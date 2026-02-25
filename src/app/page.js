@@ -39,7 +39,7 @@ export default function Home() {
         </div>
 
         {/* ── Footer — sticky behind content on desktop, normal flow on mobile */}
-        <div className="lg:sticky lg:bottom-0 z-0">
+        <div className="sticky bottom-0 z-0 max-lg:relative">
           <Footer />
         </div>
       </div>
