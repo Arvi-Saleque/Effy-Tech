@@ -2,7 +2,7 @@
    Navbar — Main navigation bar
    - Nav links always visible (white on hero, dark after scroll)
    - Before scroll: fully transparent background
-   - After scroll (~80px): bg-white/90 blur, shadow
+   - After scroll (~80px): dark semi-transparent blur, shadow
    - Search: command palette overlay (click search icon)
    - Mobile: full-screen overlay with stagger-animated links
    - Fixed top-0 z-50
@@ -72,17 +72,13 @@ export default function Navbar() {
       <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
           scrolled
-            ? "bg-neutral-white/90 backdrop-blur-md shadow-sm border-b border-border"
-            : "bg-transparent"
+            ? "bg-neutral-900/80 backdrop-blur-md shadow-lg border-b border-primary-darkest/30"
+            : "bg-neutral-900/20 backdrop-blur-sm"
         }`}
       >
         <div className="mx-auto flex h-16 md:h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* ── Left: Logo ───────────────────────────────────── */}
-          <Logo
-            size="md"
-            light={!scrolled}
-            className="transition-all duration-300"
-          />
+          <Logo size="md" light className="transition-all duration-300" />
 
           {/* ── Center: Nav Links (desktop — always visible) ── */}
           <nav className="hidden md:flex items-center gap-1">
@@ -92,7 +88,7 @@ export default function Navbar() {
                 href={href}
                 className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group ${
                   scrolled
-                    ? "text-text-secondary hover:text-primary"
+                    ? "text-neutral-300 hover:text-primary-light"
                     : "text-text-inverse/80 hover:text-text-inverse"
                 }`}
               >
@@ -110,7 +106,7 @@ export default function Navbar() {
               onClick={() => setSearchOpen(true)}
               className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer ${
                 scrolled
-                  ? "text-text-secondary hover:text-primary hover:bg-primary-lightest"
+                  ? "text-neutral-400 hover:text-primary-light hover:bg-neutral-white/10"
                   : "text-text-inverse/80 hover:text-text-inverse hover:bg-neutral-white/10"
               }`}
               aria-label="Search"
@@ -123,26 +119,20 @@ export default function Navbar() {
               onClick={toggleMobileMenu}
               className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer md:hidden ${
                 scrolled
-                  ? "text-text-primary hover:bg-primary-lightest"
+                  ? "text-text-inverse hover:bg-neutral-white/10"
                   : "text-text-inverse hover:bg-neutral-white/10"
               }`}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative h-5 w-5">
                 <span
-                  className={`absolute left-0 top-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${
-                    scrolled ? "bg-text-primary" : "bg-text-inverse"
-                  } ${mobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
+                  className={`absolute left-0 top-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
                 />
                 <span
-                  className={`absolute left-0 top-[9px] h-0.5 w-5 rounded-full transition-all duration-300 ${
-                    scrolled ? "bg-text-primary" : "bg-text-inverse"
-                  } ${mobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
+                  className={`absolute left-0 top-[9px] h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
                 />
                 <span
-                  className={`absolute left-0 bottom-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${
-                    scrolled ? "bg-text-primary" : "bg-text-inverse"
-                  } ${mobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
+                  className={`absolute left-0 bottom-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
                 />
               </div>
             </button>

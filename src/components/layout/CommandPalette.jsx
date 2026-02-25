@@ -53,7 +53,7 @@ export default function CommandPalette({ isOpen, onClose, onSearch }) {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            <div className="w-full max-w-xl mx-4 rounded-2xl bg-neutral-white border border-border shadow-xl overflow-hidden">
+            <div className="w-full max-w-xl mx-4 rounded-2xl bg-neutral-900/90 border border-primary-darkest/30 shadow-xl backdrop-blur-md overflow-hidden">
               {/* Search Input */}
               <div className="flex items-center gap-3 px-5 py-4">
                 <HiOutlineSearch className="h-5 w-5 text-primary-light shrink-0" />
@@ -62,11 +62,11 @@ export default function CommandPalette({ isOpen, onClose, onSearch }) {
                   type="text"
                   placeholder="Search projects, pages, anything..."
                   onChange={(e) => onSearch?.(e.target.value)}
-                  className="flex-1 bg-transparent text-lg text-text-primary placeholder:text-text-tertiary outline-none"
+                  className="flex-1 bg-transparent text-lg text-text-inverse placeholder:text-neutral-500 outline-none"
                 />
                 <button
                   onClick={onClose}
-                  className="flex h-8 w-8 items-center justify-center rounded-full text-text-tertiary hover:text-text-primary hover:bg-neutral-100 transition-colors cursor-pointer"
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-neutral-500 hover:text-text-inverse hover:bg-neutral-white/10 transition-colors cursor-pointer"
                   aria-label="Close search"
                 >
                   <HiX className="h-5 w-5" />
@@ -74,8 +74,8 @@ export default function CommandPalette({ isOpen, onClose, onSearch }) {
               </div>
 
               {/* Results area */}
-              <div className="border-t border-border px-5 py-6 text-center">
-                <p className="text-sm text-text-tertiary">
+              <div className="border-t border-neutral-700/50 px-5 py-6 text-center">
+                <p className="text-sm text-neutral-500">
                   Type to search across projects and pages
                 </p>
               </div>
