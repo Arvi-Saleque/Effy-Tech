@@ -19,14 +19,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        {/* ── Content wrapper — sits above the sticky footer (curtain effect) */}
-        <div className="relative z-10 bg-surface">
-          <Navbar />
-          {children}
-        </div>
+        <Navbar />
+        {children}
 
         {/* ── Footer — sticky behind content, revealed on scroll */}
-        <div className="sticky bottom-0 z-0">
+        <div className="sticky bottom-0 z-[1]">
           <Footer />
         </div>
       </body>

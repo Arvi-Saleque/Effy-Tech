@@ -15,17 +15,25 @@ import projects from "@/data/projects";
 export default function Home() {
   return (
     <main className="min-h-screen">
-      {/* ── Hero Section ─────────────────────────────────────── */}
-      <Hero />
+      {/* ── Hero — fixed behind everything (curtain-pull: content scrolls over it) */}
+      <div className="fixed inset-0 z-0">
+        <Hero />
+      </div>
 
-      {/* ── About Section ────────────────────────────────────── */}
-      <About />
+      {/* Spacer — reserves viewport height so content starts below hero */}
+      <div className="h-screen" aria-hidden="true" />
 
-      {/* ── Project Showcase ─────────────────────────────────── */}
-      <ProjectShowcase projects={projects} />
+      {/* ── Scrollable content — covers hero + footer reveals behind it */}
+      <div className="relative z-10 bg-surface">
+        {/* ── About Section ────────────────────────────────────── */}
+        <About />
 
-      {/* ── Contact Section ──────────────────────────────────── */}
-      <Contact />
+        {/* ── Project Showcase ─────────────────────────────────── */}
+        <ProjectShowcase projects={projects} />
+
+        {/* ── Contact Section ──────────────────────────────────── */}
+        <Contact />
+      </div>
     </main>
   );
 }
