@@ -11,12 +11,13 @@ const variantStyles = {
   primary:
     "bg-primary text-text-inverse hover:bg-primary-dark active:bg-primary-darkest shadow-sm hover:shadow-md",
   secondary:
-    "bg-accent text-neutral-900 hover:bg-accent-dark active:bg-accent-darkest shadow-sm hover:shadow-gold",
+    "bg-accent text-neutral-900 hover:bg-accent-dark active:bg-accent-darkest shadow-sm hover:shadow-accent",
   outline:
     "bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-text-inverse",
   ghost:
     "bg-transparent text-primary hover:bg-primary-lightest active:bg-primary-light",
-  gold: "bg-gradient-to-r from-accent-dark via-accent to-accent-light text-neutral-900 font-semibold shadow-sm hover:shadow-gold",
+  accent:
+    "bg-gradient-to-r from-accent-dark via-accent to-accent-light text-neutral-900 font-semibold shadow-sm hover:shadow-accent",
 };
 
 const sizeStyles = {

@@ -51,7 +51,7 @@ export default function SocialLinks({
               ${
                 light
                   ? "text-neutral-400 hover:text-text-inverse hover:bg-neutral-700"
-                  : "text-text-tertiary hover:text-accent-dark hover:bg-accent-lightest"
+                  : "text-text-tertiary hover:text-primary hover:bg-primary-lightest"
               }`}
           >
             <Icon className={sizeStyles[size]} />

@@ -1,31 +1,46 @@
 /* ============================================================
    Logo — Brand logo component
-   Renders the Effy Tech logo mark + text.
+   Uses the actual Effy Tech logo image from /images/logo.png.
    Sizes: sm | md | lg
    ============================================================ */
 
-import siteConfig from "@/theme/siteConfig";
+import Image from "next/image";
 
-const sizeStyles = {
-  sm: "text-lg",
-  md: "text-xl",
-  lg: "text-2xl",
+const sizeMap = {
+  sm: { img: 32, text: "text-lg" },
+  md: { img: 40, text: "text-xl" },
+  lg: { img: 52, text: "text-2xl" },
 };
 
-export default function Logo({ size = "md", light = false, className = "" }) {
+export default function Logo({
+  size = "md",
+  light = false,
+  showText = true,
+  className = "",
+}) {
+  const { img, text } = sizeMap[size];
+
   return (
     <div
-      className={`inline-flex items-center gap-2 font-bold ${sizeStyles[size]} ${className}`}
+      className={`inline-flex items-center gap-2.5 font-bold ${text} ${className}`}
     >
-      {/* Logo Mark — green with gold border */}
-      <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary border border-accent/40">
-        <span className="text-sm font-extrabold text-accent-light">E</span>
-      </div>
+      {/* Logo Image */}
+      <Image
+        src="/images/logo.png"
+        alt="Effy Tech"
+        width={img}
+        height={img}
+        className="object-contain drop-shadow-md"
+        priority
+        unoptimized
+      />
 
       {/* Logo Text */}
-      <span className={light ? "text-text-inverse" : "text-text-primary"}>
-        Effy <span className="text-gradient-gold">Tech</span>
-      </span>
+      {showText && (
+        <span className={light ? "text-text-inverse" : "text-text-primary"}>
+          Effy <span className="text-gradient-accent">Tech</span>
+        </span>
+      )}
     </div>
   );
 }

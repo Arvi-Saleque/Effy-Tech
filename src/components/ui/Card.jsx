@@ -22,7 +22,7 @@ export default function Card({
   const CardContent = (
     <motion.div
       className={`group relative overflow-hidden rounded-xl bg-neutral-white border border-border 
-        hover:shadow-lg hover:border-accent/30 transition-all duration-[var(--transition-base)] ${className}`}
+        hover:shadow-lg hover:border-primary/20 transition-all duration-[var(--transition-base)] ${className}`}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
