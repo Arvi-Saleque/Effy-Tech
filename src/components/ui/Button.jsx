@@ -35,7 +35,7 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-[var(--transition-base)] cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2";
+    "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-[var(--transition-base)] cursor-pointer select-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:outline-none";
 
   const classes = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 

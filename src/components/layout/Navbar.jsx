@@ -1,10 +1,9 @@
 /* ============================================================
    Navbar — Main navigation bar
-   - Nav links always visible (white on hero, dark after scroll)
-   - Before scroll: fully transparent background
-   - After scroll (~80px): bg-white/90 blur, shadow
-   - Search: command palette overlay (click search icon)
-   - Mobile: full-screen overlay with stagger-animated links
+   - 3-column grid layout for perfect center alignment
+   - Transparent → solid on scroll (~80px)
+   - Corporate pill-hover nav links with focus states
+   - ⌘K hint badge on desktop
    - Fixed top-0 z-50
    ============================================================ */
 
@@ -70,77 +69,88 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${
           scrolled
-            ? "bg-neutral-white/90 backdrop-blur-md shadow-sm border-b border-border"
+            ? "bg-neutral-white/80 backdrop-blur-xl shadow-sm border-b border-border"
             : "bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-16 md:h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* ── Left: Logo ───────────────────────────────────── */}
-          <Logo
-            size="md"
-            light={!scrolled}
-            className="transition-all duration-300"
-          />
+        {/* ── 3-column grid: logo | nav | actions ── */}
+        <div className="mx-auto grid h-16 md:h-[72px] max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6 lg:px-8">
+          {/* ── Left: Logo ── */}
+          <div className="justify-self-start">
+            <Logo
+              size="md"
+              light={!scrolled}
+              className="transition-all duration-200"
+            />
+          </div>
 
           {/* ── Center: Nav Links (desktop — always visible) ── */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex justify-self-center items-center gap-1">
             {siteConfig.navLinks.map(({ label, href }) => (
               <a
                 key={label}
                 href={href}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group ${
+                className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:outline-none ${
                   scrolled
-                    ? "text-text-secondary hover:text-primary"
-                    : "text-text-inverse/80 hover:text-text-inverse"
+                    ? "text-text-secondary hover:text-text-primary hover:bg-neutral-100"
+                    : "text-text-inverse/80 hover:text-text-inverse hover:bg-white/10"
                 }`}
               >
                 {label}
-                {/* Gold underline on hover */}
-                <span className="absolute bottom-0.5 left-4 right-4 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               </a>
             ))}
           </nav>
 
-          {/* ── Right: Search + Hamburger ─────────────────────── */}
-          <div className="flex items-center gap-3">
-            {/* Search icon → opens command palette */}
+          {/* ── Right: Search + ⌘K hint + Hamburger ── */}
+          <div className="justify-self-end flex items-center gap-2">
+            {/* Search button with ⌘K hint (desktop) */}
             <button
               onClick={() => setSearchOpen(true)}
-              className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer ${
+              className={`flex items-center gap-2 rounded-lg transition-colors duration-150 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:outline-none ${
                 scrolled
-                  ? "text-text-secondary hover:text-primary hover:bg-primary-lightest"
-                  : "text-text-inverse/80 hover:text-text-inverse hover:bg-neutral-white/10"
-              }`}
-              aria-label="Search"
+                  ? "text-text-tertiary hover:text-text-secondary hover:bg-neutral-100"
+                  : "text-text-inverse/70 hover:text-text-inverse hover:bg-white/10"
+              } h-9 px-2`}
+              aria-label="Search (⌘K)"
             >
-              <HiOutlineSearch className="h-5 w-5" />
+              <HiOutlineSearch className="h-4 w-4" />
+              {/* ⌘K badge — desktop only */}
+              <kbd
+                className={`hidden md:inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-medium leading-none ${
+                  scrolled
+                    ? "bg-neutral-100 text-text-tertiary border border-border"
+                    : "bg-white/10 text-text-inverse/60 border border-white/15"
+                }`}
+              >
+                ⌘K
+              </kbd>
             </button>
 
             {/* Hamburger / Close toggle (mobile only) */}
             <button
               onClick={toggleMobileMenu}
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer md:hidden ${
+              className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-150 cursor-pointer md:hidden focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:outline-none ${
                 scrolled
-                  ? "text-text-primary hover:bg-primary-lightest"
-                  : "text-text-inverse hover:bg-neutral-white/10"
+                  ? "text-text-primary hover:bg-neutral-100"
+                  : "text-text-inverse hover:bg-white/10"
               }`}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative h-5 w-5">
                 <span
-                  className={`absolute left-0 top-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${
+                  className={`absolute left-0 top-0.5 h-0.5 w-5 rounded-full transition-all duration-200 ${
                     scrolled ? "bg-text-primary" : "bg-text-inverse"
                   } ${mobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
                 />
                 <span
-                  className={`absolute left-0 top-[9px] h-0.5 w-5 rounded-full transition-all duration-300 ${
+                  className={`absolute left-0 top-[9px] h-0.5 w-5 rounded-full transition-all duration-200 ${
                     scrolled ? "bg-text-primary" : "bg-text-inverse"
                   } ${mobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
                 />
                 <span
-                  className={`absolute left-0 bottom-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${
+                  className={`absolute left-0 bottom-0.5 h-0.5 w-5 rounded-full transition-all duration-200 ${
                     scrolled ? "bg-text-primary" : "bg-text-inverse"
                   } ${mobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
                 />
@@ -150,7 +160,7 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* ── Overlays ─────────────────────────────────────────── */}
+      {/* ── Overlays ── */}
       <CommandPalette
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
