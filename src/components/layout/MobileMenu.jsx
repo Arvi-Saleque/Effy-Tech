@@ -1,7 +1,6 @@
 /* ============================================================
-   MobileMenu — Full-screen corporate mobile navigation
-   Product-style UI: grouped sections, normal typography,
-   clear CTA, tighter motion, focus states.
+   MobileMenu — Full-screen overlay with stagger-animated links
+   Large text links, gold accent dividers, cinematic feel.
    ============================================================ */
 
 "use client";
@@ -20,18 +19,19 @@ const menuVariants = {
   open: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.04,
-      delayChildren: 0.1,
+      staggerChildren: 0.08,
+      delayChildren: 0.15,
     },
   },
 };
 
 const linkVariants = {
-  closed: { opacity: 0, y: 12 },
+  closed: { opacity: 0, y: 30, filter: "blur(4px)" },
   open: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.2, ease: "easeOut" },
+    filter: "blur(0px)",
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 };
 
@@ -45,14 +45,14 @@ export default function MobileMenu({ isOpen, onClose }) {
           initial="closed"
           animate="open"
           exit="closed"
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.3 }}
         >
           {/* Top bar — logo + close */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
+          <div className="flex items-center justify-between px-6 py-5">
             <Logo light size="md" />
             <button
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-text-inverse/70 hover:text-text-inverse hover:bg-white/10 transition-colors duration-150 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-light/20 text-text-inverse hover:bg-primary-light/10 transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <svg
@@ -71,47 +71,36 @@ export default function MobileMenu({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation links — large stagger animated */}
           <motion.nav
-            className="flex flex-1 flex-col px-6 pt-8 pb-4 overflow-y-auto"
+            className="flex flex-1 flex-col items-center justify-center gap-2"
             variants={menuVariants}
             initial="closed"
             animate="open"
             exit="closed"
           >
-            {/* Section label */}
-            <motion.p
-              variants={linkVariants}
-              className="text-xs font-medium uppercase tracking-wider text-text-tertiary mb-3"
-            >
-              Navigation
-            </motion.p>
-
-            {/* Nav links */}
-            {siteConfig.navLinks.map(({ label, href }) => (
+            {siteConfig.navLinks.map(({ label, href }, index) => (
               <motion.div key={label} variants={linkVariants}>
+                {/* Gold divider line before each link (except first) */}
+                {index > 0 && (
+                  <div className="mx-auto mb-2 h-px w-16 bg-primary-light/20" />
+                )}
                 <a
                   href={href}
                   onClick={onClose}
-                  className="block rounded-lg px-3 py-2.5 text-lg font-medium text-text-inverse/90 hover:text-text-inverse hover:bg-white/5 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
+                  className="block px-6 py-3 text-center text-4xl md:text-5xl font-bold text-text-inverse hover:text-primary-light transition-colors"
                 >
                   {label}
                 </a>
               </motion.div>
             ))}
 
-            {/* Divider */}
-            <motion.div
-              variants={linkVariants}
-              className="my-6 h-px bg-neutral-800"
-            />
-
-            {/* CTA group */}
-            <motion.div variants={linkVariants} className="space-y-3">
+            {/* CTA */}
+            <motion.div variants={linkVariants} className="mt-8">
               <a
                 href="#contact"
                 onClick={onClose}
-                className="flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-text-inverse hover:bg-primary-dark transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark focus-visible:outline-none"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-primary px-8 py-3 text-base font-semibold text-text-inverse shadow-accent transition-all hover:scale-105"
               >
                 Get in Touch
               </a>
@@ -119,7 +108,7 @@ export default function MobileMenu({ isOpen, onClose }) {
           </motion.nav>
 
           {/* Bottom — social links */}
-          <div className="flex justify-center border-t border-neutral-800 px-6 py-6">
+          <div className="flex justify-center pb-8">
             <SocialLinks links={siteConfig.socials} light size="md" />
           </div>
         </motion.div>

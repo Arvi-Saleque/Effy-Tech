@@ -94,10 +94,10 @@
   --spacing-88: 22rem;
   --spacing-128: 32rem;
 
-  /* Transitions (tighter for corporate feel) */
-  --transition-fast: 100ms ease;
-  --transition-base: 180ms ease;
-  --transition-slow: 300ms ease;
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
 }
 
 /* ── Base / Reset ──────────────────────────────────────────── */
@@ -128,11 +128,9 @@
   }
 
   :focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 2px var(--color-neutral-white),
-      0 0 0 4px rgba(15, 118, 110, 0.4);
-    border-radius: var(--radius-md);
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   ::selection {
@@ -211,14 +209,5 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(45, 212, 191, 0.1);
-  }
-
-  /* Design-system surface — reusable elevated card/overlay look */
-  .surface {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
   }
 }

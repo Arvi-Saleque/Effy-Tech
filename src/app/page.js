@@ -1,9 +1,10 @@
 /* ============================================================
-   Effy Tech — Landing Page Shell
-   Assembles all sections. Actual section content will be
-   built step-by-step in subsequent iterations.
+   Effy Tech — Landing Page
+   Assembles all sections. Each section is a separate component
+   in /components/sections/.
    ============================================================ */
 
+import Hero from "@/components/sections/Hero";
 import {
   SectionWrapper,
   SectionHeading,
@@ -16,20 +17,8 @@ import {
 export default function Home() {
   return (
     <main className="min-h-screen">
-      {/* ── Temporary Hero (tests navbar transparency → solid transition) ── */}
-      <section
-        id="hero"
-        className="relative flex min-h-screen items-center justify-center bg-gradient-hero"
-      >
-        <div className="text-center">
-          <h1 className="text-hero font-bold text-text-inverse">
-            Effy <span className="text-gradient-accent">Tech</span>
-          </h1>
-          <p className="mt-4 text-lg text-neutral-300">
-            Scroll down to see the navbar transition
-          </p>
-        </div>
-      </section>
+      {/* ── Hero Section ─────────────────────────────────────── */}
+      <Hero />
 
       {/* ── Component Showcase ── */}
       <SectionWrapper id="showcase" bgClass="bg-glossy">
