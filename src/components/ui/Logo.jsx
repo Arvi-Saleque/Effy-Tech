@@ -17,14 +17,14 @@ export default function Logo({ size = "md", light = false, className = "" }) {
     <div
       className={`inline-flex items-center gap-2 font-bold ${sizeStyles[size]} ${className}`}
     >
-      {/* Logo Mark */}
-      <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-        <span className="text-sm font-extrabold text-text-inverse">E</span>
+      {/* Logo Mark — green with gold border */}
+      <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary border border-accent/40">
+        <span className="text-sm font-extrabold text-accent-light">E</span>
       </div>
 
       {/* Logo Text */}
       <span className={light ? "text-text-inverse" : "text-text-primary"}>
-        {siteConfig.name}
+        Effy <span className="text-gradient-gold">Tech</span>
       </span>
     </div>
   );

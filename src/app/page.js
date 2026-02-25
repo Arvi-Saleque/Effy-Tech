@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* ── Component Showcase (temporary — verifies all components work) ── */}
-      <SectionWrapper id="showcase" bgClass="bg-surface">
+      <SectionWrapper id="showcase" bgClass="bg-glossy">
         <SectionHeading
           title="Component Showcase"
           subtitle="Verifying all reusable components render correctly. This section will be replaced with actual content."
@@ -38,7 +38,8 @@ export default function Home() {
             <Button variant="primary" size="lg">
               Primary LG
             </Button>
-            <Button variant="secondary">Secondary</Button>
+            <Button variant="secondary">Gold Secondary</Button>
+            <Button variant="gold">Gold Gradient</Button>
             <Button variant="outline">Outline</Button>
             <Button variant="ghost">Ghost</Button>
           </div>
@@ -53,6 +54,7 @@ export default function Home() {
             <Badge label="Web" />
             <Badge label="Android" />
             <Badge label="iOS" />
+            <Badge label="Premium" variant="gold" />
             <Badge label="UI/UX" variant="outline" />
             <Badge label="Small" size="sm" />
           </div>

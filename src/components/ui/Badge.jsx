@@ -6,7 +6,8 @@
 
 const variantStyles = {
   solid: "bg-primary/10 text-primary-dark border border-primary/20",
-  outline: "bg-transparent text-text-secondary border border-border",
+  outline: "bg-transparent text-text-secondary border border-border-dark",
+  gold: "bg-accent-lightest text-accent-dark border border-accent/25",
 };
 
 const sizeStyles = {
