@@ -93,11 +93,34 @@ const siteConfig = {
 
   /* ── Footer ──────────────────────────────────────────────── */
   footer: {
-    quickLinks: [
-      { label: "Home", href: "#hero" },
-      { label: "About", href: "#about" },
-      { label: "Projects", href: "#projects" },
-      { label: "Contact", href: "#contact" },
+    columns: [
+      {
+        title: "Company",
+        links: [
+          { label: "About", href: "#about" },
+          { label: "Careers", href: "#" },
+          { label: "Blog", href: "#" },
+          { label: "Press", href: "#" },
+        ],
+      },
+      {
+        title: "Services",
+        links: [
+          { label: "Web Development", href: "#" },
+          { label: "Mobile Apps", href: "#" },
+          { label: "UI/UX Design", href: "#" },
+          { label: "Consulting", href: "#" },
+        ],
+      },
+      {
+        title: "Resources",
+        links: [
+          { label: "Documentation", href: "#" },
+          { label: "Support", href: "#" },
+          { label: "Privacy Policy", href: "#" },
+          { label: "Terms of Service", href: "#" },
+        ],
+      },
     ],
     copyright: `© ${new Date().getFullYear()} Effy Tech. All rights reserved.`,
   },

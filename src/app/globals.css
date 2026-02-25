@@ -211,6 +211,16 @@
     border: 1px solid rgba(45, 212, 191, 0.1);
   }
 
+  /* Dot-grid pattern (footer background texture) */
+  .bg-dot-grid {
+    background-image: radial-gradient(
+      circle,
+      rgba(148, 163, 184, 0.12) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
   /* Animated gradient mesh (CSS only — no canvas) */
   .bg-gradient-mesh {
     background:

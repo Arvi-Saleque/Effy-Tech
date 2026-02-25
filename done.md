@@ -355,6 +355,52 @@
 
 ---
 
-## Upcoming Sections
+## 11. Footer (Curtain-Reveal) ✅
 
-- ⬜ **Footer** — Links, socials, copyright
+**Completed:** Architectural grid footer with curtain-pull reveal effect — slides out from behind the Contact section as user scrolls.
+
+**Design Approach:**
+
+- **Curtain-pull reveal:** Footer is `sticky bottom-0 z-0` inside a wrapper; all page content sits in a `relative z-10 bg-surface` div above it. As content scrolls away, the footer is progressively revealed from behind — zero client JS required for the effect
+- Dark surface background (`surface-dark`) with subtle dot-grid pattern at low opacity (`radial-gradient` repeating circles)
+- Teal → Champagne gradient divider line at the top
+- 5-column grid on desktop (Brand 2-col + 3 link columns), collapses to 2→1 on mobile
+- Social icons with hover lift + color transition (reuses `SocialLinks` component)
+- Link hover: text color shift to `primary-light` + animated underline (`w-0 → w-full`)
+- "Back to Top" smooth-scroll button — plain `<a href="#">` leveraging `scroll-behavior: smooth` in CSS (zero JS)
+- **Fully server component** — no `"use client"`, no Framer Motion, zero JS bundle cost
+
+**Files created/modified:**
+
+| File                                     | Purpose                                                                     |
+| ---------------------------------------- | --------------------------------------------------------------------------- |
+| `src/components/layout/Footer.jsx`       | Main footer — brand, link columns grid, divider, copyright bar, back-to-top |
+| `src/components/layout/FooterColumn.jsx` | Reusable column component — title + animated-underline links list           |
+| `src/theme/siteConfig.js`                | Expanded `footer.columns[]` with Company, Services, Resources link arrays   |
+| `src/app/layout.js`                      | Restructured: content wrapper (`relative z-10 bg-surface`) + sticky footer  |
+| `src/app/globals.css`                    | Added `.bg-dot-grid` repeating radial-gradient utility                      |
+
+**Key Technical Details:**
+
+| Feature          | Implementation                                                                                           |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| Curtain-pull     | Content wrapper `relative z-10 bg-surface` covers `sticky bottom-0 z-0` footer — pure CSS stacking       |
+| Dot-grid pattern | `radial-gradient(circle, rgba(148,163,184,0.12) 1px, transparent 1px)` at `24px 24px` repeat             |
+| Gradient divider | `linear-gradient(90deg, transparent → primary → accent → transparent)` — 1px height                      |
+| Link animation   | `group` hover: text `primary-light` + underline span `w-0 → w-full` with `transition-all duration-300`   |
+| Back to Top      | `<a href="#">` + CSS `scroll-behavior: smooth` — zero JS, arrow icon lifts on hover (`-translate-y-0.5`) |
+| Server component | No `"use client"`, no `useEffect`, no Framer Motion — 0 KB JS footprint                                  |
+| Layout grid      | 5-col lg grid: brand spans 2, link columns span 1 each. Responsive: `sm:grid-cols-2 → lg:grid-cols-5`    |
+
+---
+
+## All Sections Complete ✅
+
+The Effy Tech landing page now includes:
+
+1. Navbar (dark, always-visible links, command palette search)
+2. Hero (parallax, stagger text, magnetic CTA)
+3. About (asymmetric bento grid, animated stat counters)
+4. Project Showcase (morph filter, expandable modal, 10 projects)
+5. Contact (floating-label form, Zod validation, server action)
+6. Footer (curtain-reveal, dot-grid, server component)
