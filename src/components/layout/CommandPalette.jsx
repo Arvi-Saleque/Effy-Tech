@@ -66,10 +66,11 @@ export default function CommandPalette({ isOpen, onClose, onSearch }) {
                 />
                 <button
                   onClick={onClose}
-                  className="flex h-8 w-8 items-center justify-center rounded-full text-neutral-500 hover:text-text-inverse hover:bg-neutral-white/10 transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-neutral-400 hover:text-text-inverse hover:bg-neutral-white/10 border border-neutral-700 transition-colors cursor-pointer sm:h-8 sm:w-8 sm:px-0 sm:py-0 sm:border-0"
                   aria-label="Close search"
                 >
                   <HiX className="h-5 w-5" />
+                  <span className="sm:hidden">Close</span>
                 </button>
               </div>
 

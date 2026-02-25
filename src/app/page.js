@@ -38,8 +38,8 @@ export default function Home() {
           <Contact />
         </div>
 
-        {/* ── Footer — sticky behind content, revealed as content scrolls away */}
-        <div className="sticky bottom-0 z-0">
+        {/* ── Footer — sticky behind content on desktop, normal flow on mobile */}
+        <div className="lg:sticky lg:bottom-0 z-0">
           <Footer />
         </div>
       </div>
