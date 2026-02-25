@@ -314,7 +314,47 @@
 
 ---
 
+## 10. Contact Section ✅
+
+**Completed:** Contact section with split layout, floating-label form, and Zod validation.
+
+**Design Approach:**
+
+- Split layout with bold typography + contact info on left, floating-label form on right
+- Animated gradient mesh background using pure CSS `@keyframes` (no canvas/JS)
+- Floating-label inputs — labels animate from placeholder position to above the field on focus
+- Full validation with Zod schema shared between client (React Hook Form) and server action
+- Server action stub ready for MongoDB integration
+- Stagger fade-up entrance animations on scroll
+- Decorative teal glow orb for depth
+- Success state with animated SVG checkmark
+
+**Files created/modified:**
+
+| File                                      | Purpose                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `src/lib/contactSchema.js`                | Shared Zod validation schema — name, email, phone, company, service, message   |
+| `src/app/actions/submitContact.js`        | Next.js server action — validates with Zod, stub ready for MongoDB `insertOne` |
+| `src/components/sections/ContactForm.jsx` | Floating-label form — React Hook Form + Zod resolver, 6 fields, success state  |
+| `src/components/sections/Contact.jsx`     | Split layout wrapper — heading, contact info, social links, form, mesh bg      |
+| `src/app/globals.css`                     | Added `.bg-gradient-mesh` animated gradient utility + `@keyframes meshShift`   |
+| `src/app/page.js`                         | Added `import Contact` and `<Contact />` after `<ProjectShowcase />`           |
+
+**Key Technical Details:**
+
+| Feature            | Implementation                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| Validation         | Zod schema shared between client (`zodResolver`) and server (`contactSchema.safeParse`)               |
+| Floating labels    | CSS `peer` + `peer-focus` + `peer-not-placeholder-shown` selectors for label animation                |
+| Form state         | `react-hook-form` `useForm` with `zodResolver`, inline error messages, loading + success states       |
+| Server action      | `"use server"` directive, returns `{success, errors}`, ready for `await db.collection().insertOne()`  |
+| Mesh background    | Pure CSS: 3 overlapping `radial-gradient` layers with `background-size: 200%` + `meshShift` animation |
+| Entrance animation | Framer Motion `whileInView` with stagger delays, viewport `once: true, margin: "-50px"`               |
+| Service dropdown   | `SERVICE_OPTIONS` exported from contactSchema for DRY usage in both form and validation               |
+| Success checkmark  | Animated SVG `<path>` with `pathLength` from 0→1 + scale spring                                       |
+
+---
+
 ## Upcoming Sections
 
-- ⬜ **Contact Section** — Contact form / info
 - ⬜ **Footer** — Links, socials, copyright

@@ -9,6 +9,7 @@
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import ProjectShowcase from "@/components/sections/ProjectShowcase";
+import Contact from "@/components/sections/Contact";
 import projects from "@/data/projects";
 
 export default function Home() {
@@ -22,6 +23,9 @@ export default function Home() {
 
       {/* ── Project Showcase ─────────────────────────────────── */}
       <ProjectShowcase projects={projects} />
+
+      {/* ── Contact Section ──────────────────────────────────── */}
+      <Contact />
     </main>
   );
 }
