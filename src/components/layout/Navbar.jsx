@@ -17,6 +17,7 @@ import { Logo } from "@/components/ui";
 import CommandPalette from "./CommandPalette";
 import MobileMenu from "./MobileMenu";
 import { HiOutlineSearch } from "react-icons/hi";
+import projects from "@/data/projects";
 
 const SCROLL_THRESHOLD = 80;
 
@@ -61,10 +62,6 @@ export default function Navbar() {
 
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
-  }, []);
-
-  const handleSearch = useCallback((query) => {
-    console.log("Search:", query);
   }, []);
 
   return (
@@ -144,7 +141,8 @@ export default function Navbar() {
       <CommandPalette
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
-        onSearch={handleSearch}
+        projects={projects}
+        pages={siteConfig.navLinks}
       />
       <MobileMenu
         isOpen={mobileMenuOpen}
