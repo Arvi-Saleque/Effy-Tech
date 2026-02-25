@@ -268,8 +268,53 @@
 
 ---
 
+## 9. Project Showcase (Animated Masonry with Morph Filter)
+
+**Status:** ✅ Completed
+
+**What was done:**
+
+- Animated masonry grid with smooth morph filter transitions
+- Filter tabs: All, Web, Android, iOS, UI/UX, Cross-Platform — clicking a tab morphs card positions via `AnimatePresence` + `layout` prop (no harsh cuts)
+- Cards: thumbnail with clipped hover-zoom, category badge, title, description, tag pills
+- On hover: `y: -8` lift + `scale: 1.02` + shadow elevation + translucent overlay with "View Details →"
+- Clicking a card opens an expanding modal via shared `layoutId` — keeps users on the page
+- Modal shows full details: description, tags, client name, "View Live" external link
+- Data: imported as static array in server component (`page.js`), passed as props — ready for MongoDB `await db.projects.find()` swap
+- Filter operates client-side on the pre-fetched array (instant, zero network calls)
+- 10 sample projects across 6 categories
+- Data model matches future MongoDB schema: `title, slug, description, category (enum), tags[], thumbnail, images[], clientName, liveUrl, featured, order`
+- Empty state when no projects match a filter
+- Body scroll locked when modal is open
+- Top accent gradient stripe on card hover
+- Tags capped at 3 visible + overflow count
+
+**Files created/modified:**
+
+| File                                          | Purpose                                                                       |
+| --------------------------------------------- | ----------------------------------------------------------------------------- |
+| `src/components/sections/ProjectShowcase.jsx` | Main section — filter tabs, animated grid with LayoutGroup, modal trigger     |
+| `src/components/sections/ProjectCard.jsx`     | Individual card — hover zoom, overlay, shared layoutId for morph              |
+| `src/components/sections/ProjectModal.jsx`    | Expanding detail modal — shared layoutId, full project info, "View Live" link |
+| `src/data/projects.js`                        | 10 sample projects matching MongoDB model schema                              |
+| `src/theme/siteConfig.js`                     | Added "Cross-Platform" to projectCategories                                   |
+| `src/app/page.js`                             | Import projects data at server level, pass as props to `<ProjectShowcase />`  |
+
+**Key Technical Details:**
+
+| Feature              | Implementation                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Morph filter         | `AnimatePresence mode="popLayout"` + `motion.div layout` for smooth card reflow                             |
+| Shared layout        | `LayoutGroup` + `layoutId={project-card-${id}}` for card → modal morph                                      |
+| Card animation       | `initial/animate/exit` with stagger by index, `whileHover` lift + scale                                     |
+| Filter               | `useFilter` hook — client-side `useMemo` on pre-fetched array                                               |
+| Modal                | Spring transition (`stiffness: 300, damping: 30`), backdrop blur, body scroll lock                          |
+| Data architecture    | Server component imports static data; swap to `await db.find()` for MongoDB                                 |
+| Future MongoDB model | `{ title, slug, description, category, tags[], thumbnail, images[], clientName, liveUrl, featured, order }` |
+
+---
+
 ## Upcoming Sections
 
-- ⬜ **Project Showcase** — Filtered project grid by category
 - ⬜ **Contact Section** — Contact form / info
 - ⬜ **Footer** — Links, socials, copyright

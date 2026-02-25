@@ -36,7 +36,14 @@ const siteConfig = {
   },
 
   /* ── Project Filter Categories ───────────────────────────── */
-  projectCategories: ["All", "Web", "Android", "iOS", "UI/UX"],
+  projectCategories: [
+    "All",
+    "Web",
+    "Android",
+    "iOS",
+    "UI/UX",
+    "Cross-Platform",
+  ],
 
   /* ── About Section ───────────────────────────────────────── */
   about: {
