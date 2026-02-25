@@ -215,9 +215,61 @@
 
 ---
 
+## 8. About Section (Asymmetric Bento Grid)
+
+**Status:** ✅ Completed
+
+**What was done:**
+
+- Apple-style asymmetric bento grid layout — no generic 3-column icons
+- Cards of different sizes arranged in a 4-column desktop grid (stacks on mobile)
+- 5 distinct cards: Story (large), Mission (large), Values (medium), Tech Stack (small), Stats (small dark)
+- Stats card uses animated count-up numbers (0 → target) triggered when card enters viewport via IntersectionObserver
+- Each card reveals on scroll with fade-in-from-bottom animation (staggered by index)
+- 3D tilt hover effect on all cards (`rotateX`, `rotateY`, `scale` via Framer Motion `whileHover`)
+- Respects `prefers-reduced-motion` — tilt hover disabled when reduced motion preferred
+- Stats card has dark gradient background (`primary-darkest → neutral-900`) for visual contrast
+- Decorative blurred gradient orbs on Story and Mission cards for depth
+- Values use numbered circle badges (01, 02, 03)
+- Tech Stack shows pill tags with hover highlight
+- All content pulled from centralized `siteConfig.about` — zero hardcoded strings
+- Replaced the temporary component showcase in page.js
+
+**Files created/modified:**
+
+| File                                   | Purpose                                                                                             |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `src/components/sections/About.jsx`    | Main bento grid — 5 cards (Story, Mission, Values, Tech Stack, Stats), scroll reveal, 3D tilt hover |
+| `src/components/sections/StatCard.jsx` | Single animated stat counter for the dark stats card                                                |
+| `src/hooks/useCountUp.js`              | Custom hook: IntersectionObserver + requestAnimationFrame count-up (ease-out cubic)                 |
+| `src/theme/siteConfig.js`              | Added `about` block: story, mission, values[], techStack[], stats[]                                 |
+| `src/app/page.js`                      | Replaced component showcase with `<About />` section                                                |
+
+**Bento Grid Layout (desktop):**
+
+```
+┌─────────────────────┬─────────────────────┐
+│  Story (2 col)      │  Mission (2 col)    │
+├─────────────────────┼──────────┬──────────┤
+│  Values (2 col)     │ TechStack│  Stats   │
+│                     │ (1 col)  │ (1 col)  │
+└─────────────────────┴──────────┴──────────┘
+```
+
+**Key Technical Details:**
+
+| Feature       | Implementation                                                                 |
+| ------------- | ------------------------------------------------------------------------------ |
+| Scroll reveal | `whileInView` + custom stagger delay per card index (`i * 0.1s`)               |
+| 3D tilt hover | `whileHover: { rotateX: -2, rotateY: 3, scale: 1.02 }` with `perspective: 800` |
+| Count-up      | `useCountUp(target, 2000ms)` — IntersectionObserver → rAF → ease-out cubic     |
+| Accessibility | `useReducedMotion()` disables tilt hover; count-up still runs (non-motion)     |
+| Data source   | `siteConfig.about.{story, mission, values, techStack, stats}`                  |
+
+---
+
 ## Upcoming Sections
 
-- ⬜ **About Section** — Company introduction
 - ⬜ **Project Showcase** — Filtered project grid by category
 - ⬜ **Contact Section** — Contact form / info
 - ⬜ **Footer** — Links, socials, copyright

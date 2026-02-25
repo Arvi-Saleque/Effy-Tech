@@ -38,6 +38,52 @@ const siteConfig = {
   /* ── Project Filter Categories ───────────────────────────── */
   projectCategories: ["All", "Web", "Android", "iOS", "UI/UX"],
 
+  /* ── About Section ───────────────────────────────────────── */
+  about: {
+    story: {
+      title: "Our Story",
+      text: "Founded with a vision to bridge the gap between cutting-edge technology and business growth, Effy Tech has evolved from a small dev studio into a full-service digital product company. We partner with startups and enterprises alike to turn ambitious ideas into polished, scalable products.",
+    },
+    mission: {
+      title: "Our Mission",
+      text: "To empower businesses with technology that is beautiful, performant, and built to last. Every line of code we write is driven by clarity, scalability, and purpose.",
+    },
+    values: [
+      {
+        label: "Quality First",
+        desc: "We ship code we're proud of — tested, reviewed, and refined.",
+      },
+      {
+        label: "User Obsessed",
+        desc: "Every decision starts with the end user experience.",
+      },
+      {
+        label: "Transparent",
+        desc: "Open communication, honest timelines, no surprises.",
+      },
+    ],
+    techStack: [
+      "React",
+      "Next.js",
+      "Node.js",
+      "TypeScript",
+      "MongoDB",
+      "PostgreSQL",
+      "AWS",
+      "Docker",
+      "Figma",
+      "Tailwind CSS",
+      "GraphQL",
+      "Redis",
+    ],
+    stats: [
+      { value: 50, suffix: "+", label: "Projects Delivered" },
+      { value: 30, suffix: "+", label: "Happy Clients" },
+      { value: 5, suffix: "+", label: "Years Experience" },
+      { value: 99, suffix: "%", label: "Client Retention" },
+    ],
+  },
+
   /* ── Footer ──────────────────────────────────────────────── */
   footer: {
     quickLinks: [
