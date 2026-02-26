@@ -531,54 +531,150 @@ export default function AmalTrackerShowcase({ data }) {
       </Section>
 
       {/* ─────────────────────────────────────────────────────
-          SECTION 3 — FEATURES
+          SECTION 3 — FEATURES  (WOW Edition)
          ───────────────────────────────────────────────────── */}
-      <Section className="relative py-20 sm:py-28">
-        {/* Subtle background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent" />
+      <Section className="relative py-24 sm:py-32 overflow-hidden">
+        {/* ── Atmospheric background layers ── */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 -left-32 h-[600px] w-[800px] rounded-full bg-primary/[0.04] blur-[160px]" />
+          <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-accent/[0.03] blur-[130px]" />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(45,212,191,0.4) 1px, transparent 1px)",
+              backgroundSize: "30px 30px",
+            }}
+          />
+          {/* Horizontal accent line */}
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/[0.06] to-transparent" />
+        </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
-          <SectionHeading
-            overline="Features"
-            title="যা যা আছে এই অ্যাপে"
-            subtitle="Everything you need to stay consistent with your daily Islamic practices — all in one beautiful app."
-          />
+          {/* ── Premium section heading ── */}
+          <div className="mx-auto max-w-3xl text-center mb-16 sm:mb-20">
+            <motion.div
+              variants={fadeUp}
+              className="inline-flex items-center gap-3 mb-5"
+            >
+              <span className="h-px w-8 bg-gradient-to-r from-transparent to-primary-light/40" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary-light/70">
+                Features
+              </span>
+              <span className="h-px w-8 bg-gradient-to-l from-transparent to-primary-light/40" />
+            </motion.div>
 
+            <motion.h2
+              variants={fadeUp}
+              className="text-4xl sm:text-5xl font-bold leading-[1.1]"
+            >
+              <span className="bg-gradient-to-b from-neutral-100 to-neutral-400 bg-clip-text text-transparent">
+                যা যা আছে এই অ্যাপে
+              </span>
+            </motion.h2>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-5 text-neutral-500 leading-relaxed text-lg max-w-xl mx-auto"
+            >
+              Everything you need to stay consistent with your daily Islamic
+              practices — all in one beautiful app.
+            </motion.p>
+          </div>
+
+          {/* ── Bento Feature Grid ── */}
           <motion.div
             variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
           >
             {features.map((f, i) => {
               const Icon = iconMap[f.icon] || FaCheckCircle;
+              const isHero = i === 0;
+
               return (
                 <motion.div
                   key={f.titleEn}
                   variants={fadeUp}
                   custom={i}
-                  className="group relative rounded-2xl border border-neutral-700/30 bg-neutral-900/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/25 hover:bg-neutral-900/60 hover:shadow-[0_0_40px_rgba(45,212,191,0.04)]"
+                  className={`group relative overflow-hidden rounded-2xl ${
+                    isHero ? "sm:col-span-2 lg:col-span-2" : ""
+                  }`}
                 >
-                  {/* Icon */}
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary-light transition-colors group-hover:bg-primary/20">
-                    <Icon className="h-5 w-5" />
+                  {/* Default subtle border */}
+                  <div className="absolute inset-0 rounded-2xl border border-neutral-700/25 group-hover:border-transparent transition-colors duration-500" />
+
+                  {/* Hover — gradient border reveal */}
+                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/40 via-primary/10 to-accent/30" />
+                    <div className="absolute inset-[1px] rounded-[15px] bg-[#0a0e14]" />
                   </div>
 
-                  {/* Bangla title */}
-                  <h3 className="text-base font-bold text-neutral-100 leading-snug">
-                    {f.titleBn}
-                  </h3>
+                  {/* Glass fill */}
+                  <div className="absolute inset-[1px] rounded-[15px] bg-neutral-900/50 backdrop-blur-2xl group-hover:bg-[#0d1117]/90 transition-colors duration-500" />
 
-                  {/* English title */}
-                  <p className="mt-0.5 text-xs font-medium text-primary-light/70 uppercase tracking-wide">
-                    {f.titleEn}
-                  </p>
+                  {/* Top glow bloom */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-28 w-2/3 bg-primary/[0.06] blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                  {/* Bangla description */}
-                  <p className="mt-3 text-sm leading-relaxed text-neutral-400">
-                    {f.descBn}
-                  </p>
+                  {/* Shimmer sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1200ms] ease-in-out bg-gradient-to-r from-transparent via-white/[0.03] to-transparent pointer-events-none" />
 
-                  {/* Hover accent line */}
-                  <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary-light/0 to-transparent transition-all duration-300 group-hover:via-primary-light/20" />
+                  {/* ── Card content ── */}
+                  <div
+                    className={`relative z-10 ${
+                      isHero
+                        ? "flex flex-col sm:flex-row sm:items-center gap-6 p-8 sm:p-10"
+                        : "flex flex-col p-6 sm:p-7"
+                    }`}
+                  >
+                    {/* Icon with glow halo */}
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute -inset-4 rounded-full bg-primary/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                      <div
+                        className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/[0.03] border border-primary/10 group-hover:border-primary/25 group-hover:shadow-[0_0_30px_rgba(45,212,191,0.08)] transition-all duration-500 ${
+                          isHero ? "h-16 w-16" : "h-12 w-12"
+                        }`}
+                      >
+                        <Icon
+                          className={`text-primary-light transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(45,212,191,0.5)] ${
+                            isHero ? "h-7 w-7" : "h-5 w-5"
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text block */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3
+                            className={`font-bold text-neutral-200 leading-snug group-hover:text-neutral-50 transition-colors duration-300 ${
+                              isHero ? "text-xl sm:text-2xl" : "text-base"
+                            }`}
+                          >
+                            {f.titleBn}
+                          </h3>
+                          <p className="mt-1 text-[11px] font-semibold text-primary-light/50 uppercase tracking-[0.15em]">
+                            {f.titleEn}
+                          </p>
+                        </div>
+                        {/* Numbered badge */}
+                        <span className="text-[10px] font-mono text-neutral-700 tracking-widest flex-shrink-0 mt-1 opacity-60 group-hover:opacity-100 group-hover:text-primary-light/30 transition-all duration-300">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+
+                      <p
+                        className={`mt-3 leading-relaxed text-neutral-500 group-hover:text-neutral-400 transition-colors duration-300 ${
+                          isHero ? "text-[15px]" : "text-sm"
+                        }`}
+                      >
+                        {f.descBn}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bottom accent glow line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/25 transition-all duration-700 pointer-events-none" />
                 </motion.div>
               );
             })}
