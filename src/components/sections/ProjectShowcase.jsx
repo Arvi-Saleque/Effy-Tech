@@ -85,11 +85,10 @@ export default function ProjectShowcase({ projects = [] }) {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative"
-      style={{ clipPath: "inset(0)" }}
+      className="relative [clip-path:inset(0)] py-28 sm:py-36"
     >
-      {/* ── Fixed background (clipped to section bounds) ────── */}
-      <div className="pointer-events-none fixed inset-0 bg-surface-dark" aria-hidden="true">
+      {/* ── Fixed background — stays still while content scrolls (curtain feel) */}
+      <div className="pointer-events-none fixed inset-0 z-0 bg-surface-dark" aria-hidden="true">
         {/* Dot grid */}
         <div
           className="absolute inset-0 opacity-[0.04]"
@@ -117,7 +116,7 @@ export default function ProjectShowcase({ projects = [] }) {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-28 sm:px-6 sm:py-36 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ── Section Header ──────────────────────────────────── */}
         <motion.div
           className="mb-16 text-center"

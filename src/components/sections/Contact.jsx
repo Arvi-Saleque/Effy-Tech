@@ -50,7 +50,7 @@ const fadeUp = {
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="contact" className="relative overflow-hidden bg-surface py-24 sm:py-32">
       {/* ── Animated Gradient Mesh BG ─────────────────────────── */}
       <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
       <div className="absolute inset-0 bg-surface/80 backdrop-blur-[1px]" />
