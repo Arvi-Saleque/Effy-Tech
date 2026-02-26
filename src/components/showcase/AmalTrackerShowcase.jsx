@@ -254,7 +254,11 @@ function FeatureDeepDive() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="relative py-24 sm:py-32 overflow-hidden">
+    <section
+      ref={ref}
+      id="deep-dive"
+      className="relative py-24 sm:py-32 overflow-hidden"
+    >
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-1/4 h-[600px] w-[600px] rounded-full bg-primary/[0.03] blur-[140px]" />
@@ -623,6 +627,263 @@ function ScreenshotCarousel({ screenshots }) {
   );
 }
 
+/* ── Amal Tracker custom navbar links ─────────────────────── */
+const showcaseNavLinks = [
+  { label: "Features", href: "#features" },
+  { label: "Details", href: "#deep-dive" },
+  { label: "Screenshots", href: "#screenshots" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Download", href: "#download" },
+];
+
+/* ── Custom Navbar for Amal Tracker page ──────────────────── */
+function ShowcaseNavbar({ appName, playStoreUrl }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  return (
+    <motion.header
+      initial={{ y: -80 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-neutral-900/85 backdrop-blur-xl shadow-lg border-b border-primary/10"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Left — Back + App name */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/#projects"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-700/30 bg-neutral-800/50 text-neutral-400 hover:text-neutral-100 hover:border-neutral-600 transition-all"
+          >
+            <HiArrowLeft className="h-4 w-4" />
+          </Link>
+          <span className="text-sm font-bold text-neutral-200 hidden sm:block">
+            {appName}
+          </span>
+        </div>
+
+        {/* Center — Nav Links (desktop) */}
+        <nav className="hidden md:flex items-center gap-1">
+          {showcaseNavLinks.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              className="relative px-3 lg:px-4 py-2 text-[13px] font-medium text-neutral-400 hover:text-neutral-100 transition-colors group"
+            >
+              {label}
+              <span className="absolute bottom-0.5 left-3 right-3 h-0.5 bg-primary-light scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+            </a>
+          ))}
+        </nav>
+
+        {/* Right — CTA + Hamburger */}
+        <div className="flex items-center gap-3">
+          <a
+            href={playStoreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-primary/90 px-4 py-2 text-xs font-semibold text-neutral-100 hover:bg-primary transition-colors"
+          >
+            <FaGooglePlay className="h-3.5 w-3.5" />
+            Download
+          </a>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen((p) => !p)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-300 hover:bg-neutral-800 transition-colors md:hidden cursor-pointer"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
+            <div className="relative h-4 w-5">
+              <span
+                className={`absolute left-0 top-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-[7px]" : ""}`}
+              />
+              <span
+                className={`absolute left-0 top-[7px] h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${mobileOpen ? "opacity-0 scale-x-0" : ""}`}
+              />
+              <span
+                className={`absolute left-0 bottom-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
+              />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu overlay */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden border-t border-neutral-800/50 bg-neutral-900/95 backdrop-blur-xl overflow-hidden"
+          >
+            <nav className="flex flex-col py-4 px-6 gap-1">
+              {showcaseNavLinks.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className="py-3 text-sm font-medium text-neutral-300 hover:text-primary-light border-b border-neutral-800/30 last:border-0 transition-colors"
+                >
+                  {label}
+                </a>
+              ))}
+              <a
+                href={playStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-neutral-100"
+              >
+                <FaGooglePlay className="h-4 w-4" />
+                Download on Google Play
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
+}
+
+/* ── Custom Footer for Amal Tracker page ──────────────────── */
+function ShowcaseFooter({ appName, playStoreUrl }) {
+  return (
+    <footer className="relative border-t border-neutral-800/40 bg-neutral-950/80">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-12 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-8">
+          {/* Col 1 — Brand */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <h3 className="text-lg font-bold text-neutral-100">{appName}</h3>
+            <p className="mt-2 text-sm text-neutral-500 leading-relaxed max-w-xs">
+              Your daily companion for Islamic spiritual growth — track Salah,
+              Amal, Zikir &amp; more.
+            </p>
+            <a
+              href={playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-4 rounded-lg bg-primary/15 border border-primary/20 px-4 py-2 text-xs font-semibold text-primary-light hover:bg-primary/25 transition-colors"
+            >
+              <FaGooglePlay className="h-3.5 w-3.5" />
+              Google Play
+            </a>
+          </div>
+
+          {/* Col 2 — Quick Links */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">
+              Quick Links
+            </h4>
+            <nav className="flex flex-col gap-2.5">
+              {showcaseNavLinks.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="text-sm text-neutral-400 hover:text-primary-light transition-colors"
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          {/* Col 3 — Effy Tech */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">
+              Effy Tech
+            </h4>
+            <nav className="flex flex-col gap-2.5">
+              <Link
+                href="/"
+                className="text-sm text-neutral-400 hover:text-primary-light transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/#projects"
+                className="text-sm text-neutral-400 hover:text-primary-light transition-colors"
+              >
+                All Projects
+              </Link>
+              <Link
+                href="/#about"
+                className="text-sm text-neutral-400 hover:text-primary-light transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/#contact"
+                className="text-sm text-neutral-400 hover:text-primary-light transition-colors"
+              >
+                Contact
+              </Link>
+            </nav>
+          </div>
+
+          {/* Col 4 — Info */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">
+              App Info
+            </h4>
+            <ul className="flex flex-col gap-2.5 text-sm text-neutral-400">
+              <li className="flex items-center gap-2">
+                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
+                Free to Use
+              </li>
+              <li className="flex items-center gap-2">
+                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
+                No Account Required
+              </li>
+              <li className="flex items-center gap-2">
+                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
+                Offline Support
+              </li>
+              <li className="flex items-center gap-2">
+                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
+                Flutter &amp; Firebase
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 pt-6 border-t border-neutral-800/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-neutral-600">
+            &copy; {new Date().getFullYear()} Effy Tech. All rights reserved.
+          </p>
+          <Link
+            href="/"
+            className="text-xs text-neutral-600 hover:text-primary-light transition-colors"
+          >
+            Powered by Effy Tech
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 /* ================================================================
    MAIN COMPONENT
    ================================================================ */
@@ -651,6 +912,9 @@ export default function AmalTrackerShowcase({ data }) {
 
   return (
     <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
+      {/* Custom Navbar for this page */}
+      <ShowcaseNavbar appName={name} playStoreUrl={playStoreUrl} />
+
       {/* ─────────────────────────────────────────────────────
           SECTION 1 — HERO (Full viewport)
          ───────────────────────────────────────────────────── */}
@@ -671,23 +935,6 @@ export default function AmalTrackerShowcase({ data }) {
           {/* Horizontal accent lines */}
           <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/[0.04] to-transparent" />
           <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/[0.03] to-transparent" />
-        </div>
-
-        {/* Back link pinned top */}
-        <div className="relative z-20 max-w-7xl mx-auto w-full px-6 sm:px-10 pt-8 sm:pt-10">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Link
-              href="/#projects"
-              className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-primary-light transition-colors group"
-            >
-              <HiArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to Projects
-            </Link>
-          </motion.div>
         </div>
 
         {/* Main hero content — vertically centered */}
@@ -879,7 +1126,10 @@ export default function AmalTrackerShowcase({ data }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 3 — FEATURES  (WOW Edition)
          ───────────────────────────────────────────────────── */}
-      <Section className="relative py-24 sm:py-32 overflow-hidden">
+      <Section
+        id="features"
+        className="relative py-24 sm:py-32 overflow-hidden"
+      >
         {/* ── Atmospheric background layers ── */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 -left-32 h-[600px] w-[800px] rounded-full bg-primary/[0.04] blur-[160px]" />
@@ -1041,7 +1291,7 @@ export default function AmalTrackerShowcase({ data }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 5 — HOW IT WORKS
          ───────────────────────────────────────────────────── */}
-      <Section className="relative py-20 sm:py-28">
+      <Section id="how-it-works" className="relative py-20 sm:py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.015] to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
@@ -1118,7 +1368,7 @@ export default function AmalTrackerShowcase({ data }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 7 — DOWNLOAD CTA
          ───────────────────────────────────────────────────── */}
-      <Section className="relative py-20 sm:py-28">
+      <Section id="download" className="relative py-20 sm:py-28">
         {/* Background glow */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="h-[300px] w-[600px] rounded-full bg-primary/6 blur-[100px]" />
@@ -1178,13 +1428,8 @@ export default function AmalTrackerShowcase({ data }) {
         </div>
       </Section>
 
-      {/* ── Bottom accent ─────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10">
-        <div className="h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent" />
-      </div>
-
-      {/* Spacer above footer */}
-      <div className="h-16" />
+      {/* Footer */}
+      <ShowcaseFooter appName={name} playStoreUrl={playStoreUrl} />
     </div>
   );
 }

@@ -11,6 +11,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import siteConfig from "@/theme/siteConfig";
 import { Logo } from "@/components/ui";
@@ -21,7 +22,12 @@ import projects from "@/data/projects";
 
 const SCROLL_THRESHOLD = 80;
 
+/* Pages that use their own custom navbar */
+const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM"];
+
 export default function Navbar() {
+  const pathname = usePathname();
+  const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -63,6 +69,9 @@ export default function Navbar() {
   const toggleMobileMenu = useCallback(() => {
     setMobileMenuOpen((prev) => !prev);
   }, []);
+
+  /* Hide global navbar on pages with their own navbar */
+  if (hideGlobal) return null;
 
   return (
     <>
