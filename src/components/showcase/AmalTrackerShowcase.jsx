@@ -20,6 +20,9 @@ import {
   HiDownload,
   HiExternalLink,
   HiCheckCircle,
+  HiChevronLeft,
+  HiChevronRight,
+  HiPlay,
 } from "react-icons/hi";
 import {
   FaMosque,
@@ -142,121 +145,134 @@ function PhoneMockup({ src, alt, className = "" }) {
   );
 }
 
-/* ── Screenshot Carousel — 4 visible, with overlay on active ─ */
-function ScreenshotCarousel({ screenshots }) {
+/* ── Screenshot Carousel — Full-width, 4 images, no gaps ──── */
+function ScreenshotCarousel({ screenshots, appName, playStoreUrl }) {
   const VISIBLE = 4;
-  const [activeIndex, setActiveIndex] = useState(0);
   const total = screenshots.length;
-
-  const goNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + VISIBLE >= total ? 0 : prev + 1));
-  }, [total]);
-
-  const goPrev = useCallback(() => {
-    setActiveIndex((prev) =>
-      prev <= 0 ? Math.max(total - VISIBLE, 0) : prev - 1,
-    );
-  }, [total]);
-
-  /* Get the 4 visible screenshots from current index */
-  const visibleScreenshots = [];
-  for (let i = 0; i < VISIBLE; i++) {
-    const idx = (activeIndex + i) % total;
-    visibleScreenshots.push({ ...screenshots[idx], originalIndex: idx });
-  }
-
-  /* The center item (index 1 of the 4) gets the overlay */
-  const overlayIdx = 1;
-
+  const [startIdx, setStartIdx] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
+  // The 4 currently visible screenshots
+  const visibleShots = [];
+  for (let i = 0; i < VISIBLE; i++) {
+    visibleShots.push(screenshots[(startIdx + i) % total]);
+  }
+
+  // The "active" one is the 2nd of 4 (index 1) — like center-left focus
+  const activeIdx = 1;
+
+  const goNext = useCallback(() => {
+    setStartIdx((prev) => (prev + 1) % total);
+  }, [total]);
+
+  const goPrev = useCallback(() => {
+    setStartIdx((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
   return (
-    <section
-      ref={ref}
-      id="screenshots"
-      className="relative py-20 sm:py-28 overflow-hidden"
-    >
-      <div className="max-w-7xl mx-auto px-6 sm:px-10">
-        <SectionHeading
-          overline="Screenshots"
-          title="App Interface"
-          subtitle="A clean, intuitive design that makes daily spiritual tracking effortless and beautiful."
-        />
+    <section id="screenshots" ref={ref} className="relative py-16 sm:py-24">
+      {/* Section heading */}
+      <div className="mx-auto max-w-2xl text-center mb-10 sm:mb-14 px-6">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-light mb-3"
+        >
+          Screenshots
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight"
+        >
+          App Interface
+        </motion.h2>
       </div>
 
-      {/* Carousel */}
+      {/* Full-width image strip — 4 images, no gaps, touching edges */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
-        className="max-w-7xl mx-auto px-6 sm:px-10"
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="relative w-full"
       >
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {visibleScreenshots.map((ss, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-4">
+          {visibleShots.map((ss, i) => (
             <div
-              key={`${ss.originalIndex}-${activeIndex}`}
-              className="group relative aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
+              key={`${startIdx}-${i}`}
+              className="relative overflow-hidden group cursor-pointer"
+              style={{ aspectRatio: "4 / 3" }}
             >
-              {/* Image — full cover */}
+              {/* Screenshot image — fill the entire cell */}
               <img
                 src={ss.src}
                 alt={ss.label}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
 
-              {/* Dark overlay — always subtle, stronger on center */}
+              {/* Dark overlay on all images */}
               <div
-                className={`absolute inset-0 transition-all duration-300 ${
-                  i === overlayIdx
+                className={`absolute inset-0 transition-opacity duration-300 ${
+                  i === activeIdx
                     ? "bg-neutral-black/50"
-                    : "bg-neutral-black/10 group-hover:bg-neutral-black/30"
+                    : "bg-neutral-black/20 group-hover:bg-neutral-black/40"
                 }`}
               />
 
-              {/* Active overlay content — only on center card */}
-              {i === overlayIdx && (
+              {/* Active image — title + view demo overlay */}
+              {i === activeIdx && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                  <h3 className="text-base sm:text-xl font-bold text-neutral-100 uppercase tracking-wider">
-                    {ss.label}
+                  <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-neutral-white uppercase tracking-[0.15em] drop-shadow-lg">
+                    {appName}
                   </h3>
-                  <div className="mt-3 flex items-center gap-2 text-neutral-200">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-300/40">
-                      <svg
-                        className="h-3.5 w-3.5 ml-0.5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                      </svg>
+                  <a
+                    href={playStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 sm:mt-4 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-white uppercase tracking-[0.15em] hover:text-primary-light transition-colors"
+                  >
+                    <span className="flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-neutral-white/60">
+                      <HiPlay className="h-3 w-3 sm:h-4 sm:w-4" />
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold uppercase tracking-widest">
-                      View Demo
-                    </span>
-                  </div>
+                    View Demo
+                  </a>
+                </div>
+              )}
+
+              {/* Label on non-active images (shown on hover) */}
+              {i !== activeIdx && (
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-xs sm:text-sm font-medium text-neutral-white drop-shadow-md uppercase tracking-wider">
+                    {ss.label}
+                  </p>
                 </div>
               )}
             </div>
           ))}
         </div>
-
-        {/* PRE / NEXT navigation */}
-        <div className="flex items-center justify-center gap-8 mt-8">
-          <button
-            onClick={goPrev}
-            className="flex items-center gap-2 text-sm text-neutral-400 uppercase tracking-widest font-medium transition-colors hover:text-neutral-100 cursor-pointer"
-          >
-            <span className="text-lg">←</span> Pre
-          </button>
-          <button
-            onClick={goNext}
-            className="flex items-center gap-2 text-sm text-neutral-400 uppercase tracking-widest font-medium transition-colors hover:text-neutral-100 cursor-pointer"
-          >
-            Next <span className="text-lg">→</span>
-          </button>
-        </div>
       </motion.div>
+
+      {/* Navigation — ← PRE    NEXT → */}
+      <div className="flex items-center justify-center gap-8 mt-8 sm:mt-10">
+        <button
+          onClick={goPrev}
+          className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
+        >
+          <HiChevronLeft className="h-4 w-4" />
+          Pre
+        </button>
+        <button
+          onClick={goNext}
+          className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
+        >
+          Next
+          <HiChevronRight className="h-4 w-4" />
+        </button>
+      </div>
     </section>
   );
 }
@@ -513,9 +529,13 @@ export default function AmalTrackerShowcase({ data }) {
       </Section>
 
       {/* ─────────────────────────────────────────────────────
-          SECTION 4 — SCREENSHOTS (Carousel — 4 visible)
+          SECTION 4 — SCREENSHOTS (Full-width carousel)
          ───────────────────────────────────────────────────── */}
-      <ScreenshotCarousel screenshots={screenshots} />
+      <ScreenshotCarousel
+        screenshots={screenshots}
+        appName={name}
+        playStoreUrl={playStoreUrl}
+      />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 5 — HOW IT WORKS
