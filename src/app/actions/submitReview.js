@@ -1,26 +1,63 @@
 /* ============================================================
    submitReview — Server Action for Amal Tracker reviews
    ─────────────────────────────────────────────────
-   Validates review data and stores to a JSON file.
+   Validates review data and stores to Upstash Redis (KV).
+   Falls back to seed JSON for reads when Redis is unavailable.
    New reviews default to approved: false (pending moderation).
    ============================================================ */
 
 "use server";
 
-import { readFile, writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { Redis } from "@upstash/redis";
 
-const REVIEWS_DIR = join(process.cwd(), "data");
-const REVIEWS_FILE = join(REVIEWS_DIR, "reviews-amal.json");
+const REVIEWS_KEY = "reviews-amal";
+
+/* ── Redis client (lazy — only created when env vars exist) ── */
+let redis = null;
+function getRedis() {
+  if (!redis && process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+  }
+  return redis;
+}
+
+/* ── Seed data (bundled at build-time) ─────────────────────── */
+let seedData = null;
+async function getSeedData() {
+  if (seedData !== null) return seedData;
+  try {
+    const { readFile } = await import("fs/promises");
+    const { join } = await import("path");
+    const raw = await readFile(join(process.cwd(), "data", "reviews-amal.json"), "utf-8");
+    seedData = JSON.parse(raw);
+  } catch {
+    seedData = [];
+  }
+  return seedData;
+}
 
 /* ── Read ALL reviews (including unapproved) ───────────────── */
 export async function getReviews() {
-  try {
-    const raw = await readFile(REVIEWS_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
+  const r = getRedis();
+  if (r) {
+    try {
+      const data = await r.get(REVIEWS_KEY);
+      if (data) return typeof data === "string" ? JSON.parse(data) : data;
+      // First run — seed Redis from JSON file
+      const seed = await getSeedData();
+      if (seed.length > 0) {
+        await r.set(REVIEWS_KEY, JSON.stringify(seed));
+      }
+      return seed;
+    } catch (err) {
+      console.error("Redis read error:", err);
+    }
   }
+  // Fallback: read from JSON file (works locally)
+  return getSeedData();
 }
 
 /* ── Read only APPROVED reviews (for public display) ───────── */
@@ -58,10 +95,22 @@ export async function submitReview(_prevState, formData) {
 
   /* Save */
   try {
-    await mkdir(REVIEWS_DIR, { recursive: true });
+    const r = getRedis();
+    if (!r) {
+      // Local fallback — write to JSON file
+      const { readFile, writeFile, mkdir } = await import("fs/promises");
+      const { join } = await import("path");
+      const dir = join(process.cwd(), "data");
+      await mkdir(dir, { recursive: true });
+      const existing = await getReviews();
+      existing.unshift(review);
+      await writeFile(join(dir, "reviews-amal.json"), JSON.stringify(existing, null, 2), "utf-8");
+      return { success: true, review };
+    }
+
     const existing = await getReviews();
-    existing.unshift(review); // newest first
-    await writeFile(REVIEWS_FILE, JSON.stringify(existing, null, 2), "utf-8");
+    existing.unshift(review);
+    await r.set(REVIEWS_KEY, JSON.stringify(existing));
     return { success: true, review };
   } catch (err) {
     console.error("Failed to save review:", err);

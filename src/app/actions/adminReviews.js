@@ -2,35 +2,46 @@
    adminReviews — Server Actions for review moderation
    ─────────────────────────────────────────────────
    Approve, delete, and fetch ALL reviews.
-   Protected by ADMIN_SECRET from .env.local.
+   Uses Upstash Redis for storage, protected by ADMIN_SECRET.
    ============================================================ */
 
 "use server";
 
-import { readFile, writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import { revalidatePath } from "next/cache";
+import { getReviews } from "./submitReview";
+import { Redis } from "@upstash/redis";
 
-const REVIEWS_DIR = join(process.cwd(), "data");
-const REVIEWS_FILE = join(REVIEWS_DIR, "reviews-amal.json");
+const REVIEWS_KEY = "reviews-amal";
+
+/* ── Redis client ──────────────────────────────────────────── */
+let redis = null;
+function getRedis() {
+  if (!redis && process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+  }
+  return redis;
+}
 
 /* ── Helpers ───────────────────────────────────────────────── */
 function verifySecret(secret) {
   return secret === process.env.ADMIN_SECRET;
 }
 
-async function readReviews() {
-  try {
-    const raw = await readFile(REVIEWS_FILE, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
 async function saveReviews(reviews) {
-  await mkdir(REVIEWS_DIR, { recursive: true });
-  await writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2), "utf-8");
+  const r = getRedis();
+  if (r) {
+    await r.set(REVIEWS_KEY, JSON.stringify(reviews));
+  } else {
+    // Local fallback — write to JSON file
+    const { writeFile, mkdir } = await import("fs/promises");
+    const { join } = await import("path");
+    const dir = join(process.cwd(), "data");
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, "reviews-amal.json"), JSON.stringify(reviews, null, 2), "utf-8");
+  }
 }
 
 /* ── Verify admin login ────────────────────────────────────── */
@@ -46,7 +57,7 @@ export async function getAllReviews(secret) {
   if (!verifySecret(secret)) {
     return { success: false, error: "Unauthorized" };
   }
-  const reviews = await readReviews();
+  const reviews = await getReviews();
   return { success: true, reviews };
 }
 
@@ -57,7 +68,7 @@ export async function approveReview(secret, reviewId) {
   }
 
   try {
-    const reviews = await readReviews();
+    const reviews = await getReviews();
     const index = reviews.findIndex((r) => r.id === reviewId);
     if (index === -1) {
       return { success: false, error: "Review not found" };
@@ -80,7 +91,7 @@ export async function unapproveReview(secret, reviewId) {
   }
 
   try {
-    const reviews = await readReviews();
+    const reviews = await getReviews();
     const index = reviews.findIndex((r) => r.id === reviewId);
     if (index === -1) {
       return { success: false, error: "Review not found" };
@@ -103,7 +114,7 @@ export async function deleteReview(secret, reviewId) {
   }
 
   try {
-    const reviews = await readReviews();
+    const reviews = await getReviews();
     const filtered = reviews.filter((r) => r.id !== reviewId);
 
     if (filtered.length === reviews.length) {
