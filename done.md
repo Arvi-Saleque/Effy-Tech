@@ -394,6 +394,35 @@
 
 ---
 
+## 12. Project Showcase — Dark Cinematic Redesign ✅
+
+**Status:** ✅ Completed
+
+**What was done:**
+
+Completely redesigned the Featured Projects section with a dark cinematic aesthetic — scan-line overlays, glassmorphic cards with animated glow borders, neon filter pills, and floating particle orbs. Every sub-component was updated to match.
+
+### Changes by file:
+
+| File | What changed |
+| --- | --- |
+| `src/components/sections/ProjectShowcase.jsx` | Dark `bg-surface-dark` background, animated scan-line pseudo-element, two floating gradient orbs (teal & champagne) with motion animation, inline neon filter pills with box-shadow glow replacing FilterBar, project counter display, `LayoutGroup` wrapper |
+| `src/components/sections/ProjectCard.jsx` | Glassmorphic dark glass card (`bg-neutral-900/60`, `backdrop-blur-md`), animated conic-gradient glow border that spins on hover, grayscale-to-color thumbnail transition, monospace uppercase tech tags, "[ EXPLORE ]" hover overlay with bracket animation, top accent gradient line |
+| `src/components/sections/ProjectModal.jsx` | Dark glass overlay (`bg-neutral-900/95`, `backdrop-blur-xl`), `border-neutral-700/40` border, teal glow shadow, monospace dark tags, teal ghost button for "View Live", category chip with dot indicator, bottom fade gradient on hero image |
+| `src/components/ui/ImagePlaceholder.jsx` | Added `dark` boolean prop — when true, uses dark gradient (`from-neutral-800 via-neutral-900 to-primary-darkest/30`), subtle grid-line overlay, and teal blur accent |
+| `src/app/globals.css` | Added `@keyframes scanLine` for the vertical sweep animation used in ProjectShowcase overlay |
+
+### Visual effects added:
+
+- **Scan-line overlay** — translucent line sweeps vertically across the section background
+- **Floating orbs** — two blurred gradient spheres (teal top-left, champagne bottom-right) that drift with Framer Motion
+- **Neon filter pills** — glow with `box-shadow` on the active category, ring highlight on hover
+- **Conic gradient glow border** — rotates on card hover using CSS `conic-gradient` from teal through champagne
+- **[ EXPLORE ] bracket overlay** — monospace tech-style hover text with animated bracket decorations
+- **Grayscale-to-color** — thumbnails start desaturated and brighten on hover
+
+---
+
 ## All Sections Complete ✅
 
 The Effy Tech landing page now includes:
@@ -401,6 +430,6 @@ The Effy Tech landing page now includes:
 1. Navbar (dark, always-visible links, command palette search)
 2. Hero (parallax, stagger text, magnetic CTA)
 3. About (asymmetric bento grid, animated stat counters)
-4. Project Showcase (morph filter, expandable modal, 10 projects)
+4. Project Showcase (dark cinematic glassmorphic cards, neon filters, scan-line, floating orbs)
 5. Contact (floating-label form, Zod validation, server action)
 6. Footer (curtain-reveal, dot-grid, server component)
