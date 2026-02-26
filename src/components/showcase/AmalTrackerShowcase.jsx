@@ -21,6 +21,7 @@ import {
   HiCheckCircle,
   HiChevronLeft,
   HiChevronRight,
+  HiChevronDown,
 } from "react-icons/hi";
 import {
   FaMosque,
@@ -36,6 +37,10 @@ import {
   FaBookOpen,
   FaLayerGroup,
   FaGooglePlay,
+  FaQuran,
+  FaFire,
+  FaPrayingHands,
+  FaHandHoldingHeart,
 } from "react-icons/fa";
 
 /* ── Icon map ──────────────────────────────────────────────── */
@@ -140,6 +145,289 @@ function PhoneMockup({ src, alt, className = "" }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ── Deep-dive feature data ───────────────────────────────── */
+const deepDiveCategories = [
+  {
+    id: "salah",
+    icon: FaMosque,
+    titleBn: "নামাজ ট্রাকিং",
+    titleEn: "Salah Tracking",
+    color: "from-teal-500/20 to-teal-600/5",
+    accent: "teal",
+    points: [
+      "প্রতিদিনের নামাজ ট্রাক রাখা যাবে।",
+      "জামাতে / আউয়াল ওয়াক্তে নাকি দেরী করে সেটা দেখা যাবে।",
+      "শেষ ৭ দিন / ৩০ দিনে কয় ওয়াক্ত নামাজ জামাতে পড়ছেন দেখা যাবে।",
+      "শেষ ৩০ দিনে কোন কোন নামাজ কাজা হইছে সেগুলা বিস্তারিত দেখা যাবে এবং আপডেট করা যাবে।",
+    ],
+  },
+  {
+    id: "amal",
+    icon: FaCheckCircle,
+    titleBn: "প্রতিদিনের আমল ট্রাকিং",
+    titleEn: "Daily Amal Tracking",
+    color: "from-emerald-500/20 to-emerald-600/5",
+    accent: "emerald",
+    points: [
+      "প্রতিদিনের আমল সেকশনে বেসিক ১৮ টা আমল আছে — এইগুলা চেঞ্জ বা এডিট করা যাবে না।",
+      "ইউজার প্রয়োজন হলে কাস্টম যে কোনো আমল নিজের ইচ্ছা মত যুক্ত করে নিতে পারবে।",
+      "একবার যুক্ত করলেই হবে — পরবর্তীতে যুক্ত করা লাগবে না যদি না ডিলেট করে।",
+      "আমল পেজের উপর ইনফো আইকন থেকে সকাল-সন্ধ্যার সকল দোয়া পাওয়া যাবে।",
+      "দোয়া সেকশনে শায়খ আহমাদুল্লাহ এর সকাল-সন্ধ্যার দোয়া যুক্ত করা হয়েছে।",
+    ],
+  },
+  {
+    id: "zikir",
+    icon: FaPrayingHands,
+    titleBn: "যিকির ট্রাকিং",
+    titleEn: "Zikir Tracking",
+    color: "from-amber-500/20 to-amber-600/5",
+    accent: "amber",
+    points: [
+      "বেসিক যিকির হিসেবে ৬ তাসবিহ যুক্ত করা আছে।",
+      "১০০ বার করে আলহামদুলিল্লাহ, সুবহানাল্লাহ, আল্লাহু আকবার, লা ইলাহা ইল্লাল্লাহ, আসতাগফিরুল্লাহ, দুরূদ শরীফ।",
+      "ইউজার প্রয়োজন হলে কাস্টম যে কোনো যিকির নিজের ইচ্ছা মত টার্গেট সেট করে যুক্ত করে নিতে পারবে।",
+    ],
+  },
+  {
+    id: "study",
+    icon: FaQuran,
+    titleBn: "পড়াশোনা ট্রাকিং",
+    titleEn: "Study Tracking",
+    color: "from-sky-500/20 to-sky-600/5",
+    accent: "sky",
+    points: [
+      "কুরআন, হাদীস ও তাফসীর — এই ৩ টি বিষয় রাখা হয়েছে।",
+      "কোন বিষয়ে ইউজার কত সময় রেগুলার পড়তে চায় সেটা নিজের মত করে সেট করে নিতে পারবে।",
+    ],
+  },
+  {
+    id: "gunah",
+    icon: FaShieldAlt,
+    titleBn: "গুনাহ ট্রাকিং",
+    titleEn: "Sin & Kaffara Tracking",
+    color: "from-rose-500/20 to-rose-600/5",
+    accent: "rose",
+    points: [
+      "গুনাহ ট্রাকিং এ ডিফল্ট ৪ টা গুনাহ আছে — ইউজার ইচ্ছা মত গুনাহ অ্যাড করতে পারবে।",
+      "কোন কোন গুনাহের কাফফারা বাকি সেটা দেখতে পারবে।",
+      "কাফফারার জন্য ৪ টি বিষয় রাখা হয়েছে — যিকির, দান, কুরআন, নামাজ।",
+    ],
+  },
+  {
+    id: "stats",
+    icon: FaFire,
+    titleBn: "স্ট্যাট",
+    titleEn: "Statistics & Progress",
+    color: "from-orange-500/20 to-orange-600/5",
+    accent: "orange",
+    points: [
+      "প্রতিদিনের প্রোগ্রেস ন্যুনতম ৬০% হলে স্ট্রিক কাউন্ট হবে।",
+      "সাপ্তাহিক চার্টে শেষ ৭ দিনের সামারি দেখা যাবে — মোট আমল, মোট যিকির ইত্যাদি।",
+      "মাসিক চার্টে শেষ ৩০ দিনের সামারি দেখা যাবে — মোট আমল, মোট যিকির ইত্যাদি।",
+      "মাসিক চার্টের ক্যালেন্ডারে কোনো দিনে ক্লিক করলে বিস্তারিত দেখা যাবে — ঐ দিনের আমল/টার্গেট, কি করা হয়েছে, গুনাহ ও কাফফারা সব।",
+    ],
+  },
+  {
+    id: "reminder",
+    icon: FaBell,
+    titleBn: "রিমাইন্ডার সিস্টেম",
+    titleEn: "Smart Reminders",
+    color: "from-violet-500/20 to-violet-600/5",
+    accent: "violet",
+    points: [
+      "প্রতি ওয়াক্তে নামাজের রিমাইন্ডার দিবে।",
+      "সকাল ও সন্ধ্যার যিকিরে রিমাইন্ডার দিবে।",
+      "দৈনিক আমলের রিমাইন্ডার দিবে।",
+      "ইউজার চাইলে নিজের মত কাস্টম রিমাইন্ডার অ্যাড করে নিতে পারবে।",
+    ],
+  },
+];
+
+/* ── Feature Deep Dive — Interactive accordion ────────────── */
+function FeatureDeepDive() {
+  const [openId, setOpenId] = useState("salah");
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section ref={ref} className="relative py-24 sm:py-32 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-1/4 h-[600px] w-[600px] rounded-full bg-primary/[0.03] blur-[140px]" />
+        <div className="absolute bottom-0 left-1/3 h-[500px] w-[500px] rounded-full bg-accent/[0.025] blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
+        {/* Section heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-3xl text-center mb-14 sm:mb-20"
+        >
+          <div className="inline-flex items-center gap-3 mb-5">
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-primary-light/40" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary-light/70">
+              Deep Dive
+            </span>
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-primary-light/40" />
+          </div>
+          <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1]">
+            <span className="bg-gradient-to-b from-neutral-100 to-neutral-400 bg-clip-text text-transparent">
+              বিস্তারিত ফিচার সমূহ
+            </span>
+          </h2>
+          <p className="mt-5 text-neutral-500 leading-relaxed text-lg max-w-xl mx-auto">
+            Explore every feature in detail — tap each section to learn more.
+          </p>
+        </motion.div>
+
+        {/* Accordion */}
+        <div className="max-w-4xl mx-auto flex flex-col gap-3">
+          {deepDiveCategories.map((cat, i) => {
+            const Icon = cat.icon;
+            const isOpen = openId === cat.id;
+
+            return (
+              <motion.div
+                key={cat.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.06 }}
+              >
+                {/* Accordion item wrapper */}
+                <div
+                  className={`relative rounded-2xl overflow-hidden transition-all duration-500 ${
+                    isOpen
+                      ? "bg-neutral-900/80 shadow-[0_0_60px_rgba(0,0,0,0.3)]"
+                      : "bg-neutral-900/30 hover:bg-neutral-900/50"
+                  }`}
+                >
+                  {/* Border */}
+                  <div
+                    className={`absolute inset-0 rounded-2xl border transition-colors duration-500 pointer-events-none ${
+                      isOpen
+                        ? "border-primary/20"
+                        : "border-neutral-700/20 hover:border-neutral-700/40"
+                    }`}
+                  />
+
+                  {/* Active indicator glow */}
+                  {isOpen && (
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/30 to-transparent" />
+                  )}
+
+                  {/* Header — clickable */}
+                  <button
+                    onClick={() => setOpenId(isOpen ? null : cat.id)}
+                    className="relative z-10 w-full flex items-center gap-4 sm:gap-5 p-5 sm:p-6 text-left cursor-pointer"
+                  >
+                    {/* Icon */}
+                    <div
+                      className={`relative flex-shrink-0 flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br ${cat.color} border transition-all duration-500 ${
+                        isOpen
+                          ? "border-primary/20 shadow-[0_0_25px_rgba(45,212,191,0.06)]"
+                          : "border-neutral-700/20"
+                      }`}
+                    >
+                      <Icon
+                        className={`h-5 w-5 sm:h-6 sm:w-6 transition-all duration-300 ${
+                          isOpen
+                            ? "text-primary-light drop-shadow-[0_0_6px_rgba(45,212,191,0.4)]"
+                            : "text-neutral-400"
+                        }`}
+                      />
+                    </div>
+
+                    {/* Title */}
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        className={`text-lg sm:text-xl font-bold transition-colors duration-300 ${
+                          isOpen ? "text-neutral-100" : "text-neutral-300"
+                        }`}
+                      >
+                        {cat.titleBn}
+                      </h3>
+                      <p className="text-[11px] font-semibold text-neutral-600 uppercase tracking-[0.15em] mt-0.5">
+                        {cat.titleEn}
+                      </p>
+                    </div>
+
+                    {/* Number + chevron */}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <span
+                        className={`hidden sm:block text-xs font-mono transition-colors duration-300 ${
+                          isOpen ? "text-primary-light/40" : "text-neutral-700"
+                        }`}
+                      >
+                        {cat.points.length} items
+                      </span>
+                      <div
+                        className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-300 ${
+                          isOpen
+                            ? "border-primary/20 bg-primary/10 text-primary-light rotate-180"
+                            : "border-neutral-700/30 bg-neutral-800/50 text-neutral-500"
+                        }`}
+                      >
+                        <HiChevronDown className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Expandable body */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key="body"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{
+                          duration: 0.4,
+                          ease: [0.25, 0.46, 0.45, 0.94],
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 sm:px-6 pb-6 sm:pb-7 pt-0 sm:pl-[5.25rem]">
+                          <div className="flex flex-col gap-3">
+                            {cat.points.map((point, pi) => (
+                              <motion.div
+                                key={pi}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{
+                                  duration: 0.3,
+                                  delay: pi * 0.06,
+                                }}
+                                className="flex gap-3 items-start group/point"
+                              >
+                                {/* Bullet */}
+                                <div className="relative mt-2 flex-shrink-0">
+                                  <div className="h-2 w-2 rounded-full bg-primary/30 group-hover/point:bg-primary/60 transition-colors duration-300" />
+                                  <div className="absolute -inset-1 rounded-full bg-primary/10 blur-sm opacity-0 group-hover/point:opacity-100 transition-opacity duration-300" />
+                                </div>
+                                {/* Text */}
+                                <p className="text-[15px] leading-relaxed text-neutral-400 group-hover/point:text-neutral-300 transition-colors duration-300">
+                                  {point}
+                                </p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -510,7 +798,7 @@ export default function AmalTrackerShowcase({ data }) {
                     {/* Screen */}
                     <div className="relative h-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-neutral-900">
                       <img
-                        src="/images/amal/home1.png"
+                        src="/images/amal/hero.jpeg"
                         alt="Amal Tracker Home Screen"
                         className="h-full w-auto object-cover object-top block"
                         loading="eager"
@@ -733,6 +1021,11 @@ export default function AmalTrackerShowcase({ data }) {
           </motion.div>
         </div>
       </Section>
+
+      {/* ─────────────────────────────────────────────────────
+          SECTION 3.5 — DETAILED FEATURE DEEP DIVE
+         ───────────────────────────────────────────────────── */}
+      <FeatureDeepDive />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 4 — SCREENSHOTS (Full-width carousel)
