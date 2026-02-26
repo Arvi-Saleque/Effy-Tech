@@ -12,8 +12,11 @@ import projects from "@/data/projects";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 
 /* ---------- Static params for SSG ---------- */
+/* Exclude IAM — it has a dedicated page at /projects/IAM */
 export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projects
+    .filter((p) => p.slug !== "IAM")
+    .map((p) => ({ slug: p.slug }));
 }
 
 /* ---------- Dynamic metadata ---------- */
