@@ -1,65 +1,11 @@
-﻿[
+[
   {
-    "id": "mm3tnq840n6f",
+    "id": "mm3u4z4cmrv6",
     "name": "Saleque Bin Hossain",
-    "rating": 3,
-    "message": "this is a ewview",
-    "date": "2026-02-26T18:53:55.972Z",
+    "rating": 4,
+    "message": "this is a review",
+    "date": "2026-02-26T19:07:20.652Z",
     "avatar": "S",
-    "approved": false
-  },
-  {
-    "id": "seed01",
-    "name": "Abdullah Rahman",
-    "rating": 5,
-    "message": "\u0986\u09b2\u09b9\u09be\u09ae\u09a6\u09c1\u09b2\u09bf\u09b2\u09cd\u09b2\u09be\u09b9, \u098f\u0987 \u0985\u09cd\u09af\u09be\u09aa\u099f\u09bf \u0986\u09ae\u09be\u09b0 \u09a6\u09c8\u09a8\u09bf\u0995 \u0987\u09ac\u09be\u09a6\u09a4 \u099f\u09cd\u09b0\u09cd\u09af\u09be\u0995 \u0995\u09b0\u09a4\u09c7 \u0985\u09a8\u09c7\u0995 \u09b8\u09be\u09b9\u09be\u09af\u09cd\u09af \u0995\u09b0\u099b\u09c7\u0964 \u09a8\u09be\u09ae\u09be\u099c\u09c7\u09b0 \u09b0\u09bf\u09aa\u09cb\u09b0\u09cd\u099f \u09a6\u09c7\u0996\u09c7 \u09a8\u09bf\u099c\u09c7\u0995\u09c7 \u0989\u09a8\u09cd\u09a8\u09a4 \u0995\u09b0\u09a4\u09c7 \u09aa\u09be\u09b0\u099b\u09bf\u0964",
-    "date": "2026-02-15T10:30:00.000Z",
-    "avatar": "A",
-    "approved": true
-  },
-  {
-    "id": "seed02",
-    "name": "Fatima Khatun",
-    "rating": 5,
-    "message": "\u09b8\u0995\u09be\u09b2-\u09b8\u09a8\u09cd\u09a7\u09cd\u09af\u09be\u09b0 \u09af\u09bf\u0995\u09bf\u09b0 \u09b0\u09bf\u09ae\u09be\u0987\u09a8\u09cd\u09a1\u09be\u09b0 \u09ab\u09bf\u099a\u09be\u09b0\u099f\u09bf \u0985\u09b8\u09be\u09a7\u09be\u09b0\u09a3! \u0986\u0997\u09c7 \u09aa\u09cd\u09b0\u09be\u09af\u09bc\u0987 \u09ad\u09c1\u09b2\u09c7 \u09af\u09c7\u09a4\u09be\u09ae, \u098f\u0996\u09a8 \u0986\u09b0 \u09ae\u09bf\u09b8 \u09b9\u09af\u09bc \u09a8\u09be\u0964 \u099c\u09be\u09af\u09be\u0995\u09be\u09b2\u09cd\u09b2\u09be\u09b9\u09c1 \u0996\u09be\u0987\u09b0\u09be\u09a8!",
-    "date": "2026-02-10T14:20:00.000Z",
-    "avatar": "F",
-    "approved": true
-  },
-  {
-    "id": "seed03",
-    "name": "Mohammad Hasan",
-    "rating": 4,
-    "message": "Very well-designed app. The salah tracking with Jamat/Awal Waqt tags is something I haven't seen in other apps. Would love to see a dark mode option in the future.",
-    "date": "2026-02-05T08:15:00.000Z",
-    "avatar": "M",
-    "approved": true
-  },
-  {
-    "id": "seed04",
-    "name": "Ayesha Siddiqui",
-    "rating": 5,
-    "message": "Best Islamic habit tracker I've used! The statistics and charts really motivate me to stay consistent with my prayers and daily amal. Highly recommended!",
-    "date": "2026-01-28T16:45:00.000Z",
-    "avatar": "A",
-    "approved": true
-  },
-  {
-    "id": "seed05",
-    "name": "Yusuf Ali",
-    "rating": 4,
-    "message": "\u0997\u09c1\u09a8\u09be\u09b9 \u0993 \u0995\u09be\u09ab\u09ab\u09be\u09b0\u09be \u099f\u09cd\u09b0\u09cd\u09af\u09be\u0995\u09be\u09b0 \u09ab\u09bf\u099a\u09be\u09b0\u099f\u09bf \u0996\u09c1\u09ac\u0987 \u0987\u0989\u09a8\u09bf\u0995\u0964 \u0985\u09a8\u09cd\u09af \u0995\u09cb\u09a8\u09cb \u0985\u09cd\u09af\u09be\u09aa\u09c7 \u098f\u099f\u09be \u09aa\u09be\u0987\u09a8\u09bf\u0964 \u0995\u09cd\u09af\u09be\u09b2\u09c7\u09a8\u09cd\u09a1\u09be\u09b0 \u09ad\u09bf\u0989 \u09b0\u09bf\u09aa\u09cb\u09b0\u09cd\u099f\u0993 \u0985\u09a8\u09c7\u0995 \u09b8\u09c1\u09a8\u09cd\u09a6\u09b0\u0964",
-    "date": "2026-01-20T12:00:00.000Z",
-    "avatar": "Y",
-    "approved": true
-  },
-  {
-    "id": "seed06",
-    "name": "Khadijah Noor",
-    "rating": 5,
-    "message": "This app has genuinely improved my daily ibadah routine. The Qaza tracking feature is so helpful \u2014 I can now work on making up my missed prayers systematically.",
-    "date": "2026-01-15T09:30:00.000Z",
-    "avatar": "K",
     "approved": true
   }
 ]
