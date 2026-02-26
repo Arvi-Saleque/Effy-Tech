@@ -477,7 +477,7 @@ export default function AmalTrackerShowcase({ data }) {
               </motion.div>
             </motion.div>
 
-            {/* Right — Phone mockup */}
+            {/* Right — Premium dual-phone showcase */}
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -488,11 +488,61 @@ export default function AmalTrackerShowcase({ data }) {
               }}
               className="flex justify-center lg:justify-end"
             >
-              <PhoneMockup
-                src="/images/amal/home1.png"
-                alt="Amal Tracker Home Screen"
-                className="w-56 sm:w-64 lg:w-72"
-              />
+              {/* Outer glass container */}
+              <div className="relative">
+                {/* Ambient glow behind the container */}
+                <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-primary/10 via-transparent to-accent/8 blur-[60px] pointer-events-none" />
+
+                {/* Container shell */}
+                <div className="relative rounded-[2rem] border border-neutral-700/30 bg-neutral-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-[0_8px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.03)_inset]">
+                  {/* Subtle inner top highlight */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 bg-gradient-to-r from-transparent via-neutral-500/20 to-transparent" />
+
+                  {/* Dual phones */}
+                  <div className="flex items-end gap-3 sm:gap-4">
+                    {/* Phone 1 — Dark mode (slightly taller / front) */}
+                    <div className="relative z-10 w-36 sm:w-44 lg:w-48 flex-shrink-0">
+                      <div className="relative rounded-[1.5rem] sm:rounded-[1.8rem] border-[3px] border-neutral-600/40 bg-neutral-950 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+                        {/* Notch */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-16 sm:w-20 rounded-b-xl bg-neutral-950" />
+                        {/* Screen */}
+                        <div className="relative overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-neutral-900">
+                          <img
+                            src="/images/amal/home1.png"
+                            alt="Amal Tracker — Dark Mode"
+                            className="w-full h-auto block"
+                            loading="eager"
+                          />
+                        </div>
+                        {/* Home indicator */}
+                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-10 rounded-full bg-neutral-600/40" />
+                      </div>
+                    </div>
+
+                    {/* Phone 2 — Light mode (slightly shifted down / behind) */}
+                    <div className="relative -ml-6 sm:-ml-8 w-36 sm:w-44 lg:w-48 flex-shrink-0 translate-y-3 sm:translate-y-4">
+                      <div className="relative rounded-[1.5rem] sm:rounded-[1.8rem] border-[3px] border-neutral-500/25 bg-neutral-100 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+                        {/* Notch */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-16 sm:w-20 rounded-b-xl bg-neutral-100" />
+                        {/* Screen */}
+                        <div className="relative overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-white">
+                          <img
+                            src="/images/amal/home2.png"
+                            alt="Amal Tracker — Light Mode"
+                            className="w-full h-auto block"
+                            loading="eager"
+                          />
+                        </div>
+                        {/* Home indicator */}
+                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-10 rounded-full bg-neutral-400/30" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Corner accent */}
+                  <div className="absolute -bottom-1 -right-1 h-20 w-20 rounded-br-[2rem] bg-gradient-to-tl from-primary/8 to-transparent blur-xl pointer-events-none" />
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
