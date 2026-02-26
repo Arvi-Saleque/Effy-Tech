@@ -1096,7 +1096,7 @@ function ReviewCard({ review, index }) {
 }
 
 /* ── Review Form ───────────────────────────────────────────── */
-function ReviewForm({ onNewReview }) {
+function ReviewForm() {
   const [serverState, formAction, isPending] = useActionState(submitReview, null);
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -1107,14 +1107,11 @@ function ReviewForm({ onNewReview }) {
       setSubmitted(true);
       setRating(0);
       formRef.current?.reset();
-      if (serverState.review) {
-        onNewReview(serverState.review);
-      }
-      // Reset success state after 4 seconds
-      const t = setTimeout(() => setSubmitted(false), 4000);
+      // Reset success state after 5 seconds
+      const t = setTimeout(() => setSubmitted(false), 5000);
       return () => clearTimeout(t);
     }
-  }, [serverState, onNewReview]);
+  }, [serverState]);
 
   return (
     <motion.div
@@ -1152,7 +1149,7 @@ function ReviewForm({ onNewReview }) {
               Thank you for your review!
             </p>
             <p className="mt-1 text-sm text-neutral-500">
-              জাযাকাল্লাহু খাইরান
+              Your review is pending approval
             </p>
           </motion.div>
         ) : (
@@ -1253,11 +1250,7 @@ function ReviewForm({ onNewReview }) {
 
 /* ── Review Section ────────────────────────────────────────── */
 function ReviewSection({ initialReviews }) {
-  const [reviews, setReviews] = useState(initialReviews);
-
-  const handleNewReview = useCallback((review) => {
-    setReviews((prev) => [review, ...prev]);
-  }, []);
+  const [reviews] = useState(initialReviews);
 
   const avgRating =
     reviews.length > 0
@@ -1369,7 +1362,7 @@ function ReviewSection({ initialReviews }) {
           {/* Review form — 1 col on lg */}
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24">
-              <ReviewForm onNewReview={handleNewReview} />
+              <ReviewForm />
             </div>
           </div>
         </div>

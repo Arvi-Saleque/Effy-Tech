@@ -2,7 +2,7 @@
    submitReview — Server Action for Amal Tracker reviews
    ─────────────────────────────────────────────────
    Validates review data and stores to a JSON file.
-   In production, swap with MongoDB/Prisma save.
+   New reviews default to approved: false (pending moderation).
    ============================================================ */
 
 "use server";
@@ -13,7 +13,7 @@ import { join } from "path";
 const REVIEWS_DIR = join(process.cwd(), "data");
 const REVIEWS_FILE = join(REVIEWS_DIR, "reviews-amal.json");
 
-/* ── Read existing reviews ─────────────────────────────────── */
+/* ── Read ALL reviews (including unapproved) ───────────────── */
 export async function getReviews() {
   try {
     const raw = await readFile(REVIEWS_FILE, "utf-8");
@@ -21,6 +21,12 @@ export async function getReviews() {
   } catch {
     return [];
   }
+}
+
+/* ── Read only APPROVED reviews (for public display) ───────── */
+export async function getApprovedReviews() {
+  const all = await getReviews();
+  return all.filter((r) => r.approved === true);
 }
 
 /* ── Submit a new review ───────────────────────────────────── */
@@ -47,6 +53,7 @@ export async function submitReview(_prevState, formData) {
     message,
     date: new Date().toISOString(),
     avatar: name.charAt(0).toUpperCase(),
+    approved: false,
   };
 
   /* Save */
