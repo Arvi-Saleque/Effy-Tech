@@ -100,7 +100,7 @@ export default function Navbar() {
               >
                 {label}
                 {/* Gold underline on hover */}
-                <span className="absolute bottom-0.5 left-4 right-4 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                <span className="absolute bottom-0.5 left-4 right-4 h-0.5 bg-primary-light scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               </a>
             ))}
           </nav>
