@@ -63,6 +63,8 @@
 
   /* Font Families */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-heading: "Li Alinur Nakkhatra Unicode", Georgia, serif;
+  --font-body: "Li Alinur Banglaborno Unicode", Georgia, serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Font Sizes */
@@ -109,9 +111,15 @@
   }
 
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     color: var(--color-text-primary);
     background-color: var(--color-surface);
+  }
+
+  /* All headings use Alinur Nakhatra */
+  h1,
+  h2 {
+    font-family: var(--font-heading);
   }
 
   * {

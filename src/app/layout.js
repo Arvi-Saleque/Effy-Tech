@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import siteConfig from "@/theme/siteConfig";
 import Navbar from "@/components/layout/Navbar";
@@ -9,6 +10,40 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+const banglaborno = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Li Alinur Banglaborno Unicode.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Li Alinur Banglaborno Unicode Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  display: "swap",
+  variable: "--font-body",
+});
+
+const nakhatra = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Li Alinur Nakkhatra Unicode.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Li Alinur Nakkhatra Unicode Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  display: "swap",
+  variable: "--font-heading",
+});
+
 export const metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
@@ -16,7 +51,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${banglaborno.variable} ${nakhatra.variable}`}>
       <body>
         <Navbar />
         {children}
