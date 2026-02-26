@@ -13,7 +13,7 @@
 "use client";
 
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import {
   HiArrowLeft,
@@ -642,6 +642,11 @@ export default function AmalTrackerShowcase({ data }) {
     howItWorks,
     highlights,
   } = data;
+
+  /* Scroll to top on client-side navigation */
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
