@@ -24,19 +24,16 @@ function getRedis() {
   return redis;
 }
 
-/* ── Seed data (bundled at build-time) ─────────────────────── */
-let seedData = null;
-async function getSeedData() {
-  if (seedData !== null) return seedData;
+/* ── Read from local JSON file (no caching — always fresh) ── */
+async function readFromFile() {
   try {
     const { readFile } = await import("fs/promises");
     const { join } = await import("path");
     const raw = await readFile(join(process.cwd(), "data", "reviews-amal.json"), "utf-8");
-    seedData = JSON.parse(raw);
+    return JSON.parse(raw);
   } catch {
-    seedData = [];
+    return [];
   }
-  return seedData;
 }
 
 /* ── Read ALL reviews (including unapproved) ───────────────── */
@@ -47,7 +44,7 @@ export async function getReviews() {
       const data = await r.get(REVIEWS_KEY);
       if (data) return typeof data === "string" ? JSON.parse(data) : data;
       // First run — seed Redis from JSON file
-      const seed = await getSeedData();
+      const seed = await readFromFile();
       if (seed.length > 0) {
         await r.set(REVIEWS_KEY, JSON.stringify(seed));
       }
@@ -56,8 +53,8 @@ export async function getReviews() {
       console.error("Redis read error:", err);
     }
   }
-  // Fallback: read from JSON file (works locally)
-  return getSeedData();
+  // Fallback: read from JSON file (always fresh)
+  return readFromFile();
 }
 
 /* ── Read only APPROVED reviews (for public display) ───────── */
