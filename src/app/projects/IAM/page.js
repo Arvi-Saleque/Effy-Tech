@@ -8,12 +8,16 @@
 
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
 import amalTracker from "@/data/amalTracker";
+import { getReviews } from "@/app/actions/submitReview";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Amal Tracker — Islamic Habit Tracking App | Effy Tech",
   description: amalTracker.description,
 };
 
-export default function AmalTrackerPage() {
-  return <AmalTrackerShowcase data={amalTracker} />;
+export default async function AmalTrackerPage() {
+  const initialReviews = await getReviews();
+  return <AmalTrackerShowcase data={amalTracker} initialReviews={initialReviews} />;
 }

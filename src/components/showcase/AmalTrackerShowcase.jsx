@@ -13,8 +13,9 @@
 "use client";
 
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, useActionState } from "react";
 import Link from "next/link";
+import { submitReview } from "@/app/actions/submitReview";
 import {
   HiArrowLeft,
   HiExternalLink,
@@ -22,6 +23,7 @@ import {
   HiChevronLeft,
   HiChevronRight,
   HiChevronDown,
+  HiStar,
 } from "react-icons/hi";
 import {
   FaMosque,
@@ -634,7 +636,7 @@ const showcaseNavLinks = [
   { label: "Features", href: "#features" },
   { label: "Details", href: "#deep-dive" },
   { label: "Screenshots", href: "#screenshots" },
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "Reviews", href: "#reviews" },
   { label: "Download", href: "#download" },
 ];
 
@@ -979,10 +981,407 @@ function ShowcaseFooter({ appName, playStoreUrl }) {
   );
 }
 
+/* ── Star Rating Input ─────────────────────────────────────── */
+function StarRatingInput({ value, onChange }) {
+  const [hover, setHover] = useState(0);
+
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          onClick={() => onChange(star)}
+          onMouseEnter={() => setHover(star)}
+          onMouseLeave={() => setHover(0)}
+          className="p-0.5 transition-transform hover:scale-110 cursor-pointer"
+          aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+        >
+          <HiStar
+            className={`h-7 w-7 transition-colors duration-150 ${
+              star <= (hover || value)
+                ? "text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]"
+                : "text-neutral-700"
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* ── Star Rating Display ───────────────────────────────────── */
+function StarRatingDisplay({ rating, size = "sm" }) {
+  const sizeClass = size === "sm" ? "h-4 w-4" : "h-5 w-5";
+  return (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <HiStar
+          key={star}
+          className={`${sizeClass} ${
+            star <= rating ? "text-amber-400" : "text-neutral-700"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ── Review Card ───────────────────────────────────────────── */
+function ReviewCard({ review, index }) {
+  const gradients = [
+    "from-primary/20 to-primary-light/20",
+    "from-purple-500/20 to-primary/20",
+    "from-emerald-500/20 to-primary/20",
+    "from-cyan-500/20 to-primary-light/20",
+    "from-primary-light/20 to-teal-500/20",
+    "from-blue-500/20 to-primary/20",
+  ];
+
+  const borderColors = [
+    "hover:border-primary-light/40",
+    "hover:border-purple-400/40",
+    "hover:border-emerald-400/40",
+    "hover:border-cyan-400/40",
+    "hover:border-teal-400/40",
+    "hover:border-blue-400/40",
+  ];
+
+  const grad = gradients[index % gradients.length];
+  const borderHover = borderColors[index % borderColors.length];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className={`group relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-6 backdrop-blur-sm transition-all duration-300 ${borderHover} hover:bg-neutral-800/50`}
+    >
+      {/* Gradient glow on hover */}
+      <div
+        className={`absolute -top-1/2 -right-1/2 h-full w-full rounded-full bg-gradient-to-br ${grad} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+      />
+
+      <div className="relative z-10">
+        {/* Header: avatar + name + date */}
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 to-primary-light/30 text-sm font-bold text-primary-light ring-1 ring-primary-light/20">
+              {review.avatar}
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-neutral-200">
+                {review.name}
+              </p>
+              <p className="text-xs text-neutral-500">
+                {new Date(review.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+          </div>
+          <StarRatingDisplay rating={review.rating} />
+        </div>
+
+        {/* Review text */}
+        <p className="text-sm leading-relaxed text-neutral-400">
+          {review.message}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Review Form ───────────────────────────────────────────── */
+function ReviewForm({ onNewReview }) {
+  const [serverState, formAction, isPending] = useActionState(submitReview, null);
+  const [rating, setRating] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    if (serverState?.success) {
+      setSubmitted(true);
+      setRating(0);
+      formRef.current?.reset();
+      if (serverState.review) {
+        onNewReview(serverState.review);
+      }
+      // Reset success state after 4 seconds
+      const t = setTimeout(() => setSubmitted(false), 4000);
+      return () => clearTimeout(t);
+    }
+  }, [serverState, onNewReview]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-6 sm:p-8 backdrop-blur-sm"
+    >
+      <h3 className="text-lg font-bold text-neutral-100 mb-1">
+        Share Your Experience
+      </h3>
+      <p className="text-sm text-neutral-500 mb-6">
+        আপনার মতামত জানান — your review helps others discover this app
+      </p>
+
+      <AnimatePresence mode="wait">
+        {submitted ? (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="flex flex-col items-center justify-center py-8 text-center"
+          >
+            <motion.div
+              className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-light/15 mb-4"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", damping: 12, stiffness: 200, delay: 0.1 }}
+            >
+              <HiCheckCircle className="h-8 w-8 text-primary-light" />
+            </motion.div>
+            <p className="text-base font-semibold text-neutral-200">
+              Thank you for your review!
+            </p>
+            <p className="mt-1 text-sm text-neutral-500">
+              জাযাকাল্লাহু খাইরান
+            </p>
+          </motion.div>
+        ) : (
+          <motion.form
+            key="form"
+            ref={formRef}
+            action={(fd) => {
+              fd.set("rating", String(rating));
+              formAction(fd);
+            }}
+            className="space-y-5"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* Rating */}
+            <div>
+              <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-2">
+                Rating
+              </label>
+              <StarRatingInput value={rating} onChange={setRating} />
+              {serverState?.errors?.rating && (
+                <p className="mt-1 text-xs text-error">{serverState.errors.rating}</p>
+              )}
+            </div>
+
+            {/* Name */}
+            <div>
+              <label
+                htmlFor="review-name"
+                className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-2"
+              >
+                Your Name
+              </label>
+              <input
+                id="review-name"
+                name="name"
+                type="text"
+                required
+                placeholder="Enter your name"
+                className="w-full rounded-lg border border-neutral-700 bg-neutral-800/50 px-4 py-3 text-sm text-neutral-200 placeholder-neutral-600 outline-none transition-all focus:border-primary-light focus:ring-2 focus:ring-primary-light/10"
+              />
+              {serverState?.errors?.name && (
+                <p className="mt-1 text-xs text-error">{serverState.errors.name}</p>
+              )}
+            </div>
+
+            {/* Message */}
+            <div>
+              <label
+                htmlFor="review-message"
+                className="block text-xs font-medium uppercase tracking-wider text-neutral-500 mb-2"
+              >
+                Your Review
+              </label>
+              <textarea
+                id="review-message"
+                name="message"
+                rows={4}
+                required
+                placeholder="Share your experience with Amal Tracker..."
+                className="w-full resize-none rounded-lg border border-neutral-700 bg-neutral-800/50 px-4 py-3 text-sm text-neutral-200 placeholder-neutral-600 outline-none transition-all focus:border-primary-light focus:ring-2 focus:ring-primary-light/10"
+              />
+              {serverState?.errors?.message && (
+                <p className="mt-1 text-xs text-error">{serverState.errors.message}</p>
+              )}
+            </div>
+
+            {/* Server error */}
+            {serverState?.errors?.server && (
+              <p className="text-sm text-error">{serverState.errors.server}</p>
+            )}
+
+            {/* Submit */}
+            <motion.button
+              type="submit"
+              disabled={isPending || rating === 0}
+              className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(15,118,110,0.2)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              whileTap={{ scale: 0.98 }}
+            >
+              {isPending ? (
+                <span className="inline-flex items-center gap-2">
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" />
+                    <path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="opacity-75" />
+                  </svg>
+                  Submitting...
+                </span>
+              ) : (
+                "Submit Review"
+              )}
+            </motion.button>
+          </motion.form>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+/* ── Review Section ────────────────────────────────────────── */
+function ReviewSection({ initialReviews }) {
+  const [reviews, setReviews] = useState(initialReviews);
+
+  const handleNewReview = useCallback((review) => {
+    setReviews((prev) => [review, ...prev]);
+  }, []);
+
+  const avgRating =
+    reviews.length > 0
+      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+      : "0.0";
+
+  const ratingCounts = [5, 4, 3, 2, 1].map((star) => ({
+    star,
+    count: reviews.filter((r) => r.rating === star).length,
+    pct: reviews.length > 0
+      ? Math.round((reviews.filter((r) => r.rating === star).length / reviews.length) * 100)
+      : 0,
+  }));
+
+  return (
+    <Section id="reviews" className="relative py-20 sm:py-28">
+      {/* Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/3 h-[400px] w-[400px] rounded-full bg-primary/4 blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-amber-500/3 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
+        {/* Section Header */}
+        <motion.div
+          className="text-center mb-14"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="inline-block rounded-full border border-amber-400/20 bg-amber-400/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-amber-400 mb-4">
+            Reviews
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100">
+            What Users{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-300">
+              Say
+            </span>
+          </h2>
+          <p className="mt-3 text-neutral-400 max-w-lg mx-auto">
+            Real experiences from people using Amal Tracker daily
+          </p>
+        </motion.div>
+
+        {/* Stats bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-12 rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-6 sm:p-8 backdrop-blur-sm"
+        >
+          <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-12">
+            {/* Big average */}
+            <div className="text-center sm:text-left shrink-0">
+              <p className="text-5xl font-black text-neutral-100 leading-none">
+                {avgRating}
+              </p>
+              <div className="mt-2">
+                <StarRatingDisplay rating={Math.round(Number(avgRating))} size="md" />
+              </div>
+              <p className="mt-1 text-xs text-neutral-500">
+                {reviews.length} review{reviews.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+
+            {/* Rating breakdown bars */}
+            <div className="flex-1 w-full space-y-2">
+              {ratingCounts.map(({ star, count, pct }) => (
+                <div key={star} className="flex items-center gap-3 text-sm">
+                  <span className="text-neutral-500 w-4 text-right">{star}</span>
+                  <HiStar className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                  <div className="flex-1 h-2 rounded-full bg-neutral-800 overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${pct}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 0.3 + star * 0.05 }}
+                    />
+                  </div>
+                  <span className="text-neutral-600 w-8 text-right text-xs">{count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Reviews grid + Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Review cards — 2 cols on lg */}
+          <div className="lg:col-span-2 space-y-5">
+            {reviews.length === 0 ? (
+              <div className="rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-12 text-center backdrop-blur-sm">
+                <p className="text-neutral-500">
+                  No reviews yet. Be the first to share your experience!
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {reviews.map((review, i) => (
+                  <ReviewCard key={review.id} review={review} index={i} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Review form — 1 col on lg */}
+          <div className="lg:col-span-1">
+            <div className="lg:sticky lg:top-24">
+              <ReviewForm onNewReview={handleNewReview} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 /* ================================================================
    MAIN COMPONENT
    ================================================================ */
-export default function AmalTrackerShowcase({ data }) {
+export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
   const {
     name,
     nameBn,
@@ -1459,6 +1858,11 @@ export default function AmalTrackerShowcase({ data }) {
           </motion.div>
         </div>
       </Section>
+
+      {/* ─────────────────────────────────────────────────────
+          SECTION 6.5 — REVIEWS
+         ───────────────────────────────────────────────────── */}
+      <ReviewSection initialReviews={initialReviews} />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 7 — DOWNLOAD CTA
