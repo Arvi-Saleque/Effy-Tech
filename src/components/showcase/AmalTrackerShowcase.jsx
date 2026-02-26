@@ -143,29 +143,20 @@ function PhoneMockup({ src, alt, className = "" }) {
   );
 }
 
-/* ── Screenshot Carousel — Full-width, 4 images, no gaps ──── */
+/* ── Screenshot Carousel — Full-width, slides 1 image at a time ── */
 function ScreenshotCarousel({ screenshots }) {
-  const VISIBLE = 4;
   const total = screenshots.length;
-  const [startIdx, setStartIdx] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 = prev, 1 = next
+  const [current, setCurrent] = useState(0);
   const [lightbox, setLightbox] = useState(null);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const visibleShots = [];
-  for (let i = 0; i < VISIBLE; i++) {
-    visibleShots.push(screenshots[(startIdx + i) % total]);
-  }
-
   const goNext = useCallback(() => {
-    setDirection(1);
-    setStartIdx((prev) => (prev + 1) % total);
+    setCurrent((prev) => (prev + 1) % total);
   }, [total]);
 
   const goPrev = useCallback(() => {
-    setDirection(-1);
-    setStartIdx((prev) => (prev - 1 + total) % total);
+    setCurrent((prev) => (prev - 1 + total) % total);
   }, [total]);
 
   // Lightbox navigation
@@ -182,6 +173,10 @@ function ScreenshotCarousel({ screenshots }) {
     if (lbIndex < 0) return;
     setLightbox(screenshots[(lbIndex + 1) % total]);
   }, [lbIndex, screenshots, total]);
+
+  // Triple array for seamless infinite looping
+  const extended = [...screenshots, ...screenshots, ...screenshots];
+  const offset = total;
 
   return (
     <>
@@ -206,44 +201,47 @@ function ScreenshotCarousel({ screenshots }) {
           </motion.h2>
         </div>
 
-        {/* Full-width image strip — 2 phone / 3 tablet / 4 desktop */}
+        {/* Full-width image strip — slides one image at a time */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative w-full overflow-hidden"
         >
-          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-            <motion.div
-              key={startIdx}
-              custom={direction}
-              initial={(d) => ({ x: `${(d || direction) * 100}%`, opacity: 0 })}
-              animate={{ x: 0, opacity: 1 }}
-              exit={(d) => ({ x: `${(d || direction) * -100}%`, opacity: 0 })}
-              transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-            >
-              {visibleShots.map((ss, i) => (
-                <div
-                  key={ss.src}
-                  className={`relative overflow-hidden group cursor-pointer ${
-                    i === 3 ? "hidden lg:block" : ""
-                  } ${i === 2 ? "hidden md:block" : ""}`}
-                  style={{ aspectRatio: "4 / 3" }}
-                  onClick={() => setLightbox(ss)}
-                >
-                  <img
-                    src={ss.src}
-                    alt={ss.label}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  {/* Subtle hover dim */}
-                  <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
-                </div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          <div
+            className="screenshot-strip flex transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+            style={{
+              transform: `translateX(calc(-${offset + current} * (100% / var(--cols))))`,
+              "--cols": 2,
+            }}
+          >
+            {extended.map((ss, i) => (
+              <div
+                key={`${i}`}
+                className="flex-shrink-0 w-1/2 md:w-1/3 lg:w-1/4 relative overflow-hidden group cursor-pointer"
+                style={{ aspectRatio: "4 / 3" }}
+                onClick={() => setLightbox(ss)}
+              >
+                <img
+                  src={ss.src}
+                  alt={ss.label}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
+              </div>
+            ))}
+          </div>
+
+          {/* Override --cols at each breakpoint */}
+          <style>{`
+            @media (min-width: 768px) {
+              .screenshot-strip { --cols: 3 !important; }
+            }
+            @media (min-width: 1024px) {
+              .screenshot-strip { --cols: 4 !important; }
+            }
+          `}</style>
         </motion.div>
 
         {/* Navigation — ← PRE    NEXT → */}
@@ -269,7 +267,6 @@ function ScreenshotCarousel({ screenshots }) {
       <AnimatePresence>
         {lightbox && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="lb-backdrop"
               initial={{ opacity: 0 }}
@@ -278,8 +275,6 @@ function ScreenshotCarousel({ screenshots }) {
               className="fixed inset-0 z-[100] bg-neutral-black/90 backdrop-blur-md"
               onClick={() => setLightbox(null)}
             />
-
-            {/* Image + controls */}
             <motion.div
               key="lb-content"
               initial={{ opacity: 0, scale: 0.92 }}
@@ -289,7 +284,6 @@ function ScreenshotCarousel({ screenshots }) {
               className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
               onClick={() => setLightbox(null)}
             >
-              {/* Prev arrow */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -300,8 +294,6 @@ function ScreenshotCarousel({ screenshots }) {
               >
                 <HiChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
-
-              {/* Image */}
               <div
                 className="relative max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl w-full"
                 onClick={(e) => e.stopPropagation()}
@@ -311,7 +303,6 @@ function ScreenshotCarousel({ screenshots }) {
                   alt={lightbox.label}
                   className="w-full h-auto rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.5)]"
                 />
-                {/* Label */}
                 <p className="mt-4 text-center text-sm text-neutral-400 uppercase tracking-wider">
                   {lightbox.label}
                   <span className="ml-2 text-neutral-600">
@@ -319,8 +310,6 @@ function ScreenshotCarousel({ screenshots }) {
                   </span>
                 </p>
               </div>
-
-              {/* Next arrow */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -331,8 +320,6 @@ function ScreenshotCarousel({ screenshots }) {
               >
                 <HiChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
-
-              {/* Close button */}
               <button
                 onClick={() => setLightbox(null)}
                 className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-neutral-600/50 bg-neutral-900/70 text-neutral-400 hover:text-neutral-white hover:border-neutral-400 backdrop-blur-sm transition-all cursor-pointer"
