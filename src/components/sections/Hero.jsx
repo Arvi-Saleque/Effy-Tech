@@ -145,12 +145,20 @@ export default function Hero() {
           animate="visible"
         >
           {/* Eyebrow badge */}
-          <motion.div variants={fadeUp} className="mb-6">
+          <motion.div variants={fadeUp} className="mb-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary-light/20 bg-primary-light/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
-              {siteConfig.tagline}
+              Effy Tech
             </span>
           </motion.div>
+
+          {/* Tagline — prominent display */}
+          <motion.p
+            variants={fadeUp}
+            className="mb-8 text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide"
+          >
+            <span className="text-gradient-primary">{siteConfig.tagline}</span>
+          </motion.p>
 
           {/* Headline — word-by-word stagger */}
           <motion.h1

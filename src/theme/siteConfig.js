@@ -7,7 +7,7 @@
 const siteConfig = {
   /* ── Brand ───────────────────────────────────────────────── */
   name: "Effy Tech",
-  tagline: "Building Tomorrow's Digital Solutions",
+  tagline: "Smart Solutions. Simple Execution.",
   description:
     "We craft modern, scalable, and beautiful digital products that drive growth and innovation.",
   url: "https://effytech.com",
