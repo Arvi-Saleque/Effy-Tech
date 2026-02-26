@@ -12,8 +12,8 @@
 
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   HiArrowLeft,
@@ -139,6 +139,125 @@ function PhoneMockup({ src, alt, className = "" }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ── Screenshot Carousel — 4 visible, with overlay on active ─ */
+function ScreenshotCarousel({ screenshots }) {
+  const VISIBLE = 4;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const total = screenshots.length;
+
+  const goNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + VISIBLE >= total ? 0 : prev + 1));
+  }, [total]);
+
+  const goPrev = useCallback(() => {
+    setActiveIndex((prev) =>
+      prev <= 0 ? Math.max(total - VISIBLE, 0) : prev - 1,
+    );
+  }, [total]);
+
+  /* Get the 4 visible screenshots from current index */
+  const visibleScreenshots = [];
+  for (let i = 0; i < VISIBLE; i++) {
+    const idx = (activeIndex + i) % total;
+    visibleScreenshots.push({ ...screenshots[idx], originalIndex: idx });
+  }
+
+  /* The center item (index 1 of the 4) gets the overlay */
+  const overlayIdx = 1;
+
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section
+      ref={ref}
+      id="screenshots"
+      className="relative py-20 sm:py-28 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-6 sm:px-10">
+        <SectionHeading
+          overline="Screenshots"
+          title="App Interface"
+          subtitle="A clean, intuitive design that makes daily spiritual tracking effortless and beautiful."
+        />
+      </div>
+
+      {/* Carousel */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="max-w-7xl mx-auto px-6 sm:px-10"
+      >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {visibleScreenshots.map((ss, i) => (
+            <div
+              key={`${ss.originalIndex}-${activeIndex}`}
+              className="group relative aspect-[4/3] overflow-hidden rounded-xl cursor-pointer"
+            >
+              {/* Image — full cover */}
+              <img
+                src={ss.src}
+                alt={ss.label}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+
+              {/* Dark overlay — always subtle, stronger on center */}
+              <div
+                className={`absolute inset-0 transition-all duration-300 ${
+                  i === overlayIdx
+                    ? "bg-neutral-black/50"
+                    : "bg-neutral-black/10 group-hover:bg-neutral-black/30"
+                }`}
+              />
+
+              {/* Active overlay content — only on center card */}
+              {i === overlayIdx && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+                  <h3 className="text-base sm:text-xl font-bold text-neutral-100 uppercase tracking-wider">
+                    {ss.label}
+                  </h3>
+                  <div className="mt-3 flex items-center gap-2 text-neutral-200">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-300/40">
+                      <svg
+                        className="h-3.5 w-3.5 ml-0.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                      </svg>
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold uppercase tracking-widest">
+                      View Demo
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* PRE / NEXT navigation */}
+        <div className="flex items-center justify-center gap-8 mt-8">
+          <button
+            onClick={goPrev}
+            className="flex items-center gap-2 text-sm text-neutral-400 uppercase tracking-widest font-medium transition-colors hover:text-neutral-100 cursor-pointer"
+          >
+            <span className="text-lg">←</span> Pre
+          </button>
+          <button
+            onClick={goNext}
+            className="flex items-center gap-2 text-sm text-neutral-400 uppercase tracking-widest font-medium transition-colors hover:text-neutral-100 cursor-pointer"
+          >
+            Next <span className="text-lg">→</span>
+          </button>
+        </div>
+      </motion.div>
+    </section>
   );
 }
 
@@ -394,49 +513,9 @@ export default function AmalTrackerShowcase({ data }) {
       </Section>
 
       {/* ─────────────────────────────────────────────────────
-          SECTION 4 — SCREENSHOTS
+          SECTION 4 — SCREENSHOTS (Carousel — 4 visible)
          ───────────────────────────────────────────────────── */}
-      <Section
-        id="screenshots"
-        className="relative py-20 sm:py-28 overflow-hidden"
-      >
-        <div className="max-w-7xl mx-auto px-6 sm:px-10">
-          <SectionHeading
-            overline="Screenshots"
-            title="App Interface"
-            subtitle="A clean, intuitive design that makes daily spiritual tracking effortless and beautiful."
-          />
-        </div>
-
-        {/* Horizontal scrollable screenshot gallery */}
-        <motion.div variants={fadeUp} className="relative mt-4">
-          {/* Fade edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-surface-dark to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-surface-dark to-transparent z-10" />
-
-          <div className="flex gap-5 sm:gap-8 overflow-x-auto px-6 sm:px-16 pb-6 scrollbar-hide snap-x snap-mandatory">
-            {screenshots.map((ss, i) => (
-              <motion.div
-                key={ss.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="flex-shrink-0 snap-center"
-              >
-                <PhoneMockup
-                  src={ss.src}
-                  alt={ss.label}
-                  className="w-48 sm:w-56"
-                />
-                <p className="mt-4 text-center text-xs text-neutral-500 uppercase tracking-wider">
-                  {ss.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </Section>
+      <ScreenshotCarousel screenshots={screenshots} />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 5 — HOW IT WORKS
