@@ -5,6 +5,7 @@
    ============================================================ */
 
 import Image from "next/image";
+import Link from "next/link";
 
 const sizeMap = {
   sm: { img: 32, text: "text-lg" },
@@ -21,7 +22,8 @@ export default function Logo({
   const { img, text } = sizeMap[size];
 
   return (
-    <div
+    <Link
+      href="/"
       className={`inline-flex items-center gap-2.5 font-bold ${text} ${className}`}
     >
       {/* Logo Image */}
@@ -41,6 +43,6 @@ export default function Logo({
           Effy <span className="text-gradient-accent">Tech</span>
         </span>
       )}
-    </div>
+    </Link>
   );
 }
