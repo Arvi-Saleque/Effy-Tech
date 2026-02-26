@@ -50,10 +50,23 @@ const fadeUp = {
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative overflow-hidden py-24 sm:py-32 z-10">
-      {/* ── Animated Gradient Mesh BG ─────────────────────────── */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
-      <div className="absolute inset-0 bg-surface/80 backdrop-blur-[1px]" />
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-surface-dark py-24 sm:py-32 z-10"
+    >
+      {/* ── Subtle dark gradient mesh BG ──────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 right-1/4 h-[600px] w-[600px] rounded-full bg-primary/6 blur-[150px]" />
+        <div className="absolute bottom-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-primary-light/4 blur-[120px]" />
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(45,212,191,0.4) 1px, transparent 0)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ── Section Header ──────────────────────────────────── */}
@@ -64,10 +77,10 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary mb-4">
+          <span className="inline-block rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light mb-4">
             Contact
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-text-inverse sm:text-4xl lg:text-5xl">
             Let&apos;s Build Something{" "}
             <span className="text-gradient-primary">Great</span>
           </h2>
@@ -78,7 +91,7 @@ export default function Contact() {
           {/* ── Left: Info ──────────────────────────────────────── */}
           <div className="flex flex-col justify-center">
             <motion.p
-              className="text-lg text-text-secondary leading-relaxed mb-10"
+              className="text-lg text-neutral-400 leading-relaxed mb-10"
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
@@ -102,22 +115,22 @@ export default function Contact() {
                   viewport={{ once: true }}
                   custom={i + 1}
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-light/10 text-primary-light">
                     <Icon className="h-5 w-5" />
                   </span>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-0.5">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-0.5">
                       {label}
                     </p>
                     {href ? (
                       <a
                         href={href}
-                        className="text-sm font-medium text-text-primary hover:text-primary transition-colors"
+                        className="text-sm font-medium text-neutral-200 hover:text-primary-light transition-colors"
                       >
                         {value}
                       </a>
                     ) : (
-                      <p className="text-sm font-medium text-text-primary">
+                      <p className="text-sm font-medium text-neutral-200">
                         {value}
                       </p>
                     )}
@@ -134,16 +147,16 @@ export default function Contact() {
               viewport={{ once: true }}
               custom={4}
             >
-              <p className="text-xs font-semibold uppercase tracking-wider text-text-tertiary mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
                 Follow Us
               </p>
-              <SocialLinks links={siteConfig.socials} size="md" />
+              <SocialLinks links={siteConfig.socials} size="md" light />
             </motion.div>
           </div>
 
           {/* ── Right: Form ─────────────────────────────────────── */}
           <motion.div
-            className="rounded-2xl border border-border bg-neutral-white/80 p-6 shadow-lg backdrop-blur-sm sm:p-8"
+            className="rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 shadow-lg backdrop-blur-sm sm:p-8"
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}

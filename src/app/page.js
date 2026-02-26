@@ -27,7 +27,7 @@ export default function Home() {
       {/* ── Content + Footer — all inside z-10 so they cover the fixed hero */}
       <div className="relative z-10">
         {/* Sections with opaque bg — these cover the sticky footer below */}
-        <div className="relative z-10 bg-surface">
+        <div className="relative z-10 bg-surface-dark">
           {/* ── About Section ────────────────────────────────────── */}
           <About />
 

@@ -44,9 +44,9 @@ function FloatingInput({
           onBlur: () => setFocused(false),
         })}
         onFocus={() => setFocused(true)}
-        className={`peer w-full rounded-lg border bg-transparent px-4 pb-2.5 pt-5 text-sm text-text-primary outline-none transition-all duration-200
-          ${error ? "border-error/60 focus:border-error" : "border-border focus:border-primary"}
-          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary/10"}`}
+        className={`peer w-full rounded-lg border bg-transparent px-4 pb-2.5 pt-5 text-sm text-neutral-200 outline-none transition-all duration-200
+          ${error ? "border-error/60 focus:border-error" : "border-neutral-700 focus:border-primary-light"}
+          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary-light/10"}`}
       />
       <label
         htmlFor={id}
@@ -54,7 +54,7 @@ function FloatingInput({
           peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm
           peer-focus:top-2.5 peer-focus:-translate-y-0 peer-focus:text-[11px] peer-focus:font-medium
           peer-not-placeholder-shown:top-2.5 peer-not-placeholder-shown:-translate-y-0 peer-not-placeholder-shown:text-[11px] peer-not-placeholder-shown:font-medium
-          ${error ? "text-error" : focused ? "text-primary" : "text-text-tertiary"}`}
+          ${error ? "text-error" : focused ? "text-primary-light" : "text-neutral-500"}`}
       >
         {label}
         {required && <span className="text-error ml-0.5">*</span>}
@@ -95,9 +95,9 @@ function FloatingTextarea({ id, label, register, error, required = false }) {
           onBlur: () => setFocused(false),
         })}
         onFocus={() => setFocused(true)}
-        className={`peer w-full resize-none rounded-lg border bg-transparent px-4 pb-3 pt-6 text-sm text-text-primary outline-none transition-all duration-200
-          ${error ? "border-error/60 focus:border-error" : "border-border focus:border-primary"}
-          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary/10"}`}
+        className={`peer w-full resize-none rounded-lg border bg-transparent px-4 pb-3 pt-6 text-sm text-neutral-200 outline-none transition-all duration-200
+          ${error ? "border-error/60 focus:border-error" : "border-neutral-700 focus:border-primary-light"}
+          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary-light/10"}`}
       />
       <label
         htmlFor={id}
@@ -105,7 +105,7 @@ function FloatingTextarea({ id, label, register, error, required = false }) {
           peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm
           peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:font-medium
           peer-not-placeholder-shown:top-1.5 peer-not-placeholder-shown:text-[11px] peer-not-placeholder-shown:font-medium
-          ${error ? "text-error" : focused ? "text-primary" : "text-text-tertiary"}`}
+          ${error ? "text-error" : focused ? "text-primary-light" : "text-neutral-500"}`}
       >
         {label}
         {required && <span className="text-error ml-0.5">*</span>}
@@ -147,9 +147,9 @@ function FloatingSelect({
         id={id}
         {...register(id)}
         defaultValue=""
-        className={`peer w-full appearance-none rounded-lg border bg-transparent px-4 pb-2.5 pt-5 text-sm text-text-primary outline-none transition-all duration-200 cursor-pointer
-          ${error ? "border-error/60 focus:border-error" : "border-border focus:border-primary"}
-          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary/10"}`}
+        className={`peer w-full appearance-none rounded-lg border bg-transparent px-4 pb-2.5 pt-5 text-sm text-neutral-200 outline-none transition-all duration-200 cursor-pointer
+          ${error ? "border-error/60 focus:border-error" : "border-neutral-700 focus:border-primary-light"}
+          focus:ring-2 ${error ? "focus:ring-error/10" : "focus:ring-primary-light/10"}`}
       >
         {options.map(({ value, label: optLabel }) => (
           <option key={value} value={value} disabled={value === ""}>
@@ -160,14 +160,14 @@ function FloatingSelect({
       <label
         htmlFor={id}
         className={`pointer-events-none absolute left-4 top-2.5 text-[11px] font-medium
-          ${error ? "text-error" : "text-text-tertiary"}`}
+          ${error ? "text-error" : "text-neutral-500"}`}
       >
         {label}
         {required && <span className="text-error ml-0.5">*</span>}
       </label>
       {/* Chevron */}
       <svg
-        className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary"
+        className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -232,8 +232,8 @@ function SuccessCheckmark() {
           transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
         />
       </motion.svg>
-      <h3 className="text-xl font-semibold text-text-primary">Message Sent!</h3>
-      <p className="mt-2 text-sm text-text-secondary max-w-xs">
+      <h3 className="text-xl font-semibold text-neutral-100">Message Sent!</h3>
+      <p className="mt-2 text-sm text-neutral-400 max-w-xs">
         Thank you for reaching out. We&apos;ll get back to you within 24 hours.
       </p>
     </motion.div>

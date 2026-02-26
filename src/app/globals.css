@@ -112,8 +112,8 @@
 
   body {
     font-family: var(--font-body);
-    color: var(--color-text-primary);
-    background-color: var(--color-surface);
+    color: var(--color-text-inverse);
+    background-color: var(--color-surface-dark);
   }
 
   /* All headings use Alinur Nakhatra */

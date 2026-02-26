@@ -50,7 +50,7 @@ function BentoCard({ children, className = "", index = 0, prefersReduced }) {
 
   return (
     <motion.div
-      className={`group relative overflow-hidden rounded-2xl border border-border bg-neutral-white p-6 sm:p-8 shadow-sm hover:shadow-lg transition-shadow duration-300 ${className}`}
+      className={`group relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-neutral-600/50 transition-all duration-300 backdrop-blur-sm ${className}`}
       style={{ perspective: 800 }}
       variants={cardReveal}
       initial="hidden"
@@ -69,8 +69,14 @@ export default function About() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="about" className="relative bg-glossy py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="about" className="relative bg-surface-dark py-24 sm:py-32">
+      {/* Subtle background effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/3 h-[400px] w-[400px] rounded-full bg-primary-light/3 blur-[120px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <motion.div
           className="mb-14 text-center"
@@ -79,14 +85,14 @@ export default function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary mb-4">
+          <span className="inline-block rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light mb-4">
             About Us
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-text-inverse sm:text-4xl lg:text-5xl">
             Crafting Digital{" "}
             <span className="text-gradient-primary">Excellence</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-text-secondary text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-neutral-400 text-lg">
             A glimpse into who we are, what we believe, and the tools we use.
           </p>
         </motion.div>
@@ -100,10 +106,10 @@ export default function About() {
             prefersReduced={prefersReduced}
           >
             <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/5 blur-2xl" />
-            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
               {about.story.title}
             </span>
-            <p className="relative text-text-secondary leading-relaxed text-base sm:text-lg">
+            <p className="relative text-neutral-400 leading-relaxed text-base sm:text-lg">
               {about.story.text}
             </p>
           </BentoCard>
@@ -115,10 +121,10 @@ export default function About() {
             prefersReduced={prefersReduced}
           >
             <div className="absolute -left-6 -bottom-6 h-24 w-24 rounded-full bg-accent/10 blur-2xl" />
-            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-accent-dark">
+            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
               {about.mission.title}
             </span>
-            <p className="relative text-text-secondary leading-relaxed text-base sm:text-lg">
+            <p className="relative text-neutral-400 leading-relaxed text-base sm:text-lg">
               {about.mission.text}
             </p>
           </BentoCard>
@@ -129,21 +135,21 @@ export default function About() {
             index={2}
             prefersReduced={prefersReduced}
           >
-            <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
               Our Values
             </span>
             <div className="space-y-4">
               {about.values.map(({ label, desc }, i) => (
                 <div key={label} className="flex gap-3">
                   {/* Numbered circle */}
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-light/10 text-xs font-bold text-primary-light">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <h4 className="text-sm font-semibold text-text-primary">
+                    <h4 className="text-sm font-semibold text-neutral-200">
                       {label}
                     </h4>
-                    <p className="text-sm text-text-secondary">{desc}</p>
+                    <p className="text-sm text-neutral-500">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -156,14 +162,14 @@ export default function About() {
             index={3}
             prefersReduced={prefersReduced}
           >
-            <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
               Tech Stack
             </span>
             <div className="flex flex-wrap gap-2">
               {about.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="rounded-md border border-border bg-surface-alt px-2.5 py-1 text-xs font-medium text-text-secondary transition-colors hover:border-primary/30 hover:text-primary"
+                  className="rounded-md border border-neutral-700/50 bg-neutral-800/50 px-2.5 py-1 text-xs font-medium text-neutral-400 transition-colors hover:border-primary-light/30 hover:text-primary-light"
                 >
                   {tech}
                 </span>
