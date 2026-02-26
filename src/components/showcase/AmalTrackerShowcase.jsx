@@ -358,25 +358,29 @@ export default function AmalTrackerShowcase({ data }) {
   return (
     <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
       {/* ─────────────────────────────────────────────────────
-          SECTION 1 — HERO
+          SECTION 1 — HERO (Full viewport)
          ───────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
         {/* Background effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/8 blur-[120px]" />
-          <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/6 blur-[100px]" />
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 left-1/4 h-[700px] w-[700px] rounded-full bg-primary/8 blur-[160px]" />
+          <div className="absolute bottom-1/4 right-1/4 h-[600px] w-[600px] rounded-full bg-accent/6 blur-[140px]" />
+          <div className="absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-primary/4 blur-[100px]" />
           <div
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute inset-0 opacity-[0.025]"
             style={{
               backgroundImage:
                 "radial-gradient(circle at 1px 1px, rgba(45,212,191,0.4) 1px, transparent 0)",
               backgroundSize: "40px 40px",
             }}
           />
+          {/* Horizontal accent lines */}
+          <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/[0.04] to-transparent" />
+          <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/[0.03] to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 pt-28 sm:pt-32 pb-16 sm:pb-24">
-          {/* Back link */}
+        {/* Back link pinned top */}
+        <div className="relative z-20 max-w-7xl mx-auto w-full px-6 sm:px-10 pt-8 sm:pt-10">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -384,168 +388,196 @@ export default function AmalTrackerShowcase({ data }) {
           >
             <Link
               href="/#projects"
-              className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-primary-light transition-colors group mb-10 sm:mb-14"
+              className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-primary-light transition-colors group"
             >
               <HiArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to Projects
             </Link>
           </motion.div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left — Text */}
-            <motion.div initial="hidden" animate="visible" variants={stagger}>
-              {/* Category badge */}
-              <motion.div variants={fadeUp}>
-                <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
-                  {category} App
-                </span>
-              </motion.div>
-
-              {/* Title */}
-              <motion.h1
-                variants={fadeUp}
-                className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-100 leading-[1.1]"
-              >
-                {name}
-              </motion.h1>
-
-              {/* Bangla tagline */}
-              <motion.p
-                variants={fadeUp}
-                className="mt-4 text-xl sm:text-2xl text-primary-light/90 font-medium"
-              >
-                {tagline}
-              </motion.p>
-
-              {/* English subtitle */}
-              <motion.p
-                variants={fadeUp}
-                className="mt-2 text-neutral-400 text-lg"
-              >
-                {taglineEn}
-              </motion.p>
-
-              {/* Description */}
-              <motion.p
-                variants={fadeUp}
-                className="mt-6 text-neutral-400 leading-relaxed max-w-lg"
-              >
-                {description}
-              </motion.p>
-
-              {/* Tech stack pills */}
-              <motion.div
-                variants={fadeUp}
-                className="mt-6 flex flex-wrap gap-2"
-              >
-                {techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-md border border-neutral-700/50 bg-neutral-800/40 px-3 py-1 font-mono text-xs text-neutral-400"
-                  >
-                    {tech}
+        {/* Main hero content — vertically centered */}
+        <div className="relative z-10 flex-1 flex items-center">
+          <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 py-12 sm:py-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-10 items-center">
+              {/* Left — Text */}
+              <motion.div initial="hidden" animate="visible" variants={stagger}>
+                {/* Category badge */}
+                <motion.div variants={fadeUp}>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
+                    {category} App
                   </span>
-                ))}
-              </motion.div>
+                </motion.div>
 
-              {/* CTA buttons */}
-              <motion.div
-                variants={fadeUp}
-                className="mt-8 flex flex-wrap gap-4"
-              >
-                <a
-                  href={playStoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(15,118,110,0.3)] active:scale-[0.98]"
+                {/* Title */}
+                <motion.h1
+                  variants={fadeUp}
+                  className="mt-7 text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05]"
                 >
-                  <FaGooglePlay className="h-5 w-5" />
-                  <span>
-                    <span className="block text-[10px] font-normal opacity-80 leading-none">
-                      GET IT ON
+                  <span className="bg-gradient-to-b from-neutral-50 to-neutral-300 bg-clip-text text-transparent">
+                    {name}
+                  </span>
+                </motion.h1>
+
+                {/* Bangla tagline */}
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 text-xl sm:text-2xl text-primary-light/90 font-medium"
+                >
+                  {tagline}
+                </motion.p>
+
+                {/* English subtitle */}
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-2 text-neutral-500 text-lg"
+                >
+                  {taglineEn}
+                </motion.p>
+
+                {/* Description */}
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-7 text-neutral-400 leading-relaxed max-w-lg text-[15px]"
+                >
+                  {description}
+                </motion.p>
+
+                {/* Tech stack pills */}
+                <motion.div
+                  variants={fadeUp}
+                  className="mt-6 flex flex-wrap gap-2"
+                >
+                  {techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-neutral-700/50 bg-neutral-800/40 px-3 py-1 font-mono text-xs text-neutral-400"
+                    >
+                      {tech}
                     </span>
-                    <span className="block leading-tight">Google Play</span>
-                  </span>
-                </a>
-                <a
-                  href="#screenshots"
-                  className="inline-flex items-center gap-2 rounded-xl border border-neutral-600 px-6 py-3.5 text-sm font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100 hover:border-neutral-500"
+                  ))}
+                </motion.div>
+
+                {/* CTA buttons */}
+                <motion.div
+                  variants={fadeUp}
+                  className="mt-9 flex flex-wrap gap-4"
                 >
-                  View Screenshots
-                </a>
+                  <a
+                    href={playStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
+                  >
+                    <FaGooglePlay className="h-5 w-5" />
+                    <span>
+                      <span className="block text-[10px] font-normal opacity-80 leading-none">
+                        GET IT ON
+                      </span>
+                      <span className="block leading-tight">Google Play</span>
+                    </span>
+                  </a>
+                  <a
+                    href="#screenshots"
+                    className="inline-flex items-center gap-2 rounded-xl border border-neutral-600 px-7 py-4 text-sm font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100 hover:border-neutral-500"
+                  >
+                    View Screenshots
+                  </a>
+                </motion.div>
               </motion.div>
-            </motion.div>
 
-            {/* Right — Premium dual-phone showcase */}
-            <motion.div
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className="flex justify-center lg:justify-end"
-            >
-              {/* Outer glass container */}
-              <div className="relative">
-                {/* Ambient glow behind the container */}
-                <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-primary/10 via-transparent to-accent/8 blur-[60px] pointer-events-none" />
+              {/* Right — Premium dual-phone showcase (LARGE) */}
+              <motion.div
+                initial={{ opacity: 0, y: 50, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.35,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                className="flex justify-center lg:justify-end"
+              >
+                {/* Outer glass container */}
+                <div className="relative">
+                  {/* Ambient glow behind the container */}
+                  <div className="absolute -inset-12 rounded-[4rem] bg-gradient-to-br from-primary/12 via-transparent to-accent/10 blur-[80px] pointer-events-none" />
+                  <div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-accent/6 via-transparent to-primary/8 blur-[50px] pointer-events-none" />
 
-                {/* Container shell */}
-                <div className="relative rounded-[2rem] border border-neutral-700/30 bg-neutral-900/60 backdrop-blur-xl p-5 sm:p-6 shadow-[0_8px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.03)_inset]">
-                  {/* Subtle inner top highlight */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 bg-gradient-to-r from-transparent via-neutral-500/20 to-transparent" />
+                  {/* Container shell */}
+                  <div className="relative rounded-[2.5rem] border border-neutral-700/25 bg-neutral-900/50 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_12px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)_inset]">
+                    {/* Subtle inner top highlight */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-1/2 bg-gradient-to-r from-transparent via-neutral-400/15 to-transparent" />
 
-                  {/* Dual phones */}
-                  <div className="flex items-end gap-3 sm:gap-4">
-                    {/* Phone 1 — Dark mode (slightly taller / front) */}
-                    <div className="relative z-10 w-36 sm:w-44 lg:w-48 flex-shrink-0">
-                      <div className="relative rounded-[1.5rem] sm:rounded-[1.8rem] border-[3px] border-neutral-600/40 bg-neutral-950 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
-                        {/* Notch */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-16 sm:w-20 rounded-b-xl bg-neutral-950" />
-                        {/* Screen */}
-                        <div className="relative overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-neutral-900">
-                          <img
-                            src="/images/amal/home1.png"
-                            alt="Amal Tracker — Dark Mode"
-                            className="w-full h-auto block"
-                            loading="eager"
-                          />
+                    {/* Dual phones */}
+                    <div className="flex items-end gap-4 sm:gap-5">
+                      {/* Phone 1 — Dark mode (front) */}
+                      <div className="relative z-10 w-44 sm:w-52 lg:w-60 flex-shrink-0">
+                        <div className="relative rounded-[1.8rem] sm:rounded-[2.2rem] border-[3px] border-neutral-600/35 bg-neutral-950 p-1 sm:p-1.5 shadow-[0_25px_80px_rgba(0,0,0,0.5)]">
+                          {/* Dynamic island */}
+                          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-18 sm:w-22 rounded-full bg-neutral-950" />
+                          {/* Screen */}
+                          <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[1.9rem] bg-neutral-900">
+                            <img
+                              src="/images/amal/home1.png"
+                              alt="Amal Tracker — Dark Mode"
+                              className="w-full h-auto block"
+                              loading="eager"
+                            />
+                          </div>
+                          {/* Home indicator */}
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-12 rounded-full bg-neutral-600/30" />
                         </div>
-                        {/* Home indicator */}
-                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-10 rounded-full bg-neutral-600/40" />
+                      </div>
+
+                      {/* Phone 2 — Light mode (behind, shifted down) */}
+                      <div className="relative -ml-10 sm:-ml-12 w-44 sm:w-52 lg:w-60 flex-shrink-0 translate-y-4 sm:translate-y-6">
+                        <div className="relative rounded-[1.8rem] sm:rounded-[2.2rem] border-[3px] border-neutral-400/20 bg-neutral-100 p-1 sm:p-1.5 shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
+                          {/* Dynamic island */}
+                          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-18 sm:w-22 rounded-full bg-neutral-200" />
+                          {/* Screen */}
+                          <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[1.9rem] bg-white">
+                            <img
+                              src="/images/amal/home2.png"
+                              alt="Amal Tracker — Light Mode"
+                              className="w-full h-auto block"
+                              loading="eager"
+                            />
+                          </div>
+                          {/* Home indicator */}
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-12 rounded-full bg-neutral-400/25" />
+                        </div>
                       </div>
                     </div>
 
-                    {/* Phone 2 — Light mode (slightly shifted down / behind) */}
-                    <div className="relative -ml-6 sm:-ml-8 w-36 sm:w-44 lg:w-48 flex-shrink-0 translate-y-3 sm:translate-y-4">
-                      <div className="relative rounded-[1.5rem] sm:rounded-[1.8rem] border-[3px] border-neutral-500/25 bg-neutral-100 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
-                        {/* Notch */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-16 sm:w-20 rounded-b-xl bg-neutral-100" />
-                        {/* Screen */}
-                        <div className="relative overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-white">
-                          <img
-                            src="/images/amal/home2.png"
-                            alt="Amal Tracker — Light Mode"
-                            className="w-full h-auto block"
-                            loading="eager"
-                          />
-                        </div>
-                        {/* Home indicator */}
-                        <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-10 rounded-full bg-neutral-400/30" />
-                      </div>
-                    </div>
+                    {/* Corner accents */}
+                    <div className="absolute -bottom-2 -right-2 h-28 w-28 rounded-br-[2.5rem] bg-gradient-to-tl from-primary/8 to-transparent blur-2xl pointer-events-none" />
+                    <div className="absolute -top-2 -left-2 h-20 w-20 rounded-tl-[2.5rem] bg-gradient-to-br from-accent/5 to-transparent blur-xl pointer-events-none" />
                   </div>
-
-                  {/* Corner accent */}
-                  <div className="absolute -bottom-1 -right-1 h-20 w-20 rounded-br-[2rem] bg-gradient-to-tl from-primary/8 to-transparent blur-xl pointer-events-none" />
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
+
+        {/* Scroll indicator at bottom */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="relative z-10 pb-8 flex justify-center"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-2 text-neutral-600"
+          >
+            <span className="text-[10px] uppercase tracking-[0.25em]">
+              Scroll
+            </span>
+            <div className="h-8 w-[1px] bg-gradient-to-b from-neutral-600 to-transparent" />
+          </motion.div>
+        </motion.div>
 
         {/* Bottom border */}
         <div className="h-px bg-gradient-to-r from-transparent via-neutral-700/40 to-transparent" />
