@@ -11,7 +11,7 @@ const projects = [
   {
     id: "11",
     title: "Islamic Amal Tracker",
-    slug: "islamic-amal-tracker",
+    slug: "IAM",
     description:
       "Amal Tracker is a productivity-based Islamic habit tracking mobile application that helps users monitor daily Salah, Azkar, and spiritual activities with structured reporting and reminders.",
     category: "Android",

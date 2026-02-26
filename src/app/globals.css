@@ -219,6 +219,15 @@
     border: 1px solid rgba(45, 212, 191, 0.1);
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Dot-grid pattern (footer background texture) */
   .bg-dot-grid {
     background-image: radial-gradient(
