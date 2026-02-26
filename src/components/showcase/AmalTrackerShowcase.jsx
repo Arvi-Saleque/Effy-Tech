@@ -148,7 +148,8 @@ function ScreenshotCarousel({ screenshots }) {
   const VISIBLE = 4;
   const total = screenshots.length;
   const [startIdx, setStartIdx] = useState(0);
-  const [lightbox, setLightbox] = useState(null); // screenshot object or null
+  const [direction, setDirection] = useState(0); // -1 = prev, 1 = next
+  const [lightbox, setLightbox] = useState(null);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -158,10 +159,12 @@ function ScreenshotCarousel({ screenshots }) {
   }
 
   const goNext = useCallback(() => {
+    setDirection(1);
     setStartIdx((prev) => (prev + 1) % total);
   }, [total]);
 
   const goPrev = useCallback(() => {
+    setDirection(-1);
     setStartIdx((prev) => (prev - 1 + total) % total);
   }, [total]);
 
@@ -210,27 +213,37 @@ function ScreenshotCarousel({ screenshots }) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative w-full overflow-hidden"
         >
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {visibleShots.map((ss, i) => (
-              <div
-                key={`${startIdx}-${i}`}
-                className={`relative overflow-hidden group cursor-pointer ${
-                  i === 3 ? "hidden lg:block" : ""
-                } ${i === 2 ? "hidden md:block" : ""}`}
-                style={{ aspectRatio: "4 / 3" }}
-                onClick={() => setLightbox(ss)}
-              >
-                <img
-                  src={ss.src}
-                  alt={ss.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {/* Subtle hover dim */}
-                <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
-              </div>
-            ))}
-          </div>
+          <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+            <motion.div
+              key={startIdx}
+              custom={direction}
+              initial={(d) => ({ x: `${(d || direction) * 100}%`, opacity: 0 })}
+              animate={{ x: 0, opacity: 1 }}
+              exit={(d) => ({ x: `${(d || direction) * -100}%`, opacity: 0 })}
+              transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            >
+              {visibleShots.map((ss, i) => (
+                <div
+                  key={ss.src}
+                  className={`relative overflow-hidden group cursor-pointer ${
+                    i === 3 ? "hidden lg:block" : ""
+                  } ${i === 2 ? "hidden md:block" : ""}`}
+                  style={{ aspectRatio: "4 / 3" }}
+                  onClick={() => setLightbox(ss)}
+                >
+                  <img
+                    src={ss.src}
+                    alt={ss.label}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  {/* Subtle hover dim */}
+                  <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
 
         {/* Navigation — ← PRE    NEXT → */}
