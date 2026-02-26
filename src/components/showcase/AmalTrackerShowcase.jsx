@@ -487,73 +487,43 @@ export default function AmalTrackerShowcase({ data }) {
                 </motion.div>
               </motion.div>
 
-              {/* Right — Premium dual-phone showcase (LARGE) */}
+              {/* Right — Single phone, full hero height */}
               <motion.div
-                initial={{ opacity: 0, y: 50, scale: 0.92 }}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
                   duration: 1,
                   delay: 0.35,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
-                className="flex justify-center lg:justify-end"
+                className="flex justify-center lg:justify-end h-[70vh] sm:h-[75vh] lg:h-[80vh]"
               >
-                {/* Outer glass container */}
-                <div className="relative">
-                  {/* Ambient glow behind the container */}
-                  <div className="absolute -inset-12 rounded-[4rem] bg-gradient-to-br from-primary/12 via-transparent to-accent/10 blur-[80px] pointer-events-none" />
-                  <div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-accent/6 via-transparent to-primary/8 blur-[50px] pointer-events-none" />
+                <div className="relative h-full w-auto">
+                  {/* Ambient glow */}
+                  <div className="absolute -inset-10 rounded-[3rem] bg-gradient-to-b from-primary/10 via-primary/4 to-transparent blur-[60px] pointer-events-none" />
 
-                  {/* Container shell */}
-                  <div className="relative rounded-[2.5rem] border border-neutral-700/25 bg-neutral-900/50 backdrop-blur-2xl p-6 sm:p-8 shadow-[0_12px_100px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)_inset]">
-                    {/* Subtle inner top highlight */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-1/2 bg-gradient-to-r from-transparent via-neutral-400/15 to-transparent" />
+                  {/* Phone frame */}
+                  <div className="relative h-full rounded-[2.5rem] sm:rounded-[3rem] border-[4px] border-neutral-700/40 bg-neutral-950 p-1.5 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
+                    {/* Dynamic island */}
+                    <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 h-5 w-24 rounded-full bg-neutral-950" />
 
-                    {/* Dual phones */}
-                    <div className="flex items-end gap-4 sm:gap-5">
-                      {/* Phone 1 — Dark mode (front) */}
-                      <div className="relative z-10 w-44 sm:w-52 lg:w-60 flex-shrink-0">
-                        <div className="relative rounded-[1.8rem] sm:rounded-[2.2rem] border-[3px] border-neutral-600/35 bg-neutral-950 p-1 sm:p-1.5 shadow-[0_25px_80px_rgba(0,0,0,0.5)]">
-                          {/* Dynamic island */}
-                          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-18 sm:w-22 rounded-full bg-neutral-950" />
-                          {/* Screen */}
-                          <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[1.9rem] bg-neutral-900">
-                            <img
-                              src="/images/amal/home1.png"
-                              alt="Amal Tracker — Dark Mode"
-                              className="w-full h-auto block"
-                              loading="eager"
-                            />
-                          </div>
-                          {/* Home indicator */}
-                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-12 rounded-full bg-neutral-600/30" />
-                        </div>
-                      </div>
-
-                      {/* Phone 2 — Light mode (behind, shifted down) */}
-                      <div className="relative -ml-10 sm:-ml-12 w-44 sm:w-52 lg:w-60 flex-shrink-0 translate-y-4 sm:translate-y-6">
-                        <div className="relative rounded-[1.8rem] sm:rounded-[2.2rem] border-[3px] border-neutral-400/20 bg-neutral-100 p-1 sm:p-1.5 shadow-[0_25px_80px_rgba(0,0,0,0.35)]">
-                          {/* Dynamic island */}
-                          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 h-4 sm:h-5 w-18 sm:w-22 rounded-full bg-neutral-200" />
-                          {/* Screen */}
-                          <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[1.9rem] bg-white">
-                            <img
-                              src="/images/amal/home2.png"
-                              alt="Amal Tracker — Light Mode"
-                              className="w-full h-auto block"
-                              loading="eager"
-                            />
-                          </div>
-                          {/* Home indicator */}
-                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1 w-12 rounded-full bg-neutral-400/25" />
-                        </div>
-                      </div>
+                    {/* Screen */}
+                    <div className="relative h-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-neutral-900">
+                      <img
+                        src="/images/amal/home1.png"
+                        alt="Amal Tracker Home Screen"
+                        className="h-full w-auto object-cover object-top block"
+                        loading="eager"
+                      />
                     </div>
 
-                    {/* Corner accents */}
-                    <div className="absolute -bottom-2 -right-2 h-28 w-28 rounded-br-[2.5rem] bg-gradient-to-tl from-primary/8 to-transparent blur-2xl pointer-events-none" />
-                    <div className="absolute -top-2 -left-2 h-20 w-20 rounded-tl-[2.5rem] bg-gradient-to-br from-accent/5 to-transparent blur-xl pointer-events-none" />
+                    {/* Home indicator */}
+                    <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 h-1 w-14 rounded-full bg-neutral-600/30" />
                   </div>
+
+                  {/* Side glow accents */}
+                  <div className="absolute top-1/4 -left-6 h-32 w-1 bg-gradient-to-b from-transparent via-primary/20 to-transparent blur-sm pointer-events-none" />
+                  <div className="absolute bottom-1/4 -right-6 h-32 w-1 bg-gradient-to-b from-transparent via-accent/15 to-transparent blur-sm pointer-events-none" />
                 </div>
               </motion.div>
             </div>
