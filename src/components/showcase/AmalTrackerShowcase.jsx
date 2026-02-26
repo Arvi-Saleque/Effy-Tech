@@ -17,12 +17,10 @@ import { useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   HiArrowLeft,
-  HiDownload,
   HiExternalLink,
   HiCheckCircle,
   HiChevronLeft,
   HiChevronRight,
-  HiPlay,
 } from "react-icons/hi";
 import {
   FaMosque,
@@ -146,21 +144,18 @@ function PhoneMockup({ src, alt, className = "" }) {
 }
 
 /* ── Screenshot Carousel — Full-width, 4 images, no gaps ──── */
-function ScreenshotCarousel({ screenshots, appName, playStoreUrl }) {
+function ScreenshotCarousel({ screenshots }) {
   const VISIBLE = 4;
   const total = screenshots.length;
   const [startIdx, setStartIdx] = useState(0);
+  const [lightbox, setLightbox] = useState(null); // screenshot object or null
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  // The 4 currently visible screenshots
   const visibleShots = [];
   for (let i = 0; i < VISIBLE; i++) {
     visibleShots.push(screenshots[(startIdx + i) % total]);
   }
-
-  // The "active" one is the 2nd of 4 (index 1) — like center-left focus
-  const activeIdx = 1;
 
   const goNext = useCallback(() => {
     setStartIdx((prev) => (prev + 1) % total);
@@ -170,110 +165,171 @@ function ScreenshotCarousel({ screenshots, appName, playStoreUrl }) {
     setStartIdx((prev) => (prev - 1 + total) % total);
   }, [total]);
 
+  // Lightbox navigation
+  const lbIndex = lightbox
+    ? screenshots.findIndex((s) => s.src === lightbox.src)
+    : -1;
+
+  const lbPrev = useCallback(() => {
+    if (lbIndex < 0) return;
+    setLightbox(screenshots[(lbIndex - 1 + total) % total]);
+  }, [lbIndex, screenshots, total]);
+
+  const lbNext = useCallback(() => {
+    if (lbIndex < 0) return;
+    setLightbox(screenshots[(lbIndex + 1) % total]);
+  }, [lbIndex, screenshots, total]);
+
   return (
-    <section id="screenshots" ref={ref} className="relative py-16 sm:py-24">
-      {/* Section heading */}
-      <div className="mx-auto max-w-2xl text-center mb-10 sm:mb-14 px-6">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-light mb-3"
-        >
-          Screenshots
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight"
-        >
-          App Interface
-        </motion.h2>
-      </div>
-
-      {/* Full-width image strip — 4 images, no gaps, touching edges */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="relative w-full"
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-4">
-          {visibleShots.map((ss, i) => (
-            <div
-              key={`${startIdx}-${i}`}
-              className="relative overflow-hidden group cursor-pointer"
-              style={{ aspectRatio: "4 / 3" }}
-            >
-              {/* Screenshot image — fill the entire cell */}
-              <img
-                src={ss.src}
-                alt={ss.label}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-
-              {/* Dark overlay on all images */}
-              <div
-                className={`absolute inset-0 transition-opacity duration-300 ${
-                  i === activeIdx
-                    ? "bg-neutral-black/50"
-                    : "bg-neutral-black/20 group-hover:bg-neutral-black/40"
-                }`}
-              />
-
-              {/* Active image — title + view demo overlay */}
-              {i === activeIdx && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                  <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-neutral-white uppercase tracking-[0.15em] drop-shadow-lg">
-                    {appName}
-                  </h3>
-                  <a
-                    href={playStoreUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 sm:mt-4 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-white uppercase tracking-[0.15em] hover:text-primary-light transition-colors"
-                  >
-                    <span className="flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-neutral-white/60">
-                      <HiPlay className="h-3 w-3 sm:h-4 sm:w-4" />
-                    </span>
-                    View Demo
-                  </a>
-                </div>
-              )}
-
-              {/* Label on non-active images (shown on hover) */}
-              {i !== activeIdx && (
-                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-xs sm:text-sm font-medium text-neutral-white drop-shadow-md uppercase tracking-wider">
-                    {ss.label}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
+    <>
+      <section id="screenshots" ref={ref} className="relative py-16 sm:py-24">
+        {/* Section heading */}
+        <div className="mx-auto max-w-2xl text-center mb-10 sm:mb-14 px-6">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-light mb-3"
+          >
+            Screenshots
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight"
+          >
+            App Interface
+          </motion.h2>
         </div>
-      </motion.div>
 
-      {/* Navigation — ← PRE    NEXT → */}
-      <div className="flex items-center justify-center gap-8 mt-8 sm:mt-10">
-        <button
-          onClick={goPrev}
-          className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
+        {/* Full-width image strip — 4 images, no gaps */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="relative w-full"
         >
-          <HiChevronLeft className="h-4 w-4" />
-          Pre
-        </button>
-        <button
-          onClick={goNext}
-          className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
-        >
-          Next
-          <HiChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-    </section>
+          <div className="grid grid-cols-2 sm:grid-cols-4">
+            {visibleShots.map((ss, i) => (
+              <div
+                key={`${startIdx}-${i}`}
+                className="relative overflow-hidden group cursor-pointer"
+                style={{ aspectRatio: "4 / 3" }}
+                onClick={() => setLightbox(ss)}
+              >
+                <img
+                  src={ss.src}
+                  alt={ss.label}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                {/* Subtle hover dim */}
+                <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Navigation — ← PRE    NEXT → */}
+        <div className="flex items-center justify-center gap-8 mt-8 sm:mt-10">
+          <button
+            onClick={goPrev}
+            className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
+          >
+            <HiChevronLeft className="h-4 w-4" />
+            Pre
+          </button>
+          <button
+            onClick={goNext}
+            className="flex items-center gap-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 hover:text-neutral-100 transition-colors cursor-pointer"
+          >
+            Next
+            <HiChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
+
+      {/* ── Lightbox ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {lightbox && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="lb-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-neutral-black/90 backdrop-blur-md"
+              onClick={() => setLightbox(null)}
+            />
+
+            {/* Image + controls */}
+            <motion.div
+              key="lb-content"
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+              onClick={() => setLightbox(null)}
+            >
+              {/* Prev arrow */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  lbPrev();
+                }}
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-neutral-600/50 bg-neutral-900/70 text-neutral-300 hover:text-neutral-white hover:border-neutral-400 backdrop-blur-sm transition-all cursor-pointer"
+                aria-label="Previous screenshot"
+              >
+                <HiChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Image */}
+              <div
+                className="relative max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl w-full"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={lightbox.src}
+                  alt={lightbox.label}
+                  className="w-full h-auto rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.5)]"
+                />
+                {/* Label */}
+                <p className="mt-4 text-center text-sm text-neutral-400 uppercase tracking-wider">
+                  {lightbox.label}
+                  <span className="ml-2 text-neutral-600">
+                    {lbIndex + 1} / {total}
+                  </span>
+                </p>
+              </div>
+
+              {/* Next arrow */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  lbNext();
+                }}
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-neutral-600/50 bg-neutral-900/70 text-neutral-300 hover:text-neutral-white hover:border-neutral-400 backdrop-blur-sm transition-all cursor-pointer"
+                aria-label="Next screenshot"
+              >
+                <HiChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+
+              {/* Close button */}
+              <button
+                onClick={() => setLightbox(null)}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-neutral-600/50 bg-neutral-900/70 text-neutral-400 hover:text-neutral-white hover:border-neutral-400 backdrop-blur-sm transition-all cursor-pointer"
+                aria-label="Close"
+              >
+                <span className="text-xl leading-none">&times;</span>
+              </button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -531,11 +587,7 @@ export default function AmalTrackerShowcase({ data }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 4 — SCREENSHOTS (Full-width carousel)
          ───────────────────────────────────────────────────── */}
-      <ScreenshotCarousel
-        screenshots={screenshots}
-        appName={name}
-        playStoreUrl={playStoreUrl}
-      />
+      <ScreenshotCarousel screenshots={screenshots} />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 5 — HOW IT WORKS
