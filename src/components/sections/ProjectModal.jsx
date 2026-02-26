@@ -127,6 +127,7 @@ export default function ProjectModal({ project, onClose }) {
               )}
               <Link
                 href={`/projects/${slug}`}
+                onClick={onClose}
                 className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-5 py-2.5 text-sm font-medium text-accent-light transition-all hover:bg-accent/20 hover:shadow-[0_0_20px_rgba(184,168,138,0.12)]"
               >
                 <HiArrowRight className="h-4 w-4" />

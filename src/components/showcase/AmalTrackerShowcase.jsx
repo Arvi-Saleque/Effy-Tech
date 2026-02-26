@@ -643,8 +643,9 @@ export default function AmalTrackerShowcase({ data }) {
     highlights,
   } = data;
 
-  /* Scroll to top on client-side navigation */
+  /* Scroll to top & restore body scroll on client-side navigation */
   useEffect(() => {
+    document.body.style.overflow = "";
     window.scrollTo(0, 0);
   }, []);
 
