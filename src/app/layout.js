@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import siteConfig from "@/theme/siteConfig";
 import Navbar from "@/components/layout/Navbar";
+import Preloader from "@/components/ui/Preloader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${banglaborno.variable} ${nakhatra.variable}`}>
       <body>
+        <Preloader />
         <Navbar />
         {children}
       </body>
