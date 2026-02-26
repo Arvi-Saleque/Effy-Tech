@@ -22,17 +22,14 @@ const siteConfig = {
 
   /* ── Social Media ────────────────────────────────────────── */
   socials: [
-    { platform: "github", url: "https://github.com/effytech" },
-    { platform: "linkedin", url: "https://linkedin.com/company/effytech" },
-    { platform: "twitter", url: "https://twitter.com/effytech" },
-    { platform: "instagram", url: "https://instagram.com/effytech" },
+    { platform: "facebook", url: "https://www.facebook.com/profile.php?id=61588615151448" },
   ],
 
   /* ── Contact Info ────────────────────────────────────────── */
   contact: {
-    email: "hello@effytech.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Innovation Drive, Tech City, TC 10001",
+    email: "effttech@gmail.com",
+    phone: "+8801730814853",
+    address: "Nirala R/A, Khulna",
   },
 
   /* ── Project Filter Categories ───────────────────────────── */
