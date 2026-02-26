@@ -203,18 +203,20 @@ function ScreenshotCarousel({ screenshots }) {
           </motion.h2>
         </div>
 
-        {/* Full-width image strip — 4 images, no gaps */}
+        {/* Full-width image strip — 2 phone / 3 tablet / 4 desktop */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative w-full"
+          className="relative w-full overflow-hidden"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {visibleShots.map((ss, i) => (
               <div
                 key={`${startIdx}-${i}`}
-                className="relative overflow-hidden group cursor-pointer"
+                className={`relative overflow-hidden group cursor-pointer ${
+                  i === 3 ? "hidden lg:block" : ""
+                } ${i === 2 ? "hidden md:block" : ""}`}
                 style={{ aspectRatio: "4 / 3" }}
                 onClick={() => setLightbox(ss)}
               >
