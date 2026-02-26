@@ -85,36 +85,38 @@ export default function ProjectShowcase({ projects = [] }) {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative [clip-path:inset(0)] py-28 sm:py-36"
+      className="relative overflow-hidden bg-surface-dark py-28 sm:py-36"
     >
-      {/* ── Fixed background — stays still while content scrolls (curtain feel) */}
-      <div className="pointer-events-none fixed inset-0 z-0 bg-surface-dark" aria-hidden="true">
-        {/* Dot grid */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(45,212,191,0.8) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+      {/* ── Background layers ─────────────────────────────────── */}
+      {/* Dot grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(45,212,191,0.8) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+        aria-hidden="true"
+      />
 
-        {/* Floating orbs */}
-        <motion.div
-          className="absolute -left-40 top-[20%] h-[500px] w-[500px] rounded-full bg-primary/[0.06] blur-[120px]"
-          style={{ y: orbY }}
-        />
-        <motion.div
-          className="absolute -right-32 bottom-[10%] h-[400px] w-[400px] rounded-full bg-accent/[0.04] blur-[100px]"
-          style={{ y: useTransform(scrollYProgress, [0, 1], [-60, 60]) }}
-        />
+      {/* Floating orbs */}
+      <motion.div
+        className="pointer-events-none absolute -left-40 top-[20%] h-[500px] w-[500px] rounded-full bg-primary/[0.06] blur-[120px]"
+        style={{ y: orbY }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="pointer-events-none absolute -right-32 bottom-[10%] h-[400px] w-[400px] rounded-full bg-accent/[0.04] blur-[100px]"
+        style={{ y: useTransform(scrollYProgress, [0, 1], [-60, 60]) }}
+        aria-hidden="true"
+      />
 
-        {/* Scan line sweep */}
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-light/[0.03] to-transparent"
-          style={{ backgroundSize: "100% 300%", animation: "scanLine 6s ease-in-out infinite" }}
-        />
-      </div>
+      {/* Scan line sweep */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-primary-light/[0.03] to-transparent"
+        style={{ backgroundSize: "100% 300%", animation: "scanLine 6s ease-in-out infinite" }}
+        aria-hidden="true"
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ── Section Header ──────────────────────────────────── */}

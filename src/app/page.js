@@ -26,15 +26,15 @@ export default function Home() {
 
       {/* ── Content + Footer — all inside z-10 so they cover the fixed hero */}
       <div className="relative z-10">
-        {/* Sections — each manages its own opaque bg, z-10 covers the sticky footer */}
-        <div className="relative z-10">
-          {/* ── About Section (bg-glossy covers hero) ────────────── */}
+        {/* Sections with opaque bg — these cover the sticky footer below */}
+        <div className="relative z-10 bg-surface">
+          {/* ── About Section ────────────────────────────────────── */}
           <About />
 
-          {/* ── Project Showcase (fixed bg + clip-path curtain feel) */}
+          {/* ── Project Showcase ─────────────────────────────────── */}
           <ProjectShowcase projects={projects} />
 
-          {/* ── Contact Section (bg-surface covers projects) ─────── */}
+          {/* ── Contact Section ──────────────────────────────────── */}
           <Contact />
         </div>
 

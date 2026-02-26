@@ -8,7 +8,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HiX, HiExternalLink } from "react-icons/hi";
+import { HiX, HiExternalLink, HiArrowRight } from "react-icons/hi";
+import Link from "next/link";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 
 export default function ProjectModal({ project, onClose }) {
@@ -17,6 +18,7 @@ export default function ProjectModal({ project, onClose }) {
   const {
     id,
     title,
+    slug,
     description,
     category,
     tags,
@@ -123,6 +125,13 @@ export default function ProjectModal({ project, onClose }) {
                   View Live
                 </a>
               )}
+              <Link
+                href={`/projects/${slug}`}
+                className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-5 py-2.5 text-sm font-medium text-accent-light transition-all hover:bg-accent/20 hover:shadow-[0_0_20px_rgba(184,168,138,0.12)]"
+              >
+                <HiArrowRight className="h-4 w-4" />
+                View Project
+              </Link>
               <button
                 onClick={onClose}
                 className="rounded-lg border border-neutral-700 px-5 py-2.5 text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-neutral-200 cursor-pointer"
