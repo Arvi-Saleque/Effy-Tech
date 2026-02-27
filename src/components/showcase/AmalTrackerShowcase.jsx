@@ -1407,7 +1407,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 1 — HERO (Full viewport)
          ───────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col overflow-hidden">
+      <section className="relative min-h-screen flex flex-col overflow-hidden pt-16 md:pt-[72px]">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-1/4 h-[700px] w-[700px] rounded-full bg-primary/8 blur-[160px]" />
