@@ -4,6 +4,9 @@ import "./globals.css";
 import siteConfig from "@/theme/siteConfig";
 import Navbar from "@/components/layout/Navbar";
 import Preloader from "@/components/ui/Preloader";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,9 +57,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${banglaborno.variable} ${nakhatra.variable}`}>
       <body>
+        <GoogleAnalytics />
         <Preloader />
         <Navbar />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -23,6 +23,7 @@ import {
 import Image from "next/image";
 import siteConfig from "@/theme/siteConfig";
 import MagneticButton from "./MagneticButton";
+import { trackCTAClick } from "@/lib/analytics";
 
 /* ── Animation variants ─────────────────────────────────────── */
 const containerVariants = {
@@ -193,11 +194,11 @@ export default function Hero() {
             variants={fadeUp}
             className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
-            <MagneticButton href="#projects" variant="primary" size="lg">
+            <MagneticButton href="#projects" variant="primary" size="lg" onClick={() => trackCTAClick("View Our Work", "homepage")}>
               View Our Work
             </MagneticButton>
 
-            <MagneticButton href="#contact" variant="heroOutline" size="lg">
+            <MagneticButton href="#contact" variant="heroOutline" size="lg" onClick={() => trackCTAClick("Get in Touch", "homepage")}>
               Get in Touch
             </MagneticButton>
           </motion.div>

@@ -16,6 +16,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback, useEffect, useActionState } from "react";
 import Link from "next/link";
 import { submitReview } from "@/app/actions/submitReview";
+import { trackCTAClick, trackExternalLink, trackReviewSubmit } from "@/lib/analytics";
 import {
   HiArrowLeft,
   HiExternalLink,
@@ -1104,6 +1105,7 @@ function ReviewForm() {
 
   useEffect(() => {
     if (serverState?.success) {
+      trackReviewSubmit("Islamic Amal Tracker", rating);
       setSubmitted(true);
       setRating(0);
       formRef.current?.reset();
@@ -1496,6 +1498,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                     href={playStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackCTAClick("Download - Hero", "IAM")}
                     className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
                   >
                     <FaGooglePlay className="h-5 w-5" />
@@ -1884,6 +1887,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
               href={playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackCTAClick("Download - CTA", "IAM")}
               className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.3)] active:scale-[0.98]"
             >
               <FaGooglePlay className="h-6 w-6" />

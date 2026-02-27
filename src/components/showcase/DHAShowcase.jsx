@@ -15,6 +15,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { trackCTAClick, trackExternalLink } from "@/lib/analytics";
 import {
   HiArrowLeft,
   HiExternalLink,

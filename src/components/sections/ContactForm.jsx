@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { contactSchema, serviceOptions } from "@/lib/contactSchema";
 import { submitContact } from "@/app/actions/submitContact";
+import { trackContactSubmit } from "@/lib/analytics";
 
 /* ── Floating Label Input ──────────────────────────────────── */
 function FloatingInput({
@@ -266,6 +267,7 @@ export default function ContactForm() {
 
   /* Client-side validation passes → call server action via form submission */
   const onSubmit = (data) => {
+    trackContactSubmit();
     const fd = new FormData();
     Object.entries(data).forEach(([key, val]) => fd.append(key, val));
     formAction(fd);

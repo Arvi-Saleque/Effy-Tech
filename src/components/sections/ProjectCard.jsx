@@ -12,6 +12,7 @@
 
 import { motion } from "framer-motion";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import { trackProjectClick } from "@/lib/analytics";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -44,7 +45,7 @@ export default function ProjectCard({ project, onSelect, index }) {
         scale: 1.02,
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
-      onClick={() => onSelect(project)}
+      onClick={() => { trackProjectClick(title, "card_click"); onSelect(project); }}
       className="group relative cursor-pointer overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-900/60 backdrop-blur-sm transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(45,212,191,0.08)] hover:border-primary/30"
       style={{ originX: 0.5, originY: 0.5 }}
     >
