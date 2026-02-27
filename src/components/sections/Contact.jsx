@@ -52,7 +52,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-surface-dark py-24 sm:py-32 z-10"
+      className="relative overflow-hidden bg-surface-dark py-24 sm:py-32"
     >
       {/* ── Subtle dark gradient mesh BG ──────────────────────── */}
       <div className="absolute inset-0 pointer-events-none">
