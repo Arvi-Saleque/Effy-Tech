@@ -1000,7 +1000,7 @@ function StarRatingInput({ value, onChange }) {
           <HiStar
             className={`h-7 w-7 transition-colors duration-150 ${
               star <= (hover || value)
-                ? "text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]"
+                ? "text-primary-light drop-shadow-[0_0_6px_rgba(45,212,191,0.4)]"
                 : "text-neutral-700"
             }`}
           />
@@ -1019,7 +1019,7 @@ function StarRatingDisplay({ rating, size = "sm" }) {
         <HiStar
           key={star}
           className={`${sizeClass} ${
-            star <= rating ? "text-amber-400" : "text-neutral-700"
+            star <= rating ? "text-primary-light" : "text-neutral-700"
           }`}
         />
       ))}
@@ -1270,7 +1270,7 @@ function ReviewSection({ initialReviews }) {
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/3 h-[400px] w-[400px] rounded-full bg-primary/4 blur-[140px]" />
-        <div className="absolute bottom-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-amber-500/3 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-accent/3 blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
@@ -1282,12 +1282,12 @@ function ReviewSection({ initialReviews }) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block rounded-full border border-amber-400/20 bg-amber-400/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-amber-400 mb-4">
+          <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-primary-light mb-4">
             Reviews
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100">
             What Users{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-primary">
               Say
             </span>
           </h2>
@@ -1323,10 +1323,10 @@ function ReviewSection({ initialReviews }) {
               {ratingCounts.map(({ star, count, pct }) => (
                 <div key={star} className="flex items-center gap-3 text-sm">
                   <span className="text-neutral-500 w-4 text-right">{star}</span>
-                  <HiStar className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                  <HiStar className="h-3.5 w-3.5 text-primary-light shrink-0" />
                   <div className="flex-1 h-2 rounded-full bg-neutral-800 overflow-hidden">
                     <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400"
+                      className="h-full rounded-full bg-gradient-to-r from-primary to-primary-light"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${pct}%` }}
                       viewport={{ once: true }}
