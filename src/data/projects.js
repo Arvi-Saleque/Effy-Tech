@@ -24,6 +24,21 @@ const projects = [
     featured: true,
     order: 0,
   },
+  {
+    id: "12",
+    title: "Darul Hikmah Academy",
+    slug: "DHA",
+    description:
+      "A complete bilingual academic management website for Darul Hikmah Academy — featuring admin dashboard, dynamic academic system, smart PDF viewer, class-wise filtering, and mobile-first responsive design.",
+    category: "Web",
+    tags: ["Next.js", "Tailwind CSS", "Cloudinary", "MongoDB"],
+    thumbnail: "/images/dha/img1.png",
+    images: [],
+    clientName: "Darul Hikmah Academy",
+    liveUrl: "https://www.dhakhl.com",
+    featured: true,
+    order: 1,
+  },
 ];
 
 export default projects;

@@ -12,10 +12,10 @@ import projects from "@/data/projects";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 
 /* ---------- Static params for SSG ---------- */
-/* Exclude IAM — it has a dedicated page at /projects/IAM */
+/* Exclude IAM & DHA — they have dedicated pages */
 export async function generateStaticParams() {
   return projects
-    .filter((p) => p.slug !== "IAM")
+    .filter((p) => p.slug !== "IAM" && p.slug !== "DHA")
     .map((p) => ({ slug: p.slug }));
 }
 
