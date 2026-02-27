@@ -69,11 +69,11 @@ export default function About() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="about" className="relative bg-surface-dark py-24 sm:py-32">
+    <section id="about" className="relative overflow-hidden bg-surface-dark py-24 sm:py-32">
       {/* Subtle background effects */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[140px]" />
-        <div className="absolute bottom-1/4 right-1/3 h-[400px] w-[400px] rounded-full bg-primary-light/3 blur-[120px]" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] rounded-full bg-primary/5 blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/3 h-[250px] w-[250px] sm:h-[400px] sm:w-[400px] rounded-full bg-primary-light/3 blur-[120px]" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

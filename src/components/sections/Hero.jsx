@@ -119,13 +119,13 @@ export default function Hero() {
       {/* ── Floating Geometric Shapes (parallax depth) ──────── */}
       {/* Shape 1: large teal ring — top-right */}
       <motion.div
-        className="pointer-events-none absolute -top-20 right-[10%] z-[1] h-[420px] w-[420px] rounded-full border border-primary-light/10 opacity-40 md:opacity-60"
+        className="pointer-events-none absolute -top-20 right-[10%] z-[1] h-[200px] w-[200px] sm:h-[420px] sm:w-[420px] rounded-full border border-primary-light/10 opacity-40 md:opacity-60"
         style={disableParallax ? {} : { y: shapeY, rotate: shapeRotate }}
       />
 
       {/* Shape 2: smaller champagne diamond — bottom-left */}
       <motion.div
-        className="pointer-events-none absolute bottom-[15%] -left-12 z-[1] h-48 w-48 rotate-45 rounded-2xl border border-accent/15 opacity-30 md:opacity-50"
+        className="pointer-events-none absolute bottom-[15%] -left-16 z-[1] h-24 w-24 sm:h-48 sm:w-48 rotate-45 rounded-2xl border border-accent/15 opacity-30 md:opacity-50"
         style={disableParallax ? {} : { y: shape2Y, rotate: shape2Rotate }}
       />
 

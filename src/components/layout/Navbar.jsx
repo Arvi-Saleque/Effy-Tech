@@ -23,7 +23,7 @@ import projects from "@/data/projects";
 const SCROLL_THRESHOLD = 80;
 
 /* Pages that use their own custom navbar */
-const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM"];
+const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA"];
 
 export default function Navbar() {
   const pathname = usePathname();

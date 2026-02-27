@@ -55,9 +55,9 @@ export default function Contact() {
       className="relative overflow-hidden bg-surface-dark py-24 sm:py-32"
     >
       {/* ── Subtle dark gradient mesh BG ──────────────────────── */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 h-[600px] w-[600px] rounded-full bg-primary/6 blur-[150px]" />
-        <div className="absolute bottom-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-primary-light/4 blur-[120px]" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/3 right-1/4 h-[300px] w-[300px] sm:h-[600px] sm:w-[600px] rounded-full bg-primary/6 blur-[150px]" />
+        <div className="absolute bottom-1/4 left-1/4 h-[250px] w-[250px] sm:h-[400px] sm:w-[400px] rounded-full bg-primary-light/4 blur-[120px]" />
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
