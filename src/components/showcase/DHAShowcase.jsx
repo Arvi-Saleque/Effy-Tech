@@ -1058,6 +1058,7 @@ export default function DHAShowcase({ data }) {
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackCTAClick("Visit Site - Hero", "DHA")}
                     className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
                   >
                     <FaGlobe className="h-5 w-5" />
@@ -1466,6 +1467,7 @@ export default function DHAShowcase({ data }) {
           >
             <Link
               href="/#contact"
+              onClick={() => trackCTAClick("Contact - CTA", "DHA")}
               className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.3)] active:scale-[0.98]"
             >
               <span>যোগাযোগ করুন</span>
@@ -1474,6 +1476,7 @@ export default function DHAShowcase({ data }) {
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackCTAClick("Visit Site - CTA", "DHA")}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-neutral-600 px-8 py-4 text-base font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100"
             >
               <FaGlobe className="h-5 w-5" />
