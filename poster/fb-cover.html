@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1640" />
+  <title>Effy Tech — Facebook Cover</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1640px;
+      height: 624px;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: #0f172a;
+    }
+
+    .cover {
+      width: 1640px;
+      height: 624px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 900px 600px at 15% 40%, rgba(15,118,110,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 700px 500px at 85% 30%, rgba(184,168,138,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 50% 100%, rgba(15,118,110,0.1) 0%, transparent 70%),
+        linear-gradient(145deg, #0a1628 0%, #0f172a 35%, #0d1322 65%, #0a1225 100%);
+    }
+
+    /* ── Decorative lines ── */
+    .line-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent 5%, #0f766e 25%, #2dd4bf 40%, #b8a88a 60%, #0f766e 75%, transparent 95%);
+    }
+
+    .line-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent 5%, #b8a88a 25%, #0f766e 50%, #b8a88a 75%, transparent 95%);
+    }
+
+    /* ── Geometric grid pattern ── */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.025;
+      background-image:
+        linear-gradient(rgba(45,212,191,0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,212,191,0.5) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* ── Glowing orbs ── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+    .orb-1 {
+      top: -120px; left: 100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(15,118,110,0.15), transparent 70%);
+    }
+    .orb-2 {
+      bottom: -150px; right: 200px;
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, rgba(184,168,138,0.08), transparent 70%);
+    }
+    .orb-3 {
+      top: 50px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(45,212,191,0.06), transparent 70%);
+    }
+
+    /* ── Floating geometric shapes ── */
+    .shape {
+      position: absolute;
+      border: 1px solid;
+      opacity: 0.06;
+    }
+    .shape-ring {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border-color: #2dd4bf;
+      top: 40px; right: 280px;
+    }
+    .shape-diamond {
+      width: 80px; height: 80px;
+      border-color: #b8a88a;
+      transform: rotate(45deg);
+      bottom: 80px; left: 580px;
+    }
+    .shape-square {
+      width: 120px; height: 120px;
+      border-color: #2dd4bf;
+      border-radius: 20px;
+      transform: rotate(15deg);
+      top: 180px; right: 120px;
+      opacity: 0.04;
+    }
+
+    /* ── Dot cluster ── */
+    .dots {
+      position: absolute;
+      top: 100px; left: 520px;
+      display: grid;
+      grid-template-columns: repeat(5, 8px);
+      gap: 12px;
+      opacity: 0.08;
+    }
+    .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #2dd4bf;
+    }
+
+    /* ── Accent lines ── */
+    .accent-line {
+      position: absolute;
+      background: linear-gradient(180deg, transparent, #0f766e, transparent);
+      width: 1px;
+      opacity: 0.1;
+    }
+    .al-1 { left: 520px; top: 0; height: 100%; }
+    .al-2 { right: 350px; top: 0; height: 100%; opacity: 0.06; }
+
+    /* horizontal accent */
+    .h-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,168,138,0.15), transparent);
+      left: 0; right: 0;
+      top: 50%;
+    }
+
+    /* ── Content ── */
+    .content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 100px;
+      gap: 80px;
+    }
+
+    /* ── Left: Brand ── */
+    .brand-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .logo-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+
+    .logo-text {
+      font-size: 48px;
+      font-weight: 800;
+      color: #f1f5f9;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .logo-text .accent {
+      background: linear-gradient(135deg, #2dd4bf, #0f766e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Tagline */
+    .tagline-wrap {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .tagline-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #2dd4bf, #0f766e, #b8a88a);
+    }
+
+    .tagline-line1 {
+      font-size: 30px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .tagline-line2 {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+      background: linear-gradient(135deg, #d4c5b0, #b8a88a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Services pills */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .pill.teal {
+      background: rgba(15,118,110,0.1);
+      border: 1px solid rgba(45,212,191,0.15);
+      color: #2dd4bf;
+    }
+
+    .pill.champagne {
+      background: rgba(184,168,138,0.06);
+      border: 1px solid rgba(184,168,138,0.15);
+      color: #d4c5b0;
+    }
+
+    .pill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+    .pill.teal .pill-dot { background: #2dd4bf; }
+    .pill.champagne .pill-dot { background: #b8a88a; }
+
+    /* ── Divider ── */
+    .v-divider {
+      width: 1px;
+      height: 280px;
+      background: linear-gradient(180deg, transparent, rgba(45,212,191,0.2), rgba(184,168,138,0.15), transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── Right: Abstract visual ── */
+    .visual-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Concentric rings */
+    .rings {
+      position: relative;
+      width: 420px;
+      height: 420px;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .ring-1 {
+      width: 420px; height: 420px;
+      border-color: rgba(45,212,191,0.06);
+    }
+    .ring-2 {
+      width: 320px; height: 320px;
+      border-color: rgba(45,212,191,0.1);
+    }
+    .ring-3 {
+      width: 220px; height: 220px;
+      border-color: rgba(184,168,138,0.1);
+    }
+    .ring-4 {
+      width: 120px; height: 120px;
+      border-color: rgba(45,212,191,0.15);
+    }
+
+    /* Center glow */
+    .center-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,212,191,0.25), transparent 70%);
+      filter: blur(15px);
+    }
+
+    /* Center icon block */
+    .center-block {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(15,118,110,0.25), rgba(45,212,191,0.1));
+      border: 1px solid rgba(45,212,191,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .center-block svg {
+      width: 28px; height: 28px;
+      color: #2dd4bf;
+    }
+
+    /* Orbit nodes */
+    .node {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .node-1 {
+      width: 12px; height: 12px;
+      background: #2dd4bf;
+      top: 50%; left: 0;
+      transform: translateY(-50%);
+      box-shadow: 0 0 20px rgba(45,212,191,0.4);
+    }
+    .node-2 {
+      width: 8px; height: 8px;
+      background: #b8a88a;
+      top: 12%; left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 15px rgba(184,168,138,0.3);
+    }
+    .node-3 {
+      width: 10px; height: 10px;
+      background: #0f766e;
+      bottom: 15%; right: 8%;
+      box-shadow: 0 0 20px rgba(15,118,110,0.4);
+    }
+    .node-4 {
+      width: 6px; height: 6px;
+      background: #2dd4bf;
+      top: 30%; right: 5%;
+      opacity: 0.6;
+    }
+    .node-5 {
+      width: 8px; height: 8px;
+      background: #d4c5b0;
+      bottom: 30%; left: 8%;
+      opacity: 0.5;
+    }
+
+    /* Floating tech words */
+    .tech-label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.12;
+    }
+    .tl-1 { top: 80px; right: 20px; color: #2dd4bf; transform: rotate(90deg); }
+    .tl-2 { bottom: 60px; right: 80px; color: #b8a88a; }
+    .tl-3 { top: 30px; left: 60px; color: #94a3b8; }
+
+    /* ── Website URL ── */
+    .url-bar {
+      position: absolute;
+      bottom: 28px;
+      right: 100px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .url-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2dd4bf;
+      box-shadow: 0 0 8px rgba(45,212,191,0.5);
+    }
+
+    .url-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+
+    .url-text strong {
+      color: #94a3b8;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <!-- Decorative -->
+    <div class="line-top"></div>
+    <div class="line-bottom"></div>
+    <div class="grid-pattern"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="shape shape-ring"></div>
+    <div class="shape shape-diamond"></div>
+    <div class="shape shape-square"></div>
+    <div class="accent-line al-1"></div>
+    <div class="accent-line al-2"></div>
+    <div class="h-line"></div>
+
+    <!-- Dots -->
+    <div class="dots">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Left: Brand -->
+      <div class="brand-side">
+        <div class="logo-wrap">
+          <img src="/images/logo.png" alt="Effy Tech" class="logo-img" />
+          <div class="logo-text">
+            Effy <span class="accent">Tech</span>
+          </div>
+        </div>
+
+        <div class="tagline-wrap">
+          <div class="tagline-bar"></div>
+          <div class="tagline-line1">Smart Solutions.</div>
+          <div class="tagline-line2">Simple Execution.</div>
+        </div>
+
+        <div class="pills">
+          <span class="pill teal"><span class="pill-dot"></span>Web Development</span>
+          <span class="pill champagne"><span class="pill-dot"></span>Mobile Apps</span>
+          <span class="pill teal"><span class="pill-dot"></span>UI/UX Design</span>
+          <span class="pill champagne"><span class="pill-dot"></span>Cloud Solutions</span>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="v-divider"></div>
+
+      <!-- Right: Abstract Visual -->
+      <div class="visual-side">
+        <div class="rings">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+          <div class="ring ring-4"></div>
+          <div class="center-glow"></div>
+          <div class="center-block">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <div class="node node-1"></div>
+          <div class="node node-2"></div>
+          <div class="node node-3"></div>
+          <div class="node node-4"></div>
+          <div class="node node-5"></div>
+        </div>
+
+        <!-- Floating labels -->
+        <span class="tech-label tl-1">INNOVATE</span>
+        <span class="tech-label tl-2">BUILD · SHIP · SCALE</span>
+        <span class="tech-label tl-3">DIGITAL</span>
+      </div>
+    </div>
+
+    <!-- URL -->
+    <div class="url-bar">
+      <span class="url-dot"></span>
+      <span class="url-text"><strong>effy-tech.vercel.app</strong></span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200" />
+  <title>Amal Tracker — Feed Poster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: 'Noto Sans Bengali', 'Plus Jakarta Sans', sans-serif;
+      background: #060b18;
+    }
+
+    .poster {
+      width: 1200px;
+      height: 630px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 500px 400px at 10% 30%, rgba(13,148,136,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 350px at 90% 70%, rgba(202,138,4,0.08) 0%, transparent 70%),
+        linear-gradient(135deg, #0a1628 0%, #060b18 50%, #0d1117 100%);
+    }
+
+    /* Decorative */
+    .deco-top { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, #d4a017, #0d9488, #d4a017, transparent); }
+    .deco-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, #0d9488, #d4a017, #0d9488, transparent); }
+
+    .geo-pattern {
+      position: absolute; inset: 0; opacity: 0.025;
+      background-image: linear-gradient(30deg, #d4a017 1px, transparent 1px), linear-gradient(-30deg, #d4a017 1px, transparent 1px);
+      background-size: 50px 80px;
+    }
+
+    .orb-1 { position: absolute; top: -60px; left: -80px; width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle, rgba(13,148,136,0.12), transparent 70%); filter: blur(40px); }
+    .orb-2 { position: absolute; bottom: -80px; right: -60px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(212,160,23,0.1), transparent 70%); filter: blur(40px); }
+
+    .star { position: absolute; width: 6px; height: 6px; background: #d4a017; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+    .s1 { top: 60px; left: 60px; opacity: 0.5; }
+    .s2 { top: 120px; left: 400px; opacity: 0.3; transform: scale(0.8); }
+    .s3 { bottom: 80px; left: 300px; opacity: 0.4; }
+    .s4 { top: 40px; right: 150px; opacity: 0.25; transform: scale(1.3); }
+
+    .crescent { position: absolute; top: 30px; right: 420px; width: 40px; height: 40px; border-radius: 50%; box-shadow: inset -12px -3px 0 0 #d4a017; opacity: 0.2; }
+
+    /* Layout */
+    .content {
+      position: relative; z-index: 10;
+      height: 100%;
+      display: flex;
+      padding: 36px 48px;
+      gap: 40px;
+    }
+
+    /* Left Side */
+    .left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .brand-logo { width: 40px; height: 40px; border-radius: 10px; }
+
+    .brand-text { font-size: 14px; font-weight: 700; color: #94a3b8; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 1px; }
+
+    .app-pill {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(212,160,23,0.12), rgba(212,160,23,0.04));
+      border: 1.5px solid rgba(212,160,23,0.25);
+      border-radius: 40px;
+      padding: 7px 24px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fbbf24;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .heading {
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+
+    .heading .gold {
+      background: linear-gradient(135deg, #f5c842, #d4a017, #c5930a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subheading {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #64748b;
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    /* Features row */
+    .features-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .feat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .feat-chip .emoji { font-size: 16px; }
+
+    /* Bottom CTA */
+    .bottom-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .play-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #000;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 16px;
+    }
+
+    .play-badge svg { width: 22px; height: 22px; }
+
+    .play-badge-text { display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .play-badge-text small { font-size: 9px; color: #94a3b8; font-weight: 500; }
+    .play-badge-text span { font-size: 14px; font-weight: 700; color: #fff; }
+
+    .visit-text { font-size: 13px; color: #475569; font-weight: 500; }
+    .visit-url { font-size: 14px; font-weight: 700; color: #2dd4bf; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* Right Side */
+    .right {
+      width: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .phone-glow {
+      position: absolute;
+      bottom: -20px;
+      width: 400px; height: 100px;
+      background: radial-gradient(ellipse, rgba(13,148,136,0.18), transparent 70%);
+      filter: blur(25px);
+    }
+
+    .phone-frame {
+      width: 170px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .phone-frame.main {
+      width: 195px;
+      z-index: 3;
+      transform: translateY(-10px);
+    }
+
+    .phone-frame.side-left { transform: translateX(30px) rotate(-4deg); z-index: 1; opacity: 0.85; }
+    .phone-frame.side-right { transform: translateX(-30px) rotate(4deg); z-index: 1; opacity: 0.85; }
+
+    .phone-frame img {
+      width: 100%;
+      border-radius: 22px;
+      display: block;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    }
+
+    .phones-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: relative;
+    }
+
+    /* QR corner */
+    .qr-corner {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212,160,23,0.2);
+      border-radius: 14px;
+      padding: 10px 14px;
+      z-index: 10;
+    }
+
+    .qr-corner img {
+      width: 65px; height: 65px;
+      border-radius: 8px;
+      background: white;
+      padding: 3px;
+    }
+
+    .qr-corner-text {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.3;
+      background: linear-gradient(135deg, #f5c842, #d4a017);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="deco-top"></div>
+    <div class="deco-bottom"></div>
+    <div class="geo-pattern"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="star s1"></div>
+    <div class="star s2"></div>
+    <div class="star s3"></div>
+    <div class="star s4"></div>
+    <div class="crescent"></div>
+
+    <div class="content">
+      <!-- Left -->
+      <div class="left">
+        <div class="brand-row">
+          <img src="/images/logo.png" alt="Logo" class="brand-logo" />
+          <span class="brand-text">EFFY TECH</span>
+        </div>
+
+        <span class="app-pill">ISLAMIC AMAL TRACKER</span>
+
+        <h1 class="heading">
+          আপনার নিত্যদিনের<br/><span class="gold">আমলের সঙ্গী</span>
+        </h1>
+
+        <p class="subheading">
+          প্রতিদিনের নামাজ, আমল, যিকির ও গুনাহের ট্রাক রাখুন খুব সহজেই।
+        </p>
+
+        <div class="features-row">
+          <span class="feat-chip"><span class="emoji">🕌</span> নামাজ ট্র্যাক</span>
+          <span class="feat-chip"><span class="emoji">📊</span> রিপোর্ট</span>
+          <span class="feat-chip"><span class="emoji">🔔</span> রিমাইন্ডার</span>
+          <span class="feat-chip"><span class="emoji">🛡️</span> গুনাহ ট্র্যাকার</span>
+          <span class="feat-chip"><span class="emoji">📿</span> যিকির</span>
+          <span class="feat-chip"><span class="emoji">📅</span> ক্যালেন্ডার</span>
+        </div>
+
+        <div class="bottom-row">
+          <div class="play-badge">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734c0-.392.226-.724.609-.92z" fill="#4285F4"/>
+              <path d="M17.544 8.252L5.202.862C4.79.633 4.345.553 3.94.633l9.852 11.37 3.752-3.75z" fill="#EA4335"/>
+              <path d="M3.94 23.367c.405.08.85 0 1.262-.23l12.342-7.389-3.752-3.752L3.94 23.367z" fill="#34A853"/>
+              <path d="M20.85 10.473l-3.306-1.98L13.792 12l3.752 3.748 3.306-1.976c.93-.556.93-2.743 0-3.299z" fill="#FBBC04"/>
+            </svg>
+            <div class="play-badge-text">
+              <small>GET IT ON</small>
+              <span>Google Play</span>
+            </div>
+          </div>
+          <div>
+            <div class="visit-text">বিস্তারিত জানতে ভিজিট করুনঃ</div>
+            <div class="visit-url">effy-tech.vercel.app/projects/IAM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="right">
+        <div class="phone-glow"></div>
+        <div class="phones-wrap">
+          <div class="phone-frame side-left">
+            <img src="/images/amal/single2.jpeg" alt="Screen 1" />
+          </div>
+          <div class="phone-frame main">
+            <img src="/images/amal/single1.jpeg" alt="Screen 2" />
+          </div>
+          <div class="phone-frame side-right">
+            <img src="/images/amal/single3.jpeg" alt="Screen 3" />
+          </div>
+        </div>
+
+        <div class="qr-corner">
+          <img src="/qr.png" alt="QR" />
+          <span class="qr-corner-text">ডাউনলোড<br/>করুন আজই!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
