@@ -776,8 +776,9 @@ export function generateStaticParams() {
     }));
 }
 
-export function generateMetadata({ params }) {
-  const member = getMember(params.memberSlug);
+export async function generateMetadata({ params }) {
+  const { memberSlug } = await params;
+  const member = getMember(memberSlug);
 
   if (!member) {
     return {
@@ -791,12 +792,13 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function TeamMemberPage({ params }) {
-  const member = getMember(params.memberSlug);
+export default async function TeamMemberPage({ params }) {
+  const { memberSlug } = await params;
+  const member = getMember(memberSlug);
 
   if (!member) notFound();
 
-  if (params.memberSlug === "salek") {
+  if (memberSlug === "salek") {
     return <SalekProfilePage member={member} />;
   }
 
