@@ -17,6 +17,7 @@ const siteConfig = {
     { label: "Home", href: "/#hero" },
     { label: "About", href: "/#about" },
     { label: "Projects", href: "/#projects" },
+    { label: "Team", href: "/#team" },
     { label: "Contact", href: "/#contact" },
   ],
 
@@ -89,6 +90,59 @@ const siteConfig = {
   },
 
   /* ── Footer ──────────────────────────────────────────────── */
+  /* Team Section */
+  team: [
+    {
+      name: "Salek Bin Hossain",
+      role: "Founder & CEO",
+      initials: "SH",
+      bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
+      photo: "/images/salek.jpg",
+      socials: [
+        {
+          platform: "facebook",
+          url: "https://www.facebook.com/profile.php?id=61588615151448",
+        },
+        { platform: "github", url: "/coming-soon" },
+        { platform: "linkedin", url: "/coming-soon" },
+        { platform: "mail", url: "mailto:effttech@gmail.com" },
+      ],
+    },
+    {
+      name: "Adnan Bin Wahid",
+      role: "Co-Founder & Lead Software Engineer",
+      initials: "AW",
+      bio: "Architects software systems and turns product ideas into reliable, scalable applications.",
+      photo: "/images/adnan.png",
+      socials: [
+        {
+          platform: "facebook",
+          url: "https://www.facebook.com/profile.php?id=61588615151448",
+        },
+        { platform: "github", url: "/coming-soon" },
+        { platform: "linkedin", url: "/coming-soon" },
+        { platform: "mail", url: "mailto:effttech@gmail.com" },
+      ],
+    },
+    {
+      name: "Abdullah Al Saif",
+      role: "Co-Founder & Head of Engineering",
+      initials: "AS",
+      bio: "Guides engineering standards, technical planning, and smooth delivery across projects.",
+      photo: "/images/saif.png",
+      socials: [
+        {
+          platform: "facebook",
+          url: "https://www.facebook.com/profile.php?id=61588615151448",
+        },
+        { platform: "github", url: "/coming-soon" },
+        { platform: "linkedin", url: "/coming-soon" },
+        { platform: "mail", url: "mailto:effttech@gmail.com" },
+      ],
+    },
+  ],
+
+  /* Footer */
   footer: {
     columns: [
       {

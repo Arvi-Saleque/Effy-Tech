@@ -9,6 +9,7 @@
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import ProjectShowcase from "@/components/sections/ProjectShowcase";
+import Team from "@/components/sections/Team";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
 import projects from "@/data/projects";
@@ -33,6 +34,8 @@ export default function Home() {
 
           {/* ── Project Showcase ─────────────────────────────────── */}
           <ProjectShowcase projects={projects} />
+
+          <Team />
 
           {/* ── Contact Section ──────────────────────────────────── */}
           <Contact />
