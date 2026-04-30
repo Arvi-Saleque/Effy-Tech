@@ -35,14 +35,7 @@ const siteConfig = {
   },
 
   /* ── Project Filter Categories ───────────────────────────── */
-  projectCategories: [
-    "All",
-    "Web",
-    "Android",
-    "iOS",
-    "UI/UX",
-    "Cross-Platform",
-  ],
+  projectCategories: ["All", "Web", "Android"],
 
   /* ── About Section ───────────────────────────────────────── */
   about: {
@@ -131,6 +124,34 @@ const siteConfig = {
     },
   ],
 
+  /* Why Choose Section */
+  whyChoose: [
+    {
+      title: "Business-Focused Approach",
+      description:
+        "We first understand your goal, audience, and workflow before starting development.",
+      icon: "business",
+    },
+    {
+      title: "Clean & Scalable Code",
+      description:
+        "We build with organized structure so future updates are easier and safer.",
+      icon: "code",
+    },
+    {
+      title: "Modern UI Experience",
+      description:
+        "We create smooth, responsive, and professional interfaces for web and mobile users.",
+      icon: "ui",
+    },
+    {
+      title: "Long-Term Support",
+      description:
+        "We help after launch with updates, improvements, bug fixing, and technical support.",
+      icon: "support",
+    },
+  ],
+
   /* Team Section */
   team: [
     {
@@ -139,6 +160,7 @@ const siteConfig = {
       initials: "SH",
       bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
       photo: "/images/salek.jpg",
+      detailsUrl: "/salek",
       socials: [
         {
           platform: "facebook",
@@ -155,6 +177,7 @@ const siteConfig = {
       initials: "AW",
       bio: "Architects software systems and turns product ideas into reliable, scalable applications.",
       photo: "/images/adnan.png",
+      detailsUrl: "/adnan",
       socials: [
         {
           platform: "facebook",
@@ -171,6 +194,7 @@ const siteConfig = {
       initials: "AS",
       bio: "Guides engineering standards, technical planning, and smooth delivery across projects.",
       photo: "/images/saif.png",
+      detailsUrl: "/saif",
       socials: [
         {
           platform: "facebook",

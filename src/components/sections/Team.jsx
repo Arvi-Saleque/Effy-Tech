@@ -2,7 +2,11 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
-import { HiOutlineMail, HiOutlineUserCircle } from "react-icons/hi";
+import {
+  HiOutlineArrowRight,
+  HiOutlineMail,
+  HiOutlineUserCircle,
+} from "react-icons/hi";
 import siteConfig from "@/theme/siteConfig";
 
 const socialIconMap = {
@@ -145,6 +149,14 @@ function ProfileTile({ member, index, prefersReduced, className = "" }) {
       </p>
 
       <TeamSocials links={member.socials} />
+
+      <a
+        href={member.detailsUrl}
+        className="relative z-10 mt-6 inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-5 py-2 text-sm font-semibold text-primary-light transition-all duration-300 hover:border-accent-light/35 hover:bg-accent/10 hover:text-accent-light"
+      >
+        View Details
+        <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
     </motion.article>
   );
 }
