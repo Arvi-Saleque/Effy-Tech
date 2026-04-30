@@ -392,14 +392,16 @@ function SalekProfilePage({ member }) {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <section className="grid min-h-screen items-center gap-12 py-28 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <Link
-              href="/#team"
-              className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" />
-              Back to Effy Tech
-            </Link>
-            <span className="mb-5 inline-flex rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light">
+            <div className="mb-8">
+              <Link
+                href="/#team"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
+              >
+                <HiOutlineArrowLeft className="h-4 w-4" />
+                Back to Effy Tech
+              </Link>
+            </div>
+            <span className="mb-5 inline-flex w-fit rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light">
               Founder Profile
             </span>
             <h1 className="font-heading text-5xl font-bold tracking-tight text-neutral-100 sm:text-6xl lg:text-7xl">
