@@ -8,6 +8,7 @@
 
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import Services from "@/components/sections/Services";
 import ProjectShowcase from "@/components/sections/ProjectShowcase";
 import Team from "@/components/sections/Team";
 import Contact from "@/components/sections/Contact";
@@ -31,6 +32,8 @@ export default function Home() {
         <div className="relative z-10 bg-surface-dark">
           {/* ── About Section ────────────────────────────────────── */}
           <About />
+
+          <Services />
 
           {/* ── Project Showcase ─────────────────────────────────── */}
           <ProjectShowcase projects={projects} />

@@ -16,6 +16,7 @@ const siteConfig = {
   navLinks: [
     { label: "Home", href: "/#hero" },
     { label: "About", href: "/#about" },
+    { label: "Services", href: "/#services" },
     { label: "Projects", href: "/#projects" },
     { label: "Team", href: "/#team" },
     { label: "Contact", href: "/#contact" },
@@ -90,6 +91,46 @@ const siteConfig = {
   },
 
   /* ── Footer ──────────────────────────────────────────────── */
+  /* Services Section */
+  services: [
+    {
+      title: "Website Development",
+      description:
+        "Build modern, responsive websites for companies, institutions, portfolios, and organizations.",
+      icon: "website",
+    },
+    {
+      title: "Web Application Development",
+      description:
+        "Create dashboards, admin panels, management systems, SaaS tools, and client portals.",
+      icon: "webapp",
+    },
+    {
+      title: "Mobile App Development",
+      description:
+        "Develop Android and cross-platform apps with clean UI, smooth performance, and backend integration.",
+      icon: "mobile",
+    },
+    {
+      title: "UI/UX Design",
+      description:
+        "Design professional interfaces, landing pages, app screens, wireframes, and design systems.",
+      icon: "design",
+    },
+    {
+      title: "Backend & API Development",
+      description:
+        "Build secure APIs, authentication, databases, admin logic, and server-side business features.",
+      icon: "backend",
+    },
+    {
+      title: "Maintenance & Support",
+      description:
+        "Provide bug fixing, feature updates, hosting support, optimization, and long-term assistance.",
+      icon: "support",
+    },
+  ],
+
   /* Team Section */
   team: [
     {
