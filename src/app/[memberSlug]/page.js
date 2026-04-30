@@ -115,19 +115,7 @@ const salekProfile = {
         "Lead technical direction with emphasis on maintainable codebases and responsive UI.",
         "Manage product planning, UI direction, implementation, testing, and deployment.",
       ],
-    },
-    {
-      role: "Software Engineer Intern",
-      company: "Kaz Software Limited",
-      period: "Oct 2025 - Mar 2026",
-      points: [
-        "Worked with Angular, .NET Core, and MS SQL Server.",
-        "Built and maintained frontend and backend features.",
-        "Used REST APIs, Postman, Swagger, Git, and GitHub.",
-        "Collaborated in an Agile/Scrum development environment.",
-        "Contributed to real-world software projects and internal systems.",
-      ],
-    },
+    }
   ],
   extraProjects: [
     {
@@ -298,6 +286,39 @@ function SocialButton({ social }) {
       <Icon className="h-4 w-4" />
       {social.label}
     </a>
+  );
+}
+
+function MiniFooter() {
+  return (
+    <footer className="relative z-10 border-t border-neutral-800/70 bg-neutral-950/30">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-neutral-500 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <p>
+          © {new Date().getFullYear()} Effy Tech. Built with care in
+          Bangladesh.
+        </p>
+        <div className="flex flex-wrap gap-5">
+          <Link
+            href="/"
+            className="transition-colors hover:text-primary-light"
+          >
+            Home
+          </Link>
+          <Link
+            href="/#projects"
+            className="transition-colors hover:text-primary-light"
+          >
+            Projects
+          </Link>
+          <Link
+            href="/#contact"
+            className="transition-colors hover:text-primary-light"
+          >
+            Contact
+          </Link>
+        </div>
+      </div>
+    </footer>
   );
 }
 
@@ -742,6 +763,7 @@ function SalekProfilePage({ member }) {
           </GlassCard>
         </section>
       </div>
+      <MiniFooter />
     </main>
   );
 }
@@ -826,6 +848,7 @@ function CompactMemberPage({ member }) {
           </div>
         </div>
       </section>
+      <MiniFooter />
     </main>
   );
 }
