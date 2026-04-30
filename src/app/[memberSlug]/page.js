@@ -27,14 +27,25 @@ const socialIconMap = {
 const salekProfile = {
   title: "Full-Stack Software Engineer & Founder",
   intro:
-    "I build scalable web, mobile, and software solutions with clean architecture, modern UI, and strong problem-solving fundamentals.",
-  cvUrl: "/coming-soon",
+    "KUET CSE undergraduate building scalable Flutter, Next.js, and backend solutions with clean architecture, modern UI, and strong problem-solving fundamentals.",
+  email: "alifsalek.as@gmail.com",
+  cvUrl: "/files/salek-cv.pdf",
   socials: [
-    { label: "GitHub", href: "/coming-soon", icon: FaGithub },
-    { label: "LinkedIn", href: "/coming-soon", icon: FaLinkedinIn },
+    { label: "GitHub", href: "https://github.com/Arvi-Saleque", icon: FaGithub },
+    {
+      label: "LinkedIn",
+      href: "https://linkedin.com/in/salek-bin-hossain",
+      icon: FaLinkedinIn,
+    },
     { label: "Codeforces", href: "/coming-soon", icon: HiOutlineCode },
     { label: "CodeChef", href: "/coming-soon", icon: HiOutlineCode },
-    { label: "Email", href: "mailto:effttech@gmail.com", icon: HiOutlineMail },
+    { label: "Email", href: "mailto:alifsalek.as@gmail.com", icon: HiOutlineMail },
+  ],
+  stats: [
+    { value: "1619", label: "Codeforces Peak" },
+    { value: "39th", label: "ICPC Asia Dhaka" },
+    { value: "2K+", label: "Problems Solved" },
+    { value: "1K+", label: "Amal Tracker Users" },
   ],
   skills: [
     {
@@ -56,7 +67,7 @@ const salekProfile = {
     },
     {
       title: "Backend",
-      items: [".NET Core", "FastAPI", "REST API", "Node.js", "Express"],
+      items: [".NET Core", "FastAPI", "REST API", "Node.js", "Express", "PHP"],
     },
     {
       title: "Database",
@@ -67,12 +78,14 @@ const salekProfile = {
       items: [
         "Git",
         "GitHub",
+        "Android Studio",
         "Postman",
         "Swagger",
         "Figma",
         "VS Code",
         "Vercel",
         "Render",
+        "CI/CD",
       ],
     },
     {
@@ -81,13 +94,28 @@ const salekProfile = {
         "Data Structures",
         "Algorithms",
         "Problem Solving",
+        "Graph Theory",
+        "Optimization",
         "System Design Basics",
+        "Clean Architecture",
+        "Offline Sync",
         "API Integration",
         "Responsive UI Design",
       ],
     },
   ],
   experience: [
+    {
+      role: "Founder & Lead Software Architect",
+      company: "Effy Tech",
+      period: "Jan 2025 - Present",
+      points: [
+        "Spearhead end-to-end delivery of mobile and web products.",
+        "Architect scalable systems using Next.js, Flutter, Firebase, and MongoDB.",
+        "Lead technical direction with emphasis on maintainable codebases and responsive UI.",
+        "Manage product planning, UI direction, implementation, testing, and deployment.",
+      ],
+    },
     {
       role: "Software Engineer Intern",
       company: "Kaz Software Limited",
@@ -98,16 +126,6 @@ const salekProfile = {
         "Used REST APIs, Postman, Swagger, Git, and GitHub.",
         "Collaborated in an Agile/Scrum development environment.",
         "Contributed to real-world software projects and internal systems.",
-      ],
-    },
-    {
-      role: "Founder",
-      company: "Effy Tech",
-      period: "2026 - Present",
-      points: [
-        "Founded a software company focused on websites, mobile apps, and custom software.",
-        "Lead product planning, client communication, and software delivery.",
-        "Work on branding, UI direction, development workflow, and project execution.",
       ],
     },
   ],
@@ -138,10 +156,10 @@ const salekProfile = {
       title: "Code Chase",
       type: "Flutter Learning / Coding Project",
       description:
-        "A coding-learning project designed to support practice, progress, and structured learning.",
-      stack: ["Flutter", "Dart"],
+        "A competitive programming tracker for logging solving history and visualizing progress.",
+      stack: ["Flutter", "Dart", "Firebase"],
       role: "App Developer",
-      features: ["Learning flow", "Practice-oriented UI", "Progress structure"],
+      features: ["Solve history", "Progress analytics", "Friend comparison"],
       liveUrl: "/coming-soon",
       githubUrl: "/coming-soon",
     },
@@ -160,34 +178,46 @@ const salekProfile = {
   competitive: [
     {
       title: "Codeforces Expert",
-      description: "Strong algorithmic problem-solving background.",
+      description: "Peak rating 1619 with strong algorithmic background.",
     },
     {
       title: "CodeChef 4-Star",
       description: "Consistent competitive programming performance.",
     },
     {
-      title: "ICPC Asia Dhaka Regionalist",
-      description: "Competed in a regional-level team programming contest.",
+      title: "ICPC Asia Dhaka Regional - 39th",
+      description: "Ranked 39th in a regional-level team programming contest.",
     },
     {
       title: "2000+ Problems Solved",
       description: "Across online judges and programming platforms.",
     },
+    {
+      title: "BUET IUPC - 29th",
+      description: "Placed 29th in a national-level programming contest.",
+    },
+    {
+      title: "NWU Champion",
+      description: "Champion in competitive programming contest participation.",
+    },
   ],
   education: {
     degree: "B.Sc. in Computer Science and Engineering",
     institution: "Khulna University of Engineering & Technology - KUET",
-    focus: "Software engineering, algorithms, web development, and mobile development.",
+    focus:
+      "Software engineering, algorithms, web development, mobile development, and product-focused software delivery.",
+    previous: "Notre Dame College - Higher Secondary Certificate (GPA 5.00)",
   },
   achievements: [
-    "Codeforces Expert",
-    "CodeChef 4-Star",
-    "ICPC Asia Dhaka Regionalist",
+    "Codeforces Expert - Peak 1619",
+    "CodeChef 4-Star Coder",
+    "ICPC Asia Dhaka Regional - 39th",
     "ISCPC National Runner-up",
-    "App published on Google Play",
+    "BUET IUPC - 29th",
     "Founder of Effy Tech",
-    "Internship at Kaz Software",
+    "Former President, Programming Department, NDITC",
+    "Judge, Notre Dame FTMPC",
+    "Mentor, Srinivasa Ramanujan Math Club",
   ],
   services: [
     {
@@ -360,12 +390,15 @@ function SalekProfilePage({ member }) {
         project.slug === "IAM"
           ? "Android App / Flutter Project"
           : "Institution Website / Client Project",
-      description: project.description,
+      description:
+        project.slug === "IAM"
+          ? "A Flutter and Firebase productivity app with reminders, cloud sync, clean architecture, and 1,000+ active users."
+          : project.description,
       stack: project.tags,
       role: project.slug === "IAM" ? "Founder & App Developer" : "Lead Developer",
       features:
         project.slug === "IAM"
-          ? ["Daily Amal tracking", "Spiritual reminders", "Published on Google Play"]
+          ? ["Daily Amal tracking", "Cloud sync and reminders", "1,000+ active users"]
           : ["Bilingual website", "Admin dashboard", "Responsive academic system"],
       liveUrl: project.liveUrl || "/coming-soon",
       githubUrl: "/coming-soon",
@@ -417,6 +450,7 @@ function SalekProfilePage({ member }) {
             <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href={salekProfile.cvUrl}
+                download
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
                 <HiOutlineDownload className="h-4 w-4" />
@@ -439,6 +473,22 @@ function SalekProfilePage({ member }) {
             <div className="mt-8 flex flex-wrap gap-3">
               {salekProfile.socials.map((social) => (
                 <SocialButton key={social.label} social={social} />
+              ))}
+            </div>
+
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {salekProfile.stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-xl border border-neutral-700/40 bg-neutral-900/35 p-4"
+                >
+                  <p className="font-heading text-2xl font-bold text-primary-light">
+                    {stat.value}
+                  </p>
+                  <p className="mt-1 text-xs uppercase tracking-widest text-neutral-500">
+                    {stat.label}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
@@ -577,6 +627,9 @@ function SalekProfilePage({ member }) {
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-neutral-400">
               {salekProfile.education.focus}
             </p>
+            <p className="mt-4 text-sm text-neutral-500">
+              {salekProfile.education.previous}
+            </p>
           </GlassCard>
         </section>
 
@@ -632,13 +685,16 @@ function SalekProfilePage({ member }) {
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href={salekProfile.cvUrl}
+                download
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
                 <HiOutlineDownload className="h-4 w-4" />
                 Download CV
               </a>
               <a
-                href="/coming-soon"
+                href="https://linkedin.com/in/salek-bin-hossain"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
               >
                 View LinkedIn
@@ -659,20 +715,24 @@ function SalekProfilePage({ member }) {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
-                href="mailto:effttech@gmail.com"
+                href={`mailto:${salekProfile.email}`}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
                 <HiOutlineMail className="h-4 w-4" />
                 Email Me
               </a>
               <a
-                href="/coming-soon"
+                href="https://linkedin.com/in/salek-bin-hossain"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
               >
                 Connect on LinkedIn
               </a>
               <a
-                href="/coming-soon"
+                href="https://github.com/Arvi-Saleque"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-neutral-700/60 px-6 py-3 text-sm font-semibold text-neutral-300 transition-colors hover:border-primary-light/35 hover:text-primary-light"
               >
                 View GitHub
