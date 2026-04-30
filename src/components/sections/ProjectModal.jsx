@@ -7,13 +7,21 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { HiX, HiExternalLink, HiArrowRight } from "react-icons/hi";
 import Link from "next/link";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 
 export default function ProjectModal({ project, onClose }) {
-  if (!project) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!project || !mounted) return null;
 
   const {
     id,
@@ -27,11 +35,11 @@ export default function ProjectModal({ project, onClose }) {
     liveUrl,
   } = project;
 
-  return (
+  const modal = (
     <>
       {/* Backdrop */}
       <motion.div
-        className="fixed inset-0 z-50 bg-neutral-black/70 backdrop-blur-md"
+        className="fixed inset-0 z-[1000] bg-neutral-black/70 backdrop-blur-md"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -39,7 +47,7 @@ export default function ProjectModal({ project, onClose }) {
       />
 
       {/* Modal panel */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="fixed inset-0 z-[1001] flex items-center justify-center p-4 sm:p-6">
         <motion.div
           layoutId={`project-card-${id}`}
           className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-neutral-700/40 bg-neutral-900/95 shadow-[0_0_60px_rgba(45,212,191,0.08)] backdrop-blur-xl"
@@ -148,4 +156,6 @@ export default function ProjectModal({ project, onClose }) {
       </div>
     </>
   );
+
+  return createPortal(modal, document.body);
 }
