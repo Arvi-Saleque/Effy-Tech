@@ -25,6 +25,8 @@ const siteConfig = {
   /* ── Social Media ────────────────────────────────────────── */
   socials: [
     { platform: "facebook", url: "https://www.facebook.com/profile.php?id=61588615151448" },
+    { platform: "linkedin", url: "https://www.linkedin.com/company/effy-tech" },
+    { platform: "instagram", url: "https://www.instagram.com/effy__tech/" },
   ],
 
   /* ── Contact Info ────────────────────────────────────────── */
