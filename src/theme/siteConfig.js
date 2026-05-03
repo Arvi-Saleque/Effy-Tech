@@ -202,10 +202,14 @@ const siteConfig = {
       photo: "/images/saif.jpeg",
       detailsUrl: "/saif",
       socials: [
+        {
+          platform: "facebook",
+          url: "https://www.facebook.com/saif17313.remian6501",
+        },
         { platform: "github", url: "https://github.com/saif17313" },
         {
           platform: "linkedin",
-          url: "https://www.linkedin.com/in/abdullahsaif6501",
+          url: "https://www.linkedin.com/in/abdullahalsaif2107017/",
         },
         { platform: "mail", url: "mailto:abdullahalsaif17313@gmail.com" },
       ],

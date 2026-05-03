@@ -524,13 +524,18 @@ const saifProfile = {
     "I am open to software development work, product collaborations, IoT-based systems, and technical leadership opportunities.",
   socials: [
     {
+      label: "Facebook",
+      href: "https://www.facebook.com/saif17313.remian6501",
+      icon: FaFacebookF,
+    },
+    {
       label: "GitHub",
       href: "https://github.com/saif17313",
       icon: FaGithub,
     },
     {
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/abdullahsaif6501",
+      href: "https://www.linkedin.com/in/abdullahalsaif2107017/",
       icon: FaLinkedinIn,
     },
     {
