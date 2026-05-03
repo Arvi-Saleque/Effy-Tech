@@ -31,9 +31,9 @@ const siteConfig = {
 
   /* ── Contact Info ────────────────────────────────────────── */
   contact: {
-    email: "effttech@gmail.com",
-    phone: "+8801730814853",
-    address: "Nirala R/A, Khulna",
+    email: "effytechbd@gmail.com",
+    phone: "+8801511190270",
+    address: "9/7, Garden Street, Shyamoli, Dhaka-1207.",
   },
 
   /* ── Project Filter Categories ───────────────────────────── */
