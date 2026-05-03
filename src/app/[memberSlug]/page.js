@@ -38,10 +38,15 @@ const salekProfile = {
   contactIntro:
     "I am open to software development opportunities, collaborations, freelance projects, and technical discussions.",
   socials: [
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/arviman019",
+      icon: FaFacebookF,
+    },
     { label: "GitHub", href: "https://github.com/Arvi-Saleque", icon: FaGithub },
     {
       label: "LinkedIn",
-      href: "https://linkedin.com/in/salek-bin-hossain",
+      href: "https://www.linkedin.com/in/salek-bin-hossain/",
       icon: FaLinkedinIn,
     },
     { label: "Codeforces", href: "/coming-soon", icon: HiOutlineCode },
@@ -253,6 +258,11 @@ const adnanProfile = {
   contactIntro:
     "I am open to software engineering roles, full-stack development work, research-driven projects, and technical collaborations.",
   socials: [
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/adnan08072/",
+      icon: FaFacebookF,
+    },
     {
       label: "GitHub",
       href: "https://github.com/adnan-bin-wahid",
@@ -1067,6 +1077,7 @@ function DetailedProfilePage({ member, profile }) {
               <img
                 src={member.photo}
                 alt={member.name}
+                style={{ objectPosition: member.photoPosition || "center" }}
                 className="aspect-[4/5] w-full object-cover"
               />
             </div>
@@ -1341,6 +1352,7 @@ function CompactMemberPage({ member }) {
             <img
               src={member.photo}
               alt={member.name}
+              style={{ objectPosition: member.photoPosition || "center" }}
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-neutral-950/75 to-transparent" />

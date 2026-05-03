@@ -87,6 +87,7 @@ function PortraitTile({ member, index, prefersReduced, className = "" }) {
         <img
           src={member.photo}
           alt={member.name}
+          style={{ objectPosition: member.photoPosition || "center" }}
           className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
       ) : (

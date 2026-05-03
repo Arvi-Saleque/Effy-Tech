@@ -162,14 +162,18 @@ const siteConfig = {
       initials: "SH",
       bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
       photo: "/images/salek.png",
+      photoPosition: "82% center",
       detailsUrl: "/salek",
       socials: [
         {
           platform: "facebook",
-          url: "https://www.facebook.com/profile.php?id=61588615151448",
+          url: "https://www.facebook.com/arviman019",
         },
-        { platform: "github", url: "/coming-soon" },
-        { platform: "linkedin", url: "/coming-soon" },
+        { platform: "github", url: "https://github.com/Arvi-Saleque" },
+        {
+          platform: "linkedin",
+          url: "https://www.linkedin.com/in/salek-bin-hossain/",
+        },
         { platform: "mail", url: "mailto:effttech@gmail.com" },
       ],
     },
@@ -181,6 +185,7 @@ const siteConfig = {
       photo: "/images/adnan.png",
       detailsUrl: "/adnan",
       socials: [
+        { platform: "facebook", url: "https://www.facebook.com/adnan08072/" },
         { platform: "github", url: "https://github.com/adnan-bin-wahid" },
         {
           platform: "linkedin",
