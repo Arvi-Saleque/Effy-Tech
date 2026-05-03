@@ -499,9 +499,270 @@ const adnanProfile = {
   ],
 };
 
+const saifProfile = {
+  badge: "Co-Founder Profile",
+  title: "CSE Undergraduate & Software Developer",
+  intro:
+    "KUET CSE undergraduate building practical software products across Flutter, Laravel, JavaFX, IoT systems, and full-stack web development.",
+  email: "abdullahalsaif17313@gmail.com",
+  cvUrl: "/files/saif-cv.pdf",
+  about: [
+    "I am a Computer Science and Engineering student at Khulna University of Engineering & Technology with a strong interest in software development, artificial intelligence, and product building.",
+    "My work includes mobile apps, Laravel systems, JavaFX applications, IoT-integrated tracking, and game development, supported by active technical leadership in IEEE KUET Student Branch, SGIPC, and HACK KUET.",
+  ],
+  contactIntro:
+    "I am open to software development work, product collaborations, IoT-based systems, and technical leadership opportunities.",
+  socials: [
+    {
+      label: "GitHub",
+      href: "https://github.com/saif17313",
+      icon: FaGithub,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/abdullahsaif6501",
+      icon: FaLinkedinIn,
+    },
+    {
+      label: "Email",
+      href: "mailto:abdullahalsaif17313@gmail.com",
+      icon: HiOutlineMail,
+    },
+    { label: "Phone", href: "tel:+8801511190270", icon: HiOutlinePhone },
+  ],
+  stats: [
+    { value: "3.76", label: "KUET CGPA" },
+    { value: "Silver", label: "IEEE R10 Award" },
+    { value: "1st RU", label: "Math Olympiad" },
+    { value: "4+", label: "Selected Projects" },
+  ],
+  skills: [
+    {
+      title: "Languages",
+      items: [
+        "C",
+        "C++",
+        "Python",
+        "Java",
+        "JavaScript",
+        "PHP",
+        "C#",
+        "Dart",
+        "Assembly",
+      ],
+    },
+    {
+      title: "Frameworks",
+      items: [
+        "Flutter",
+        "Laravel",
+        "JavaFX",
+        "Tailwind CSS",
+        "Bootstrap",
+        "ASP.NET Web Forms",
+      ],
+    },
+    {
+      title: "Databases",
+      items: ["MySQL", "PostgreSQL", "Oracle", "Firebase", "Supabase"],
+    },
+    {
+      title: "Tools",
+      items: ["Android Studio", "Git", "GitHub", "VS Code", "Postman", "Jira", "ClickUp"],
+    },
+    {
+      title: "Core Skills",
+      items: [
+        "REST APIs",
+        "IoT Integration",
+        "GPS/GSM Systems",
+        "Responsive UI Development",
+        "Mobile App Development",
+        "Product Building",
+      ],
+    },
+    {
+      title: "Interests",
+      items: [
+        "Software Development",
+        "Artificial Intelligence",
+        "Game Development",
+        "Full-Stack Development",
+      ],
+    },
+  ],
+  experience: [
+    {
+      role: "Co-Founder",
+      company: "Effy Tech",
+      period: "Mar 2026 - Present",
+      points: [
+        "Contributes to product planning, technical execution, and software delivery across Effy Tech projects.",
+        "Works across mobile, web, backend, and product-focused implementation with an emphasis on practical user experience.",
+      ],
+    },
+    {
+      role: "Publication Secretary",
+      company: "IEEE KUET Student Branch",
+      period: "Mar 2025 - Present",
+      points: [
+        "Supports technical community communication, publication activities, and student branch initiatives.",
+      ],
+    },
+    {
+      role: "Assistant Organizing Secretary",
+      company: "SGIPC",
+      period: "Jan 2025 - Present",
+      points: [
+        "Helps organize programming and technical activities with coordination, planning, and execution support.",
+      ],
+    },
+    {
+      role: "Batch Representative",
+      company: "HACK, KUET",
+      period: "Feb 2025 - Present",
+      points: [
+        "Represents batch-level participation and coordination in HACK KUET community activities.",
+      ],
+    },
+  ],
+  includeCompanyProjects: false,
+  extraProjects: [
+    {
+      title: "Tajweed Runner",
+      type: "Mobile Game / Godot Project",
+      description:
+        "An endless-runner game focused on polished visuals, engaging mechanics, and a professional mobile-friendly user experience.",
+      stack: ["Godot", "Game Development", "Mobile UX"],
+      role: "Developer",
+      features: [
+        "Endless-runner gameplay",
+        "Polished visual experience",
+        "Mobile-friendly interaction design",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "/coming-soon",
+    },
+    {
+      title: "IoT-Enhanced University Bus Tracking System",
+      type: "IoT / Mobile Tracking System",
+      description:
+        "A real-time university bus tracking system with GPS/GSM hardware integration and a Flutter app for live location monitoring.",
+      stack: ["Flutter", "ESP32", "NEO-6M GPS", "SIM900A GSM", "IoT"],
+      role: "Developer",
+      features: [
+        "Real-time location tracking",
+        "GPS and GSM integration",
+        "Flutter monitoring app",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "/coming-soon",
+    },
+    {
+      title: "Unified Class Co-ordination App",
+      type: "Academic Communication Platform",
+      description:
+        "A role-based coordination platform for CR, teacher, and student communication with notices, announcements, and results management.",
+      stack: ["Flutter", "Firebase", "REST APIs"],
+      role: "Developer",
+      features: [
+        "Role-based communication",
+        "Notice and announcement flow",
+        "Results management",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "/coming-soon",
+    },
+    {
+      title: "Jatri",
+      type: "Ticketing Management System",
+      description:
+        "A Laravel-based ticketing system for managing ticket-related workflows efficiently.",
+      stack: ["Laravel", "PHP", "MySQL", "Bootstrap"],
+      role: "Developer",
+      features: [
+        "Ticket workflow management",
+        "Laravel backend",
+        "Structured admin operations",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "/coming-soon",
+    },
+  ],
+  strengthEyebrow: "Technical Strengths",
+  strengthTitle: "Product-Building",
+  strengthHighlight: "Strength",
+  competitive: [
+    {
+      title: "Mobile Product Development",
+      description:
+        "Builds Flutter and mobile-friendly experiences with attention to usability, responsiveness, and practical workflows.",
+    },
+    {
+      title: "IoT Integration",
+      description:
+        "Works with ESP32, GPS, GSM, and live monitoring systems for real-world tracking applications.",
+    },
+    {
+      title: "Full-Stack Systems",
+      description:
+        "Uses Laravel, JavaFX, databases, REST APIs, and frontend frameworks to build end-to-end software systems.",
+    },
+    {
+      title: "Technical Leadership",
+      description:
+        "Active in IEEE KUET Student Branch, SGIPC, HACK KUET, and earlier DRMC Science Club leadership.",
+    },
+  ],
+  education: {
+    degree: "B.Sc. in Computer Science and Engineering",
+    institution: "Khulna University of Engineering & Technology - KUET",
+    focus:
+      "3rd Year, 2nd Semester with CGPA 3.76 and focus areas across software development, artificial intelligence, IoT systems, and product-oriented application development.",
+    previous:
+      "Dhaka Residential Model College - HSC in Science (GPA 5.00, 2021); Dhaka Residential Model College - SSC in Science (GPA 5.00, 2019)",
+  },
+  achievements: [
+    "IEEE R10 Innovation Challenge 2024 - Silver Award",
+    "National Math Olympiad 2018 - 1st Runner Up",
+    "National Science Festival 2019 - 3rd Position",
+    "Publication Secretary, IEEE KUET Student Branch",
+    "Assistant Organizing Secretary, SGIPC",
+    "Batch Representative, HACK KUET",
+    "Organizing Secretary, DRMC Science Club",
+  ],
+  services: [
+    {
+      title: "Mobile App Development",
+      description:
+        "Flutter apps, mobile-friendly product interfaces, live monitoring experiences, and responsive workflows.",
+      icon: HiOutlinePhone,
+    },
+    {
+      title: "Web & Backend Development",
+      description:
+        "Laravel, REST APIs, database-backed systems, admin workflows, and full-stack application features.",
+      icon: HiOutlineDesktopComputer,
+    },
+    {
+      title: "IoT Systems",
+      description:
+        "GPS/GSM integrations, live tracking, device-to-app communication, and practical IoT product flows.",
+      icon: HiOutlineSparkles,
+    },
+    {
+      title: "Product Engineering",
+      description:
+        "Turns academic, community, and client ideas into usable software with clear structure and delivery focus.",
+      icon: HiOutlineCode,
+    },
+  ],
+};
+
 const detailedProfiles = {
   salek: salekProfile,
   adnan: adnanProfile,
+  saif: saifProfile,
 };
 
 function getMember(slug) {
@@ -894,9 +1155,9 @@ function DetailedProfilePage({ member, profile }) {
 
         <section className="py-20">
           <SectionHeader
-            eyebrow="Competitive Programming"
-            title="Problem-Solving"
-            highlight="Strength"
+            eyebrow={profile.strengthEyebrow || "Competitive Programming"}
+            title={profile.strengthTitle || "Problem-Solving"}
+            highlight={profile.strengthHighlight || "Strength"}
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {profile.competitive.map((item) => (
