@@ -161,7 +161,7 @@ const siteConfig = {
       role: "Founder & CEO",
       initials: "SH",
       bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
-      photo: "/images/salek.jpg",
+      photo: "/images/salek.png",
       detailsUrl: "/salek",
       socials: [
         {
@@ -177,17 +177,16 @@ const siteConfig = {
       name: "Adnan Bin Wahid",
       role: "Co-Founder & Lead Software Engineer",
       initials: "AW",
-      bio: "Architects software systems and turns product ideas into reliable, scalable applications.",
+      bio: "Builds full-stack systems, developer tools, and scalable product features across modern web and backend stacks.",
       photo: "/images/adnan.png",
       detailsUrl: "/adnan",
       socials: [
+        { platform: "github", url: "https://github.com/adnan-bin-wahid" },
         {
-          platform: "facebook",
-          url: "https://www.facebook.com/profile.php?id=61588615151448",
+          platform: "linkedin",
+          url: "https://www.linkedin.com/in/adnan-bin-wahid/",
         },
-        { platform: "github", url: "/coming-soon" },
-        { platform: "linkedin", url: "/coming-soon" },
-        { platform: "mail", url: "mailto:effttech@gmail.com" },
+        { platform: "mail", url: "mailto:bsse1442@iit.du.ac.bd" },
       ],
     },
     {

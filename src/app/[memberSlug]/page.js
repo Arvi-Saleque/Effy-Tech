@@ -25,11 +25,18 @@ const socialIconMap = {
 };
 
 const salekProfile = {
+  badge: "Founder Profile",
   title: "Full-Stack Software Engineer & Founder",
   intro:
     "KUET CSE undergraduate building scalable Flutter, Next.js, and backend solutions with clean architecture, modern UI, and strong problem-solving fundamentals.",
   email: "alifsalek.as@gmail.com",
   cvUrl: "/files/salek-cv.pdf",
+  about: [
+    "I am a CSE undergraduate from KUET and a software engineer focused on building practical digital products. My work covers web applications, mobile apps, backend systems, and clean user-focused interfaces.",
+    "I am also the Founder of Effy Tech, where I work on software solutions for businesses, institutions, and startups. My background in competitive programming helps me approach problems with strong logic, structure, and efficiency.",
+  ],
+  contactIntro:
+    "I am open to software development opportunities, collaborations, freelance projects, and technical discussions.",
   socials: [
     { label: "GitHub", href: "https://github.com/Arvi-Saleque", icon: FaGithub },
     {
@@ -117,6 +124,7 @@ const salekProfile = {
       ],
     }
   ],
+  includeCompanyProjects: true,
   extraProjects: [
     {
       title: "Effy Tech Website",
@@ -229,6 +237,271 @@ const salekProfile = {
       icon: HiOutlineSparkles,
     },
   ],
+};
+
+const adnanProfile = {
+  badge: "Co-Founder Profile",
+  title: "Software Engineer & Full-Stack Developer",
+  intro:
+    "Software Engineering undergraduate at the University of Dhaka IIT with a strong full-stack background across React, Node.js, FastAPI, ASP.NET Core, databases, testing, and developer tooling.",
+  email: "bsse1442@iit.du.ac.bd",
+  cvUrl: "/files/adnan-cv.pdf",
+  about: [
+    "I am a Software Engineering student at the Institute of Information Technology, University of Dhaka, with a CGPA of 3.90 to date and a focus on building reliable, scalable software systems.",
+    "My work spans AI-assisted developer tools, archival management systems, educational platforms, distributed ride-sharing, and security-focused C/C++ projects, backed by hands-on internship experience at Kaz Software Limited.",
+  ],
+  contactIntro:
+    "I am open to software engineering roles, full-stack development work, research-driven projects, and technical collaborations.",
+  socials: [
+    {
+      label: "GitHub",
+      href: "https://github.com/adnan-bin-wahid",
+      icon: FaGithub,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/adnan-bin-wahid/",
+      icon: FaLinkedinIn,
+    },
+    {
+      label: "Email",
+      href: "mailto:bsse1442@iit.du.ac.bd",
+      icon: HiOutlineMail,
+    },
+    { label: "Phone", href: "tel:+8801567937800", icon: HiOutlinePhone },
+  ],
+  stats: [
+    { value: "3.90", label: "DU IIT CGPA" },
+    { value: "55K+", label: "Records Migrated" },
+    { value: "Top 13", label: "BUET CSE Fest" },
+    { value: "3rd RU", label: "SN Bose Hackathon" },
+  ],
+  skills: [
+    {
+      title: "Programming",
+      items: ["C", "C++", "Python", "JavaScript", "TypeScript", "Java", "C#"],
+    },
+    {
+      title: "Frontend",
+      items: ["React.js", "Angular", "Tailwind CSS", "VS Code API"],
+    },
+    {
+      title: "Backend",
+      items: [
+        "Node.js",
+        "Express.js",
+        "FastAPI",
+        "ASP.NET Core",
+        "Spring Boot",
+        "Sequelize",
+      ],
+    },
+    {
+      title: "Database",
+      items: ["PostgreSQL", "MySQL", "MongoDB", "MS SQL Server", "SQLite"],
+    },
+    {
+      title: "Testing & Build",
+      items: ["JUnit", "JaCoCo", "Mutation Testing", "Maven", "Selenium"],
+    },
+    {
+      title: "Tools & Platforms",
+      items: [
+        "Git",
+        "GitHub",
+        "Docker",
+        "Swagger",
+        "Postman",
+        "Wireshark",
+        "Nginx",
+        "Vercel",
+        "Render",
+      ],
+    },
+  ],
+  experience: [
+    {
+      role: "Software Engineer Intern",
+      company: "Kaz Software Limited",
+      period: "Oct 2025 - Mar 2026",
+      points: [
+        "Built frontend and backend features for JTI, Veny, and Virus Shield using Angular, .NET Core, MS SQL Server, and REST APIs.",
+        "Delivered responsive user interfaces, scalable application functionality, and RAG-based systems to improve retrieval quality and support data-driven features.",
+        "Worked in an Agile Scrum environment with Git, GitHub, Postman, Swagger, and VS Code while collaborating with team members to ship features on time.",
+      ],
+    },
+    {
+      role: "Assistant General Secretary",
+      company: "IIT Software Engineers' Community",
+      period: "Jun 2025 - Present",
+      points: [
+        "Contributes to community leadership, coordination, and software engineering activities at IIT, University of Dhaka.",
+      ],
+    },
+  ],
+  includeCompanyProjects: false,
+  extraProjects: [
+    {
+      title: "RepoAlign",
+      type: "AI Developer Tool / VS Code Extension",
+      description:
+        "An AI-driven semantic consistency checker for repository-wide code intelligence and architectural validation.",
+      stack: [
+        "TypeScript",
+        "VS Code API",
+        "Python",
+        "FastAPI",
+        "SQLite",
+        "Sentence-Transformer",
+        "ts-morph",
+        "Z3",
+      ],
+      role: "Developer",
+      features: [
+        "AST-based repository analysis",
+        "Semantic indexing and retrieval",
+        "Cross-file dependency modeling",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "https://github.com/adnan-bin-wahid/repoalign-vscode",
+    },
+    {
+      title: "Liberation War Museum Archival System",
+      type: "Archival Management Platform",
+      description:
+        "A scalable system for migrating oral history records and artifacts from documents into a centralized searchable database.",
+      stack: ["ReactJS", "NodeJS", "Express.js", "PostgreSQL", "Sequelize"],
+      role: "Full-Stack Developer",
+      features: [
+        "55,000 oral history record migration",
+        "33,000 artifact database",
+        "Automated tagging and categorization",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "https://github.com/adnan-bin-wahid/LWM-Management-System.git",
+    },
+    {
+      title: "Shikhon360",
+      type: "Interactive Educational Platform",
+      description:
+        "A learning platform with STEM simulations, AI tutoring, multilingual text-to-speech, and research collaboration features.",
+      stack: [
+        "React.js",
+        "Node.js",
+        "MongoDB",
+        "Express.js",
+        "Azure TTS",
+        "Google Generative AI",
+      ],
+      role: "Co-Developer",
+      features: [
+        "STEM simulations",
+        "AI tutoring",
+        "Multilingual TTS support",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "https://github.com/adnan-bin-wahid/SNBoseHack.git",
+    },
+    {
+      title: "Gontobbo",
+      type: "Distributed Ride-Sharing System",
+      description:
+        "A scalable ride-sharing app with geolocation, fare estimation, authentication, REST APIs, and containerized services.",
+      stack: ["React", "MongoDB", "NodeJS", "JWT", "Docker"],
+      role: "Full-Stack Developer",
+      features: [
+        "Geolocation and fare estimation",
+        "JWT authentication",
+        "Microservice-oriented ride handling",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "https://github.com/adnan-bin-wahid/Gontobbo.git",
+    },
+    {
+      title: "HashStego Vault",
+      type: "Security / Steganography Project",
+      description:
+        "A C/C++ project using image steganography and cryptographic hashing to embed, transfer, and verify data integrity.",
+      stack: ["C", "C++"],
+      role: "Developer",
+      features: [
+        "Image steganography",
+        "Cryptographic hashing",
+        "Integrity verification",
+      ],
+      liveUrl: "/coming-soon",
+      githubUrl: "https://github.com/adnan-bin-wahid/HashStegoVault.git",
+    },
+  ],
+  competitive: [
+    {
+      title: "Semantic Code Intelligence",
+      description:
+        "Built RepoAlign around AST analysis, semantic retrieval, and repository-level consistency checking.",
+    },
+    {
+      title: "Full-Stack Product Systems",
+      description:
+        "Worked across frontend, backend, database, authentication, APIs, deployment, and developer workflow tooling.",
+    },
+    {
+      title: "Data Migration at Scale",
+      description:
+        "Helped modernize archival workflows around tens of thousands of historical records and artifacts.",
+    },
+    {
+      title: "Testing-Oriented Development",
+      description:
+        "Uses JUnit, JaCoCo, mutation testing, Maven, and Selenium for stronger software quality practices.",
+    },
+  ],
+  education: {
+    degree: "B.Sc. in Software Engineering",
+    institution: "Institute of Information Technology, University of Dhaka",
+    focus:
+      "CGPA 3.90 to date, with expected graduation in September 2026 and a focus on software engineering, full-stack systems, databases, testing, and applied AI tools.",
+    previous:
+      "Notre Dame College - HSC in Science (GPA 5.00, 2021); Hasan Ali Government High School, Chandpur - SSC in Science (GPA 5.00, 2019)",
+  },
+  achievements: [
+    "Software Engineer Intern at Kaz Software Limited",
+    "Assistant General Secretary, IIT Software Engineers' Community",
+    "Finalist, BUET CSE Fest 2025 Poster Presentation - Top 13 out of 121+ teams",
+    "3rd Runner-Up, SN Bose Hackathon - National level competition with 80+ teams",
+    "Built RepoAlign, an AI-driven semantic consistency checker",
+    "Migrated and organized large-scale archival records for Liberation War Museum",
+  ],
+  services: [
+    {
+      title: "Full-Stack Development",
+      description:
+        "React, Angular, Node.js, Express.js, FastAPI, ASP.NET Core, and database-backed application development.",
+      icon: HiOutlineDesktopComputer,
+    },
+    {
+      title: "Backend & API Systems",
+      description:
+        "REST APIs, authentication, SQL and NoSQL data modeling, backend integrations, and scalable service logic.",
+      icon: HiOutlineCode,
+    },
+    {
+      title: "Developer Tooling",
+      description:
+        "VS Code extensions, semantic code analysis, repository intelligence, and workflow automation.",
+      icon: HiOutlineSparkles,
+    },
+    {
+      title: "Testing & Quality",
+      description:
+        "Unit testing, coverage analysis, mutation testing, Selenium automation, and maintainable delivery practices.",
+      icon: HiOutlineSupport,
+    },
+  ],
+};
+
+const detailedProfiles = {
+  salek: salekProfile,
+  adnan: adnanProfile,
 };
 
 function getMember(slug) {
@@ -403,29 +676,42 @@ function ProjectCard({ project }) {
   );
 }
 
-function SalekProfilePage({ member }) {
+function DetailedProfilePage({ member, profile }) {
+  const linkedin = profile.socials.find((social) => social.label === "LinkedIn");
+  const github = profile.socials.find((social) => social.label === "GitHub");
   const featuredProjects = [
-    ...projects.map((project) => ({
-      title: project.title,
-      type:
-        project.slug === "IAM"
-          ? "Android App / Flutter Project"
-          : "Institution Website / Client Project",
-      description:
-        project.slug === "IAM"
-          ? "A Flutter and Firebase productivity app with reminders, cloud sync, clean architecture, and 1,000+ active users."
-          : project.description,
-      stack: project.tags,
-      role: project.slug === "IAM" ? "Founder & App Developer" : "Lead Developer",
-      features:
-        project.slug === "IAM"
-          ? ["Daily Amal tracking", "Cloud sync and reminders", "1,000+ active users"]
-          : ["Bilingual website", "Admin dashboard", "Responsive academic system"],
-      liveUrl: project.liveUrl || "/coming-soon",
-      githubUrl: "/coming-soon",
-      thumbnail: project.thumbnail,
-    })),
-    ...salekProfile.extraProjects,
+    ...(profile.includeCompanyProjects
+      ? projects.map((project) => ({
+          title: project.title,
+          type:
+            project.slug === "IAM"
+              ? "Android App / Flutter Project"
+              : "Institution Website / Client Project",
+          description:
+            project.slug === "IAM"
+              ? "A Flutter and Firebase productivity app with reminders, cloud sync, clean architecture, and 1,000+ active users."
+              : project.description,
+          stack: project.tags,
+          role:
+            project.slug === "IAM" ? "Founder & App Developer" : "Lead Developer",
+          features:
+            project.slug === "IAM"
+              ? [
+                  "Daily Amal tracking",
+                  "Cloud sync and reminders",
+                  "1,000+ active users",
+                ]
+              : [
+                  "Bilingual website",
+                  "Admin dashboard",
+                  "Responsive academic system",
+                ],
+          liveUrl: project.liveUrl || "/coming-soon",
+          githubUrl: "/coming-soon",
+          thumbnail: project.thumbnail,
+        }))
+      : []),
+    ...profile.extraProjects,
   ].slice(0, 6);
 
   return (
@@ -456,21 +742,21 @@ function SalekProfilePage({ member }) {
               </Link>
             </div>
             <span className="mb-5 inline-flex w-fit rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light">
-              Founder Profile
+              {profile.badge}
             </span>
             <h1 className="font-heading text-5xl font-bold tracking-tight text-neutral-100 sm:text-6xl lg:text-7xl">
               {member.name}
             </h1>
             <p className="mt-4 text-xl font-semibold text-gradient-primary sm:text-2xl">
-              {salekProfile.title}
+              {profile.title}
             </p>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-400">
-              {salekProfile.intro}
+              {profile.intro}
             </p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <a
-                href={salekProfile.cvUrl}
+                href={profile.cvUrl}
                 download
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
@@ -492,13 +778,13 @@ function SalekProfilePage({ member }) {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              {salekProfile.socials.map((social) => (
+              {profile.socials.map((social) => (
                 <SocialButton key={social.label} social={social} />
               ))}
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {salekProfile.stats.map((stat) => (
+              {profile.stats.map((stat) => (
                 <div
                   key={stat.label}
                   className="rounded-xl border border-neutral-700/40 bg-neutral-900/35 p-4"
@@ -530,18 +816,9 @@ function SalekProfilePage({ member }) {
           <SectionHeader eyebrow="About" title="About" highlight="Me" />
           <GlassCard>
             <div className="grid gap-6 text-base leading-relaxed text-neutral-400 lg:grid-cols-2">
-              <p>
-                I am a CSE undergraduate from KUET and a software engineer
-                focused on building practical digital products. My work covers
-                web applications, mobile apps, backend systems, and clean
-                user-focused interfaces.
-              </p>
-              <p>
-                I am also the Founder of Effy Tech, where I work on software
-                solutions for businesses, institutions, and startups. My
-                background in competitive programming helps me approach
-                problems with strong logic, structure, and efficiency.
-              </p>
+              {profile.about.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </GlassCard>
         </section>
@@ -553,7 +830,7 @@ function SalekProfilePage({ member }) {
             highlight="Tech Stack"
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {salekProfile.skills.map((group) => (
+            {profile.skills.map((group) => (
               <GlassCard key={group.title} className="min-h-[220px]">
                 <h3 className="font-heading text-2xl font-bold text-neutral-100">
                   {group.title}
@@ -576,7 +853,7 @@ function SalekProfilePage({ member }) {
         <section className="py-20">
           <SectionHeader eyebrow="Experience" title="Work" highlight="Timeline" />
           <div className="space-y-6">
-            {salekProfile.experience.map((item) => (
+            {profile.experience.map((item) => (
               <GlassCard key={`${item.role}-${item.company}`}>
                 <div className="grid gap-6 lg:grid-cols-[0.35fr_1fr]">
                   <div>
@@ -622,7 +899,7 @@ function SalekProfilePage({ member }) {
             highlight="Strength"
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {salekProfile.competitive.map((item) => (
+            {profile.competitive.map((item) => (
               <GlassCard key={item.title} className="min-h-[190px]">
                 <HiOutlineCode className="h-8 w-8 text-primary-light" />
                 <h3 className="mt-5 font-heading text-2xl font-bold text-neutral-100">
@@ -640,16 +917,16 @@ function SalekProfilePage({ member }) {
           <SectionHeader eyebrow="Education" title="Academic" highlight="Path" />
           <GlassCard>
             <h3 className="font-heading text-3xl font-bold text-neutral-100">
-              {salekProfile.education.degree}
+              {profile.education.degree}
             </h3>
             <p className="mt-3 text-primary-light">
-              {salekProfile.education.institution}
+              {profile.education.institution}
             </p>
             <p className="mt-5 max-w-3xl text-base leading-relaxed text-neutral-400">
-              {salekProfile.education.focus}
+              {profile.education.focus}
             </p>
             <p className="mt-4 text-sm text-neutral-500">
-              {salekProfile.education.previous}
+              {profile.education.previous}
             </p>
           </GlassCard>
         </section>
@@ -661,7 +938,7 @@ function SalekProfilePage({ member }) {
             highlight="Highlights"
           />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {salekProfile.achievements.map((achievement) => (
+            {profile.achievements.map((achievement) => (
               <GlassCard key={achievement} className="min-h-[130px]">
                 <HiOutlineSparkles className="h-7 w-7 text-primary-light" />
                 <h3 className="mt-4 font-heading text-xl font-bold text-neutral-100">
@@ -679,7 +956,7 @@ function SalekProfilePage({ member }) {
             highlight="Can Do"
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {salekProfile.services.map(({ title, description, icon: Icon }) => (
+            {profile.services.map(({ title, description, icon: Icon }) => (
               <GlassCard key={title} className="min-h-[220px]">
                 <Icon className="h-8 w-8 text-primary-light" />
                 <h3 className="mt-5 font-heading text-2xl font-bold text-neutral-100">
@@ -705,22 +982,24 @@ function SalekProfilePage({ member }) {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
-                href={salekProfile.cvUrl}
+                href={profile.cvUrl}
                 download
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
                 <HiOutlineDownload className="h-4 w-4" />
                 Download CV
               </a>
-              <a
-                href="https://linkedin.com/in/salek-bin-hossain"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
-              >
-                View LinkedIn
-                <FaLinkedinIn className="h-4 w-4" />
-              </a>
+              {linkedin && (
+                <a
+                  href={linkedin.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
+                >
+                  View LinkedIn
+                  <FaLinkedinIn className="h-4 w-4" />
+                </a>
+              )}
             </div>
           </GlassCard>
         </section>
@@ -731,34 +1010,37 @@ function SalekProfilePage({ member }) {
               Let&apos;s Connect
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-neutral-400">
-              I am open to software development opportunities, collaborations,
-              freelance projects, and technical discussions.
+              {profile.contactIntro}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
-                href={`mailto:${salekProfile.email}`}
+                href={`mailto:${profile.email}`}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-text-inverse shadow-accent transition-all hover:scale-[1.02]"
               >
                 <HiOutlineMail className="h-4 w-4" />
                 Email Me
               </a>
-              <a
-                href="https://linkedin.com/in/salek-bin-hossain"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
-              >
-                Connect on LinkedIn
-              </a>
-              <a
-                href="https://github.com/Arvi-Saleque"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-neutral-700/60 px-6 py-3 text-sm font-semibold text-neutral-300 transition-colors hover:border-primary-light/35 hover:text-primary-light"
-              >
-                View GitHub
-                <HiOutlineArrowRight className="h-4 w-4" />
-              </a>
+              {linkedin && (
+                <a
+                  href={linkedin.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-6 py-3 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
+                >
+                  Connect on LinkedIn
+                </a>
+              )}
+              {github && (
+                <a
+                  href={github.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-700/60 px-6 py-3 text-sm font-semibold text-neutral-300 transition-colors hover:border-primary-light/35 hover:text-primary-light"
+                >
+                  View GitHub
+                  <HiOutlineArrowRight className="h-4 w-4" />
+                </a>
+              )}
             </div>
           </GlassCard>
         </section>
@@ -883,8 +1165,10 @@ export default async function TeamMemberPage({ params }) {
 
   if (!member) notFound();
 
-  if (memberSlug === "salek") {
-    return <SalekProfilePage member={member} />;
+  const detailedProfile = detailedProfiles[memberSlug];
+
+  if (detailedProfile) {
+    return <DetailedProfilePage member={member} profile={detailedProfile} />;
   }
 
   return <CompactMemberPage member={member} />;
