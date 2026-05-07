@@ -1924,8 +1924,6 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
         </div>
       </Section>
 
-      {/* Footer */}
-      <ShowcaseFooter appName={name} playStoreUrl={playStoreUrl} />
     </div>
   );
 }
