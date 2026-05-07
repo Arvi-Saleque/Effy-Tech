@@ -8,25 +8,39 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ── Node positions for the "E" letter (normalized 0-1) ───── */
+/* ── Node positions tracing the Effy Tech logo (normalized 0-1) ── */
 const E_NODES = [
-  { x: 0.15, y: 0.08 },
-  { x: 0.15, y: 0.28 },
-  { x: 0.15, y: 0.5 },
-  { x: 0.15, y: 0.72 },
-  { x: 0.15, y: 0.92 },
-  { x: 0.38, y: 0.08 },
-  { x: 0.6, y: 0.08 },
+  // Top slanted bar
+  { x: 0.34, y: 0.08 },
+  { x: 0.58, y: 0.08 },
   { x: 0.82, y: 0.08 },
-  { x: 0.38, y: 0.5 },
-  { x: 0.6, y: 0.5 },
-  { x: 0.72, y: 0.5 },
-  { x: 0.38, y: 0.92 },
-  { x: 0.6, y: 0.92 },
-  { x: 0.82, y: 0.92 },
+  { x: 0.9, y: 0.08 },
+  { x: 0.78, y: 0.25 },
+  { x: 0.52, y: 0.25 },
+  { x: 0.24, y: 0.25 },
+
+  // Middle slanted bar with the logo's down-left hook
+  { x: 0.24, y: 0.42 },
+  { x: 0.5, y: 0.42 },
+  { x: 0.74, y: 0.42 },
+  { x: 0.84, y: 0.42 },
+  { x: 0.72, y: 0.59 },
+  { x: 0.48, y: 0.59 },
+  { x: 0.26, y: 0.59 },
+  { x: 0.12, y: 0.69 },
+  { x: 0.02, y: 0.79 },
+
+  // Bottom slanted bar
+  { x: 0.32, y: 0.74 },
+  { x: 0.58, y: 0.74 },
+  { x: 0.82, y: 0.74 },
+  { x: 0.9, y: 0.74 },
+  { x: 0.78, y: 0.92 },
+  { x: 0.52, y: 0.92 },
+  { x: 0.24, y: 0.92 },
 ];
 
 const SCATTER = E_NODES.map(() => ({
@@ -35,12 +49,15 @@ const SCATTER = E_NODES.map(() => ({
 }));
 
 const EDGES = [
-  [0, 1], [1, 2], [2, 3], [3, 4],
-  [0, 5], [5, 6], [6, 7],
-  [2, 8], [8, 9], [9, 10],
-  [4, 11], [11, 12], [12, 13],
-  [1, 5], [3, 11], [8, 6], [10, 7], [9, 12],
-  [0, 7], [4, 13], [2, 10],
+  // Top bar outline
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0],
+
+  // Middle bar and hook outline
+  [7, 8], [8, 9], [9, 10], [10, 11], [11, 12], [12, 13],
+  [13, 14], [14, 15], [15, 7],
+
+  // Bottom bar outline
+  [16, 17], [17, 18], [18, 19], [19, 20], [20, 21], [21, 22], [22, 16],
 ];
 
 function easeInOutCubic(x) {
