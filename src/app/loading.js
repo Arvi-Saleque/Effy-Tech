@@ -1,5 +1,6 @@
 /* ============================================================
-   Loading — Morphing constellation that forms "E" → dissolves
+   Loading — Morphing constellation that forms the Effy Tech
+   logo (three slanted bars with a hooked middle) → dissolves.
    Unique: not a spinner, not a bar. A generative node graph
    that pulses and morphs, with teal energy arcs.
    ============================================================ */
@@ -9,26 +10,35 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-/* ── Node positions for the "E" letter (normalized 0-1) ───── */
+/* ── Node positions tracing the Effy Tech logo (normalized) ──
+   Three slanted parallelogram bars (italic "E"/"F" feel),
+   with the middle bar carrying a hook/arrow extending up-left.
+   ──────────────────────────────────────────────────────────── */
 const E_NODES = [
-  // Left vertical bar
-  { x: 0.2, y: 0.1 },
-  { x: 0.2, y: 0.3 },
-  { x: 0.2, y: 0.5 },
-  { x: 0.2, y: 0.7 },
-  { x: 0.2, y: 0.9 },
-  // Top horizontal
-  { x: 0.4, y: 0.1 },
-  { x: 0.6, y: 0.1 },
-  { x: 0.8, y: 0.1 },
-  // Middle horizontal
-  { x: 0.4, y: 0.5 },
-  { x: 0.6, y: 0.5 },
-  { x: 0.7, y: 0.5 },
-  // Bottom horizontal
-  { x: 0.4, y: 0.9 },
-  { x: 0.6, y: 0.9 },
-  { x: 0.8, y: 0.9 },
+  // Top bar (parallelogram, slanted right)
+  { x: 0.30, y: 0.10 }, // 0  TL
+  { x: 0.61, y: 0.10 }, // 1  T-mid
+  { x: 0.92, y: 0.10 }, // 2  TR
+  { x: 0.85, y: 0.22 }, // 3  BR
+  { x: 0.54, y: 0.22 }, // 4  B-mid
+  { x: 0.23, y: 0.22 }, // 5  BL
+
+  // Middle bar with hook on the left
+  { x: 0.08, y: 0.55 }, // 6  Hook apex (far left point)
+  { x: 0.36, y: 0.40 }, // 7  Top-left of body (hook meets bar)
+  { x: 0.66, y: 0.40 }, // 8  Top-mid
+  { x: 0.92, y: 0.40 }, // 9  TR
+  { x: 0.85, y: 0.58 }, // 10 BR
+  { x: 0.58, y: 0.58 }, // 11 B-mid
+  { x: 0.30, y: 0.58 }, // 12 BL (hook base)
+
+  // Bottom bar (parallelogram, slanted right)
+  { x: 0.30, y: 0.78 }, // 13 TL
+  { x: 0.61, y: 0.78 }, // 14 T-mid
+  { x: 0.92, y: 0.78 }, // 15 TR
+  { x: 0.85, y: 0.90 }, // 16 BR
+  { x: 0.54, y: 0.90 }, // 17 B-mid
+  { x: 0.23, y: 0.90 }, // 18 BL
 ];
 
 /* ── Random scatter positions ──────────────────────────────── */
@@ -37,27 +47,26 @@ const SCATTER = E_NODES.map(() => ({
   y: Math.random(),
 }));
 
-/* ── Connections (index pairs) for the E shape ─────────────── */
+/* ── Connections (index pairs) tracing the logo outline ────── */
 const EDGES = [
-  [0, 1],
-  [1, 2],
-  [2, 3],
-  [3, 4], // vertical
-  [0, 5],
-  [5, 6],
-  [6, 7], // top
-  [2, 8],
-  [8, 9],
-  [9, 10], // middle
-  [4, 11],
-  [11, 12],
-  [12, 13], // bottom
-  // Cross connections for visual interest
-  [1, 5],
-  [3, 11],
-  [8, 6],
-  [10, 7],
-  [9, 12],
+  // Top bar outline
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0],
+  // Top bar diagonals (inner structure)
+  [1, 4], [0, 3],
+
+  // Middle bar with hook outline
+  [6, 7], [7, 8], [8, 9], [9, 10], [10, 11], [11, 12], [12, 6],
+  // Middle bar inner diagonals
+  [7, 12], [8, 11], [7, 11],
+
+  // Bottom bar outline
+  [13, 14], [14, 15], [15, 16], [16, 17], [17, 18], [18, 13],
+  // Bottom bar diagonals
+  [14, 17], [13, 16],
+
+  // Cross-bar connections (constellation feel)
+  [5, 12], [12, 18],
+  [3, 10], [10, 16],
 ];
 
 function MorphingConstellation() {
