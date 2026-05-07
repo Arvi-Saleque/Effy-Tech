@@ -55,6 +55,9 @@ const nakhatra = localFont({
 export const metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
+  icons: {
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
