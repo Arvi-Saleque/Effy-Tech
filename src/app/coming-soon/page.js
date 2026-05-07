@@ -8,6 +8,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { HiArrowLeft } from "react-icons/hi";
+import Footer from "@/components/layout/Footer";
 
 /* ── Orbit ring component ──────────────────────────────────── */
 function OrbitRing({ radius, duration, delay = 0, dotCount = 3, color }) {
@@ -47,6 +48,7 @@ function OrbitRing({ radius, duration, delay = 0, dotCount = 3, color }) {
 
 export default function ComingSoon() {
   return (
+    <>
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-surface-dark">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -169,5 +171,7 @@ export default function ComingSoon() {
       {/* Bottom decorative line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent" />
     </div>
+    <Footer />
+    </>
   );
 }

@@ -8,6 +8,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Footer from "@/components/layout/Footer";
 
 /* ── Tiny floating particle canvas ─────────────────────────── */
 function ParticleField() {
@@ -116,6 +117,7 @@ const glitchKeyframes = `
 
 export default function NotFound() {
   return (
+    <>
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-surface-dark">
       <style dangerouslySetInnerHTML={{ __html: glitchKeyframes }} />
 
@@ -213,5 +215,7 @@ export default function NotFound() {
       {/* Bottom decorative line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent" />
     </div>
+    <Footer />
+    </>
   );
 }

@@ -30,6 +30,7 @@ import {
   HiExclamationCircle,
   HiLockClosed,
 } from "react-icons/hi";
+import Footer from "@/components/layout/Footer";
 
 export default function AdminReviewsPage() {
   const [secret, setSecret] = useState("");
@@ -154,6 +155,7 @@ export default function AdminReviewsPage() {
   /* ── Login screen ────────────────────────────────────────── */
   if (!isLoggedIn) {
     return (
+      <>
       <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center px-4">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -228,11 +230,14 @@ export default function AdminReviewsPage() {
           </div>
         </motion.div>
       </div>
+      <Footer />
+      </>
     );
   }
 
   /* ── Admin dashboard ─────────────────────────────────────── */
   return (
+    <>
     <div className="min-h-screen bg-[#0a0e1a]">
       {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -515,5 +520,7 @@ export default function AdminReviewsPage() {
         )}
       </main>
     </div>
+    <Footer />
+    </>
   );
 }

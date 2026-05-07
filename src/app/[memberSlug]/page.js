@@ -16,6 +16,7 @@ import {
 } from "react-icons/hi";
 import projects from "@/data/projects";
 import siteConfig from "@/theme/siteConfig";
+import Footer from "@/components/layout/Footer";
 
 const socialIconMap = {
   facebook: FaFacebookF,
@@ -1322,7 +1323,7 @@ function DetailedProfilePage({ member, profile }) {
           </GlassCard>
         </section>
       </div>
-      <MiniFooter />
+      <Footer />
     </main>
   );
 }
@@ -1408,7 +1409,7 @@ function CompactMemberPage({ member }) {
           </div>
         </div>
       </section>
-      <MiniFooter />
+      <Footer />
     </main>
   );
 }

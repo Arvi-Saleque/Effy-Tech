@@ -10,6 +10,7 @@ import Link from "next/link";
 import { HiArrowLeft, HiExternalLink } from "react-icons/hi";
 import projects from "@/data/projects";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import Footer from "@/components/layout/Footer";
 
 /* ---------- Static params for SSG ---------- */
 /* Exclude IAM & DHA — they have dedicated pages */
@@ -48,6 +49,7 @@ export default async function ProjectPage({ params }) {
   } = project;
 
   return (
+    <>
     <main className="min-h-screen bg-surface-dark text-text-inverse">
       {/* ── Back Navigation ─────────────────────────────────── */}
       <div className="relative z-10 pt-24 pb-6 px-6 sm:px-10 max-w-6xl mx-auto">
@@ -196,5 +198,7 @@ export default async function ProjectPage({ params }) {
         <div className="h-px bg-gradient-to-r from-transparent via-primary-light/20 to-transparent" />
       </div>
     </main>
+    <Footer />
+    </>
   );
 }
