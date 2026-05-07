@@ -77,18 +77,14 @@ const siteConfig = {
       "GraphQL",
       "Redis",
     ],
-    stats: [
-      { value: 50, suffix: "+", label: "Projects Delivered" },
-      { value: 30, suffix: "+", label: "Happy Clients" },
-      { value: 5, suffix: "+", label: "Years Experience" },
-      { value: 99, suffix: "%", label: "Client Retention" },
-    ],
+    stats: [],
   },
 
   /* ── Footer ──────────────────────────────────────────────── */
   /* Services Section */
   services: [
     {
+      id: "website-webapp",
       title: "Website & Web Application Development",
       shortTitle: "Website Development",
       description:
@@ -103,6 +99,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "mobile-app",
       title: "Mobile App Development",
       shortTitle: "Mobile App Development",
       description:
@@ -117,12 +114,12 @@ const siteConfig = {
       ],
     },
     {
+      id: "fullstack-software",
       title: "Full-Stack Software Development",
       shortTitle: "Custom Software Development",
       description:
         "Complete software solutions from frontend design to backend APIs, databases, admin panels, and deployment.",
       icon: "fullstack",
-      featured: true,
       examples: [
         "Frontend, backend, and database systems",
         "Authentication and role-based dashboards",
@@ -131,6 +128,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "business-automation",
       title: "Business Automation Solutions",
       shortTitle: "Business Automation",
       description:
@@ -145,6 +143,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "ai-automation",
       title: "AI Agent & AI Automation",
       shortTitle: "AI Agent Development",
       description:
@@ -159,6 +158,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "ecommerce",
       title: "E-commerce Development",
       shortTitle: "E-commerce Solutions",
       description:
@@ -173,6 +173,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "ui-ux",
       title: "UI/UX Design",
       shortTitle: "UI/UX Design",
       description:
@@ -186,6 +187,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "dashboard-admin",
       title: "Dashboard & Admin Panel Development",
       shortTitle: "Dashboard Development",
       description:
@@ -199,11 +201,13 @@ const siteConfig = {
       ],
     },
     {
+      id: "erp-management",
       title: "Custom ERP & Management Software",
-      shortTitle: "ERP Software",
+      shortTitle: "Custom Software / ERP",
       description:
         "Tailored management systems for schools, businesses, hospitals, shops, and organizations.",
       icon: "erp",
+      featured: true,
       examples: [
         "School, university, and hospital management",
         "Restaurant, shop, and inventory management",
@@ -212,6 +216,53 @@ const siteConfig = {
       ],
     },
     {
+      id: "mvp-startup",
+      title: "MVP & Startup Product Development",
+      shortTitle: "MVP Development",
+      description:
+        "We help startups turn ideas into launch-ready MVPs with planning, UI/UX, development, backend, deployment, and future scaling support.",
+      icon: "consulting",
+      examples: [
+        "Startup MVP",
+        "Prototype to product",
+        "SaaS MVP",
+        "Investor/demo-ready product",
+        "Version 1 launch",
+      ],
+    },
+    {
+      id: "education-solutions",
+      title: "School, College & University Digital Solutions",
+      shortTitle: "Education Digital Solutions",
+      description:
+        "Dedicated digital platforms for educational institutions with websites, portals, result systems, admission forms, and admin control.",
+      icon: "website",
+      examples: [
+        "Academic website",
+        "Notice/news management",
+        "Student and teacher portals",
+        "Result system and admission form",
+        "Committee/member management",
+      ],
+    },
+    {
+      id: "admin-editable-website",
+      title: "Admin-Editable Website Development",
+      shortTitle: "Admin-Editable Websites",
+      description:
+        "Client-friendly websites where your team can update content, galleries, files, members, services, and homepage sections without developer help.",
+      icon: "dashboard",
+      examples: [
+        "Add/edit/delete news",
+        "Update gallery",
+        "Add team members",
+        "Manage services",
+        "Upload files",
+        "Edit homepage sections",
+      ],
+    },
+    {
+      id: "api-integration",
       title: "API Development & Integration",
       shortTitle: "API Integration",
       description:
@@ -225,6 +276,71 @@ const siteConfig = {
       ],
     },
     {
+      id: "crm-client-management",
+      title: "CRM & Client Management System",
+      shortTitle: "CRM System",
+      description:
+        "Custom CRM software to manage leads, clients, follow-ups, project status, invoices, payments, files, and communication history.",
+      icon: "dashboard",
+      examples: [
+        "Client database",
+        "Follow-up tracking",
+        "Project status tracking",
+        "Invoice and payment tracking",
+        "Client file/document management",
+        "Lead management",
+      ],
+    },
+    {
+      id: "pos-inventory",
+      title: "POS, Inventory & Sales Management Software",
+      shortTitle: "POS & Inventory Software",
+      description:
+        "Practical POS and inventory systems for shops and local businesses that need cleaner sales, stock, purchase, and invoice management.",
+      icon: "ecommerce",
+      examples: [
+        "Shop POS",
+        "Stock management",
+        "Sales report",
+        "Purchase tracking",
+        "Invoice generation",
+        "Supplier/customer records",
+      ],
+    },
+    {
+      id: "whatsapp-automation",
+      title: "WhatsApp Business Automation",
+      shortTitle: "WhatsApp Automation",
+      description:
+        "WhatsApp workflows for faster replies, lead collection, order updates, reminders, support, and customer communication.",
+      icon: "automation",
+      examples: [
+        "Auto reply",
+        "Lead collection",
+        "Order update",
+        "Customer support",
+        "Payment reminder",
+        "Appointment reminder",
+      ],
+    },
+    {
+      id: "data-reporting",
+      title: "Data Management & Reporting Software",
+      shortTitle: "Data & Reporting Software",
+      description:
+        "Software for businesses moving away from manual Excel files into organized data entry, reporting, dashboards, exports, and analytics.",
+      icon: "dashboard",
+      examples: [
+        "Excel-to-software conversion",
+        "Report dashboard",
+        "Daily/monthly business reports",
+        "Data entry panel",
+        "Export PDF/Excel",
+        "Analytics dashboard",
+      ],
+    },
+    {
+      id: "hosting-deployment",
       title: "Hosting, Deployment & Maintenance",
       shortTitle: "Hosting & Deployment",
       description:
@@ -238,6 +354,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "technical-support",
       title: "Website Maintenance & Technical Support",
       shortTitle: "Technical Support",
       description:
@@ -251,6 +368,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "seo-growth",
       title: "SEO & Digital Growth Setup",
       shortTitle: "SEO Setup",
       description:
@@ -264,6 +382,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "branding-creative",
       title: "Branding & Creative Design",
       shortTitle: "Branding Design",
       description:
@@ -277,6 +396,7 @@ const siteConfig = {
       ],
     },
     {
+      id: "software-consulting",
       title: "Software Consulting & Digital Strategy",
       shortTitle: "Software Consulting",
       description:
@@ -287,6 +407,23 @@ const siteConfig = {
         "Software idea validation",
         "Tech stack and architecture selection",
         "MVP planning and cost estimation",
+      ],
+    },
+    {
+      id: "domain-email-it",
+      title: "Domain, Business Email & IT Setup",
+      shortTitle: "Domain & Business Email",
+      description:
+        "Non-technical setup support for domains, professional email, DNS, SSL, hosting connection, and basic email deliverability.",
+      icon: "hosting",
+      examples: [
+        "Domain setup",
+        "Professional email",
+        "Google Workspace / Zoho Mail setup",
+        "DNS setup",
+        "SSL",
+        "Hosting connection",
+        "Email deliverability basics",
       ],
     },
   ],
@@ -388,27 +525,27 @@ const siteConfig = {
         title: "Company",
         links: [
           { label: "About", href: "/#about" },
-          { label: "Careers", href: "/coming-soon" },
-          { label: "Blog", href: "/coming-soon" },
-          { label: "Press", href: "/coming-soon" },
+          { label: "Projects", href: "/#projects" },
+          { label: "Team", href: "/#team" },
+          { label: "Contact", href: "/#contact" },
         ],
       },
       {
         title: "Services",
         links: [
-          { label: "Web Development", href: "/coming-soon" },
-          { label: "Mobile Apps", href: "/coming-soon" },
-          { label: "UI/UX Design", href: "/coming-soon" },
-          { label: "Consulting", href: "/coming-soon" },
+          { label: "Main Services", href: "/#services" },
+          { label: "Build Services", href: "/allservices#build" },
+          { label: "Automation Services", href: "/allservices#automate" },
+          { label: "Growth Services", href: "/allservices#grow" },
         ],
       },
       {
-        title: "Resources",
+        title: "Explore",
         links: [
-          { label: "Documentation", href: "/coming-soon" },
-          { label: "Support", href: "/coming-soon" },
-          { label: "Privacy Policy", href: "/coming-soon" },
-          { label: "Terms of Service", href: "/coming-soon" },
+          { label: "Services Overview", href: "/quickservices" },
+          { label: "All Services", href: "/allservices" },
+          { label: "Project Showcase", href: "/#projects" },
+          { label: "Start a Project", href: "/#contact" },
         ],
       },
     ],

@@ -67,6 +67,7 @@ function BentoCard({ children, className = "", index = 0, prefersReduced }) {
 /* ── Main Component ─────────────────────────────────────────── */
 export default function About() {
   const prefersReduced = useReducedMotion();
+  const hasStats = about.stats?.length > 0;
 
   return (
     <section id="about" className="relative overflow-hidden bg-surface-dark py-24 sm:py-32">
@@ -178,20 +179,22 @@ export default function About() {
           </BentoCard>
 
           {/* ─ Stats Card (small — 1 col) ────────────────────── */}
-          <BentoCard
-            className="lg:col-span-1 lg:row-span-1 bg-gradient-to-br from-primary-darkest to-neutral-900"
-            index={4}
-            prefersReduced={prefersReduced}
-          >
-            <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
-              By the Numbers
-            </span>
-            <div className="grid grid-cols-2 gap-4">
-              {about.stats.map((stat) => (
-                <StatCard key={stat.label} {...stat} />
-              ))}
-            </div>
-          </BentoCard>
+          {hasStats && (
+            <BentoCard
+              className="lg:col-span-1 lg:row-span-1 bg-gradient-to-br from-primary-darkest to-neutral-900"
+              index={4}
+              prefersReduced={prefersReduced}
+            >
+              <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-primary-light">
+                By the Numbers
+              </span>
+              <div className="grid grid-cols-2 gap-4">
+                {about.stats.map((stat) => (
+                  <StatCard key={stat.label} {...stat} />
+                ))}
+              </div>
+            </BentoCard>
+          )}
         </div>
       </div>
     </section>

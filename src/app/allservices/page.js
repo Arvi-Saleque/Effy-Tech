@@ -24,7 +24,7 @@ import Footer from "@/components/layout/Footer";
 export const metadata = {
   title: "All Services | Effy Tech",
   description:
-    "Detailed service catalog for Effy Tech: websites, mobile apps, full-stack software, automation, AI agents, e-commerce, dashboards, ERP, APIs, hosting, SEO, branding, and consulting.",
+    "Detailed service catalog for Effy Tech: websites, mobile apps, MVPs, software, automation, AI agents, e-commerce, dashboards, ERP, CRM, POS, education platforms, hosting, SEO, branding, and consulting.",
 };
 
 const iconMap = {
@@ -53,7 +53,17 @@ const sections = [
     description:
       "For clients who need a new digital product, online platform, or internal management system.",
     icons: ["website", "mobile", "fullstack", "ecommerce", "dashboard", "erp"],
-    serviceIcons: ["website", "mobile", "fullstack", "ecommerce", "dashboard", "erp"],
+    serviceIds: [
+      "website-webapp",
+      "mobile-app",
+      "fullstack-software",
+      "ecommerce",
+      "dashboard-admin",
+      "erp-management",
+      "mvp-startup",
+      "education-solutions",
+      "admin-editable-website",
+    ],
   },
   {
     id: "automate",
@@ -62,7 +72,15 @@ const sections = [
     description:
       "For businesses that want to save time, reduce manual work, and connect their tools.",
     icons: ["automation", "ai", "api"],
-    serviceIcons: ["automation", "ai", "api"],
+    serviceIds: [
+      "business-automation",
+      "ai-automation",
+      "api-integration",
+      "crm-client-management",
+      "pos-inventory",
+      "whatsapp-automation",
+      "data-reporting",
+    ],
   },
   {
     id: "grow",
@@ -71,7 +89,15 @@ const sections = [
     description:
       "For teams that need better design, reliable hosting, maintenance, tracking, or planning.",
     icons: ["design", "hosting", "support", "seo", "branding", "consulting"],
-    serviceIcons: ["design", "hosting", "support", "seo", "branding", "consulting"],
+    serviceIds: [
+      "ui-ux",
+      "hosting-deployment",
+      "technical-support",
+      "seo-growth",
+      "branding-creative",
+      "software-consulting",
+      "domain-email-it",
+    ],
   },
 ];
 
@@ -156,7 +182,7 @@ function ServiceCard({ service }) {
 
 export default function AllServicesPage() {
   const services = siteConfig.services || [];
-  const servicesByIcon = new Map(services.map((service) => [service.icon, service]));
+  const servicesById = new Map(services.map((service) => [service.id, service]));
 
   return (
     <>
@@ -208,8 +234,8 @@ export default function AllServicesPage() {
         <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <div className="space-y-16">
             {sections.map((section) => {
-              const groupServices = section.serviceIcons
-                .map((icon) => servicesByIcon.get(icon))
+              const groupServices = section.serviceIds
+                .map((id) => servicesById.get(id))
                 .filter(Boolean);
 
               return (

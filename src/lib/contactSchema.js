@@ -10,9 +10,20 @@ import { z } from "zod";
 
 export const serviceOptions = [
   { value: "", label: "Select a service" },
-  { value: "web-dev", label: "Web Development" },
+  { value: "web-dev", label: "Website & Web App Development" },
   { value: "mobile-app", label: "Mobile App Development" },
+  { value: "business-automation", label: "Business Automation" },
+  { value: "ai-automation", label: "AI Automation" },
+  { value: "ecommerce", label: "E-commerce Development" },
+  { value: "admin-panel", label: "Dashboard & Admin Panel" },
+  { value: "erp-software", label: "Custom Software / ERP" },
+  { value: "crm", label: "CRM & Client Management" },
+  { value: "pos-inventory", label: "POS & Inventory Software" },
+  { value: "whatsapp-automation", label: "WhatsApp Business Automation" },
+  { value: "mvp-startup", label: "MVP / Startup Product" },
   { value: "ui-ux", label: "UI/UX Design" },
+  { value: "maintenance", label: "Maintenance & Support" },
+  { value: "branding", label: "Branding & Creative Design" },
   { value: "consulting", label: "Technical Consulting" },
   { value: "other", label: "Other" },
 ];

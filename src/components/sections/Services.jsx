@@ -179,6 +179,13 @@ export default function Services() {
           ))}
         </div>
 
+        <div className="mt-8 flex justify-center">
+          <Button href="/allservices" variant="accent" size="md">
+            View All Services
+            <HiOutlineArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+
         {moreServices.length > 0 && (
           <motion.div
             className="mt-12 rounded-2xl border border-neutral-700/35 bg-neutral-900/45 p-5 backdrop-blur-sm sm:p-6"
@@ -196,8 +203,8 @@ export default function Services() {
                   Extra support when your project needs more than development
                 </h3>
               </div>
-              <Button href="/allservices" variant="accent" size="sm">
-                See Complete List
+              <Button href="/allservices" variant="outline" size="sm">
+                Detailed Service List
               </Button>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
