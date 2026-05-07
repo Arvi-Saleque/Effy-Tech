@@ -89,40 +89,205 @@ const siteConfig = {
   /* Services Section */
   services: [
     {
-      title: "Website Development",
+      title: "Website & Web Application Development",
+      shortTitle: "Website Development",
       description:
-        "Build modern, responsive websites for companies, institutions, portfolios, and organizations.",
+        "Modern, responsive, SEO-friendly websites and custom web applications for businesses, institutions, and startups.",
       icon: "website",
-    },
-    {
-      title: "Web Application Development",
-      description:
-        "Create dashboards, admin panels, management systems, SaaS tools, and client portals.",
-      icon: "webapp",
+      featured: true,
+      examples: [
+        "Business and company websites",
+        "School, college, and university websites",
+        "Landing pages, portfolios, blogs, and news sites",
+        "Custom web apps, SaaS tools, and booking systems",
+      ],
     },
     {
       title: "Mobile App Development",
+      shortTitle: "Mobile App Development",
       description:
-        "Develop Android and cross-platform apps with clean UI, smooth performance, and backend integration.",
+        "Cross-platform Android and iOS applications with modern UI, smooth performance, and scalable backend integration.",
       icon: "mobile",
+      featured: true,
+      examples: [
+        "Android and iOS apps",
+        "Flutter business apps",
+        "Education, booking, delivery, and service apps",
+        "Firebase-based apps with admin and user roles",
+      ],
+    },
+    {
+      title: "Full-Stack Software Development",
+      shortTitle: "Custom Software Development",
+      description:
+        "Complete software solutions from frontend design to backend APIs, databases, admin panels, and deployment.",
+      icon: "fullstack",
+      featured: true,
+      examples: [
+        "Frontend, backend, and database systems",
+        "Authentication and role-based dashboards",
+        "File uploads, reports, and notifications",
+        "Payment-ready custom software platforms",
+      ],
+    },
+    {
+      title: "Business Automation Solutions",
+      shortTitle: "Business Automation",
+      description:
+        "Automation tools to reduce manual work, manage operations, track clients, generate reports, and improve business efficiency.",
+      icon: "automation",
+      featured: true,
+      examples: [
+        "Invoice and report automation",
+        "Client, task, inventory, and sales tracking",
+        "Employee attendance and CRM systems",
+        "WhatsApp, SMS, and email workflow automation",
+      ],
+    },
+    {
+      title: "AI Agent & AI Automation",
+      shortTitle: "AI Agent Development",
+      description:
+        "Custom AI agents, chatbots, and automation systems that help businesses handle support, data, documents, and repetitive tasks.",
+      icon: "ai",
+      featured: true,
+      examples: [
+        "Website and customer support AI assistants",
+        "WhatsApp AI bots and lead generation bots",
+        "AI document and email assistants",
+        "RAG-based knowledge assistants",
+      ],
+    },
+    {
+      title: "E-commerce Development",
+      shortTitle: "E-commerce Solutions",
+      description:
+        "Complete online store development with product management, cart, order tracking, payment integration, and admin control.",
+      icon: "ecommerce",
+      featured: true,
+      examples: [
+        "Online shops and product catalogs",
+        "Cart, checkout, coupons, and order tracking",
+        "Payment gateway and delivery charge setup",
+        "Admin, customer, and inventory dashboards",
+      ],
     },
     {
       title: "UI/UX Design",
+      shortTitle: "UI/UX Design",
       description:
-        "Design professional interfaces, landing pages, app screens, wireframes, and design systems.",
+        "Clean, modern, user-friendly interface design for websites, mobile apps, dashboards, and digital products.",
       icon: "design",
+      examples: [
+        "Website and mobile app UI design",
+        "Dashboard UI design",
+        "Figma wireframes and prototypes",
+        "Landing page and design system creation",
+      ],
     },
     {
-      title: "Backend & API Development",
+      title: "Dashboard & Admin Panel Development",
+      shortTitle: "Dashboard Development",
       description:
-        "Build secure APIs, authentication, databases, admin logic, and server-side business features.",
-      icon: "backend",
+        "Custom dashboards and admin panels to manage users, content, sales, reports, files, and business operations.",
+      icon: "dashboard",
+      examples: [
+        "Business and sales dashboards",
+        "School and university admin panels",
+        "E-commerce and analytics dashboards",
+        "Employee, client, and content management panels",
+      ],
     },
     {
-      title: "Maintenance & Support",
+      title: "Custom ERP & Management Software",
+      shortTitle: "ERP Software",
       description:
-        "Provide bug fixing, feature updates, hosting support, optimization, and long-term assistance.",
+        "Tailored management systems for schools, businesses, hospitals, shops, and organizations.",
+      icon: "erp",
+      examples: [
+        "School, university, and hospital management",
+        "Restaurant, shop, and inventory management",
+        "HR, payroll, POS, and accounting systems",
+        "Client and project management software",
+      ],
+    },
+    {
+      title: "API Development & Integration",
+      shortTitle: "API Integration",
+      description:
+        "Secure backend APIs and third-party integrations including payment gateways, SMS, email, maps, and business tools.",
+      icon: "api",
+      examples: [
+        "REST API development",
+        "Payment gateway integration",
+        "SMS, email, WhatsApp, and map APIs",
+        "Firebase and third-party business tool integration",
+      ],
+    },
+    {
+      title: "Hosting, Deployment & Maintenance",
+      shortTitle: "Hosting & Deployment",
+      description:
+        "Domain, hosting, server setup, deployment, SSL, database configuration, and ongoing technical maintenance.",
+      icon: "hosting",
+      examples: [
+        "Domain, hosting, SSL, and email setup",
+        "Vercel, VPS, cPanel, and Firebase deployment",
+        "Server and database configuration",
+        "Ongoing technical maintenance",
+      ],
+    },
+    {
+      title: "Website Maintenance & Technical Support",
+      shortTitle: "Technical Support",
+      description:
+        "Regular updates, bug fixing, content changes, security monitoring, backup, and performance optimization.",
       icon: "support",
+      examples: [
+        "Bug fixing and feature updates",
+        "Content updates and backups",
+        "Security monitoring",
+        "Website speed and performance optimization",
+      ],
+    },
+    {
+      title: "SEO & Digital Growth Setup",
+      shortTitle: "SEO Setup",
+      description:
+        "Technical SEO, analytics, tracking tools, performance optimization, and conversion-focused landing pages.",
+      icon: "seo",
+      examples: [
+        "Technical and on-page SEO setup",
+        "Google Search Console and Analytics",
+        "Meta Pixel and conversion tracking",
+        "Landing page optimization",
+      ],
+    },
+    {
+      title: "Branding & Creative Design",
+      shortTitle: "Branding Design",
+      description:
+        "Professional brand identity, social media creatives, business cards, company profiles, and marketing materials.",
+      icon: "branding",
+      examples: [
+        "Logo and brand identity",
+        "Social media post design",
+        "Business cards, brochures, and banners",
+        "Company profiles and brand guidelines",
+      ],
+    },
+    {
+      title: "Software Consulting & Digital Strategy",
+      shortTitle: "Software Consulting",
+      description:
+        "We help businesses understand requirements, plan software systems, choose the right technology, and execute projects efficiently.",
+      icon: "consulting",
+      examples: [
+        "Requirement analysis and project planning",
+        "Software idea validation",
+        "Tech stack and architecture selection",
+        "MVP planning and cost estimation",
+      ],
     },
   ],
 

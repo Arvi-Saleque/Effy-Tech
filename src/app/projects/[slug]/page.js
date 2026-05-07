@@ -15,7 +15,7 @@ import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 /* Exclude IAM & DHA — they have dedicated pages */
 export async function generateStaticParams() {
   return projects
-    .filter((p) => p.slug !== "IAM" && p.slug !== "DHA")
+    .filter((p) => !["IAM", "DHA", "BUEK"].includes(p.slug))
     .map((p) => ({ slug: p.slug }));
 }
 

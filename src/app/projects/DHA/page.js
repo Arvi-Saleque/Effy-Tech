@@ -8,6 +8,7 @@
 
 import DHAShowcase from "@/components/showcase/DHAShowcase";
 import dha from "@/data/dha";
+import Footer from "@/components/layout/Footer";
 
 export const dynamic = "force-dynamic";
 
@@ -17,5 +18,10 @@ export const metadata = {
 };
 
 export default function DHAPage() {
-  return <DHAShowcase data={dha} />;
+  return (
+    <>
+      <DHAShowcase data={dha} />
+      <Footer />
+    </>
+  );
 }

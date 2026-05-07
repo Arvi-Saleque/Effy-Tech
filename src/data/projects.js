@@ -39,6 +39,28 @@ const projects = [
     featured: true,
     order: 1,
   },
+  {
+    id: "13",
+    title: "Bangladesh University of Engineering Knowledge (BUEK)",
+    slug: "BUEK",
+    description:
+      "A full-featured university website with a protected admin panel, dynamic content management, media library, news, events, gallery, and 10+ public pages.",
+    category: "Web",
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "MongoDB",
+      "Cloudinary",
+    ],
+    thumbnail: "/images/buek/img1.png",
+    images: [],
+    clientName: "Bangladesh University of Engineering Knowledge",
+    liveUrl: "https://buekbd.com",
+    featured: true,
+    order: 2,
+  },
 ];
 
 export default projects;

@@ -9,6 +9,7 @@
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
 import amalTracker from "@/data/amalTracker";
 import { getApprovedReviews } from "@/app/actions/submitReview";
+import Footer from "@/components/layout/Footer";
 
 export const dynamic = "force-dynamic";
 
@@ -19,5 +20,10 @@ export const metadata = {
 
 export default async function AmalTrackerPage() {
   const initialReviews = await getApprovedReviews();
-  return <AmalTrackerShowcase data={amalTracker} initialReviews={initialReviews} />;
+  return (
+    <>
+      <AmalTrackerShowcase data={amalTracker} initialReviews={initialReviews} />
+      <Footer />
+    </>
+  );
 }

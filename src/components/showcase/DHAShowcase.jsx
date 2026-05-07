@@ -56,6 +56,16 @@ const iconMap = {
   shield: FaShieldAlt,
 };
 
+function formatUrlDisplay(url) {
+  if (!url) return "Project website";
+
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url.replace(/^https?:\/\//, "").replace(/^www\./, "");
+  }
+}
+
 /* ── Animation variants ───────────────────────────────────── */
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -124,7 +134,7 @@ function SectionHeading({ overline, title, subtitle }) {
 }
 
 /* ── Browser Mockup for hero ──────────────────────────────── */
-function BrowserMockup({ src, alt, className = "" }) {
+function BrowserMockup({ src, alt, urlDisplay, className = "" }) {
   return (
     <div className={`relative mx-auto ${className}`}>
       {/* Browser frame */}
@@ -141,7 +151,7 @@ function BrowserMockup({ src, alt, className = "" }) {
           <div className="flex-1 mx-3">
             <div className="flex items-center gap-2 rounded-md bg-neutral-800/80 px-3 py-1.5 text-xs text-neutral-500">
               <FaGlobe className="h-3 w-3 text-primary-light/50" />
-              <span className="truncate">www.dhakhl.com</span>
+              <span className="truncate">{urlDisplay}</span>
             </div>
           </div>
         </div>
@@ -560,7 +570,6 @@ const showcaseNavLinks = [
   { label: "Screenshots", href: "#screenshots" },
   { label: "Full Pages", href: "#full-pages" },
   { label: "Tech Stack", href: "#tech-stack" },
-  { label: "Visit Site", href: "https://www.dhakhl.com", external: true },
 ];
 
 /* ── Stagger variants for mobile overlay ──────────────────── */
@@ -588,6 +597,9 @@ const mobileLinkVariants = {
 function ShowcaseNavbar({ appName, liveUrl }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navLinks = liveUrl
+    ? [...showcaseNavLinks, { label: "Visit Site", href: liveUrl, external: true }]
+    : showcaseNavLinks;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -631,7 +643,7 @@ function ShowcaseNavbar({ appName, liveUrl }) {
 
           {/* Center: Nav Links (desktop) */}
           <nav className="hidden md:flex items-center gap-1">
-            {showcaseNavLinks.map(({ label, href, external }) =>
+            {navLinks.map(({ label, href, external }) =>
               external ? (
                 <a
                   key={label}
@@ -757,7 +769,7 @@ function ShowcaseNavbar({ appName, liveUrl }) {
               animate="open"
               exit="closed"
             >
-              {showcaseNavLinks.map(({ label, href, external }, index) => (
+              {navLinks.map(({ label, href, external }, index) => (
                 <motion.div key={label} variants={mobileLinkVariants}>
                   {index > 0 && (
                     <div className="mx-auto mb-2 h-px w-16 bg-primary-light/20" />
@@ -814,7 +826,14 @@ function ShowcaseNavbar({ appName, liveUrl }) {
 }
 
 /* ── Custom Footer ────────────────────────────────────────── */
-function ShowcaseFooter({ appName, liveUrl }) {
+function ShowcaseFooter({ appName, liveUrl, footerDescription, proofPoints }) {
+  const infoItems = proofPoints || [
+    "Custom Built - No WordPress",
+    "Full Admin Dashboard",
+    "SEO Optimized",
+    "Mobile Responsive",
+  ];
+
   return (
     <footer className="relative border-t border-neutral-800/40 bg-neutral-950/80">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-12 sm:py-16">
@@ -823,8 +842,8 @@ function ShowcaseFooter({ appName, liveUrl }) {
           <div className="sm:col-span-2 lg:col-span-1">
             <h3 className="text-lg font-bold text-neutral-100">{appName}</h3>
             <p className="mt-2 text-sm text-neutral-500 leading-relaxed max-w-xs">
-              A complete academic management website for Islamic educational
-              institutions — built by Effy Tech.
+              {footerDescription ||
+                "A complete academic management website for educational institutions - built by Effy Tech."}
             </p>
             <a
               href={liveUrl}
@@ -896,22 +915,12 @@ function ShowcaseFooter({ appName, liveUrl }) {
               Project Info
             </h4>
             <ul className="flex flex-col gap-2.5 text-sm text-neutral-400">
-              <li className="flex items-center gap-2">
-                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                Custom Built — No WordPress
-              </li>
-              <li className="flex items-center gap-2">
-                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                Full Admin Dashboard
-              </li>
-              <li className="flex items-center gap-2">
-                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                SEO Optimized
-              </li>
-              <li className="flex items-center gap-2">
-                <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                Mobile Responsive
-              </li>
+              {infoItems.map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -952,7 +961,51 @@ export default function DHAShowcase({ data }) {
     longScreenshots,
     highlights,
     client,
+    heroImage = "/images/dha/img1.png",
+    heroImageAlt = `${name} homepage`,
+    projectKey = "DHA",
+    browserUrl = formatUrlDisplay(liveUrl),
+    featureHeading = "এই ওয়েবসাইটে যা যা আছে",
+    featureSubtitle = "A complete academic management platform — no WordPress, no limitations, full control.",
+    techHeading = "যে প্রযুক্তিতে তৈরি",
+    techSubtitle = "Modern, scalable technologies — no WordPress dependency.",
+    techCards,
+    ctaEyebrow = "Interested?",
+    ctaTitle = "আপনার প্রতিষ্ঠানের জন্যও",
+    ctaTitleAccent = "এমন ওয়েবসাইট চান?",
+    ctaDescription = "Want a custom-built website like this for your institution or business? Let's build it together.",
+    ctaButtonLabel = "যোগাযোগ করুন",
+    proofPoints = [
+      "No WordPress",
+      "Full Admin Control",
+      "SEO Optimized",
+      "Mobile Responsive",
+    ],
+    footerDescription,
   } = data;
+  const visibleTechCards =
+    techCards || [
+      {
+        name: "Next.js",
+        desc: "React-based framework for blazing-fast SSR & SSG performance with built-in SEO optimization.",
+        color: "from-neutral-400/20 to-neutral-600/5",
+      },
+      {
+        name: "Tailwind CSS",
+        desc: "Utility-first CSS framework for pixel-perfect responsive design without bloated stylesheets.",
+        color: "from-sky-500/20 to-sky-600/5",
+      },
+      {
+        name: "Cloudinary",
+        desc: "Cloud-based media management - auto-optimized images, PDF-to-image transformation, CDN delivery.",
+        color: "from-blue-500/20 to-blue-600/5",
+      },
+      {
+        name: "MongoDB",
+        desc: "Flexible NoSQL database for dynamic content - assignments, results, news, events - all real-time.",
+        color: "from-emerald-500/20 to-emerald-600/5",
+      },
+    ];
 
   /* Scroll to top on mount */
   useEffect(() => {
@@ -1058,7 +1111,7 @@ export default function DHAShowcase({ data }) {
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => trackCTAClick("Visit Site - Hero", "DHA")}
+                    onClick={() => trackCTAClick("Visit Site - Hero", projectKey)}
                     className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
                   >
                     <FaGlobe className="h-5 w-5" />
@@ -1111,8 +1164,9 @@ export default function DHAShowcase({ data }) {
                   <div className="absolute -inset-10 rounded-3xl bg-gradient-to-b from-primary/10 via-primary/4 to-transparent blur-[60px] pointer-events-none" />
 
                   <BrowserMockup
-                    src="/images/dha/img1.png"
-                    alt="Darul Hikmah Academy Homepage"
+                    src={heroImage}
+                    alt={heroImageAlt}
+                    urlDisplay={browserUrl}
                   />
 
                   {/* Side glow accents */}
@@ -1217,7 +1271,7 @@ export default function DHAShowcase({ data }) {
               className="text-4xl sm:text-5xl font-bold leading-[1.1]"
             >
               <span className="bg-gradient-to-b from-neutral-100 to-neutral-400 bg-clip-text text-transparent">
-                এই ওয়েবসাইটে যা যা আছে
+                {featureHeading}
               </span>
             </motion.h2>
 
@@ -1225,8 +1279,7 @@ export default function DHAShowcase({ data }) {
               variants={fadeUp}
               className="mt-5 text-neutral-500 leading-relaxed text-lg max-w-xl mx-auto"
             >
-              A complete academic management platform — no WordPress, no
-              limitations, full control.
+              {featureSubtitle}
             </motion.p>
           </div>
 
@@ -1350,33 +1403,12 @@ export default function DHAShowcase({ data }) {
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
           <SectionHeading
             overline="Tech Stack"
-            title="যে প্রযুক্তিতে তৈরি"
-            subtitle="Modern, scalable technologies — no WordPress dependency."
+            title={techHeading}
+            subtitle={techSubtitle}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {[
-              {
-                name: "Next.js",
-                desc: "React-based framework for blazing-fast SSR & SSG performance with built-in SEO optimization.",
-                color: "from-neutral-400/20 to-neutral-600/5",
-              },
-              {
-                name: "Tailwind CSS",
-                desc: "Utility-first CSS framework for pixel-perfect responsive design without bloated stylesheets.",
-                color: "from-sky-500/20 to-sky-600/5",
-              },
-              {
-                name: "Cloudinary",
-                desc: "Cloud-based media management — auto-optimized images, PDF-to-image transformation, CDN delivery.",
-                color: "from-blue-500/20 to-blue-600/5",
-              },
-              {
-                name: "MongoDB",
-                desc: "Flexible NoSQL database for dynamic content — assignments, results, news, events — all real-time.",
-                color: "from-emerald-500/20 to-emerald-600/5",
-              },
-            ].map((tech, i) => (
+            {visibleTechCards.map((tech, i) => (
               <motion.div
                 key={tech.name}
                 variants={fadeUp}
@@ -1446,18 +1478,17 @@ export default function DHAShowcase({ data }) {
         <div className="relative z-10 max-w-3xl mx-auto px-6 sm:px-10 text-center">
           <motion.div variants={fadeUp}>
             <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-5 py-2 text-xs font-medium uppercase tracking-[0.2em] text-primary-light mb-5">
-              Interested?
+              {ctaEyebrow}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight">
-              আপনার প্রতিষ্ঠানের জন্যও
+              {ctaTitle}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-primary">
-                এমন ওয়েবসাইট চান?
+                {ctaTitleAccent}
               </span>
             </h2>
             <p className="mt-4 text-lg text-neutral-400 max-w-lg mx-auto">
-              Want a custom-built website like this for your institution or
-              business? Let&apos;s build it together.
+              {ctaDescription}
             </p>
           </motion.div>
 
@@ -1467,16 +1498,16 @@ export default function DHAShowcase({ data }) {
           >
             <Link
               href="/#contact"
-              onClick={() => trackCTAClick("Contact - CTA", "DHA")}
+              onClick={() => trackCTAClick("Contact - CTA", projectKey)}
               className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.3)] active:scale-[0.98]"
             >
-              <span>যোগাযোগ করুন</span>
+              <span>{ctaButtonLabel}</span>
             </Link>
             <a
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackCTAClick("Visit Site - CTA", "DHA")}
+              onClick={() => trackCTAClick("Visit Site - CTA", projectKey)}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-neutral-600 px-8 py-4 text-base font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100"
             >
               <FaGlobe className="h-5 w-5" />
@@ -1489,12 +1520,7 @@ export default function DHAShowcase({ data }) {
             variants={fadeUp}
             className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-neutral-500"
           >
-            {[
-              "No WordPress",
-              "Full Admin Control",
-              "SEO Optimized",
-              "Mobile Responsive",
-            ].map((item) => (
+            {proofPoints.map((item) => (
               <span key={item} className="flex items-center gap-1.5">
                 <HiCheckCircle className="h-4 w-4 text-primary-light" />
                 {item}
@@ -1504,8 +1530,6 @@ export default function DHAShowcase({ data }) {
         </div>
       </Section>
 
-      {/* Footer */}
-      <ShowcaseFooter appName={name} liveUrl={liveUrl} />
     </div>
   );
 }
