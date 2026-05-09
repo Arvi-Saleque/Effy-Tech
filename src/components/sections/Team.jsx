@@ -1,11 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import {
+  HiOutlineArrowLeft,
   HiOutlineArrowRight,
   HiOutlineMail,
-  HiOutlineUserCircle,
 } from "react-icons/hi";
 import siteConfig from "@/theme/siteConfig";
 
@@ -16,30 +18,50 @@ const socialIconMap = {
   mail: HiOutlineMail,
 };
 
-const portraitGradients = [
-  "from-primary-darkest via-neutral-900 to-neutral-800",
-  "from-neutral-800 via-primary-darkest to-neutral-900",
-  "from-neutral-900 via-neutral-800 to-primary-darkest",
-];
+const memberDetails = {
+  "Salek Bin Hossain": {
+    tag: "Vision",
+    focus: ["Product Direction", "Client Strategy", "Launch Planning"],
+    note: "Turns business goals into a clear product roadmap and keeps the team aligned from idea to delivery.",
+  },
+  "Adnan Bin Wahid": {
+    tag: "Systems",
+    focus: ["Full-Stack Builds", "Backend Architecture", "Developer Tools"],
+    note: "Shapes reliable systems with clean interfaces, scalable foundations, and practical engineering discipline.",
+  },
+  "Abdullah Al Saif": {
+    tag: "Execution",
+    focus: ["Mobile Apps", "IoT Products", "Engineering Delivery"],
+    note: "Connects software, hardware, and launch-ready implementation with a strong focus on usable results.",
+  },
+};
 
-const tileReveal = {
-  hidden: { opacity: 0, y: 36 },
-  visible: (i) => ({
+const cardMotion = {
+  initial: { opacity: 0, y: 34, filter: "blur(8px)" },
+  visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
     transition: {
-      delay: i * 0.08,
-      duration: 0.6,
+      delay,
+      duration: 0.65,
       ease: [0.22, 1, 0.36, 1],
     },
   }),
 };
 
+function getOffset(index, activeIndex, total) {
+  const rawOffset = index - activeIndex;
+  if (rawOffset > total / 2) return rawOffset - total;
+  if (rawOffset < -total / 2) return rawOffset + total;
+  return rawOffset;
+}
+
 function TeamSocials({ links = [] }) {
   if (!links.length) return null;
 
   return (
-    <div className="mt-6 flex items-center justify-center gap-3">
+    <div className="flex items-center gap-2">
       {links.map(({ platform, url }) => {
         const Icon = socialIconMap[platform];
         if (!Icon || !url) return null;
@@ -53,7 +75,7 @@ function TeamSocials({ links = [] }) {
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noopener noreferrer" : undefined}
             aria-label={platform}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-700/50 bg-neutral-900/40 text-neutral-400 transition-all duration-300 hover:border-primary-light/40 hover:bg-primary-light/10 hover:text-primary-light"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-700 bg-neutral-950 text-neutral-300 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light hover:bg-primary-light hover:text-neutral-950"
           >
             <Icon className="h-4 w-4" />
           </a>
@@ -63,136 +85,169 @@ function TeamSocials({ links = [] }) {
   );
 }
 
-function PortraitTile({ member, index, prefersReduced, className = "" }) {
-  const hoverMotion = prefersReduced
-    ? {}
-    : {
-        whileHover: {
-          y: -8,
-          transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
-        },
-      };
+function MemberCard({ member, offset, isActive, onSelect, index }) {
+  const distance = Math.abs(offset);
+  const position = Math.max(-1, Math.min(1, offset));
+  const scale = isActive ? 1 : 0.78;
+  const rotate = isActive ? 0 : position * -7;
+  const opacity = isActive ? 1 : 0.48;
+  const blur = isActive ? "blur(0px)" : "blur(1px)";
+  const grayscale = isActive ? "grayscale(0)" : "grayscale(1)";
 
   return (
-    <motion.article
-      variants={tileReveal}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      custom={index}
-      className={`group relative min-h-[300px] overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary/30 hover:shadow-[0_0_40px_rgba(45,212,191,0.08)] sm:min-h-[340px] ${className}`}
-      {...hoverMotion}
+    <motion.button
+      type="button"
+      onClick={onSelect}
+      aria-label={`Show ${member.name}`}
+      className="absolute left-1/2 top-1/2 h-[260px] w-[205px] overflow-hidden rounded-[8px] border border-neutral-200 bg-neutral-white shadow-xl outline-none transition-shadow duration-300 hover:shadow-2xl sm:h-[320px] sm:w-[245px] md:h-[350px] md:w-[270px]"
+      initial={false}
+      animate={{
+        opacity,
+        scale,
+        rotate,
+        x: `calc(-50% + (${position} * clamp(6.1rem, 22vw, 14.5rem)))`,
+        y: "-50%",
+        zIndex: isActive ? 30 : 20 - distance,
+        filter: `${blur} ${grayscale}`,
+      }}
+      style={{
+        transformOrigin: "center",
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 180,
+        damping: 24,
+        mass: 0.8,
+      }}
+      whileHover={isActive ? { y: "-52%" } : { scale: 0.82 }}
     >
-      {member.photo ? (
-        <img
-          src={member.photo}
-          alt={member.name}
-          style={{ objectPosition: member.photoPosition || "center" }}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-        />
-      ) : (
-        <div
-          className={`relative flex h-full min-h-[300px] items-end justify-center overflow-hidden bg-gradient-to-br ${portraitGradients[index % portraitGradients.length]} p-8 sm:min-h-[340px]`}
-        >
-          <div className="absolute inset-0 opacity-[0.06] bg-dot-grid" />
-          <div className="absolute left-1/2 top-12 h-36 w-36 -translate-x-1/2 rounded-full bg-primary-light/10 blur-3xl transition-transform duration-700 group-hover:scale-125" />
-          <div className="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-t-full border border-primary-light/10 bg-primary-light/5" />
-          <div className="relative z-10 flex flex-col items-center pb-6 text-center">
-            <div className="mb-5 flex h-32 w-32 items-center justify-center rounded-full border border-primary-light/25 bg-neutral-900/55 text-primary-light shadow-[0_0_35px_rgba(45,212,191,0.12)] backdrop-blur-md">
-              <HiOutlineUserCircle className="absolute h-24 w-24 text-primary-light/15" />
-              <span className="relative font-heading text-4xl font-bold tracking-tight">
-                {member.initials}
-              </span>
-            </div>
-            <span className="rounded-full border border-primary-light/20 bg-neutral-900/60 px-3 py-1 text-xs font-medium uppercase tracking-widest text-primary-light">
-              {member.role}
-            </span>
-          </div>
-        </div>
-      )}
-
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950/70 to-transparent" />
-    </motion.article>
+      <span className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-neutral-950/15" />
+      <Image
+        src={member.photo}
+        alt={member.name}
+        fill
+        priority={index === 0}
+        sizes="(max-width: 640px) 205px, (max-width: 768px) 245px, 270px"
+        className="object-cover"
+        style={{ objectPosition: member.photoPosition || "center" }}
+      />
+      <span className="pointer-events-none absolute inset-x-4 bottom-4 z-20 rounded-[8px] border border-neutral-white/50 bg-neutral-white/85 px-3 py-2 text-center shadow-lg backdrop-blur-md sm:hidden">
+        <span className="block font-heading text-base font-bold text-neutral-950">
+          {member.name}
+        </span>
+        <span className="block text-[10px] font-bold uppercase tracking-widest text-primary">
+          {member.role}
+        </span>
+      </span>
+    </motion.button>
   );
 }
 
-function ProfileTile({ member, index, prefersReduced, className = "" }) {
-  const hoverMotion = prefersReduced
-    ? {}
-    : {
-        whileHover: {
-          y: -8,
-          transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
-        },
-      };
-
+function ProfileConsole({ member, details }) {
   return (
-    <motion.article
-      variants={tileReveal}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      custom={index}
-      className={`group relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-7 text-center shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary/30 hover:bg-neutral-800/70 hover:shadow-[0_0_40px_rgba(45,212,191,0.08)] sm:min-h-[340px] sm:p-9 ${className}`}
-      {...hoverMotion}
-    >
-      <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-primary-light/5 blur-3xl transition-transform duration-700 group-hover:scale-125" />
-      <div className="absolute -bottom-16 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
-
-      <h3 className="font-heading text-2xl font-bold tracking-tight text-neutral-100">
-        {member.name}
-      </h3>
-      <p className="mt-1 text-sm font-semibold uppercase tracking-widest text-primary-light">
-        {member.role}
-      </p>
-      <p className="mx-auto mt-5 max-w-xs text-sm leading-relaxed text-neutral-400">
-        {member.bio}
-      </p>
-
-      <TeamSocials links={member.socials} />
-
-      <a
-        href={member.detailsUrl}
-        className="relative z-10 mt-6 inline-flex items-center gap-2 rounded-full border border-primary-light/25 bg-primary-light/10 px-5 py-2 text-sm font-semibold text-primary-light transition-all duration-300 hover:border-accent-light/35 hover:bg-accent/10 hover:text-accent-light"
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={member.name}
+        initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -12, filter: "blur(8px)" }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-[8px] border border-neutral-800 bg-neutral-950 text-left shadow-2xl shadow-neutral-950/20"
       >
-        View Details
-        <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-      </a>
-    </motion.article>
+        <div className="flex items-center justify-between border-b border-neutral-800 bg-neutral-900 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-error" />
+            <span className="h-3 w-3 rounded-full bg-warning" />
+            <span className="h-3 w-3 rounded-full bg-success" />
+            <span className="ml-2 text-xs font-semibold uppercase tracking-widest text-neutral-400">
+              Team Profile
+            </span>
+          </div>
+          <span className="hidden text-xs font-semibold text-neutral-400 sm:block">
+            Effy Tech / {details.tag}
+          </span>
+        </div>
+
+        <div className="grid gap-6 p-5 sm:p-6 md:grid-cols-[1.25fr_0.75fr]">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-primary-light">
+              {details.tag}
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-neutral-200 sm:text-lg">
+              {details.note}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-neutral-400">
+              {member.bio}
+            </p>
+          </div>
+
+          <div className="space-y-5">
+            <div className="flex flex-wrap gap-2">
+              {details.focus.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-primary-light/20 bg-primary-light/10 px-3 py-1 text-xs font-semibold text-primary-light"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <TeamSocials links={member.socials} />
+              <a
+                href={member.detailsUrl}
+                className="inline-flex items-center gap-2 rounded-full border border-primary-light/40 bg-primary-light/10 px-4 py-2 text-sm font-bold text-primary-light transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:text-neutral-950"
+              >
+                View Details
+                <HiOutlineArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
 export default function Team() {
   const prefersReduced = useReducedMotion();
-  const team = siteConfig.team || [];
+  const team = useMemo(() => siteConfig.team || [], []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const mosaicTiles = team.flatMap((member, memberIndex) => [
-    {
-      type: "portrait",
-      member,
-      className:
-        memberIndex === 1 ? "order-3 lg:order-5" : memberIndex === 2 ? "order-5 lg:order-3" : "order-1",
-    },
-    {
-      type: "profile",
-      member,
-      className:
-        memberIndex === 0
-          ? "order-2 lg:order-4"
-          : memberIndex === 1
-            ? "order-4 lg:order-2"
-            : "order-6",
-    },
-  ]);
+  const activeMember = team[activeIndex];
+  const activeDetails = memberDetails[activeMember?.name] || {
+    tag: "Craft",
+    focus: ["Product", "Design", "Engineering"],
+    note: activeMember?.bio || "",
+  };
+
+  const goTo = (index) => {
+    if (!team.length) return;
+    setActiveIndex((index + team.length) % team.length);
+  };
+
+  useEffect(() => {
+    if (prefersReduced || isPaused || team.length < 2) return undefined;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % team.length);
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused, prefersReduced, team.length]);
+
+  if (!team.length) return null;
 
   return (
     <section
       id="team"
-      className="relative overflow-hidden bg-surface-dark py-24 sm:py-32"
+      className="relative overflow-hidden bg-surface-dark py-20 text-neutral-white sm:py-28"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/4 top-1/4 h-[300px] w-[300px] rounded-full bg-primary/5 blur-[130px] sm:h-[520px] sm:w-[520px]" />
-        <div className="absolute bottom-1/4 right-1/4 h-[260px] w-[260px] rounded-full bg-accent/6 blur-[120px] sm:h-[420px] sm:w-[420px]" />
+        <div className="absolute -left-28 top-1/4 h-[360px] w-[360px] rounded-full bg-primary/5 blur-[130px] sm:h-[560px] sm:w-[560px]" />
+        <div className="absolute bottom-1/4 right-0 h-[300px] w-[300px] rounded-full bg-accent/6 blur-[120px] sm:h-[440px] sm:w-[440px]" />
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
@@ -203,49 +258,117 @@ export default function Team() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
         <motion.div
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          variants={cardMotion}
+          initial="initial"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          custom={0}
         >
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary-light">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary-light">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-light" />
-            Our Team
+            Effy Tech Crew
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-text-inverse sm:text-4xl lg:text-5xl">
-            Meet the People Behind{" "}
-            <span className="text-gradient-primary">Effy Tech</span>
+          <h2 className="mt-5 font-heading text-4xl font-black tracking-tight text-neutral-white sm:text-5xl">
+            The Minds Behind Effy Tech
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-neutral-400">
-            A focused crew blending product thinking, design craft, and
-            engineering discipline.
+          <p className="mx-auto mt-3 max-w-2xl text-base font-semibold leading-relaxed text-neutral-400 sm:text-lg">
+            A focused team of builders, strategists, and engineers — turning
+            ideas into products that work.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {mosaicTiles.map(({ type, member, className }, index) =>
-            type === "portrait" ? (
-              <PortraitTile
-                key={`${member.name}-portrait`}
-                member={member}
-                index={index}
-                prefersReduced={prefersReduced}
-                className={className}
-              />
-            ) : (
-              <ProfileTile
-                key={`${member.name}-profile`}
-                member={member}
-                index={index}
-                prefersReduced={prefersReduced}
-                className={className}
-              />
-            ),
-          )}
+        <motion.div
+          variants={cardMotion}
+          initial="initial"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          custom={0.08}
+          className="relative mx-auto mt-12 h-[310px] max-w-5xl sm:h-[400px]"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 select-none font-heading text-6xl font-black uppercase tracking-wide text-neutral-700/50 blur-[1px] sm:text-8xl md:text-9xl">
+            Our Team
+          </div>
+
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex - 1)}
+            aria-label="Previous team member"
+            className="absolute left-0 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-primary/20 bg-primary/85 text-neutral-white shadow-lg transition-all duration-300 hover:-translate-x-1 hover:bg-primary-dark sm:left-6"
+          >
+            <HiOutlineArrowLeft className="h-5 w-5" />
+          </button>
+
+          <div className="absolute inset-x-8 top-0 h-full sm:inset-x-16">
+            {team.map((member, index) => {
+              const offset = getOffset(index, activeIndex, team.length);
+              const isActive = offset === 0;
+
+              return (
+                <MemberCard
+                  key={member.name}
+                  member={member}
+                  offset={offset}
+                  isActive={isActive}
+                  onSelect={() => goTo(index)}
+                  index={index}
+                />
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex + 1)}
+            aria-label="Next team member"
+            className="absolute right-0 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-700 bg-neutral-950 text-neutral-white shadow-lg transition-all duration-300 hover:translate-x-1 hover:bg-neutral-800 sm:right-6"
+          >
+            <HiOutlineArrowRight className="h-5 w-5" />
+          </button>
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeMember.name}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3 }}
+            className="mx-auto mt-6 hidden min-h-[72px] max-w-md px-12 text-center sm:block"
+          >
+            <div className="flex items-center justify-center gap-4">
+              <span className="h-px w-16 bg-primary/40" />
+              <h3 className="font-heading text-xl font-black text-primary-light sm:text-2xl">
+                {activeMember.name}
+              </h3>
+              <span className="h-px w-16 bg-primary/40" />
+            </div>
+            <p className="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
+              {activeMember.role}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+
+        <div className="mt-6 flex items-center justify-center gap-2">
+          {team.map((member, index) => (
+            <button
+              key={`${member.name}-dot`}
+              type="button"
+              onClick={() => goTo(index)}
+              aria-label={`Show ${member.name}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === activeIndex
+                  ? "w-7 bg-primary"
+                  : "w-2 bg-neutral-700 hover:bg-neutral-500"
+              }`}
+            />
+          ))}
         </div>
+
+        <ProfileConsole member={activeMember} details={activeDetails} />
       </div>
     </section>
   );

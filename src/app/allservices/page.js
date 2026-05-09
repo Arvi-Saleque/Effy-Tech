@@ -20,6 +20,7 @@ import {
 } from "react-icons/hi";
 import siteConfig from "@/theme/siteConfig";
 import Footer from "@/components/layout/Footer";
+import ServiceExplorer from "@/components/showcase/ServiceExplorer";
 
 export const metadata = {
   title: "All Services | Effy Tech",
@@ -260,11 +261,7 @@ export default function AllServicesPage() {
                     </Link>
                   </div>
 
-                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                    {groupServices.map((service) => (
-                      <ServiceCard key={service.title} service={service} />
-                    ))}
-                  </div>
+                  <ServiceExplorer groupId={section.label} />
                 </div>
               );
             })}

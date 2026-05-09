@@ -180,7 +180,7 @@ export default function Services() {
         </div>
 
         <div className="mt-8 flex justify-center">
-          <Button href="/allservices" variant="accent" size="md">
+          <Button href="/allservices" variant="outline" size="md">
             View All Services
             <HiOutlineArrowRight className="ml-2 h-4 w-4" />
           </Button>
