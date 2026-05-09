@@ -88,8 +88,8 @@ function TeamSocials({ links = [] }) {
 function MemberCard({ member, offset, isActive, onSelect, index }) {
   const distance = Math.abs(offset);
   const position = Math.max(-1, Math.min(1, offset));
-  const scale = isActive ? 1 : 0.78;
-  const rotate = isActive ? 0 : position * -7;
+  const scale = isActive ? 1 : 0.72;
+  const rotate = 0;
   const opacity = isActive ? 1 : 0.48;
   const blur = isActive ? "blur(0px)" : "blur(1px)";
   const grayscale = isActive ? "grayscale(0)" : "grayscale(1)";

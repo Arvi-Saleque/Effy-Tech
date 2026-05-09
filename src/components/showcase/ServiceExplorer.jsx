@@ -14,7 +14,6 @@ import {
   HiOutlineAdjustments,
   HiOutlineArrowRight,
   HiOutlineBell,
-  HiOutlineChartBar,
   HiOutlineChat,
   HiOutlineCheckCircle,
   HiOutlineChip,
@@ -92,14 +91,18 @@ function getIcon(key) {
 function FeatureCard({ feature }) {
   const Icon = getIcon(feature.icon);
   return (
-    <div className="rounded-xl border border-neutral-700/50 bg-neutral-800/40 p-4 transition-colors duration-200 hover:border-primary-light/30 hover:bg-neutral-800/70">
-      <div className="mb-3 flex items-center gap-3">
-        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-primary-light/20 bg-primary-light/10 text-primary-light">
-          <Icon className="h-4.5 w-4.5" />
+    <div className="group rounded-[8px] border border-neutral-700/70 bg-neutral-950/25 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/45 hover:bg-neutral-900/45 sm:p-6">
+      <div className="mb-4 flex items-center gap-4">
+        <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[8px] border border-primary-light/20 bg-primary-light/10 text-primary-light shadow-[0_0_28px_rgba(45,212,191,0.1)] transition-all duration-300 group-hover:border-primary-light/45 group-hover:bg-primary-light/15">
+          <Icon className="h-7 w-7" />
         </span>
-        <h4 className="text-sm font-semibold text-neutral-100">{feature.title}</h4>
+        <h4 className="font-heading text-lg font-bold leading-tight text-neutral-100">
+          {feature.title}
+        </h4>
       </div>
-      <p className="text-sm leading-relaxed text-neutral-400">{feature.description}</p>
+      <p className="text-base leading-relaxed text-neutral-400">
+        {feature.description}
+      </p>
     </div>
   );
 }
@@ -111,34 +114,72 @@ function SidebarItem({ service, isActive, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className={`group flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all duration-200 ${
+      className={`group relative flex w-full items-center gap-4 overflow-hidden rounded-[8px] border px-5 py-5 text-left transition-all duration-300 ${
         isActive
-          ? "border-primary/30 bg-primary/10 text-neutral-100"
-          : "border-transparent text-neutral-400 hover:border-neutral-700/50 hover:bg-neutral-800/50 hover:text-neutral-200"
+          ? "border-primary-light/70 bg-primary-light/10 text-neutral-100 shadow-[0_0_34px_rgba(45,212,191,0.15)]"
+          : "border-neutral-800/65 bg-neutral-950/15 text-neutral-400 hover:border-primary-light/25 hover:bg-neutral-900/35 hover:text-neutral-200"
       }`}
     >
+      {isActive && (
+        <>
+          <span className="absolute right-0 top-1/2 h-16 w-16 -translate-y-1/2 translate-x-12 rotate-45 bg-primary-light shadow-[0_0_32px_rgba(45,212,191,0.55)]" />
+          <span className="absolute right-0 top-1/2 h-8 w-px -translate-y-1/2 bg-primary-light" />
+        </>
+      )}
       <span
-        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border transition-colors duration-200 ${
+        className={`relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[8px] border transition-colors duration-300 ${
           isActive
-            ? "border-primary-light/30 bg-primary-light/10 text-primary-light"
-            : "border-neutral-700/50 bg-neutral-800/40 text-neutral-500 group-hover:border-neutral-600/50 group-hover:text-neutral-400"
+            ? "border-primary-light/35 bg-primary-light/15 text-primary-light"
+            : "border-neutral-700/55 bg-neutral-950/40 text-neutral-400 group-hover:border-primary-light/25 group-hover:text-primary-light"
         }`}
       >
-        <Icon className="h-4 w-4" />
+        <Icon className="h-6 w-6" />
       </span>
-      <span className="flex-1 text-sm font-medium leading-tight">
+      <span className="relative z-10 flex-1 font-heading text-lg font-bold leading-tight">
         {service.shortTitle}
       </span>
       {isActive && (
-        <HiOutlineArrowRight className="h-3.5 w-3.5 flex-shrink-0 text-primary-light" />
+        <HiOutlineArrowRight className="relative z-10 h-5 w-5 flex-shrink-0 text-primary-light" />
       )}
     </button>
   );
 }
 
 /* ── Detail Panel ───────────────────────────────────────────── */
+function ServiceIllustration() {
+  return (
+    <div className="pointer-events-none relative hidden min-h-[230px] flex-1 lg:block">
+      <div className="absolute inset-0 opacity-60">
+        <div
+          className="h-full w-full"
+          style={{
+            backgroundImage:
+              "linear-gradient(120deg, rgba(45,212,191,0.16) 1px, transparent 1px), linear-gradient(35deg, rgba(14,165,233,0.13) 1px, transparent 1px)",
+            backgroundSize: "92px 92px",
+            maskImage:
+              "radial-gradient(circle at 62% 42%, black 0%, transparent 68%)",
+          }}
+        />
+      </div>
+
+      <div className="absolute right-6 top-3 h-40 w-64 rotate-[-28deg] rounded-[8px] border border-info/50 bg-info/10 shadow-[0_0_42px_rgba(14,165,233,0.14)]" />
+      <div className="absolute right-20 top-14 h-36 w-64 rotate-[-28deg] rounded-[8px] border border-primary-light/55 bg-primary-light/10 shadow-[0_0_40px_rgba(45,212,191,0.16)]" />
+      <div className="absolute right-2 top-24 h-36 w-64 rotate-[-28deg] rounded-[8px] border border-info/55 bg-info/10 shadow-[0_0_42px_rgba(14,165,233,0.16)]" />
+      <div className="absolute right-24 top-28 h-28 w-48 rotate-[-28deg] rounded-[8px] border border-primary-light/45 bg-neutral-950/45">
+        <span className="absolute left-5 top-5 h-2 w-20 rounded-full bg-primary-light/45" />
+        <span className="absolute left-5 top-10 h-2 w-32 rounded-full bg-info/35" />
+        <span className="absolute left-5 top-16 h-2 w-24 rounded-full bg-primary-light/25" />
+      </div>
+      <div className="absolute right-12 top-9 flex rotate-[-28deg] gap-2">
+        <span className="h-2 w-2 rounded-full bg-primary-light" />
+        <span className="h-2 w-2 rounded-full bg-info" />
+        <span className="h-2 w-2 rounded-full bg-primary-light/60" />
+      </div>
+    </div>
+  );
+}
+
 function DetailPanel({ service }) {
-  const MenuIcon = getIcon(service.menuIcon);
   return (
     <motion.div
       key={service.id}
@@ -146,52 +187,47 @@ function DetailPanel({ service }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-      className="p-6 sm:p-8 lg:p-10"
+      className="relative p-6 sm:p-8 lg:p-12"
     >
-      {/* Top: badge + visual icon */}
-      <div className="flex items-start justify-between gap-4">
-        <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary-light">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-light" />
-          {service.category}
-        </span>
-        {/* Decorative service icon — top-right */}
-        <span className="hidden items-center justify-center rounded-2xl border border-primary-light/15 bg-primary-light/8 p-4 sm:flex">
-          <MenuIcon className="h-10 w-10 text-primary-light/60" />
-        </span>
+      <div className="flex gap-10">
+        <div className="max-w-3xl flex-1">
+          <span className="inline-flex items-center gap-5 text-sm font-bold uppercase tracking-[0.28em] text-primary-light">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-light shadow-[0_0_16px_rgba(45,212,191,0.9)]" />
+            {service.category}
+          </span>
+
+          <h2 className="mt-7 font-heading text-4xl font-black leading-tight text-neutral-100 sm:text-5xl lg:text-6xl">
+            {service.title}
+          </h2>
+
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-neutral-400">
+            {service.description}
+          </p>
+        </div>
+
+        <ServiceIllustration />
       </div>
 
-      {/* Title */}
-      <h2 className="mt-4 font-heading text-3xl font-black leading-tight text-neutral-100 sm:text-4xl">
-        {service.title}
-      </h2>
-
-      {/* Description */}
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-neutral-400">
-        {service.description}
-      </p>
-
-      {/* Feature grid */}
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {service.features.map((feature) => (
           <FeatureCard key={feature.title} feature={feature} />
         ))}
       </div>
 
-      {/* Action buttons */}
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row">
         <Link
           href="/#contact"
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-neutral-white transition-all duration-200 hover:bg-primary-dark hover:-translate-y-0.5"
+          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-[8px] border border-primary-light/60 bg-gradient-to-r from-primary to-primary-light/70 px-8 py-3 text-base font-bold text-neutral-white shadow-[0_0_34px_rgba(45,212,191,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_44px_rgba(45,212,191,0.25)] sm:min-w-80"
         >
           Discuss this service
-          <HiOutlineArrowRight className="h-4 w-4" />
+          <HiOutlineArrowRight className="h-5 w-5" />
         </Link>
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 rounded-xl border border-neutral-700 px-5 py-2.5 text-sm font-semibold text-neutral-300 transition-all duration-200 hover:border-neutral-500 hover:text-neutral-100"
+          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-[8px] border border-neutral-700/80 bg-neutral-950/20 px-8 py-3 text-base font-bold text-neutral-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/35 hover:text-neutral-100 sm:min-w-56"
         >
           View related work
-          <HiOutlineExternalLink className="h-4 w-4" />
+          <HiOutlineExternalLink className="h-5 w-5" />
         </Link>
       </div>
     </motion.div>
@@ -229,29 +265,29 @@ export default function ServiceExplorer({ groupId }) {
       }));
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-neutral-800/50 bg-neutral-900/30 shadow-2xl shadow-neutral-950/40">
-      <div className="flex flex-col sm:flex-row">
+    <div className="overflow-hidden rounded-[8px] border border-neutral-700/75 bg-neutral-950/25 shadow-2xl shadow-neutral-950/40">
+      <div className="flex flex-col lg:flex-row">
 
         {/* ── Left Sidebar ── */}
         <aside
-          className="flex w-full flex-shrink-0 flex-col border-b border-neutral-800/50 bg-neutral-950/80 sm:w-72 sm:border-b-0 sm:border-r"
+          className="flex w-full flex-shrink-0 flex-col border-b border-neutral-700/60 bg-neutral-950/45 lg:w-[22.5rem] lg:border-b-0 lg:border-r"
         >
           {/* Brand header */}
-          <div className="flex-shrink-0 border-b border-neutral-800/50 px-4 py-4">
-            <div className="flex items-center gap-3">
+          <div className="flex-shrink-0 px-6 pb-8 pt-8">
+            <div className="flex items-center gap-5">
               <Image
                 src="/images/logo.png"
                 alt="Effy Tech"
-                width={36}
-                height={36}
+                width={62}
+                height={62}
                 className="object-contain"
                 unoptimized
               />
               <div>
-                <p className="text-sm font-bold text-neutral-100">
+                <p className="font-heading text-3xl font-bold leading-none text-neutral-100">
                   {siteConfig.name}
                 </p>
-                <p className="text-[11px] leading-tight text-neutral-500">
+                <p className="mt-2 text-base leading-tight text-neutral-400">
                   {siteConfig.tagline}
                 </p>
               </div>
@@ -259,7 +295,7 @@ export default function ServiceExplorer({ groupId }) {
           </div>
 
           {/* Grouped service list */}
-          <nav className="px-3 py-3">
+          <nav className="flex-1 space-y-4 px-5 pb-6">
             {grouped.map((group) => (
               <div key={group.id} className="mb-4">
                 {!groupId && (
@@ -267,7 +303,7 @@ export default function ServiceExplorer({ groupId }) {
                     {group.label}
                   </p>
                 )}
-                <div className="space-y-0.5">
+                <div className="space-y-4">
                   {group.services.map((service) => (
                     <SidebarItem
                       key={service.id}
@@ -282,26 +318,26 @@ export default function ServiceExplorer({ groupId }) {
           </nav>
 
           {/* CTA footer */}
-          <div className="flex-shrink-0 border-t border-neutral-800/50 p-4">
-            <div className="mb-3 flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-neutral-700/50 bg-neutral-800/50 text-neutral-500">
-                <HiOutlineChat className="h-4 w-4" />
+          <div className="m-5 mt-auto flex-shrink-0 rounded-[8px] border border-neutral-700/60 bg-neutral-950/25 p-6">
+            <div className="mb-6">
+              <span className="mb-6 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[8px] border border-primary-light/35 bg-primary-light/10 text-primary-light">
+                <HiOutlineChat className="h-6 w-6" />
               </span>
               <div>
-                <p className="text-sm font-semibold text-neutral-200">
+                <p className="font-heading text-xl font-bold text-neutral-100">
                   Have a project in mind?
                 </p>
-                <p className="text-xs leading-snug text-neutral-500">
+                <p className="mt-2 text-base leading-relaxed text-neutral-400">
                   Let&apos;s build something great together.
                 </p>
               </div>
             </div>
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-sm font-semibold text-primary-light transition-all duration-200 hover:bg-primary/20"
+              className="inline-flex items-center gap-3 rounded-[8px] border border-neutral-700/80 bg-neutral-900/50 px-6 py-3 text-base font-bold text-neutral-100 transition-all duration-300 hover:border-primary-light/45 hover:text-primary-light"
             >
               Contact Us
-              <HiOutlineArrowRight className="h-3.5 w-3.5" />
+              <HiOutlineArrowRight className="h-5 w-5" />
             </Link>
           </div>
         </aside>
@@ -309,8 +345,10 @@ export default function ServiceExplorer({ groupId }) {
         {/* ── Right Detail Panel ── */}
         <main
           ref={detailRef}
-          className="flex-1 bg-neutral-900/20"
+          className="relative flex-1 overflow-hidden bg-neutral-950/10"
         >
+          <div className="pointer-events-none absolute left-0 top-0 h-96 w-96 rounded-full bg-primary-light/5 blur-[110px]" />
+          <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-info/5 blur-[120px]" />
           <AnimatePresence mode="wait">
             <DetailPanel key={activeService.id} service={activeService} />
           </AnimatePresence>
