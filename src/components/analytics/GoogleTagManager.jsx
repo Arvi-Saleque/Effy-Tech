@@ -9,7 +9,7 @@
 
 import Script from "next/script";
 
-const GTM_ID = "GTM-WK2P58NV";
+const GTM_ID = "GTM-TJJFCB39";
 
 export function GoogleTagManagerScript() {
   return (
