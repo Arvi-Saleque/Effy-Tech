@@ -4,11 +4,11 @@
    ============================================================ */
 
 const buek = {
-  name: "Bangladesh University of Engineering Knowledge",
+  name: "Bangladesh University of Excellence Khulna",
   tagline: "A modern university website with complete content control",
   taglineEn: "Full-stack institution website and protected admin panel",
   description:
-    "A modern, multi-page university website built for Bangladesh University of Engineering Knowledge in Khulna, Bangladesh. The project combines a dynamic public site with hero sliders, academic programs, news, events, gallery, contact flows, and a fully protected admin panel for managing content without code.",
+    "A modern, multi-page university website built for Bangladesh University of Excellence Khulna in Khulna, Bangladesh. The project combines a dynamic public site with hero sliders, academic programs, news, events, gallery, contact flows, and a fully protected admin panel for managing content without code.",
   descriptionBn:
     "BUEK is a full-stack university website where staff can manage pages, sections, news, events, galleries, media, SEO, and global site settings from one protected dashboard. The public site is fast, responsive, and structured for students, applicants, administration, and the wider public.",
 
@@ -41,7 +41,7 @@ const buek = {
     "Effy Tech builds custom websites with admin panels, media tools, SEO, and clean workflows for schools, universities, and organizations.",
   ctaButtonLabel: "Contact Us",
   footerDescription:
-    "A full-stack university website and admin panel for Bangladesh University of Engineering Knowledge - built by Effy Tech.",
+    "A full-stack university website and admin panel for Bangladesh University of Excellence Khulna - built by Effy Tech.",
   proofPoints: [
     "Custom CMS",
     "Protected Admin Panel",
@@ -164,7 +164,7 @@ const buek = {
   ],
 
   client: {
-    name: "Bangladesh University of Engineering Knowledge",
+    name: "Bangladesh University of Excellence Khulna",
     location: "Khulna, Bangladesh",
     type: "University Institution",
   },

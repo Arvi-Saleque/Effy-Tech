@@ -1,15 +1,15 @@
 # Project Information — BUEK University Website
 
-Filled checklist for the **Bangladesh University of Engineering Knowledge (BUEK)** project.
+Filled checklist for the **Bangladesh University of Excellence Khulna (BUEK)** project.
 
 ---
 
 ## Basic Project Details
 
-- **Project name:** Bangladesh University of Engineering Knowledge (BUEK)
+- **Project name:** Bangladesh University of Excellence Khulna (BUEK)
 - **Project type:** Institution Website / Client Project
 - **Short one-line summary:** A full-featured university website with a powerful admin panel for complete content management.
-- **Full short description:** BUEK is a modern, multi-page university website built for Bangladesh University of Engineering Knowledge in Khulna, Bangladesh. It features a dynamic public-facing site with hero sliders, news and events, photo gallery, academic programs, and a contact system. A fully protected admin panel allows staff to manage all content, media, and page sections without any coding knowledge.
+- **Full short description:** BUEK is a modern, multi-page university website built for Bangladesh University of Excellence Khulna in Khulna, Bangladesh. It features a dynamic public-facing site with hero sliders, news and events, photo gallery, academic programs, and a contact system. A fully protected admin panel allows staff to manage all content, media, and page sections without any coding knowledge.
 - **Project category:** Web
 - **Is this project featured?** Yes
 
@@ -17,40 +17,40 @@ Filled checklist for the **Bangladesh University of Engineering Knowledge (BUEK)
 
 ## Project Links
 
-- **Live website link:** *(to be added when deployed)*
+- **Live website link:** _(to be added when deployed)_
 - **Google Play Store link:** N/A
 - **App Store link:** N/A
-- **GitHub repository link:** *(private or to be added)*
-- **Demo video link:** *(to be added)*
-- **Client/business link:** *(to be added)*
+- **GitHub repository link:** _(private or to be added)_
+- **Demo video link:** _(to be added)_
+- **Client/business link:** _(to be added)_
 
 ---
 
 ## Client / Ownership
 
-- **Client name:** Bangladesh University of Engineering Knowledge
-- **Organization name:** BUEK — Bangladesh University of Engineering Knowledge
+- **Client name:** Bangladesh University of Excellence Khulna
+- **Organization name:** BUEK — Bangladesh University of Excellence Khulna
 - **Location:** Khulna, Bangladesh
 - **Your role:** Lead Developer (full-stack)
-- **Other team members involved:** *(to be added)*
+- **Other team members involved:** _(to be added)_
 - **What Effy Tech handled:** Planning, UI/UX design, frontend, backend, admin panel, media integration, deployment
 
 ---
 
 ## Tech Stack
 
-| Area                 | Technologies                                       |
-|----------------------|----------------------------------------------------|
-| Framework            | Next.js 15.1.3 (App Router)                        |
-| Frontend             | React 19, TypeScript 5.7, Tailwind CSS 3.4         |
-| Backend              | Next.js Server Actions, Node.js                    |
-| Database             | MongoDB 6.11 (cloud)                               |
-| Authentication       | Custom JWT via `jose` 5.9 (HTTP-only cookies)      |
-| Media / Storage      | Cloudinary 2.5 (image hosting + media library)     |
-| Icons                | Lucide React 0.468                                 |
-| Utilities            | clsx 2.1                                           |
-| Hosting / Deployment | Vercel (recommended)                               |
-| Code Quality         | ESLint 9.17 with Next.js config                    |
+| Area                 | Technologies                                   |
+| -------------------- | ---------------------------------------------- |
+| Framework            | Next.js 15.1.3 (App Router)                    |
+| Frontend             | React 19, TypeScript 5.7, Tailwind CSS 3.4     |
+| Backend              | Next.js Server Actions, Node.js                |
+| Database             | MongoDB 6.11 (cloud)                           |
+| Authentication       | Custom JWT via `jose` 5.9 (HTTP-only cookies)  |
+| Media / Storage      | Cloudinary 2.5 (image hosting + media library) |
+| Icons                | Lucide React 0.468                             |
+| Utilities            | clsx 2.1                                       |
+| Hosting / Deployment | Vercel (recommended)                           |
+| Code Quality         | ESLint 9.17 with Next.js config                |
 
 ```text
 Framework:    Next.js 15 (App Router)
@@ -100,16 +100,16 @@ Hosting:      Vercel
 
 ## Screenshots and Media
 
-| Type                   | Notes                                               |
-|------------------------|-----------------------------------------------------|
-| Thumbnail              | Homepage hero with slider                           |
-| Screenshot 1           | Homepage — full view with slider and sections       |
-| Screenshot 2           | Academic programs page                              |
-| Screenshot 3           | News and events listing                             |
-| Screenshot 4           | Gallery with photo albums                           |
-| Screenshot 5           | Admin dashboard panel                               |
-| Screenshot 6           | Admin content editor for a page                     |
-| Mobile screenshot      | Homepage and navigation on mobile                   |
+| Type              | Notes                                         |
+| ----------------- | --------------------------------------------- |
+| Thumbnail         | Homepage hero with slider                     |
+| Screenshot 1      | Homepage — full view with slider and sections |
+| Screenshot 2      | Academic programs page                        |
+| Screenshot 3      | News and events listing                       |
+| Screenshot 4      | Gallery with photo albums                     |
+| Screenshot 5      | Admin dashboard panel                         |
+| Screenshot 6      | Admin content editor for a page               |
+| Mobile screenshot | Homepage and navigation on mobile             |
 
 **Image guidelines:**
 
@@ -143,14 +143,14 @@ public/images/buek/mobile-home.png
 - MongoDB-backed with 6 collections and full CRUD operations
 - 5-minute edge caching on public pages for fast load times
 
-*(Live user and traffic metrics to be added after deployment)*
+_(Live user and traffic metrics to be added after deployment)_
 
 ---
 
 ## Project Timeline
 
-- **Start date:** *(to be added)*
-- **End date:** *(to be added)*
+- **Start date:** _(to be added)_
+- **End date:** _(to be added)_
 - **Current status:** `In Development`
 
 ---
@@ -158,14 +158,14 @@ public/images/buek/mobile-home.png
 ## Content for Website Card
 
 ```text
-Title:              Bangladesh University of Engineering Knowledge (BUEK)
+Title:              Bangladesh University of Excellence Khulna (BUEK)
 Category:           Web
 Short Description:  A full-featured university website with a powerful admin panel,
                     dynamic content management, media library, and 10+ public pages.
 Tech Tags:          Next.js, React, TypeScript, Tailwind CSS, MongoDB, Cloudinary
 Thumbnail Path:     /images/buek/thumbnail.png
 Live URL:           (to be added)
-Client Name:        Bangladesh University of Engineering Knowledge
+Client Name:        Bangladesh University of Excellence Khulna
 Featured:           Yes
 ```
 
@@ -175,7 +175,7 @@ Featured:           Yes
 
 ```text
 Project Overview:
-  A modern, full-stack university website for Bangladesh University of Engineering Knowledge
+  A modern, full-stack university website for Bangladesh University of Excellence Khulna
   in Khulna, Bangladesh. Built with Next.js 15 and a MongoDB backend, the project includes
   a fully responsive public site and a protected admin panel for complete content management
   without any coding knowledge required.
@@ -272,6 +272,5 @@ npm run start     # Start production server
 npm run lint      # Run ESLint
 npm run clean     # Clear .next cache
 ```
-
 
 here in the details answer for you

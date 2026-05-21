@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title:
-    "Bangladesh University of Engineering Knowledge - University Website | Effy Tech",
+    "Bangladesh University of Excellence Khulna - University Website | Effy Tech",
   description: buek.description,
 };
 

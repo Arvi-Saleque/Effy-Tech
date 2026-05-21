@@ -41,7 +41,7 @@ const projects = [
   },
   {
     id: "13",
-    title: "Bangladesh University of Engineering Knowledge (BUEK)",
+    title: "Bangladesh University of Excellence Khulna (BUEK)",
     slug: "BUEK",
     description:
       "A full-featured university website with a protected admin panel, dynamic content management, media library, news, events, gallery, and 10+ public pages.",
@@ -56,7 +56,7 @@ const projects = [
     ],
     thumbnail: "/images/buek/img1.png",
     images: [],
-    clientName: "Bangladesh University of Engineering Knowledge",
+    clientName: "Bangladesh University of Excellence Khulna",
     liveUrl: "https://buekbd.com",
     featured: true,
     order: 2,
