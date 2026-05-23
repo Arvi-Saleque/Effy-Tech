@@ -6,7 +6,6 @@ import Navbar from "@/components/layout/Navbar";
 import Preloader from "@/components/ui/Preloader";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import {
   GoogleTagManagerScript,
@@ -69,7 +68,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <GoogleTagManagerNoscript />
-        <GoogleAnalytics />
         <Preloader />
         <Navbar />
         {children}
