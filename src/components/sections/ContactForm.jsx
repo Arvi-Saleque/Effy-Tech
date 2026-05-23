@@ -276,6 +276,18 @@ export default function ContactForm() {
   /* Watch for server success */
   if (serverState?.success && !submitted) {
     setSubmitted(true);
+    
+    /* Push dataLayer event only after successful submit */
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "contact_form_submit",
+        form_name: "project_contact_form",
+        page_path: window.location.pathname,
+      });
+    } catch (error) {
+      console.error("Error pushing to dataLayer:", error);
+    }
   }
 
   /* ── Success State ─── */
