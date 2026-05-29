@@ -282,7 +282,7 @@ export default function ContactForm() {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "contact_form_submit",
-        form_name: "project_contact_form",
+        form_name: "home_contact_form",
         page_path: window.location.pathname,
       });
     } catch (error) {
