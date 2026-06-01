@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle2, AlertCircle } from 'react-icons/fa6';
+import { FaCheckCircle, FaCircleExclamation } from 'react-icons/fa6';
 import Button from '@/components/ui/Button';
 
 export default function EmailConfirmedPage() {
@@ -29,7 +29,7 @@ export default function EmailConfirmedPage() {
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-lightest">
-                    <CheckCircle2 className="w-8 h-8 text-primary" />
+                    <FaCheckCircle className="w-8 h-8 text-primary" />
                   </div>
                 </div>
 
@@ -78,7 +78,7 @@ export default function EmailConfirmedPage() {
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100">
-                    <AlertCircle className="w-8 h-8 text-error" />
+                    <FaCircleExclamation className="w-8 h-8 text-error" />
                   </div>
                 </div>
 
@@ -138,9 +138,3 @@ export default function EmailConfirmedPage() {
     </>
   );
 }
-
-export const metadata = {
-  title: 'Email Verified | Islamic Amal Tracker',
-  description: 'Your Islamic Amal Tracker email has been verified. Return to the app and sign in.',
-  robots: 'noindex, nofollow',
-};
