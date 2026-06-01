@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaCheckCircle, FaCircleExclamation } from 'react-icons/fa6';
+import { FaCircleCheck, FaCircleExclamation } from 'react-icons/fa6';
 import Button from '@/components/ui/Button';
 
 export default function EmailConfirmedPage() {
@@ -29,7 +29,7 @@ export default function EmailConfirmedPage() {
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-lightest">
-                    <FaCheckCircle className="w-8 h-8 text-primary" />
+                    <FaCircleCheck className="w-8 h-8 text-primary" />
                   </div>
                 </div>
 
@@ -131,7 +131,7 @@ export default function EmailConfirmedPage() {
 
           {/* Subtle Branding Footer */}
           <p className="text-center text-xs text-text-tertiary mt-6">
-            © 2026 Effy Tech. All rights reserved.
+            &copy; 2026 Effy Tech. All rights reserved.
           </p>
         </div>
       </div>
