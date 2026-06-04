@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { startWork, takeBreak, resumeWork, endWork, markAssignmentDone } from "@/lib/admin/actions";
+import { startWork, takeBreak, resumeWork, endWork, markAssignmentDone, finishCurrentWork } from "@/lib/admin/actions";
 import StatusBadge from "./StatusBadge";
 import WorkTimer from "./WorkTimer";
 import AssignmentCard from "./AssignmentCard";
@@ -10,9 +10,34 @@ import DailyWorkLogForm from "./DailyWorkLogForm";
 import { formatDateTime } from "@/lib/admin/time";
 import { Loader2, AlertCircle, CheckCircle2, Play, CornerDownRight } from "lucide-react";
 
+function ActiveBlockTimer({ startedAt }) {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    if (!startedAt) return;
+    const start = new Date(startedAt).getTime();
+    const update = () => {
+      const now = new Date().getTime();
+      setSeconds(Math.max(0, Math.floor((now - start) / 1000)));
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [startedAt]);
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  return (
+    <span className="font-mono text-emerald-450 font-bold tracking-tight">
+      {String(hrs).padStart(2, "0")}:{String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
+    </span>
+  );
+}
+
 export default function MyWorkClient({ initialData }) {
   const router = useRouter();
-  const { profile, todaySession, todayLog, todayAssignments, tomorrowAssignments } = initialData;
+  const { profile, todaySession, todayLog, todayAssignments, tomorrowAssignments, todayWorkBlocks = [] } = initialData;
 
   const [currentWorkTitle, setCurrentWorkTitle] = useState("");
   const [currentWorkNote, setCurrentWorkNote] = useState("");
@@ -26,9 +51,30 @@ export default function MyWorkClient({ initialData }) {
   const isWorking = status === "active" || status === "break";
   const isEnded = status === "ended";
 
+  const activeBlock = todayWorkBlocks.find(b => b.status === "active");
+
   const clearMessages = () => {
     setErrorMsg(null);
     setSuccessMsg(null);
+  };
+
+  const handleFinishCurrentWork = async () => {
+    setIsLoading(true);
+    clearMessages();
+
+    try {
+      const res = await finishCurrentWork();
+      if (res.error) {
+        setErrorMsg(res.error);
+      } else {
+        setSuccessMsg("Current work block finished successfully.");
+        router.refresh();
+      }
+    } catch (err) {
+      setErrorMsg("Failed to finish current work block.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleManualStart = async (e) => {
@@ -207,28 +253,56 @@ export default function MyWorkClient({ initialData }) {
             </div>
           )}
 
-          {/* Current Session Display */}
-          {isWorking && (
-            <div className="mb-6 p-4 bg-neutral-950/30 border border-neutral-800/60 rounded-xl">
-              <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold block mb-1">
-                Current Activity
-              </span>
-              <h3 className="text-base font-bold text-neutral-200 flex items-center gap-2">
-                <CornerDownRight className="h-4 w-4 text-emerald-400 shrink-0" />
-                {todaySession.current_work_title}
-              </h3>
-              {todaySession.current_work_note && (
-                <p className="text-xs text-neutral-400 pl-6 mt-1 italic">
-                  &ldquo;{todaySession.current_work_note}&rdquo;
-                </p>
-              )}
-              
-              <div className="flex flex-wrap gap-4 text-xs text-neutral-500 mt-3 pl-6">
-                <span>Started: {formatDateTime(todaySession.started_at)}</span>
-                {todaySession.break_minutes > 0 && (
-                  <span>Break Minutes: {todaySession.break_minutes}m</span>
-                )}
+          {/* Current Active Work Block Display */}
+          {activeBlock && (
+            <div className="mb-6 p-4 bg-neutral-950/30 border border-neutral-850/60 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold block mb-1">
+                    Current Active Task
+                  </span>
+                  <h3 className="text-base font-bold text-neutral-200 flex items-center gap-2">
+                    <CornerDownRight className="h-4 w-4 text-emerald-400 shrink-0" />
+                    {activeBlock.title}
+                  </h3>
+                  {activeBlock.note && (
+                    <p className="text-xs text-neutral-400 pl-6 mt-1 italic">
+                      &ldquo;{activeBlock.note}&rdquo;
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-4 text-xs text-neutral-500 mt-3 pl-6">
+                    <span>Started: {formatDateTime(activeBlock.started_at)}</span>
+                    {status === "break" && (
+                      <span className="text-amber-400 font-medium">Break pauses daily timer only</span>
+                    )}
+                  </div>
+                </div>
+                <div className="sm:text-right shrink-0">
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold block mb-1">
+                    Task Elapsed
+                  </span>
+                  <div className="text-xl">
+                    <ActiveBlockTimer startedAt={activeBlock.started_at} />
+                  </div>
+                </div>
               </div>
+
+              {status === "active" && (
+                <div className="mt-4 pl-6">
+                  <button
+                    onClick={handleFinishCurrentWork}
+                    disabled={isLoading}
+                    className="py-1.5 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    )}
+                    Finish Current Work
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -288,13 +362,95 @@ export default function MyWorkClient({ initialData }) {
               </div>
             )}
           </div>
+
+          {/* Today's Work Blocks list */}
+          {todayWorkBlocks.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-neutral-800/80">
+              <h3 className="text-sm font-bold text-neutral-200 mb-4 flex items-center justify-between">
+                <span>Today's Completed Work</span>
+                <span className="text-xs text-neutral-500 font-medium">
+                  {todayWorkBlocks.length} block{todayWorkBlocks.length !== 1 ? "s" : ""}
+                </span>
+              </h3>
+              <div className="space-y-3">
+                {todayWorkBlocks.map((block) => {
+                  const linkedAssignment = todayAssignments.find(a => a.id === block.assignment_id) || 
+                                           tomorrowAssignments.find(a => a.id === block.assignment_id);
+                  const isBlockActive = block.status === "active";
+                  const formatBlockDuration = (minutes) => {
+                    if (!minutes || minutes <= 0) return "0m";
+                    const hrs = Math.floor(minutes / 60);
+                    const mins = minutes % 60;
+                    if (hrs > 0) {
+                      return `${hrs}h ${mins}m`;
+                    }
+                    return `${mins}m`;
+                  };
+                  return (
+                    <div 
+                      key={block.id} 
+                      className={`p-3.5 rounded-xl border text-xs transition-all duration-200 ${
+                        isBlockActive 
+                          ? "bg-emerald-950/5 border-emerald-500/20" 
+                          : "bg-neutral-950/20 border-neutral-800/40 hover:border-neutral-700/60"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-semibold text-neutral-200">{block.title}</span>
+                            {linkedAssignment && (
+                              <span className="text-[10px] bg-neutral-850 text-neutral-400 px-1.5 py-0.5 rounded">
+                                Assignment: {linkedAssignment.title}
+                              </span>
+                            )}
+                          </div>
+                          {block.note && (
+                            <p className="text-neutral-400 italic font-light">&ldquo;{block.note}&rdquo;</p>
+                          )}
+                          <div className="text-[10px] text-neutral-500 flex items-center gap-2">
+                            <span>Started: {formatDateTime(block.started_at, true)}</span>
+                            {block.ended_at && (
+                              <span>• Ended: {formatDateTime(block.ended_at, true)}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
+                          <span className={`text-[9px] font-semibold tracking-wide uppercase px-1.5 py-0.5 rounded ${
+                            isBlockActive 
+                              ? "bg-emerald-500/10 text-emerald-400 animate-pulse" 
+                              : block.status === "done" 
+                                ? "bg-neutral-800 text-neutral-400" 
+                                : "bg-red-500/10 text-red-400"
+                          }`}>
+                            {block.status}
+                          </span>
+                          {!isBlockActive && (
+                            <span className="font-mono font-medium text-neutral-400">
+                              {formatBlockDuration(block.total_minutes)}
+                            </span>
+                          )}
+                          {isBlockActive && (
+                            <span className="font-mono font-medium text-emerald-455">
+                              <ActiveBlockTimer startedAt={block.started_at} />
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Manual Tracker Start Form (Only if offline/no session) */}
-        {!isWorking && !isEnded && (
+        {/* Manual Tracker Start Form */}
+        {((!isWorking && !isEnded) || (status === "active" && !activeBlock)) && (
           <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
             <h3 className="text-lg font-bold text-neutral-100 mb-4">
-              Start Work Session
+              {status === "active" ? "Start Next Work" : "Start Work Session"}
             </h3>
             
             <form onSubmit={handleManualStart} className="space-y-4">
@@ -393,7 +549,7 @@ export default function MyWorkClient({ initialData }) {
                 <AssignmentCard
                   key={assignment.id}
                   assignment={assignment}
-                  isWorking={isWorking}
+                  isWorking={!!activeBlock}
                   isEnded={isEnded}
                   currentAssignmentId={todaySession?.assignment_id}
                   onStartWork={handleStartAssignment}
