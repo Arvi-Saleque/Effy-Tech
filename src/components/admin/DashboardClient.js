@@ -1,0 +1,473 @@
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createAssignment } from "@/lib/admin/actions";
+import { calculateSessionDisplayMinutes, formatMinutes, getTomorrowDateString } from "@/lib/admin/time";
+import StatusBadge from "./StatusBadge";
+import WorkHoursChart from "./WorkHoursChart";
+import { 
+  Activity, 
+  Coffee, 
+  Clock, 
+  FileText, 
+  UserPlus, 
+  Loader2, 
+  AlertCircle, 
+  CheckCircle2, 
+  ArrowRight,
+  ClipboardList
+} from "lucide-react";
+
+export default function DashboardClient({ initialData }) {
+  const router = useRouter();
+  const { profiles, sessions, logs, todayAssignments, tomorrowAssignments, stats } = initialData;
+
+  const [assignedTo, setAssignedTo] = useState("");
+  const [assignTitle, setAssignTitle] = useState("");
+  const [assignDesc, setAssignDesc] = useState("");
+  const [workDate, setWorkDate] = useState(getTomorrowDateString());
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+
+  // Prepare chart data: worked hours today per profile
+  const chartData = profiles.map(member => {
+    const session = sessions.find(s => s.user_id === member.id);
+    const mins = session ? calculateSessionDisplayMinutes(session) : 0;
+    return {
+      name: member.name,
+      hours: parseFloat((mins / 60).toFixed(1))
+    };
+  });
+
+  const handleAssign = async (e) => {
+    e.preventDefault();
+    if (!assignedTo) {
+      setErrorMsg("Please select a team member.");
+      return;
+    }
+    if (!assignTitle.trim()) {
+      setErrorMsg("Please enter a task title.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    try {
+      const res = await createAssignment({
+        assignedTo,
+        title: assignTitle,
+        description: assignDesc,
+        workDate
+      });
+
+      if (res.error) {
+        setErrorMsg(res.error);
+      } else {
+        setSuccessMsg("Task assigned successfully!");
+        setAssignTitle("");
+        setAssignDesc("");
+        // Retain assignedTo if they want to assign multiple tasks, or clear it
+        router.refresh();
+      }
+    } catch (err) {
+      setErrorMsg("Failed to assign task.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getProfileName = (id) => {
+    const p = profiles.find(profile => profile.id === id);
+    return p ? p.name : "Unknown User";
+  };
+
+  return (
+    <div className="space-y-8 font-sans animate-fade-in">
+      
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-xs text-neutral-400 font-semibold uppercase tracking-widest block mb-1">
+            Admin
+          </span>
+          <h2 className="text-2xl font-extrabold text-neutral-100 tracking-tight">
+            Admin Dashboard
+          </h2>
+        </div>
+      </div>
+
+      {/* Summary Statistics Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <Activity className="h-5 w-5" />
+          </div>
+          <div>
+            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider block">
+              Active Now
+            </span>
+            <span className="text-xl font-bold text-neutral-100">{stats.activeNow}</span>
+          </div>
+        </div>
+
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+            <Coffee className="h-5 w-5" />
+          </div>
+          <div>
+            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider block">
+              On Break
+            </span>
+            <span className="text-xl font-bold text-neutral-100">{stats.onBreak}</span>
+          </div>
+        </div>
+
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0">
+            <Clock className="h-5 w-5" />
+          </div>
+          <div>
+            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider block">
+              Hours Logged Today
+            </span>
+            <span className="text-xl font-bold text-neutral-100">{stats.totalHoursToday}h</span>
+          </div>
+        </div>
+
+        <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+            <FileText className="h-5 w-5" />
+          </div>
+          <div>
+            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider block">
+              Reports Submitted
+            </span>
+            <span className="text-xl font-bold text-neutral-100">{stats.reportsSubmitted}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid: Status Table & Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Team Status Table */}
+        <div className="lg:col-span-2 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-100 mb-4">
+              Team Member Status
+            </h3>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-800/80 text-neutral-400 text-xs uppercase tracking-wider">
+                    <th className="pb-3 font-semibold">Member</th>
+                    <th className="pb-3 font-semibold">Status</th>
+                    <th className="pb-3 font-semibold">Current Work</th>
+                    <th className="pb-3 font-semibold">Worked Today</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/40">
+                  {profiles.map(member => {
+                    const session = sessions.find(s => s.user_id === member.id);
+                    const status = session ? session.status : "offline";
+                    const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+                    
+                    return (
+                      <tr key={member.id} className="text-neutral-300">
+                        <td className="py-3.5 font-semibold text-neutral-100">
+                          {member.name}
+                          <span className="block text-[10px] text-neutral-500 font-normal mt-0.5">
+                            {member.email}
+                          </span>
+                        </td>
+                        <td className="py-3.5">
+                          <StatusBadge status={status} />
+                        </td>
+                        <td className="py-3.5 text-xs text-neutral-400 max-w-[200px] truncate">
+                          {status === "active" || status === "break" ? (
+                            <span className="text-neutral-200 font-medium">
+                              {session?.current_work_title}
+                            </span>
+                          ) : status === "ended" ? (
+                            <span className="text-neutral-500 italic">Work Ended</span>
+                          ) : (
+                            <span className="text-neutral-600 italic">Offline</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 font-mono text-xs text-neutral-200">
+                          {formatMinutes(workedMins)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Work Hours Chart */}
+        <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-100 mb-4">
+              Today's Work Hours
+            </h3>
+            <WorkHoursChart data={chartData} />
+          </div>
+        </div>
+
+      </div>
+
+      {/* Today's Work Notes Cards */}
+      <div className="space-y-4">
+        <h3 className="text-base font-bold text-neutral-100">
+          Today's Logs & Work Notes
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {profiles.map(member => {
+            const session = sessions.find(s => s.user_id === member.id);
+            const log = logs.find(l => l.user_id === member.id);
+            
+            const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+            const hasLog = !!log;
+            const isSubmitted = !!(log && log.submitted_at);
+
+            return (
+              <div key={member.id} className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-xl space-y-3.5">
+                <div className="flex items-center justify-between border-b border-neutral-800/60 pb-3">
+                  <div>
+                    <h4 className="text-sm font-bold text-neutral-100">{member.name}</h4>
+                    <span className="text-[10px] text-neutral-500 font-medium font-mono">
+                      Time: {formatMinutes(workedMins)}
+                    </span>
+                  </div>
+                  
+                  <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border ${
+                    isSubmitted 
+                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
+                      : hasLog 
+                        ? "bg-amber-500/10 border-amber-500/20 text-amber-400" 
+                        : "bg-neutral-800 border-neutral-700 text-neutral-500"
+                  }`}>
+                    {isSubmitted ? "Submitted" : hasLog ? "Draft" : "No Activity"}
+                  </span>
+                </div>
+
+                <div className="space-y-3 text-xs">
+                  <div>
+                    <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
+                      Current Work
+                    </span>
+                    <p className="text-neutral-300">
+                      {session?.current_work_title || <span className="text-neutral-600 italic">No active task</span>}
+                    </p>
+                  </div>
+
+                  <div>
+                    <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
+                      Work Accomplished
+                    </span>
+                    <p className="text-neutral-300 line-clamp-3">
+                      {log?.work_note || <span className="text-neutral-600 italic">No notes written yet</span>}
+                    </p>
+                  </div>
+
+                  {log?.blockers && (
+                    <div>
+                      <span className="block text-[10px] text-red-400 font-semibold uppercase tracking-wider mb-1">
+                        Blockers
+                      </span>
+                      <p className="text-red-300">{log.blockers}</p>
+                    </div>
+                  )}
+
+                  {log?.tomorrow_plan && (
+                    <div>
+                      <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
+                        Tomorrow's Plan
+                      </span>
+                      <p className="text-neutral-400 line-clamp-2">{log.tomorrow_plan}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Task Assignment Control Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Assign Work Form */}
+        <div className="lg:col-span-1 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
+          <h3 className="text-base font-bold text-neutral-100 mb-4 flex items-center gap-2">
+            <UserPlus className="h-5 w-5 text-emerald-400" />
+            Assign Tomorrow's Work
+          </h3>
+
+          {errorMsg && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl flex items-center gap-2.5 text-xs">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          {successMsg && (
+            <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center gap-2.5 text-xs">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleAssign} className="space-y-4">
+            <div>
+              <label htmlFor="assignee" className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
+                Team Member <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="assignee"
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+                className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-3 py-2.5 text-sm text-neutral-300 focus:outline-none focus:border-emerald-500/50"
+                required
+              >
+                <option value="" className="bg-neutral-950 text-neutral-400">-- Select Member --</option>
+                {profiles.map(member => (
+                  <option key={member.id} value={member.id} className="bg-neutral-950 text-neutral-200">
+                    {member.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="taskTitle" className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
+                Work Title <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="taskTitle"
+                placeholder="e.g. Implement contact API endpoint..."
+                value={assignTitle}
+                onChange={(e) => setAssignTitle(e.target.value)}
+                className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2.5 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500/50"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="taskDesc" className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
+                Description (Optional)
+              </label>
+              <textarea
+                id="taskDesc"
+                placeholder="Add instructions, links, requirements..."
+                value={assignDesc}
+                onChange={(e) => setAssignDesc(e.target.value)}
+                rows={3}
+                className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2.5 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500/50"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="workDate" className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
+                Target Date
+              </label>
+              <input
+                type="date"
+                id="workDate"
+                value={workDate}
+                onChange={(e) => setWorkDate(e.target.value)}
+                className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2 text-sm text-neutral-300 focus:outline-none focus:border-emerald-500/50"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 text-sm"
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <UserPlus className="h-4 w-4" />
+              )}
+              Assign Task
+            </button>
+          </form>
+        </div>
+
+        {/* Tomorrow's Work Assignment Board */}
+        <div className="lg:col-span-2 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-100 mb-4 flex items-center gap-2">
+              <ClipboardList className="h-5 w-5 text-emerald-400" />
+              Tomorrow's Work Assignments
+            </h3>
+
+            {tomorrowAssignments.length === 0 ? (
+              <div className="text-center py-16 border border-dashed border-neutral-800/60 rounded-xl bg-neutral-950/10">
+                <span className="text-xs text-neutral-500 font-medium">
+                  No tasks assigned for tomorrow yet.
+                </span>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-neutral-800/80 text-neutral-400 text-xs uppercase tracking-wider">
+                      <th className="pb-3 font-semibold">Assigned To</th>
+                      <th className="pb-3 font-semibold">Task</th>
+                      <th className="pb-3 font-semibold">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-800/40">
+                    {tomorrowAssignments.map(task => (
+                      <tr key={task.id} className="text-neutral-300">
+                        <td className="py-3 font-semibold text-neutral-100">
+                          {getProfileName(task.assigned_to)}
+                        </td>
+                        <td className="py-3">
+                          <span className="font-medium text-neutral-200 block">
+                            {task.title}
+                          </span>
+                          {task.description && (
+                            <span className="text-xs text-neutral-500 block max-w-xs truncate">
+                              {task.description}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 text-xs">
+                          <span className={`px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[9px] border ${
+                            task.status === "done"
+                              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                              : task.status === "in_progress"
+                                ? "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                                : "bg-neutral-800 border-neutral-700 text-neutral-400"
+                          }`}>
+                            {task.status.replace("_", " ")}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
