@@ -21,7 +21,7 @@ import {
 
 export default function DashboardClient({ initialData }) {
   const router = useRouter();
-  const { profiles, sessions, logs, todayAssignments, tomorrowAssignments, stats } = initialData;
+  const { profiles, sessions, logs, todayAssignments, tomorrowAssignments, todayWorkBlocks = [], stats } = initialData;
 
   // Calculate compact assignment stats
   const todayPendingCount = todayAssignments.filter(a => a.status === "pending").length;
@@ -183,6 +183,7 @@ export default function DashboardClient({ initialData }) {
                     const session = sessions.find(s => s.user_id === member.id);
                     const status = session ? session.status : "offline";
                     const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+                    const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
                     
                     return (
                       <tr key={member.id} className="text-neutral-300">
@@ -198,7 +199,7 @@ export default function DashboardClient({ initialData }) {
                         <td className="py-3.5 text-xs text-neutral-400 max-w-[200px] truncate">
                           {status === "active" || status === "break" ? (
                             <span className="text-neutral-200 font-medium">
-                              {session?.current_work_title}
+                              {activeBlock ? activeBlock.title : (session?.current_work_title || "Active")}
                             </span>
                           ) : status === "ended" ? (
                             <span className="text-neutral-500 italic">Work Ended</span>
@@ -230,6 +231,99 @@ export default function DashboardClient({ initialData }) {
 
       </div>
 
+      {/* Today's Work Blocks Grouped by Founder */}
+      <div className="space-y-4">
+        <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
+          <Clock className="h-5 w-5 text-emerald-400" />
+          Today's Work Blocks
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {profiles.map(member => {
+            const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
+            const formatBlockDuration = (minutes) => {
+              if (!minutes || minutes <= 0) return "0m";
+              const hrs = Math.floor(minutes / 60);
+              const mins = minutes % 60;
+              if (hrs > 0) return `${hrs}h ${mins}m`;
+              return `${mins}m`;
+            };
+            const formatBlockTime = (timeStr) => {
+              if (!timeStr) return "";
+              const date = new Date(timeStr);
+              return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            };
+
+            return (
+              <div key={member.id} className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-xl flex flex-col justify-between space-y-4">
+                <div>
+                  <div className="flex items-center justify-between border-b border-neutral-800/60 pb-3 mb-3">
+                    <h4 className="text-sm font-bold text-neutral-100">{member.name}</h4>
+                    <span className="text-[10px] text-neutral-500 font-semibold uppercase font-mono">
+                      {memberBlocks.length} Task{memberBlocks.length !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+
+                  {memberBlocks.length === 0 ? (
+                    <div className="text-center py-6 text-xs text-neutral-600 italic">
+                      No work blocks started today.
+                    </div>
+                  ) : (
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                      {memberBlocks.map(block => {
+                        const isBlockActive = block.status === "active";
+                        return (
+                          <div 
+                            key={block.id} 
+                            className={`p-3 rounded-xl border text-xs space-y-1.5 ${
+                              isBlockActive 
+                                ? "bg-emerald-950/10 border-emerald-500/25 animate-pulse" 
+                                : "bg-neutral-950/30 border-neutral-800/40 hover:border-neutral-700/40"
+                            }`}
+                          >
+                            <div className="flex justify-between items-start gap-2">
+                              <span className="font-semibold text-neutral-200 break-words">{block.title}</span>
+                              <span className={`text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border shrink-0 ${
+                                isBlockActive ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                                block.status === "done" ? "bg-neutral-800 border-neutral-700 text-neutral-400" :
+                                "bg-red-500/10 border-red-500/20 text-red-400"
+                              }`}>
+                                {block.status}
+                              </span>
+                            </div>
+
+                            {block.note && (
+                              <p className="text-neutral-400 italic text-[11px]">&ldquo;{block.note}&rdquo;</p>
+                            )}
+
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 pt-1 border-t border-neutral-800/20">
+                              <span>
+                                {formatBlockTime(block.started_at)}
+                                {block.ended_at ? ` - ${formatBlockTime(block.ended_at)}` : " - Present"}
+                              </span>
+                              {!isBlockActive && (
+                                <span className="font-mono text-neutral-350">
+                                  {formatBlockDuration(block.total_minutes)}
+                                </span>
+                              )}
+                              {isBlockActive && (
+                                <span className="font-mono text-emerald-400 font-semibold">
+                                  Active
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Today's Work Notes Cards */}
       <div className="space-y-4">
         <h3 className="text-base font-bold text-neutral-100">
@@ -240,6 +334,7 @@ export default function DashboardClient({ initialData }) {
           {profiles.map(member => {
             const session = sessions.find(s => s.user_id === member.id);
             const log = logs.find(l => l.user_id === member.id);
+            const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
             
             const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
             const hasLog = !!log;
@@ -272,7 +367,7 @@ export default function DashboardClient({ initialData }) {
                       Current Work
                     </span>
                     <p className="text-neutral-300">
-                      {session?.current_work_title || <span className="text-neutral-600 italic">No active task</span>}
+                      {activeBlock ? activeBlock.title : (session?.current_work_title || <span className="text-neutral-600 italic">No active task</span>)}
                     </p>
                   </div>
 
