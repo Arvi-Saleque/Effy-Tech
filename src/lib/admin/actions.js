@@ -53,12 +53,21 @@ export async function getMyWorkData() {
       .eq("work_date", tomorrow)
       .order("created_at", { ascending: true });
 
+    // Get today's work blocks
+    const { data: todayWorkBlocks, error: blocksError } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("user_id", profile.id)
+      .eq("work_date", today)
+      .order("started_at", { ascending: true });
+
     return {
       profile,
       todaySession: todaySession || null,
       todayLog: todayLog || null,
       todayAssignments: todayAssignments || [],
-      tomorrowAssignments: tomorrowAssignments || []
+      tomorrowAssignments: tomorrowAssignments || [],
+      todayWorkBlocks: todayWorkBlocks || []
     };
   } catch (error) {
     console.error("Error in getMyWorkData:", error);
@@ -67,7 +76,8 @@ export async function getMyWorkData() {
       todaySession: null,
       todayLog: null,
       todayAssignments: [],
-      tomorrowAssignments: []
+      tomorrowAssignments: [],
+      todayWorkBlocks: []
     };
   }
 }
@@ -102,11 +112,21 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
         return { error: "You are currently on break. Resume work before changing work." };
       }
       if (existingSession.status === "active") {
-        return { error: "A work session is already active." };
+        // Check if there is already an active work block
+        const { data: activeBlock } = await supabase
+          .from("work_blocks")
+          .select("*")
+          .eq("session_id", existingSession.id)
+          .eq("status", "active")
+          .maybeSingle();
+
+        if (activeBlock) {
+          return { error: "Finish current work before starting a new one." };
+        }
       }
     }
 
-    // Only after checks pass, verify assignment and update status
+    // Verify assignment if provided
     if (assignmentId) {
       const { data: assignment, error: assignError } = await supabase
         .from("work_assignments")
@@ -118,15 +138,11 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       if (assignError || !assignment) {
         return { error: "Selected assignment does not belong to you or does not exist." };
       }
-
-      // Update assignment to in_progress
-      await supabase
-        .from("work_assignments")
-        .update({ status: "in_progress" })
-        .eq("id", assignmentId);
     }
 
+    let sessionId;
     if (existingSession) {
+      sessionId = existingSession.id;
       // Update session
       const { error: updateError } = await supabase
         .from("work_sessions")
@@ -144,7 +160,7 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       if (updateError) throw updateError;
     } else {
       // Create session
-      const { error: insertError } = await supabase
+      const { data: newSession, error: insertError } = await supabase
         .from("work_sessions")
         .insert({
           user_id: profile.id,
@@ -156,10 +172,38 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           started_at: now,
           break_minutes: 0,
           total_minutes: 0
-        });
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+      sessionId = newSession.id;
     }
+
+    // Update assignment to in_progress if provided
+    if (assignmentId) {
+      await supabase
+        .from("work_assignments")
+        .update({ status: "in_progress" })
+        .eq("id", assignmentId);
+    }
+
+    // Create work block
+    const { error: blockInsertError } = await supabase
+      .from("work_blocks")
+      .insert({
+        user_id: profile.id,
+        session_id: sessionId,
+        assignment_id: assignmentId || null,
+        work_date: today,
+        title: currentWorkTitle,
+        note: currentWorkNote || "",
+        status: "active",
+        started_at: now,
+        total_minutes: 0
+      });
+
+    if (blockInsertError) throw blockInsertError;
 
     revalidatePath("/admin/my-work");
     revalidatePath("/admin/dashboard");
@@ -289,6 +333,29 @@ export async function endWork() {
       return { error: "Session has not been started yet." };
     }
 
+    // Find active work block to auto-finish
+    const { data: activeBlock } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("session_id", session.id)
+      .eq("status", "active")
+      .maybeSingle();
+
+    if (activeBlock) {
+      const start = new Date(activeBlock.started_at);
+      const diffMs = now.getTime() - start.getTime();
+      const diffMins = Math.max(0, Math.round(diffMs / 60000));
+
+      await supabase
+        .from("work_blocks")
+        .update({
+          status: "done",
+          ended_at: now.toISOString(),
+          total_minutes: diffMins
+        })
+        .eq("id", activeBlock.id);
+    }
+
     let finalBreakMinutes = session.break_minutes || 0;
     if (session.status === "break" && session.break_started_at) {
       const breakStart = new Date(session.break_started_at);
@@ -309,14 +376,14 @@ export async function endWork() {
         ended_at: now.toISOString(),
         break_started_at: null,
         break_minutes: finalBreakMinutes,
-        total_minutes: finalTotalMinutes
+        total_minutes: finalTotalMinutes,
+        current_work_title: null,
+        current_work_note: "",
+        assignment_id: null
       })
       .eq("id", session.id);
 
     if (updateError) throw updateError;
-
-    // If an assignment was active, update status to done or in_progress? Keep as is,
-    // assignment status is manually set to done, or remains in_progress.
 
     revalidatePath("/admin/my-work");
     revalidatePath("/admin/dashboard");
@@ -324,6 +391,77 @@ export async function endWork() {
   } catch (error) {
     console.error("Error in endWork:", error);
     return { error: error.message || "Failed to end work." };
+  }
+}
+
+/**
+ * Finish the currently active work block.
+ */
+export async function finishCurrentWork() {
+  const profile = await requireAuth();
+  try {
+    const supabase = await createClient();
+    const today = getTodayDateString();
+    const now = new Date();
+
+    // Find today's session
+    const { data: session } = await supabase
+      .from("work_sessions")
+      .select("*")
+      .eq("user_id", profile.id)
+      .eq("work_date", today)
+      .maybeSingle();
+
+    if (!session) {
+      return { error: "No active daily work session found." };
+    }
+
+    // Find active work block for today/session
+    const { data: activeBlock } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("session_id", session.id)
+      .eq("status", "active")
+      .maybeSingle();
+
+    if (!activeBlock) {
+      return { error: "No active work block found to finish." };
+    }
+
+    const start = new Date(activeBlock.started_at);
+    const diffMs = now.getTime() - start.getTime();
+    const diffMins = Math.max(0, Math.round(diffMs / 60000));
+
+    // Set work_block done
+    const { error: blockErr } = await supabase
+      .from("work_blocks")
+      .update({
+        status: "done",
+        ended_at: now.toISOString(),
+        total_minutes: diffMins
+      })
+      .eq("id", activeBlock.id);
+
+    if (blockErr) throw blockErr;
+
+    // Clear session current work fields (title = null, current_work_note = '', assignment_id = null)
+    const { error: sessionErr } = await supabase
+      .from("work_sessions")
+      .update({
+        current_work_title: null,
+        current_work_note: "",
+        assignment_id: null
+      })
+      .eq("id", session.id);
+
+    if (sessionErr) throw sessionErr;
+
+    revalidatePath("/admin/my-work");
+    revalidatePath("/admin/dashboard");
+    return { success: true };
+  } catch (error) {
+    console.error("Error in finishCurrentWork:", error);
+    return { error: error.message || "Failed to finish current work block." };
   }
 }
 
@@ -612,12 +750,20 @@ export async function getAdminDashboardData() {
       }));
     };
 
+    // Fetch today's work blocks for all users
+    const { data: todayWorkBlocks } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("work_date", today)
+      .order("started_at", { ascending: true });
+
     return {
       profiles: profiles || [],
       sessions: sessions || [],
       logs: logs || [],
       todayAssignments: mapAssignmentNames(todayAssignments),
       tomorrowAssignments: mapAssignmentNames(tomorrowAssignments),
+      todayWorkBlocks: todayWorkBlocks || [],
       stats: {
         activeNow,
         onBreak,
@@ -633,6 +779,7 @@ export async function getAdminDashboardData() {
       logs: [],
       todayAssignments: [],
       tomorrowAssignments: [],
+      todayWorkBlocks: [],
       stats: { activeNow: 0, onBreak: 0, totalHoursToday: 0, reportsSubmitted: 0 }
     };
   }
@@ -766,10 +913,25 @@ export async function getReportsData(range) {
       return a.name.localeCompare(b.name);
     });
 
+    // Fetch work blocks in range
+    const { data: rawWorkBlocks } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .gte("work_date", startDate)
+      .lte("work_date", endDate)
+      .order("started_at", { ascending: true });
+
+    // Map member names onto work blocks
+    const workBlocksHistory = rawWorkBlocks ? rawWorkBlocks.map(block => ({
+      ...block,
+      memberName: profileMap[block.user_id] || "Unknown"
+    })) : [];
+
     return {
       summary,
       history,
       assignments,
+      workBlocksHistory,
       startDate,
       endDate
     };
@@ -779,6 +941,7 @@ export async function getReportsData(range) {
       summary: [],
       history: [],
       assignments: [],
+      workBlocksHistory: [],
       startDate: "",
       endDate: ""
     };
