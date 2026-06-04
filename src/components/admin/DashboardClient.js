@@ -23,6 +23,12 @@ export default function DashboardClient({ initialData }) {
   const router = useRouter();
   const { profiles, sessions, logs, todayAssignments, tomorrowAssignments, stats } = initialData;
 
+  // Calculate compact assignment stats
+  const todayPendingCount = todayAssignments.filter(a => a.status === "pending").length;
+  const todayInProgressCount = todayAssignments.filter(a => a.status === "in_progress").length;
+  const todayDoneCount = todayAssignments.filter(a => a.status === "done").length;
+  const tomorrowAssignedCount = tomorrowAssignments.length;
+
   const [assignedTo, setAssignedTo] = useState("");
   const [assignTitle, setAssignTitle] = useState("");
   const [assignDesc, setAssignDesc] = useState("");
@@ -300,6 +306,113 @@ export default function DashboardClient({ initialData }) {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Assigned Work Overview Section */}
+      <div className="space-y-4">
+        <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
+          <ClipboardList className="h-5 w-5 text-emerald-400" />
+          Assigned Work Overview
+        </h3>
+
+        {/* Compact Assignment Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today Pending</span>
+            <span className="text-lg font-bold text-amber-400 mt-1">{todayPendingCount}</span>
+          </div>
+          <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today In Progress</span>
+            <span className="text-lg font-bold text-emerald-400 mt-1">{todayInProgressCount}</span>
+          </div>
+          <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today Done</span>
+            <span className="text-lg font-bold text-blue-400 mt-1">{todayDoneCount}</span>
+          </div>
+          <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Tomorrow Assigned</span>
+            <span className="text-lg font-bold text-neutral-300 mt-1">{tomorrowAssignedCount}</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Today's Assigned Work */}
+          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
+            <h4 className="text-sm font-bold text-neutral-200 mb-4 pb-2 border-b border-neutral-800/40">
+              Today's Assignments ({todayAssignments.length})
+            </h4>
+            
+            {todayAssignments.length === 0 ? (
+              <div className="text-center py-8 text-xs text-neutral-600 italic">
+                No tasks assigned for today.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {todayAssignments.map(task => (
+                  <div key={task.id} className="p-3 bg-neutral-950/20 border border-neutral-800/40 rounded-xl space-y-2">
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <h5 className="font-semibold text-neutral-200 text-sm">{task.title}</h5>
+                        {task.description && (
+                          <p className="text-xs text-neutral-500 mt-1">{task.description}</p>
+                        )}
+                      </div>
+                      <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded border shrink-0 ${
+                        task.status === "done" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                        task.status === "in_progress" ? "bg-blue-500/10 border-blue-500/20 text-blue-400 font-semibold animate-pulse" :
+                        task.status === "cancelled" ? "bg-neutral-800 border-neutral-700 text-neutral-500" :
+                        "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                      }`}>
+                        {task.status.replace("_", " ")}
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between text-[10px] text-neutral-500 pt-1.5 border-t border-neutral-800/30">
+                      <span>Assigned to: <strong className="text-neutral-300">{task.assignedToName}</strong></span>
+                      <span>By: <strong className="text-neutral-400">{task.assignedByName}</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Tomorrow's Assigned Work */}
+          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
+            <h4 className="text-sm font-bold text-neutral-200 mb-4 pb-2 border-b border-neutral-800/40">
+              Tomorrow's Assignments ({tomorrowAssignments.length})
+            </h4>
+
+            {tomorrowAssignments.length === 0 ? (
+              <div className="text-center py-8 text-xs text-neutral-600 italic">
+                No tasks assigned for tomorrow yet.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {tomorrowAssignments.map(task => (
+                  <div key={task.id} className="p-3 bg-neutral-950/20 border border-neutral-800/40 rounded-xl space-y-2">
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <h5 className="font-semibold text-neutral-200 text-sm">{task.title}</h5>
+                        {task.description && (
+                          <p className="text-xs text-neutral-500 mt-1">{task.description}</p>
+                        )}
+                      </div>
+                      <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded border bg-neutral-800 border-neutral-750 text-neutral-400 shrink-0">
+                        Upcoming
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between text-[10px] text-neutral-500 pt-1.5 border-t border-neutral-800/30">
+                      <span>Assigned to: <strong className="text-neutral-300">{task.assignedToName}</strong></span>
+                      <span>By: <strong className="text-neutral-400">{task.assignedByName}</strong></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

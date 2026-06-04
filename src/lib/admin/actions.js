@@ -595,12 +595,29 @@ export async function getAdminDashboardData() {
 
     const reportsSubmitted = logs ? logs.filter(l => l.submitted_at !== null).length : 0;
 
+    // Helper map to lookup profile names
+    const profileMap = {};
+    if (profiles) {
+      profiles.forEach(p => {
+        profileMap[p.id] = p.name;
+      });
+    }
+
+    const mapAssignmentNames = (list) => {
+      if (!list) return [];
+      return list.map(item => ({
+        ...item,
+        assignedToName: profileMap[item.assigned_to] || "Unknown",
+        assignedByName: profileMap[item.assigned_by] || "Unknown"
+      }));
+    };
+
     return {
       profiles: profiles || [],
       sessions: sessions || [],
       logs: logs || [],
-      todayAssignments: todayAssignments || [],
-      tomorrowAssignments: tomorrowAssignments || [],
+      todayAssignments: mapAssignmentNames(todayAssignments),
+      tomorrowAssignments: mapAssignmentNames(tomorrowAssignments),
       stats: {
         activeNow,
         onBreak,
@@ -666,6 +683,28 @@ export async function getReportsData(range) {
 
     if (lErr) throw lErr;
 
+    // Fetch assignments in range
+    const { data: rawAssignments } = await supabase
+      .from("work_assignments")
+      .select("*")
+      .gte("work_date", startDate)
+      .lte("work_date", endDate)
+      .order("work_date", { ascending: false });
+
+    // Map names for assignments
+    const profileMap = {};
+    if (profiles) {
+      profiles.forEach(p => {
+        profileMap[p.id] = p.name;
+      });
+    }
+
+    const assignments = rawAssignments ? rawAssignments.map(item => ({
+      ...item,
+      assignedToName: profileMap[item.assigned_to] || "Unknown",
+      assignedByName: profileMap[item.assigned_by] || "Unknown"
+    })) : [];
+
     // Process summary details per member
     const summary = profiles.map(member => {
       const memberSessions = sessions ? sessions.filter(s => s.user_id === member.id) : [];
@@ -730,6 +769,7 @@ export async function getReportsData(range) {
     return {
       summary,
       history,
+      assignments,
       startDate,
       endDate
     };
@@ -738,6 +778,7 @@ export async function getReportsData(range) {
     return {
       summary: [],
       history: [],
+      assignments: [],
       startDate: "",
       endDate: ""
     };

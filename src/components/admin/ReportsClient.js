@@ -16,7 +16,7 @@ import {
 
 export default function ReportsClient({ initialData, currentRange }) {
   const router = useRouter();
-  const { summary, history, startDate, endDate } = initialData;
+  const { summary, history, assignments = [], startDate, endDate } = initialData;
 
   const handleRangeChange = (range) => {
     router.push(`/admin/reports?range=${range}`);
@@ -113,6 +113,71 @@ export default function ReportsClient({ initialData, currentRange }) {
           </div>
         </div>
 
+      </div>
+
+      {/* Assigned Work in Selected Period Section */}
+      <div className="space-y-4">
+        <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
+          <FileSpreadsheet className="h-5 w-5 text-emerald-400" />
+          Assigned Work in Selected Period ({assignments.length})
+        </h3>
+
+        {assignments.length === 0 ? (
+          <div className="text-center py-12 border border-dashed border-neutral-800/60 rounded-2xl bg-neutral-900/10 text-xs text-neutral-500 font-medium">
+            No work assignments found for the selected period.
+          </div>
+        ) : (
+          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-800/80 text-neutral-400 text-xs uppercase tracking-wider">
+                    <th className="pb-3 font-semibold">Date</th>
+                    <th className="pb-3 font-semibold">Assigned To</th>
+                    <th className="pb-3 font-semibold">Title</th>
+                    <th className="pb-3 font-semibold">Status</th>
+                    <th className="pb-3 font-semibold">Assigned By</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/40">
+                  {assignments.map(task => (
+                    <tr key={task.id} className="text-neutral-300">
+                      <td className="py-3.5 font-mono text-xs text-neutral-400">
+                        {task.work_date}
+                      </td>
+                      <td className="py-3.5 font-semibold text-neutral-100">
+                        {task.assignedToName}
+                      </td>
+                      <td className="py-3.5">
+                        <span className="font-medium text-neutral-200 block">
+                          {task.title}
+                        </span>
+                        {task.description && (
+                          <span className="text-xs text-neutral-500 block max-w-md truncate">
+                            {task.description}
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 text-xs">
+                        <span className={`px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[9px] border ${
+                          task.status === "done" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                          task.status === "in_progress" ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
+                          task.status === "cancelled" ? "bg-neutral-800 border-neutral-700 text-neutral-500" :
+                          "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                        }`}>
+                          {task.status.replace("_", " ")}
+                        </span>
+                      </td>
+                      <td className="py-3.5 text-xs text-neutral-400">
+                        {task.assignedByName}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* History Log Section */}
