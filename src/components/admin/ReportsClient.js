@@ -16,7 +16,7 @@ import {
 
 export default function ReportsClient({ initialData, currentRange }) {
   const router = useRouter();
-  const { summary, history, assignments = [], startDate, endDate } = initialData;
+  const { summary, history, assignments = [], workBlocksHistory = [], startDate, endDate } = initialData;
 
   const handleRangeChange = (range) => {
     router.push(`/admin/reports?range=${range}`);
@@ -173,6 +173,84 @@ export default function ReportsClient({ initialData, currentRange }) {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Work Blocks in Selected Period Section */}
+      <div className="space-y-4">
+        <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
+          <Clock className="h-5 w-5 text-emerald-400" />
+          Work Blocks in Selected Period ({workBlocksHistory.length})
+        </h3>
+
+        {workBlocksHistory.length === 0 ? (
+          <div className="text-center py-12 border border-dashed border-neutral-800/60 rounded-2xl bg-neutral-900/10 text-xs text-neutral-500 font-medium">
+            No work blocks recorded in this period.
+          </div>
+        ) : (
+          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-800/80 text-neutral-400 text-xs uppercase tracking-wider">
+                    <th className="pb-3 font-semibold">Date</th>
+                    <th className="pb-3 font-semibold">Member</th>
+                    <th className="pb-3 font-semibold">Work Title</th>
+                    <th className="pb-3 font-semibold">Time</th>
+                    <th className="pb-3 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/40 text-xs">
+                  {workBlocksHistory.map(block => {
+                    const formatBlockDuration = (minutes) => {
+                      if (!minutes || minutes <= 0) return "0m";
+                      const hrs = Math.floor(minutes / 60);
+                      const mins = minutes % 60;
+                      if (hrs > 0) return `${hrs}h ${mins}m`;
+                      return `${mins}m`;
+                    };
+
+                    return (
+                      <tr key={block.id} className="text-neutral-300">
+                        <td className="py-3.5 font-mono text-neutral-450">
+                          {block.work_date}
+                        </td>
+                        <td className="py-3.5 font-semibold text-neutral-100">
+                          {block.memberName}
+                        </td>
+                        <td className="py-3.5">
+                          <span className="font-medium text-neutral-250 block">
+                            {block.title}
+                          </span>
+                          {block.note && (
+                            <span className="text-neutral-500 italic block mt-0.5 max-w-lg truncate">
+                              &ldquo;{block.note}&rdquo;
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3.5 font-mono text-neutral-350">
+                          {block.status === "active" ? (
+                            <span className="text-emerald-450 font-semibold">Active</span>
+                          ) : (
+                            formatBlockDuration(block.total_minutes)
+                          )}
+                        </td>
+                        <td className="py-3.5">
+                          <span className={`px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[9px] border ${
+                            block.status === "done" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                            block.status === "active" ? "bg-blue-500/10 border-blue-500/20 text-blue-400 animate-pulse" :
+                            "bg-red-500/10 border-red-500/20 text-red-400"
+                          }`}>
+                            {block.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
