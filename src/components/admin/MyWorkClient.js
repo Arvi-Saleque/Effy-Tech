@@ -53,10 +53,6 @@ export default function MyWorkClient({ initialData }) {
   const router = useRouter();
   const { profile, todaySession, todayLog, todayWorkBlocks = [], myTasks = [], recentDoneTasks = [] } = initialData;
 
-  const [currentWorkTitle, setCurrentWorkTitle] = useState("");
-  const [currentWorkNote, setCurrentWorkNote] = useState("");
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState(null);
-
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
@@ -123,38 +119,6 @@ export default function MyWorkClient({ initialData }) {
     }
   };
 
-  const handleManualStart = async (e) => {
-    e.preventDefault();
-    if (!currentWorkTitle.trim()) {
-      setErrorMsg("Please enter what you are working on.");
-      return;
-    }
-
-    setIsLoading(true);
-    clearMessages();
-
-    try {
-      const res = await startWork({
-        currentWorkTitle,
-        currentWorkNote,
-        assignmentId: selectedAssignmentId
-      });
-
-      if (res.error) {
-        setErrorMsg(res.error);
-      } else {
-        setSuccessMsg("Task started successfully!");
-        setCurrentWorkTitle("");
-        setCurrentWorkNote("");
-        setSelectedAssignmentId(null);
-        router.refresh();
-      }
-    } catch (err) {
-      setErrorMsg("Failed to start task.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleStartAssignment = async (title, id) => {
     setIsLoading(true);
@@ -292,7 +256,7 @@ export default function MyWorkClient({ initialData }) {
             <button
               onClick={() => handleStartAssignment(task.title, task.id)}
               disabled={!!activeBlock || isEnded}
-              title={activeBlock ? "Finish current task first" : ""}
+              title={activeBlock ? "Finish or complete the active task first." : ""}
               className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Play className="h-3 w-3 fill-emerald-400/20" />
@@ -510,90 +474,22 @@ export default function MyWorkClient({ initialData }) {
 
         {/* Right Column: Active status notice and Manual Task Form */}
         <div className="lg:col-span-1 space-y-6">
-          {/* No active task notice */}
-          {todaySession && status === "active" && !activeBlock && !isEnded && (
-            <div className="p-4 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl flex items-start gap-2.5 text-xs">
-              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-bold">No task is active now.</p>
-                <p className="mt-0.5 text-neutral-450 leading-relaxed">
-                  Start your next task below, or end the full workday if you are done for today.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Manual Tracker Start Form */}
+          {/* Empty state instruction card when no task is active */}
           {!activeBlock && !isEnded && (
-            <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
-              <h3 className="text-lg font-bold text-neutral-100 mb-4">
-                {!todaySession ? "Start Your First Task" : "Start Next Task"}
-              </h3>
-              
-              <form onSubmit={handleManualStart} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
-                    What task are you working on? <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Website layout adjustments, Supabase APIs..."
-                    value={currentWorkTitle}
-                    onChange={(e) => setCurrentWorkTitle(e.target.value)}
-                    className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2.5 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500/50"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
-                    Task Note / Context (Optional)
-                  </label>
-                  <textarea
-                    placeholder="Additional context on current work..."
-                    value={currentWorkNote}
-                    onChange={(e) => setCurrentWorkNote(e.target.value)}
-                    rows={2}
-                    className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2.5 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500/50"
-                  />
-                </div>
-
-                {myTasks.length > 0 && (
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
-                      Associate with Task (Optional)
-                    </label>
-                    <select
-                      value={selectedAssignmentId || ""}
-                      onChange={(e) => setSelectedAssignmentId(e.target.value || null)}
-                      className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-3 py-2.5 text-sm text-neutral-300 focus:outline-none focus:border-emerald-500/50"
-                    >
-                      <option value="" className="bg-neutral-950 text-neutral-450">-- None --</option>
-                      {myTasks
-                        .filter(a => a.status !== "done")
-                        .map(a => (
-                          <option key={a.id} value={a.id} className="bg-neutral-950 text-neutral-200">
-                            {a.title} ({a.status === "in_progress" ? "In Progress" : "To Do"})
-                          </option>
-                        ))
-                      }
-                    </select>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-bold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Play className="h-4 w-4 fill-emerald-950" />
-                  )}
-                  Start Task
-                </button>
-              </form>
+            <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-3">
+              <div className="flex items-center gap-2 text-teal-400">
+                <AlertCircle className="h-5 w-5 shrink-0" />
+                <h3 className="text-base font-bold text-neutral-100">No task is active</h3>
+              </div>
+              {myTasks.length > 0 ? (
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Start a task from your board below. Tasks move from To Do &rarr; In Progress &rarr; Done.
+                </p>
+              ) : (
+                <p className="text-xs text-neutral-500 font-medium leading-relaxed">
+                  No assigned tasks available. Ask an admin/founder to create a task from the dashboard.
+                </p>
+              )}
             </div>
           )}
 
@@ -694,9 +590,13 @@ export default function MyWorkClient({ initialData }) {
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-semibold text-neutral-200">{block.title}</span>
-                        {linkedAssignment && (
+                        {linkedAssignment ? (
                           <span className="text-[10px] bg-neutral-850 text-neutral-450 px-1.5 py-0.5 rounded border border-neutral-800/40">
                             Task: {linkedAssignment.title}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] bg-neutral-950/20 text-neutral-505 px-1.5 py-0.5 rounded border border-neutral-800/20 italic">
+                            Manual work block
                           </span>
                         )}
                       </div>

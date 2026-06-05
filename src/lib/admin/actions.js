@@ -110,8 +110,8 @@ export async function getMyWorkData() {
 export async function startWork({ currentWorkTitle, currentWorkNote, assignmentId }) {
   const profile = await requireAuth();
   try {
-    if (!currentWorkTitle || currentWorkTitle.trim() === "") {
-      return { error: "Please enter what you are working on." };
+    if (!assignmentId) {
+      return { error: "Please start work from an assigned task." };
     }
 
     const supabase = await createClient();
@@ -148,23 +148,27 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       }
     }
 
-    // Verify assignment if provided
-    if (assignmentId) {
-      const { data: assignment, error: assignError } = await supabase
-        .from("work_assignments")
-        .select("*")
-        .eq("id", assignmentId)
-        .eq("assigned_to", profile.id)
-        .maybeSingle();
+    // Verify assignment
+    const { data: assignment, error: assignError } = await supabase
+      .from("work_assignments")
+      .select("*")
+      .eq("id", assignmentId)
+      .eq("assigned_to", profile.id)
+      .maybeSingle();
 
-      if (assignError || !assignment) {
-        return { error: "Selected assignment does not belong to you or does not exist." };
-      }
-
-      if (assignment.status !== "pending" && assignment.status !== "in_progress") {
-        return { error: "Selected assignment is already done or cancelled." };
-      }
+    if (assignError || !assignment) {
+      return { error: "Selected assignment does not belong to you or does not exist." };
     }
+
+    if (assignment.status !== "pending" && assignment.status !== "in_progress") {
+      return { error: "Selected assignment is already done or cancelled." };
+    }
+
+    const titleToUse = (currentWorkTitle || assignment.title || "").trim();
+    if (!titleToUse) {
+      return { error: "Task title cannot be empty." };
+    }
+    const noteToUse = currentWorkNote || assignment.description || "";
 
     let sessionId;
     if (existingSession) {
@@ -174,9 +178,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
         .from("work_sessions")
         .update({
           status: "active",
-          current_work_title: currentWorkTitle,
-          current_work_note: currentWorkNote || "",
-          assignment_id: assignmentId || null,
+          current_work_title: titleToUse,
+          current_work_note: noteToUse,
+          assignment_id: assignmentId,
           started_at: existingSession.started_at || now,
           ended_at: null,
           break_started_at: null
@@ -192,9 +196,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           user_id: profile.id,
           work_date: today,
           status: "active",
-          current_work_title: currentWorkTitle,
-          current_work_note: currentWorkNote || "",
-          assignment_id: assignmentId || null,
+          current_work_title: titleToUse,
+          current_work_note: noteToUse,
+          assignment_id: assignmentId,
           started_at: now,
           break_minutes: 0,
           total_minutes: 0
@@ -206,13 +210,11 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       sessionId = newSession.id;
     }
 
-    // Update assignment to in_progress if provided
-    if (assignmentId) {
-      await supabase
-        .from("work_assignments")
-        .update({ status: "in_progress" })
-        .eq("id", assignmentId);
-    }
+    // Update assignment to in_progress
+    await supabase
+      .from("work_assignments")
+      .update({ status: "in_progress" })
+      .eq("id", assignmentId);
 
     // Create work block
     const { error: blockInsertError } = await supabase
@@ -220,10 +222,10 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       .insert({
         user_id: profile.id,
         session_id: sessionId,
-        assignment_id: assignmentId || null,
+        assignment_id: assignmentId,
         work_date: today,
-        title: currentWorkTitle,
-        note: currentWorkNote || "",
+        title: titleToUse,
+        note: noteToUse,
         status: "active",
         started_at: now,
         total_minutes: 0
