@@ -30,14 +30,6 @@ export async function getMyWorkData() {
       .eq("work_date", today)
       .maybeSingle();
 
-    // Get today's daily work log
-    const { data: todayLog, error: logError } = await supabase
-      .from("daily_work_logs")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("work_date", today)
-      .maybeSingle();
-
     // Get today's assignments
     const { data: todayAssignments, error: todayAssignError } = await supabase
       .from("work_assignments")
@@ -82,7 +74,6 @@ export async function getMyWorkData() {
     return {
       profile,
       todaySession: todaySession || null,
-      todayLog: todayLog || null,
       todayAssignments: todayAssignments || [],
       tomorrowAssignments: tomorrowAssignments || [],
       todayWorkBlocks: todayWorkBlocks || [],
@@ -94,7 +85,6 @@ export async function getMyWorkData() {
     return {
       profile: null,
       todaySession: null,
-      todayLog: null,
       todayAssignments: [],
       tomorrowAssignments: [],
       todayWorkBlocks: [],
@@ -565,139 +555,7 @@ export async function completeCurrentTask() {
   }
 }
 
-/**
- * Save daily work log draft.
- */
-export async function saveDailyLog({ workNote, blockers, tomorrowPlan }) {
-  const profile = await requireAuth();
-  try {
-    const supabase = await createClient();
-    const today = getTodayDateString();
 
-    // Must have today's session
-    const { data: session } = await supabase
-      .from("work_sessions")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("work_date", today)
-      .maybeSingle();
-
-    if (!session) {
-      return { error: "You must start a work session before saving notes." };
-    }
-
-    const { data: existingLog } = await supabase
-      .from("daily_work_logs")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("work_date", today)
-      .maybeSingle();
-
-    if (existingLog) {
-      if (existingLog.submitted_at) {
-        return { error: "Daily work log is already submitted and locked." };
-      }
-      const { error: updateError } = await supabase
-        .from("daily_work_logs")
-        .update({
-          work_note: workNote || "",
-          blockers: blockers || "",
-          tomorrow_plan: tomorrowPlan || ""
-        })
-        .eq("id", existingLog.id);
-
-      if (updateError) throw updateError;
-    } else {
-      const { error: insertError } = await supabase
-        .from("daily_work_logs")
-        .insert({
-          user_id: profile.id,
-          session_id: session.id,
-          work_date: today,
-          work_note: workNote || "",
-          blockers: blockers || "",
-          tomorrow_plan: tomorrowPlan || ""
-        });
-
-      if (insertError) throw insertError;
-    }
-
-    revalidatePath("/admin/my-work");
-    revalidatePath("/admin/dashboard");
-    return { success: true };
-  } catch (error) {
-    console.error("Error in saveDailyLog:", error);
-    return { error: error.message || "Failed to save daily work log." };
-  }
-}
-
-/**
- * Submit daily work log.
- */
-export async function submitDailyLog({ workNote, blockers, tomorrowPlan }) {
-  const profile = await requireAuth();
-  try {
-    const supabase = await createClient();
-    const today = getTodayDateString();
-    const now = new Date().toISOString();
-
-    const { data: session } = await supabase
-      .from("work_sessions")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("work_date", today)
-      .maybeSingle();
-
-    if (!session) {
-      return { error: "You must start a work session before submitting reports." };
-    }
-
-    const { data: existingLog } = await supabase
-      .from("daily_work_logs")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("work_date", today)
-      .maybeSingle();
-
-    if (existingLog) {
-      if (existingLog.submitted_at) {
-        return { error: "Daily work log is already submitted and locked." };
-      }
-      const { error: updateError } = await supabase
-        .from("daily_work_logs")
-        .update({
-          work_note: workNote || "",
-          blockers: blockers || "",
-          tomorrow_plan: tomorrowPlan || "",
-          submitted_at: now
-        })
-        .eq("id", existingLog.id);
-
-      if (updateError) throw updateError;
-    } else {
-      const { error: insertError } = await supabase
-        .from("daily_work_logs")
-        .insert({
-          user_id: profile.id,
-          session_id: session.id,
-          work_date: today,
-          work_note: workNote || "",
-          blockers: blockers || "",
-          tomorrow_plan: tomorrowPlan || "",
-          submitted_at: now
-        });
-
-      if (insertError) throw insertError;
-    }
-
-    revalidatePath("/admin/my-work");
-    revalidatePath("/admin/dashboard");
-    return { success: true };
-  } catch (error) {
-    console.error("Error in submitDailyLog:", error);
-    return { error: error.message || "Failed to submit daily work log." };
-  }
-}
 
 /**
  * Mark an assignment as done.
@@ -801,12 +659,6 @@ export async function getAdminDashboardData() {
       .select("*")
       .eq("work_date", today);
 
-    // Fetch today's daily work logs
-    const { data: logs } = await supabase
-      .from("daily_work_logs")
-      .select("*")
-      .eq("work_date", today);
-
     // Fetch today's assignments
     const { data: todayAssignments } = await supabase
       .from("work_assignments")
@@ -849,8 +701,6 @@ export async function getAdminDashboardData() {
     }
     const totalHoursToday = parseFloat((totalMinutesToday / 60).toFixed(1));
 
-    const reportsSubmitted = logs ? logs.filter(l => l.submitted_at !== null).length : 0;
-
     // Helper map to lookup profile names
     const profileMap = {};
     if (profiles) {
@@ -871,7 +721,6 @@ export async function getAdminDashboardData() {
     return {
       profiles: profiles || [],
       sessions: sessions || [],
-      logs: logs || [],
       todayAssignments: mapAssignmentNames(todayAssignments),
       tomorrowAssignments: mapAssignmentNames(tomorrowAssignments),
       todayWorkBlocks: todayWorkBlocks || [],
@@ -879,8 +728,7 @@ export async function getAdminDashboardData() {
       stats: {
         activeNow,
         onBreak,
-        totalHoursToday,
-        reportsSubmitted
+        totalHoursToday
       }
     };
   } catch (error) {
@@ -888,12 +736,11 @@ export async function getAdminDashboardData() {
     return {
       profiles: [],
       sessions: [],
-      logs: [],
       todayAssignments: [],
       tomorrowAssignments: [],
       todayWorkBlocks: [],
       teamTasks: [],
-      stats: { activeNow: 0, onBreak: 0, totalHoursToday: 0, reportsSubmitted: 0 }
+      stats: { activeNow: 0, onBreak: 0, totalHoursToday: 0 }
     };
   }
 }
@@ -933,15 +780,6 @@ export async function getReportsData(range) {
       .lte("work_date", endDate);
 
     if (sErr) throw sErr;
-
-    // Fetch logs in range
-    const { data: logs, error: lErr } = await supabase
-      .from("daily_work_logs")
-      .select("*")
-      .gte("work_date", startDate)
-      .lte("work_date", endDate);
-
-    if (lErr) throw lErr;
 
     // Fetch assignments in range
     const { data: rawAssignments } = await supabase
@@ -984,7 +822,6 @@ export async function getReportsData(range) {
     // Process summary details per member
     const summary = profiles.map(member => {
       const memberBlocks = rawWorkBlocks ? rawWorkBlocks.filter(b => b.user_id === member.id) : [];
-      const memberLogs = logs ? logs.filter(l => l.user_id === member.id) : [];
       const todaySession = sessions ? sessions.find(s => s.user_id === member.id && s.work_date === today) : null;
 
       const totalMinutes = calculateWorkBlocksDisplayMinutes(memberBlocks, todaySession);
@@ -995,7 +832,6 @@ export async function getReportsData(range) {
       const daysWorked = uniqueDates.size;
 
       const averageHours = daysWorked > 0 ? parseFloat((totalHours / daysWorked).toFixed(1)) : 0;
-      const reportsCount = memberLogs.filter(l => l.submitted_at !== null).length;
 
       return {
         id: member.id,
@@ -1004,16 +840,14 @@ export async function getReportsData(range) {
         role: member.role,
         totalHours,
         daysWorked,
-        averageHours,
-        reportsCount
+        averageHours
       };
     });
 
-    // Process work log history list (join logs & sessions by user/date)
+    // Process work history list (sessions only)
     const history = [];
     if (sessions) {
       sessions.forEach(session => {
-        const matchingLog = logs ? logs.find(l => l.user_id === session.user_id && l.work_date === session.work_date) : null;
         const matchingProfile = profiles.find(p => p.id === session.user_id);
 
         if (matchingProfile) {
@@ -1026,11 +860,7 @@ export async function getReportsData(range) {
             status: session.status,
             current_work_title: session.current_work_title,
             break_minutes: session.break_minutes,
-            total_minutes: calculateWorkBlocksDisplayMinutes(dayBlocks, session),
-            work_note: matchingLog ? matchingLog.work_note : "",
-            blockers: matchingLog ? matchingLog.blockers : "",
-            tomorrow_plan: matchingLog ? matchingLog.tomorrow_plan : "",
-            submitted_at: matchingLog ? matchingLog.submitted_at : null
+            total_minutes: calculateWorkBlocksDisplayMinutes(dayBlocks, session)
           });
         }
       });

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { startWork, takeBreak, resumeWork, endWork, markAssignmentDone, finishCurrentWorkForNow, completeCurrentTask } from "@/lib/admin/actions";
 import StatusBadge from "./StatusBadge";
 import WorkTimer from "./WorkTimer";
-import DailyWorkLogForm from "./DailyWorkLogForm";
 import { formatDateTime } from "@/lib/admin/time";
 import { Loader2, AlertCircle, CheckCircle2, Play, CornerDownRight, ClipboardList, Calendar, Coffee, Clock } from "lucide-react";
 
@@ -51,7 +50,7 @@ function ActiveBlockTimer({ startedAt, session }) {
 
 export default function MyWorkClient({ initialData }) {
   const router = useRouter();
-  const { profile, todaySession, todayLog, todayWorkBlocks = [], myTasks = [], recentDoneTasks = [] } = initialData;
+  const { profile, todaySession, todayWorkBlocks = [], myTasks = [], recentDoneTasks = [] } = initialData;
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -493,8 +492,6 @@ export default function MyWorkClient({ initialData }) {
             </div>
           )}
 
-          {/* EOD Work Log Form */}
-          <DailyWorkLogForm initialLog={todayLog} hasSession={!!todaySession} isEnded={isEnded} />
         </div>
       </div>
 

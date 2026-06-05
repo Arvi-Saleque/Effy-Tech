@@ -84,7 +84,6 @@ export default function ReportsClient({ initialData, currentRange }) {
                     <th className="pb-3 font-semibold">Total Hours</th>
                     <th className="pb-3 font-semibold">Days Worked</th>
                     <th className="pb-3 font-semibold">Avg Hours/Day</th>
-                    <th className="pb-3 font-semibold">Reports Submitted</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-800/40">
@@ -94,7 +93,6 @@ export default function ReportsClient({ initialData, currentRange }) {
                       <td className="py-4 font-mono text-xs text-neutral-200 font-semibold">{item.totalHours}h</td>
                       <td className="py-4 font-mono text-xs">{item.daysWorked}d</td>
                       <td className="py-4 font-mono text-xs text-neutral-400">{item.averageHours}h/d</td>
-                      <td className="py-4 font-mono text-xs text-emerald-400">{item.reportsCount}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -266,20 +264,18 @@ export default function ReportsClient({ initialData, currentRange }) {
       <div className="space-y-4">
         <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
           <Calendar className="h-5 w-5 text-emerald-400" />
-          Work Log History ({history.length})
+          Workday Session History ({history.length})
         </h3>
 
         {history.length === 0 ? (
           <div className="text-center py-16 border border-dashed border-neutral-800/60 rounded-2xl bg-neutral-900/10">
             <span className="text-xs text-neutral-500 font-medium">
-              No historical logs found for the selected period.
+              No historical workday sessions found for the selected period.
             </span>
           </div>
         ) : (
           <div className="space-y-4">
             {history.map((log) => {
-              const hasWorkNote = !!log.work_note;
-              
               return (
                 <div key={log.id} className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-4">
                   
@@ -295,58 +291,31 @@ export default function ReportsClient({ initialData, currentRange }) {
 
                     <div className="flex items-center gap-3 text-xs">
                       <span className="text-neutral-500 font-mono">
-                        Hours: <strong className="text-neutral-200">{(log.total_minutes / 60).toFixed(1)}h</strong> ({formatMinutes(log.total_minutes)})
+                        Hours Worked: <strong className="text-neutral-200">{(log.total_minutes / 60).toFixed(1)}h</strong> ({formatMinutes(log.total_minutes)})
                       </span>
                       <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border ${
-                        log.submitted_at 
-                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
-                          : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                        log.status === "ended" 
+                          ? "bg-neutral-800 border-neutral-700 text-neutral-500" 
+                          : log.status === "break"
+                            ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                            : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                       }`}>
-                        {log.submitted_at ? "Submitted" : "Draft"}
+                        {log.status === "ended" ? "Ended" : log.status === "break" ? "On Break" : "Active"}
                       </span>
                     </div>
                   </div>
 
                   {/* Body description */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                    <div>
+                  {log.current_work_title && (
+                    <div className="text-xs text-neutral-300">
                       <span className="block text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-1">
-                        Current Work Title
+                        Last Active Task
                       </span>
-                      <p className="text-neutral-300">
-                        {log.current_work_title || <span className="text-neutral-600 italic">No activity registered</span>}
+                      <p className="text-neutral-200 font-medium">
+                        {log.current_work_title}
                       </p>
                     </div>
-
-                    <div>
-                      <span className="block text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-1">
-                        Work Accomplished Note
-                      </span>
-                      <p className="text-neutral-300 whitespace-pre-line leading-relaxed">
-                        {log.work_note || <span className="text-neutral-600 italic">No notes written</span>}
-                      </p>
-                    </div>
-
-                    <div className="space-y-3">
-                      {log.blockers && (
-                        <div>
-                          <span className="block text-[10px] text-red-400 font-bold uppercase tracking-wider mb-1">
-                            Blockers
-                          </span>
-                          <p className="text-red-300 leading-relaxed">{log.blockers}</p>
-                        </div>
-                      )}
-                      
-                      {log.tomorrow_plan && (
-                        <div>
-                          <span className="block text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-1">
-                            Tomorrow's Plan
-                          </span>
-                          <p className="text-neutral-400 leading-relaxed">{log.tomorrow_plan}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  )}
 
                 </div>
               );

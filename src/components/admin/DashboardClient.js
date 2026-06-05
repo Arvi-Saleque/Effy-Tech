@@ -22,7 +22,7 @@ import {
 
 export default function DashboardClient({ initialData }) {
   const router = useRouter();
-  const { profiles, sessions, logs, teamTasks = [], todayWorkBlocks = [], stats } = initialData;
+  const { profiles, sessions, teamTasks = [], todayWorkBlocks = [], stats } = initialData;
 
   // Calculate compact assignment stats from task board
   const pendingCount = teamTasks.filter(t => t.status === "pending").length;
@@ -109,7 +109,7 @@ export default function DashboardClient({ initialData }) {
       </div>
 
       {/* Summary Statistics Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
           <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
             <Activity className="h-5 w-5" />
@@ -143,18 +143,6 @@ export default function DashboardClient({ initialData }) {
               Hours Logged Today
             </span>
             <span className="text-xl font-bold text-neutral-100">{stats.totalHoursToday}h</span>
-          </div>
-        </div>
-
-        <div className="bg-neutral-900/40 border border-neutral-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
-            <FileText className="h-5 w-5" />
-          </div>
-          <div>
-            <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider block">
-              Reports Submitted
-            </span>
-            <span className="text-xl font-bold text-neutral-100">{stats.reportsSubmitted}</span>
           </div>
         </div>
       </div>
@@ -351,105 +339,7 @@ export default function DashboardClient({ initialData }) {
         </div>
       </div>
 
-      {/* Today's Work Notes Cards */}
-      <div className="space-y-4">
-        <h3 className="text-base font-bold text-neutral-100">
-          Today's Logs & Work Notes
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {profiles.map(member => {
-            const session = sessions.find(s => s.user_id === member.id);
-            const log = logs.find(l => l.user_id === member.id);
-            const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
-            const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
-            const workedMins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
-            const hasLog = !!log;
-            const isSubmitted = !!(log && log.submitted_at);
 
-            return (
-              <div key={member.id} className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-5 shadow-xl backdrop-blur-xl space-y-3.5">
-                <div className="flex items-center justify-between border-b border-neutral-800/60 pb-3">
-                  <div>
-                    <h4 className="text-sm font-bold text-neutral-100">{member.name}</h4>
-                    <span className="text-[10px] text-neutral-500 font-medium font-mono">
-                      Time: {formatMinutes(workedMins)}
-                    </span>
-                  </div>
-                  
-                  <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border ${
-                    isSubmitted 
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
-                      : hasLog 
-                        ? "bg-amber-500/10 border-amber-500/20 text-amber-400" 
-                        : "bg-neutral-800 border-neutral-700 text-neutral-500"
-                  }`}>
-                    {isSubmitted ? "Submitted" : hasLog ? "Draft" : "No Activity"}
-                  </span>
-                </div>
-
-                <div className="space-y-3 text-xs">
-                  <div>
-                    <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
-                      Current Work
-                    </span>
-                    <div className="text-neutral-300">
-                      {session ? (
-                        session.status === "ended" ? (
-                          <span className="text-neutral-500 italic">Workday Ended</span>
-                        ) : session.status === "break" ? (
-                          activeBlock ? (
-                            <span className="text-neutral-350 font-medium">{activeBlock.title} <span className="text-amber-500/80 text-[10px] uppercase tracking-wider font-semibold">(Paused)</span></span>
-                          ) : (
-                            <span className="text-neutral-600 italic">No active task</span>
-                          )
-                        ) : session.status === "active" ? (
-                          activeBlock ? (
-                            <span className="text-neutral-200 font-medium">{activeBlock.title}</span>
-                          ) : (
-                            <span className="text-neutral-600 italic">No active task</span>
-                          )
-                        ) : (
-                          <span className="text-neutral-650 italic">Offline</span>
-                        )
-                      ) : (
-                        <span className="text-neutral-650 italic">Offline</span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
-                      Work Accomplished
-                    </span>
-                    <p className="text-neutral-300 line-clamp-3">
-                      {log?.work_note || <span className="text-neutral-600 italic">No notes written yet</span>}
-                    </p>
-                  </div>
-
-                  {log?.blockers && (
-                    <div>
-                      <span className="block text-[10px] text-red-400 font-semibold uppercase tracking-wider mb-1">
-                        Blockers
-                      </span>
-                      <p className="text-red-300">{log.blockers}</p>
-                    </div>
-                  )}
-
-                  {log?.tomorrow_plan && (
-                    <div>
-                      <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
-                        Tomorrow's Plan
-                      </span>
-                      <p className="text-neutral-400 line-clamp-2">{log.tomorrow_plan}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Team Task Board Section */}
       <div className="space-y-4">
