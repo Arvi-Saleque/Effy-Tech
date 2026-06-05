@@ -20,6 +20,7 @@ export default function ReportsClient({ initialData, currentRange }) {
 
   const handleRangeChange = (range) => {
     router.push(`/admin/reports?range=${range}`);
+    router.refresh();
   };
 
   // Format chart data: [{ name, hours }]
@@ -119,7 +120,7 @@ export default function ReportsClient({ initialData, currentRange }) {
       <div className="space-y-4">
         <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
           <FileSpreadsheet className="h-5 w-5 text-emerald-400" />
-          Assigned Work in Selected Period ({assignments.length})
+          Task History in Selected Period ({assignments.length})
         </h3>
 
         {assignments.length === 0 ? (
@@ -165,7 +166,10 @@ export default function ReportsClient({ initialData, currentRange }) {
                           task.status === "cancelled" ? "bg-neutral-800 border-neutral-700 text-neutral-500" :
                           "bg-amber-500/10 border-amber-500/20 text-amber-400"
                         }`}>
-                          {task.status.replace("_", " ")}
+                          {task.status === "pending" ? "To Do" :
+                           task.status === "in_progress" ? "In Progress" :
+                           task.status === "done" ? "Done" :
+                           task.status}
                         </span>
                       </td>
                       <td className="py-3.5 text-xs text-neutral-400">

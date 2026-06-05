@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createAssignment } from "@/lib/admin/actions";
-import { calculateSessionDisplayMinutes, formatMinutes, getTomorrowDateString, calculateWorkBlocksDisplayMinutes } from "@/lib/admin/time";
+import { calculateSessionDisplayMinutes, formatMinutes, getTodayDateString, getTomorrowDateString, calculateWorkBlocksDisplayMinutes } from "@/lib/admin/time";
 import StatusBadge from "./StatusBadge";
 import WorkHoursChart from "./WorkHoursChart";
 import { 
@@ -16,23 +16,23 @@ import {
   AlertCircle, 
   CheckCircle2, 
   ArrowRight,
-  ClipboardList
+  ClipboardList,
+  Calendar
 } from "lucide-react";
 
 export default function DashboardClient({ initialData }) {
   const router = useRouter();
-  const { profiles, sessions, logs, todayAssignments, tomorrowAssignments, todayWorkBlocks = [], stats } = initialData;
+  const { profiles, sessions, logs, teamTasks = [], todayWorkBlocks = [], stats } = initialData;
 
-  // Calculate compact assignment stats
-  const todayPendingCount = todayAssignments.filter(a => a.status === "pending").length;
-  const todayInProgressCount = todayAssignments.filter(a => a.status === "in_progress").length;
-  const todayDoneCount = todayAssignments.filter(a => a.status === "done").length;
-  const tomorrowAssignedCount = tomorrowAssignments.length;
+  // Calculate compact assignment stats from task board
+  const pendingCount = teamTasks.filter(t => t.status === "pending").length;
+  const inProgressCount = teamTasks.filter(t => t.status === "in_progress").length;
+  const doneCount = teamTasks.filter(t => t.status === "done").length;
 
   const [assignedTo, setAssignedTo] = useState("");
   const [assignTitle, setAssignTitle] = useState("");
   const [assignDesc, setAssignDesc] = useState("");
-  const [workDate, setWorkDate] = useState(getTomorrowDateString());
+  const [workDate, setWorkDate] = useState(getTodayDateString());
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -451,110 +451,83 @@ export default function DashboardClient({ initialData }) {
         </div>
       </div>
 
-      {/* Assigned Work Overview Section */}
+      {/* Team Task Board Section */}
       <div className="space-y-4">
         <h3 className="text-base font-bold text-neutral-100 flex items-center gap-2">
           <ClipboardList className="h-5 w-5 text-emerald-400" />
-          Assigned Work Overview
+          Team Task Board
         </h3>
 
         {/* Compact Assignment Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
-            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today Pending</span>
-            <span className="text-lg font-bold text-amber-400 mt-1">{todayPendingCount}</span>
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">To Do Tasks</span>
+            <span className="text-lg font-bold text-amber-400 mt-1">{pendingCount}</span>
           </div>
           <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
-            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today In Progress</span>
-            <span className="text-lg font-bold text-emerald-400 mt-1">{todayInProgressCount}</span>
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">In Progress Tasks</span>
+            <span className="text-lg font-bold text-blue-400 mt-1">{inProgressCount}</span>
           </div>
           <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
-            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Today Done</span>
-            <span className="text-lg font-bold text-blue-400 mt-1">{todayDoneCount}</span>
-          </div>
-          <div className="bg-neutral-900/30 border border-neutral-800/60 p-4 rounded-xl flex flex-col justify-between">
-            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Tomorrow Assigned</span>
-            <span className="text-lg font-bold text-neutral-300 mt-1">{tomorrowAssignedCount}</span>
+            <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Completed Tasks</span>
+            <span className="text-lg font-bold text-emerald-400 mt-1">{doneCount}</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Today's Assigned Work */}
-          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
-            <h4 className="text-sm font-bold text-neutral-200 mb-4 pb-2 border-b border-neutral-800/40">
-              Today's Assignments ({todayAssignments.length})
-            </h4>
-            
-            {todayAssignments.length === 0 ? (
-              <div className="text-center py-8 text-xs text-neutral-600 italic">
-                No tasks assigned for today.
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {todayAssignments.map(task => (
-                  <div key={task.id} className="p-3 bg-neutral-950/20 border border-neutral-800/40 rounded-xl space-y-2">
-                    <div className="flex justify-between items-start gap-4">
-                      <div>
-                        <h5 className="font-semibold text-neutral-200 text-sm">{task.title}</h5>
-                        {task.description && (
-                          <p className="text-xs text-neutral-500 mt-1">{task.description}</p>
-                        )}
-                      </div>
-                      <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded border shrink-0 ${
-                        task.status === "done" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                        task.status === "in_progress" ? "bg-blue-500/10 border-blue-500/20 text-blue-400 font-semibold animate-pulse" :
-                        task.status === "cancelled" ? "bg-neutral-800 border-neutral-700 text-neutral-500" :
-                        "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                      }`}>
-                        {task.status.replace("_", " ")}
-                      </span>
-                    </div>
-                    
-                    <div className="flex justify-between text-[10px] text-neutral-500 pt-1.5 border-t border-neutral-800/30">
-                      <span>Assigned to: <strong className="text-neutral-300">{task.assignedToName}</strong></span>
-                      <span>By: <strong className="text-neutral-400">{task.assignedByName}</strong></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Board Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* To Do */}
+          <div className="bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 space-y-4 min-h-[350px]">
+            <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
+              <h4 className="text-sm font-bold text-neutral-300">To Do</h4>
+              <span className="px-2 py-0.5 text-xs font-semibold bg-neutral-800 text-neutral-400 rounded-md">
+                {teamTasks.filter(t => t.status === "pending").length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {teamTasks.filter(t => t.status === "pending").length === 0 ? (
+                <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks in To Do.</div>
+              ) : (
+                teamTasks.filter(t => t.status === "pending").map(task => renderTeamTaskCard(task))
+              )}
+            </div>
           </div>
 
-          {/* Tomorrow's Assigned Work */}
-          <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
-            <h4 className="text-sm font-bold text-neutral-200 mb-4 pb-2 border-b border-neutral-800/40">
-              Tomorrow's Assignments ({tomorrowAssignments.length})
-            </h4>
-
-            {tomorrowAssignments.length === 0 ? (
-              <div className="text-center py-8 text-xs text-neutral-600 italic">
-                No tasks assigned for tomorrow yet.
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {tomorrowAssignments.map(task => (
-                  <div key={task.id} className="p-3 bg-neutral-950/20 border border-neutral-800/40 rounded-xl space-y-2">
-                    <div className="flex justify-between items-start gap-4">
-                      <div>
-                        <h5 className="font-semibold text-neutral-200 text-sm">{task.title}</h5>
-                        {task.description && (
-                          <p className="text-xs text-neutral-500 mt-1">{task.description}</p>
-                        )}
-                      </div>
-                      <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded border bg-neutral-800 border-neutral-750 text-neutral-400 shrink-0">
-                        Upcoming
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between text-[10px] text-neutral-500 pt-1.5 border-t border-neutral-800/30">
-                      <span>Assigned to: <strong className="text-neutral-300">{task.assignedToName}</strong></span>
-                      <span>By: <strong className="text-neutral-400">{task.assignedByName}</strong></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* In Progress */}
+          <div className="bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 space-y-4 min-h-[350px]">
+            <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
+              <h4 className="text-sm font-bold text-blue-400">In Progress</h4>
+              <span className="px-2 py-0.5 text-xs font-semibold bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
+                {teamTasks.filter(t => t.status === "in_progress").length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {teamTasks.filter(t => t.status === "in_progress").length === 0 ? (
+                <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks In Progress.</div>
+              ) : (
+                teamTasks.filter(t => t.status === "in_progress").map(task => renderTeamTaskCard(task))
+              )}
+            </div>
           </div>
+
+          {/* Done */}
+          <div className="bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 space-y-4 min-h-[350px]">
+            <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
+              <h4 className="text-sm font-bold text-emerald-400">Done</h4>
+              <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 rounded-md border border-emerald-500/20">
+                {teamTasks.filter(t => t.status === "done").length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {teamTasks.filter(t => t.status === "done").length === 0 ? (
+                <div className="text-center py-12 text-xs text-neutral-600 italic">No completed tasks.</div>
+              ) : (
+                teamTasks.filter(t => t.status === "done").map(task => renderTeamTaskCard(task))
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -565,7 +538,7 @@ export default function DashboardClient({ initialData }) {
         <div className="lg:col-span-1 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
           <h3 className="text-base font-bold text-neutral-100 mb-4 flex items-center gap-2">
             <UserPlus className="h-5 w-5 text-emerald-400" />
-            Assign Tomorrow's Work
+            Create / Assign Task
           </h3>
 
           {errorMsg && (
@@ -634,7 +607,7 @@ export default function DashboardClient({ initialData }) {
 
             <div>
               <label htmlFor="workDate" className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
-                Target Date
+                Target Date (Optional)
               </label>
               <input
                 type="date"
@@ -642,7 +615,6 @@ export default function DashboardClient({ initialData }) {
                 value={workDate}
                 onChange={(e) => setWorkDate(e.target.value)}
                 className="w-full bg-neutral-950/40 border border-neutral-800/80 rounded-xl px-4 py-2 text-sm text-neutral-300 focus:outline-none focus:border-emerald-500/50"
-                required
               />
             </div>
 
@@ -656,69 +628,18 @@ export default function DashboardClient({ initialData }) {
               ) : (
                 <UserPlus className="h-4 w-4" />
               )}
-              Assign Task
+              Create Task
             </button>
           </form>
         </div>
 
-        {/* Tomorrow's Work Assignment Board */}
-        <div className="lg:col-span-2 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <h3 className="text-base font-bold text-neutral-100 mb-4 flex items-center gap-2">
-              <ClipboardList className="h-5 w-5 text-emerald-400" />
-              Tomorrow's Work Assignments
-            </h3>
-
-            {tomorrowAssignments.length === 0 ? (
-              <div className="text-center py-16 border border-dashed border-neutral-800/60 rounded-xl bg-neutral-950/10">
-                <span className="text-xs text-neutral-500 font-medium">
-                  No tasks assigned for tomorrow yet.
-                </span>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-neutral-800/80 text-neutral-400 text-xs uppercase tracking-wider">
-                      <th className="pb-3 font-semibold">Assigned To</th>
-                      <th className="pb-3 font-semibold">Task</th>
-                      <th className="pb-3 font-semibold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-800/40">
-                    {tomorrowAssignments.map(task => (
-                      <tr key={task.id} className="text-neutral-300">
-                        <td className="py-3 font-semibold text-neutral-100">
-                          {getProfileName(task.assigned_to)}
-                        </td>
-                        <td className="py-3">
-                          <span className="font-medium text-neutral-200 block">
-                            {task.title}
-                          </span>
-                          {task.description && (
-                            <span className="text-xs text-neutral-500 block max-w-xs truncate">
-                              {task.description}
-                            </span>
-                          )}
-                        </td>
-                        <td className="py-3 text-xs">
-                          <span className={`px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[9px] border ${
-                            task.status === "done"
-                              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                              : task.status === "in_progress"
-                                ? "bg-blue-500/10 border-blue-500/20 text-blue-400"
-                                : "bg-neutral-800 border-neutral-700 text-neutral-400"
-                          }`}>
-                            {task.status.replace("_", " ")}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+        {/* Task Management info box */}
+        <div className="lg:col-span-2 bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-center items-center text-center">
+          <ClipboardList className="h-12 w-12 text-neutral-600 mb-3" />
+          <h4 className="text-neutral-300 font-bold mb-1">Task Management</h4>
+          <p className="text-xs text-neutral-500 max-w-sm leading-relaxed">
+            Create and assign tasks to team members. They will appear on their boards in the To Do column, and they can start tracking work blocks against them.
+          </p>
         </div>
 
       </div>
@@ -726,3 +647,35 @@ export default function DashboardClient({ initialData }) {
     </div>
   );
 }
+
+// Render task card helper for team task board
+const renderTeamTaskCard = (task) => {
+  const isDone = task.status === "done";
+  return (
+    <div key={task.id} className="p-4 bg-neutral-900/60 border border-neutral-800/80 rounded-xl space-y-3 shadow-md hover:border-neutral-700/80 transition-all duration-200 text-left">
+      <div>
+        <h5 className={`font-semibold text-neutral-200 text-sm ${isDone ? "line-through text-neutral-450" : ""}`}>
+          {task.title}
+        </h5>
+        {task.description && (
+          <p className={`text-xs mt-1.5 leading-relaxed whitespace-pre-wrap ${isDone ? "text-neutral-500" : "text-neutral-450"}`}>
+            {task.description}
+          </p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5 pt-2 border-t border-neutral-800/40 text-[10px] text-neutral-500">
+        <div className="flex justify-between items-center">
+          <span>Assigned to: <strong className="text-neutral-300">{task.assignedToName}</strong></span>
+          <span>By: <strong className="text-neutral-400">{task.assignedByName}</strong></span>
+        </div>
+        {task.work_date && (
+          <div className="flex items-center gap-1.5 text-neutral-400 font-mono mt-0.5">
+            <Calendar className="h-3 w-3 text-neutral-500" />
+            <span>Target: {task.work_date}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
