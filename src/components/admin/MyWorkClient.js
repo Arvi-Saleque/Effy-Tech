@@ -52,6 +52,7 @@ export default function MyWorkClient({ initialData }) {
   const isEnded = status === "ended";
 
   const activeBlock = todayWorkBlocks.find(b => b.status === "active");
+  const completedWorkBlocks = todayWorkBlocks.filter(b => b.status !== "active");
 
   const clearMessages = () => {
     setErrorMsg(null);
@@ -67,11 +68,11 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg("Current work block finished successfully.");
+        setSuccessMsg("Task finished successfully.");
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to finish current work block.");
+      setErrorMsg("Failed to finish current task.");
     } finally {
       setIsLoading(false);
     }
@@ -97,14 +98,14 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg("Session started successfully!");
+        setSuccessMsg("Task started successfully!");
         setCurrentWorkTitle("");
         setCurrentWorkNote("");
         setSelectedAssignmentId(null);
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to start session.");
+      setErrorMsg("Failed to start task.");
     } finally {
       setIsLoading(false);
     }
@@ -124,11 +125,11 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg(`Started work on: "${title}"`);
+        setSuccessMsg(`Started task: "${title}"`);
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to start assignment work.");
+      setErrorMsg("Failed to start assignment task.");
     } finally {
       setIsLoading(false);
     }
@@ -143,11 +144,11 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg("Break started.");
+        setSuccessMsg("Task paused.");
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to start break.");
+      setErrorMsg("Failed to pause task.");
     } finally {
       setIsLoading(false);
     }
@@ -162,20 +163,26 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg("Work resumed.");
+        setSuccessMsg("Task resumed.");
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to resume work.");
+      setErrorMsg("Failed to resume task.");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleEndWork = async () => {
-    if (!confirm("Are you sure you want to end work for today? This will record your total time and cannot be restarted.")) {
-      return;
-    }
+    const firstConfirm = confirm(
+      "End full workday for today? This is not for finishing one task. Use 'Finish This Task' if you only completed the current task."
+    );
+    if (!firstConfirm) return;
+
+    const secondConfirm = confirm(
+      "Final confirmation: this will close your full workday, calculate today's total time, auto-finish any active task, and you cannot start another task today. Continue?"
+    );
+    if (!secondConfirm) return;
 
     setIsLoading(true);
     clearMessages();
@@ -185,11 +192,11 @@ export default function MyWorkClient({ initialData }) {
       if (res.error) {
         setErrorMsg(res.error);
       } else {
-        setSuccessMsg("Work session ended successfully.");
+        setSuccessMsg("Workday ended successfully.");
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to end work session.");
+      setErrorMsg("Failed to end workday.");
     } finally {
       setIsLoading(false);
     }
@@ -251,58 +258,94 @@ export default function MyWorkClient({ initialData }) {
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <span>{successMsg}</span>
             </div>
-          )}
-
-          {/* Current Active Work Block Display */}
+          )}          {/* Current Active Task Card */}
           {activeBlock && (
-            <div className="mb-6 p-4 bg-neutral-950/30 border border-neutral-850/60 rounded-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="mb-6 p-6 bg-neutral-900/60 border border-emerald-500/30 rounded-2xl shadow-lg shadow-emerald-950/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-4 border-b border-neutral-800/60">
                 <div>
-                  <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold block mb-1">
-                    Current Active Task
-                  </span>
-                  <h3 className="text-base font-bold text-neutral-200 flex items-center gap-2">
-                    <CornerDownRight className="h-4 w-4 text-emerald-400 shrink-0" />
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold block">
+                      Current Active Task
+                    </span>
+                    {status === "break" && (
+                      <span className="text-[9px] bg-amber-500/15 border border-amber-500/30 text-amber-400 font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+                        Paused / On Break
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-extrabold text-neutral-100 flex items-center gap-2">
+                    <CornerDownRight className="h-5 w-5 text-emerald-400 shrink-0" />
                     {activeBlock.title}
                   </h3>
                   {activeBlock.note && (
-                    <p className="text-xs text-neutral-400 pl-6 mt-1 italic">
+                    <p className="text-xs text-neutral-400 pl-7 mt-1.5 italic leading-relaxed">
                       &ldquo;{activeBlock.note}&rdquo;
                     </p>
                   )}
-                  <div className="flex flex-wrap gap-4 text-xs text-neutral-500 mt-3 pl-6">
+                  <div className="flex flex-wrap gap-4 text-xs text-neutral-500 mt-3 pl-7">
                     <span>Started: {formatDateTime(activeBlock.started_at)}</span>
                     {status === "break" && (
-                      <span className="text-amber-400 font-medium">Break pauses daily timer only</span>
+                      <span className="text-amber-400 font-medium italic">Break pauses daily timer only</span>
                     )}
                   </div>
                 </div>
-                <div className="sm:text-right shrink-0">
+                <div className="sm:text-right shrink-0 bg-neutral-950/30 border border-neutral-800/40 p-4 rounded-xl">
                   <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold block mb-1">
                     Task Elapsed
                   </span>
-                  <div className="text-xl">
+                  <div className="text-2xl">
                     <ActiveBlockTimer startedAt={activeBlock.started_at} />
                   </div>
                 </div>
               </div>
 
-              {status === "active" && (
-                <div className="mt-4 pl-6">
-                  <button
-                    onClick={handleFinishCurrentWork}
-                    disabled={isLoading}
-                    className="py-1.5 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : (
-                      <CheckCircle2 className="h-3.5 w-3.5" />
+              {/* Task Actions (Pause / Resume / Finish) inside the Active Task Card */}
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                {isLoading ? (
+                  <div className="flex items-center gap-2 text-xs text-neutral-400 py-2">
+                    <Loader2 className="h-4 w-4 animate-spin text-emerald-400" />
+                    <span>Processing...</span>
+                  </div>
+                ) : (
+                  <>
+                    {status === "active" && (
+                      <>
+                        <button
+                          onClick={handleTakeBreak}
+                          className="py-2 px-4 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 hover:border-amber-500/40 text-amber-400 text-xs font-bold rounded-lg transition-all duration-200"
+                        >
+                          Pause / Break
+                        </button>
+                        <button
+                          onClick={handleFinishCurrentWork}
+                          className="py-2 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" />
+                          Finish This Task
+                        </button>
+                      </>
                     )}
-                    Finish Current Work
-                  </button>
-                </div>
-              )}
+                    {status === "break" && (
+                      <>
+                        <button
+                          onClick={handleResumeWork}
+                          className="py-2 px-4 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-xs font-bold rounded-lg transition-all duration-200"
+                        >
+                          Resume Task
+                        </button>
+                        <button
+                          disabled
+                          title="Resume task first to finish"
+                          className="py-2 px-4 bg-neutral-950/20 border border-neutral-900 text-neutral-600 text-xs font-bold rounded-lg opacity-50 cursor-not-allowed flex items-center gap-1.5"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" />
+                          Finish This Task
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           )}
 
@@ -311,49 +354,8 @@ export default function MyWorkClient({ initialData }) {
             <WorkTimer session={todaySession} />
           </div>
 
-          {/* Live Action Timer Controls */}
+          {/* Live Action Timer Controls (ended state banner) */}
           <div className="flex items-center gap-3">
-            {isLoading && (
-              <div className="flex items-center gap-2 text-xs text-neutral-400">
-                <Loader2 className="h-4 w-4 animate-spin text-emerald-400" />
-                <span>Processing...</span>
-              </div>
-            )}
-
-            {!isLoading && status === "active" && (
-              <>
-                <button
-                  onClick={handleTakeBreak}
-                  className="flex-grow py-3 px-4 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 hover:border-amber-500/40 text-amber-400 text-sm font-bold rounded-xl transition-all duration-200"
-                >
-                  Take Break
-                </button>
-                <button
-                  onClick={handleEndWork}
-                  className="flex-grow py-3 px-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-sm font-bold rounded-xl transition-all duration-200"
-                >
-                  End Work
-                </button>
-              </>
-            )}
-
-            {!isLoading && status === "break" && (
-              <>
-                <button
-                  onClick={handleResumeWork}
-                  className="flex-grow py-3 px-4 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-sm font-bold rounded-xl transition-all duration-200"
-                >
-                  Resume Work
-                </button>
-                <button
-                  onClick={handleEndWork}
-                  className="flex-grow py-3 px-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-sm font-bold rounded-xl transition-all duration-200"
-                >
-                  End Work
-                </button>
-              </>
-            )}
-
             {isEnded && (
               <div className="w-full py-4 text-center border border-dashed border-neutral-800 rounded-xl bg-neutral-950/20">
                 <span className="text-sm font-semibold text-neutral-500">
@@ -363,20 +365,19 @@ export default function MyWorkClient({ initialData }) {
             )}
           </div>
 
-          {/* Today's Work Blocks list */}
-          {todayWorkBlocks.length > 0 && (
+          {/* Tasks Today section */}
+          {completedWorkBlocks.length > 0 && (
             <div className="mt-8 pt-6 border-t border-neutral-800/80">
               <h3 className="text-sm font-bold text-neutral-200 mb-4 flex items-center justify-between">
-                <span>Today's Completed Work</span>
+                <span>Tasks Today</span>
                 <span className="text-xs text-neutral-500 font-medium">
-                  {todayWorkBlocks.length} block{todayWorkBlocks.length !== 1 ? "s" : ""}
+                  {completedWorkBlocks.length} task{completedWorkBlocks.length !== 1 ? "s" : ""}
                 </span>
               </h3>
               <div className="space-y-3">
-                {todayWorkBlocks.map((block) => {
+                {completedWorkBlocks.map((block) => {
                   const linkedAssignment = todayAssignments.find(a => a.id === block.assignment_id) || 
                                            tomorrowAssignments.find(a => a.id === block.assignment_id);
-                  const isBlockActive = block.status === "active";
                   const formatBlockDuration = (minutes) => {
                     if (!minutes || minutes <= 0) return "0m";
                     const hrs = Math.floor(minutes / 60);
@@ -389,11 +390,7 @@ export default function MyWorkClient({ initialData }) {
                   return (
                     <div 
                       key={block.id} 
-                      className={`p-3.5 rounded-xl border text-xs transition-all duration-200 ${
-                        isBlockActive 
-                          ? "bg-emerald-950/5 border-emerald-500/20" 
-                          : "bg-neutral-950/20 border-neutral-800/40 hover:border-neutral-700/60"
-                      }`}
+                      className="p-3.5 rounded-xl border text-xs bg-neutral-950/20 border-neutral-800/40 hover:border-neutral-700/60 transition-all duration-200"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="space-y-1">
@@ -417,25 +414,12 @@ export default function MyWorkClient({ initialData }) {
                         </div>
 
                         <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
-                          <span className={`text-[9px] font-semibold tracking-wide uppercase px-1.5 py-0.5 rounded ${
-                            isBlockActive 
-                              ? "bg-emerald-500/10 text-emerald-400 animate-pulse" 
-                              : block.status === "done" 
-                                ? "bg-neutral-800 text-neutral-400" 
-                                : "bg-red-500/10 text-red-400"
-                          }`}>
-                            {block.status}
+                          <span className="text-[9px] font-semibold tracking-wide uppercase px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-450">
+                            Done
                           </span>
-                          {!isBlockActive && (
-                            <span className="font-mono font-medium text-neutral-400">
-                              {formatBlockDuration(block.total_minutes)}
-                            </span>
-                          )}
-                          {isBlockActive && (
-                            <span className="font-mono font-medium text-emerald-455">
-                              <ActiveBlockTimer startedAt={block.started_at} />
-                            </span>
-                          )}
+                          <span className="font-mono font-medium text-neutral-400">
+                            {formatBlockDuration(block.total_minutes)}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -444,19 +428,44 @@ export default function MyWorkClient({ initialData }) {
               </div>
             </div>
           )}
+
+          {/* End Full Workday Danger Zone */}
+          {todaySession && (status === "active" || status === "break") && !isEnded && (
+            <div className="mt-8 pt-6 border-t border-neutral-800/80">
+              <div className="p-5 bg-red-950/5 border border-red-500/10 rounded-2xl space-y-3 shadow-sm shadow-red-950/5">
+                <div>
+                  <h4 className="text-sm font-extrabold text-red-400 uppercase tracking-wider">
+                    End Full Workday
+                  </h4>
+                  <p className="text-xs text-neutral-400 mt-1.5 leading-relaxed">
+                    Use this only when you are completely finished for today. After ending the workday, you cannot start another task today.
+                  </p>
+                </div>
+                <div className="pt-1">
+                  <button
+                    onClick={handleEndWork}
+                    disabled={isLoading}
+                    className="py-2.5 px-5 bg-red-500/15 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-bold rounded-xl transition-all duration-200 disabled:opacity-50"
+                  >
+                    End Full Workday
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Manual Tracker Start Form */}
-        {((!isWorking && !isEnded) || (status === "active" && !activeBlock)) && (
+        {!activeBlock && !isEnded && (
           <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl">
             <h3 className="text-lg font-bold text-neutral-100 mb-4">
-              {status === "active" ? "Start Next Work" : "Start Work Session"}
+              {!todaySession ? "Start Your First Task" : "Start Next Task"}
             </h3>
             
             <form onSubmit={handleManualStart} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1.5">
-                  What are you working on now? <span className="text-red-500">*</span>
+                  What task are you working on? <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -514,14 +523,14 @@ export default function MyWorkClient({ initialData }) {
                 ) : (
                   <Play className="h-4 w-4 fill-emerald-950" />
                 )}
-                Start Work
+                Start Task
               </button>
             </form>
           </div>
         )}
 
         {/* EOD Work Log Form */}
-        <DailyWorkLogForm initialLog={todayLog} hasSession={!!todaySession} />
+        <DailyWorkLogForm initialLog={todayLog} hasSession={!!todaySession} isEnded={isEnded} />
 
       </div>
 
