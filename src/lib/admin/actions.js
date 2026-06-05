@@ -354,6 +354,14 @@ export async function endWork() {
           total_minutes: diffMins
         })
         .eq("id", activeBlock.id);
+
+      if (activeBlock.assignment_id) {
+        await supabase
+          .from("work_assignments")
+          .update({ status: "done" })
+          .eq("id", activeBlock.assignment_id)
+          .eq("assigned_to", profile.id);
+      }
     }
 
     let finalBreakMinutes = session.break_minutes || 0;
@@ -443,6 +451,14 @@ export async function finishCurrentWork() {
       .eq("id", activeBlock.id);
 
     if (blockErr) throw blockErr;
+
+    if (activeBlock.assignment_id) {
+      await supabase
+        .from("work_assignments")
+        .update({ status: "done" })
+        .eq("id", activeBlock.assignment_id)
+        .eq("assigned_to", profile.id);
+    }
 
     // Clear session current work fields (title = null, current_work_note = '', assignment_id = null)
     const { error: sessionErr } = await supabase
