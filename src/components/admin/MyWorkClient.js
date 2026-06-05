@@ -54,6 +54,18 @@ export default function MyWorkClient({ initialData }) {
   const activeBlock = todayWorkBlocks.find(b => b.status === "active");
   const completedWorkBlocks = todayWorkBlocks.filter(b => b.status !== "active");
 
+  // Derived display status
+  let displayStatus = "offline";
+  if (!todaySession) {
+    displayStatus = "offline";
+  } else if (todaySession.status === "ended") {
+    displayStatus = "workday_ended";
+  } else if (todaySession.status === "break") {
+    displayStatus = "break";
+  } else if (todaySession.status === "active") {
+    displayStatus = activeBlock ? "task_active" : "workday_open";
+  }
+
   const clearMessages = () => {
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -242,7 +254,7 @@ export default function MyWorkClient({ initialData }) {
               <span className="text-xs text-neutral-400 font-medium">
                 {formatDateTime(new Date().toISOString(), false)}
               </span>
-              <StatusBadge status={status} />
+              <StatusBadge status={displayStatus} />
             </div>
           </div>
 
@@ -365,11 +377,11 @@ export default function MyWorkClient({ initialData }) {
             )}
           </div>
 
-          {/* Tasks Today section */}
+          {/* Completed Tasks Today section */}
           {completedWorkBlocks.length > 0 && (
             <div className="mt-8 pt-6 border-t border-neutral-800/80">
               <h3 className="text-sm font-bold text-neutral-200 mb-4 flex items-center justify-between">
-                <span>Tasks Today</span>
+                <span>Completed Tasks Today</span>
                 <span className="text-xs text-neutral-500 font-medium">
                   {completedWorkBlocks.length} task{completedWorkBlocks.length !== 1 ? "s" : ""}
                 </span>
@@ -438,6 +450,11 @@ export default function MyWorkClient({ initialData }) {
                     End Full Workday
                   </h4>
                   <p className="text-xs text-neutral-400 mt-1.5 leading-relaxed">
+                    {!activeBlock && (
+                      <span className="block text-red-405 font-bold mb-1.5">
+                        No task is currently active. Use this only if your full workday is finished.
+                      </span>
+                    )}
                     Use this only when you are completely finished for today. After ending the workday, you cannot start another task today.
                   </p>
                 </div>
@@ -454,6 +471,19 @@ export default function MyWorkClient({ initialData }) {
             </div>
           )}
         </div>
+
+        {/* No active task notice */}
+        {todaySession && status === "active" && !activeBlock && !isEnded && (
+          <div className="mb-4 p-4 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl flex items-start gap-2.5 text-xs">
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold">No task is active now.</p>
+              <p className="mt-0.5 text-neutral-450 leading-relaxed">
+                Start your next task below, or end the full workday if you are done for today.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Manual Tracker Start Form */}
         {!activeBlock && !isEnded && (
