@@ -734,8 +734,15 @@ export async function getAdminDashboardData() {
       .select("*")
       .eq("work_date", tomorrow);
 
+    // Fetch today's work blocks for all users
+    const { data: todayWorkBlocks } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("work_date", today)
+      .order("started_at", { ascending: true });
+
     // Summary counts
-    const activeNow = sessions ? sessions.filter(s => s.status === "active").length : 0;
+    const activeNow = todayWorkBlocks ? todayWorkBlocks.filter(b => b.status === "active").length : 0;
     const onBreak = sessions ? sessions.filter(s => s.status === "break").length : 0;
     
     // Sum of worked minutes today (including live elapsed minutes for currently active/break sessions)
@@ -765,13 +772,6 @@ export async function getAdminDashboardData() {
         assignedByName: profileMap[item.assigned_by] || "Unknown"
       }));
     };
-
-    // Fetch today's work blocks for all users
-    const { data: todayWorkBlocks } = await supabase
-      .from("work_blocks")
-      .select("*")
-      .eq("work_date", today)
-      .order("started_at", { ascending: true });
 
     return {
       profiles: profiles || [],

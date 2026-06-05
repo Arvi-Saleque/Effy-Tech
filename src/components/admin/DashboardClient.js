@@ -181,9 +181,34 @@ export default function DashboardClient({ initialData }) {
                 <tbody className="divide-y divide-neutral-800/40">
                   {profiles.map(member => {
                     const session = sessions.find(s => s.user_id === member.id);
-                    const status = session ? session.status : "offline";
-                    const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
                     const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
+                    const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+
+                    let displayStatus = "offline";
+                    if (!session) {
+                      displayStatus = "offline";
+                    } else if (session.status === "ended") {
+                      displayStatus = "workday_ended";
+                    } else if (session.status === "break") {
+                      displayStatus = "break";
+                    } else if (session.status === "active" && activeBlock) {
+                      displayStatus = "task_active";
+                    } else if (session.status === "active" && !activeBlock) {
+                      displayStatus = "workday_open";
+                    }
+
+                    let currentWorkLabel = "Offline";
+                    if (displayStatus === "task_active") {
+                      currentWorkLabel = activeBlock.title;
+                    } else if (displayStatus === "break") {
+                      currentWorkLabel = activeBlock ? `${activeBlock.title} (Paused)` : "No active task (Paused)";
+                    } else if (displayStatus === "workday_open") {
+                      currentWorkLabel = "No active task";
+                    } else if (displayStatus === "workday_ended") {
+                      currentWorkLabel = "Workday Ended";
+                    } else {
+                      currentWorkLabel = "Offline";
+                    }
                     
                     return (
                       <tr key={member.id} className="text-neutral-300">
@@ -194,17 +219,17 @@ export default function DashboardClient({ initialData }) {
                           </span>
                         </td>
                         <td className="py-3.5">
-                          <StatusBadge status={status} />
+                          <StatusBadge status={displayStatus} />
                         </td>
                         <td className="py-3.5 text-xs text-neutral-400 max-w-[200px] truncate">
-                          {status === "active" || status === "break" ? (
+                          {displayStatus === "task_active" || (displayStatus === "break" && activeBlock) ? (
                             <span className="text-neutral-200 font-medium">
-                              {activeBlock ? activeBlock.title : (session?.current_work_title || "Active")}
+                              {currentWorkLabel}
                             </span>
-                          ) : status === "ended" ? (
-                            <span className="text-neutral-500 italic">Work Ended</span>
                           ) : (
-                            <span className="text-neutral-600 italic">Offline</span>
+                            <span className="text-neutral-500 italic">
+                              {currentWorkLabel}
+                            </span>
                           )}
                         </td>
                         <td className="py-3.5 font-mono text-xs text-neutral-200">
@@ -366,9 +391,29 @@ export default function DashboardClient({ initialData }) {
                     <span className="block text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1">
                       Current Work
                     </span>
-                    <p className="text-neutral-300">
-                      {activeBlock ? activeBlock.title : (session?.current_work_title || <span className="text-neutral-600 italic">No active task</span>)}
-                    </p>
+                    <div className="text-neutral-300">
+                      {session ? (
+                        session.status === "ended" ? (
+                          <span className="text-neutral-500 italic">Workday Ended</span>
+                        ) : session.status === "break" ? (
+                          activeBlock ? (
+                            <span className="text-neutral-350 font-medium">{activeBlock.title} <span className="text-amber-500/80 text-[10px] uppercase tracking-wider font-semibold">(Paused)</span></span>
+                          ) : (
+                            <span className="text-neutral-600 italic">No active task</span>
+                          )
+                        ) : session.status === "active" ? (
+                          activeBlock ? (
+                            <span className="text-neutral-200 font-medium">{activeBlock.title}</span>
+                          ) : (
+                            <span className="text-neutral-600 italic">No active task</span>
+                          )
+                        ) : (
+                          <span className="text-neutral-650 italic">Offline</span>
+                        )
+                      ) : (
+                        <span className="text-neutral-650 italic">Offline</span>
+                      )}
+                    </div>
                   </div>
 
                   <div>
