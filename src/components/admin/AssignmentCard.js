@@ -58,14 +58,15 @@ export default function AssignmentCard({ assignment, onStartWork, onMarkDone, is
             <button
               onClick={() => onStartWork(assignment.title, assignment.id)}
               disabled={isWorking}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+              title={isWorking ? "Finish current task first" : ""}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <Play className="h-3 w-3" />
-              Start Work
+              Start Task
             </button>
           )}
           
-          {onMarkDone && (
+          {onMarkDone && !isEnded && (
             <button
               onClick={() => onMarkDone(assignment.id)}
               className="inline-flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-200 transition-colors"

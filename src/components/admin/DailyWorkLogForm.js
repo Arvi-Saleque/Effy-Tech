@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { formatDateTime } from "@/lib/admin/time";
 
-export default function DailyWorkLogForm({ initialLog, hasSession }) {
+export default function DailyWorkLogForm({ initialLog, hasSession, isEnded }) {
   const router = useRouter();
   const [workNote, setWorkNote] = useState("");
   const [blockers, setBlockers] = useState("");
@@ -103,6 +103,13 @@ export default function DailyWorkLogForm({ initialLog, hasSession }) {
           <span>
             Log submitted and locked on <strong>{formatDateTime(initialLog.submitted_at)}</strong>.
           </span>
+        </div>
+      )}
+
+      {isEnded && !isSubmitted && (
+        <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-2.5 text-xs text-neutral-300 font-medium">
+          <AlertCircle className="h-4 w-4 text-amber-400 shrink-0" />
+          <span>Your workday is complete! Now submit your daily work log.</span>
         </div>
       )}
 
