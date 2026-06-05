@@ -7,7 +7,8 @@ import {
   getTomorrowDateString, 
   calculateSessionDisplayMinutes,
   getDateStringWithOffset,
-  getCurrentMonthStartDateString
+  getCurrentMonthStartDateString,
+  calculateWorkBlocksDisplayMinutes
 } from "@/lib/admin/time";
 import { revalidatePath } from "next/cache";
 
@@ -299,6 +300,28 @@ export async function resumeWork() {
 
     if (updateError) throw updateError;
 
+    // Shift active work block started_at forward by the break duration
+    const { data: activeBlock } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .eq("session_id", session.id)
+      .eq("status", "active")
+      .maybeSingle();
+
+    if (activeBlock) {
+      const currentStart = new Date(activeBlock.started_at).getTime();
+      const newStart = new Date(currentStart + diffMs);
+      
+      const { error: blockUpdateError } = await supabase
+        .from("work_blocks")
+        .update({
+          started_at: newStart.toISOString()
+        })
+        .eq("id", activeBlock.id);
+
+      if (blockUpdateError) throw blockUpdateError;
+    }
+
     revalidatePath("/admin/my-work");
     revalidatePath("/admin/dashboard");
     return { success: true };
@@ -372,10 +395,19 @@ export async function endWork() {
       finalBreakMinutes += diffMins;
     }
 
-    const start = new Date(session.started_at);
-    const totalMs = now.getTime() - start.getTime();
-    const totalMins = Math.round(totalMs / 60000) - finalBreakMinutes;
-    const finalTotalMinutes = Math.max(0, totalMins);
+    // Fetch all today work_blocks for this session and user and sum total_minutes where status = done
+    const { data: doneBlocks, error: dbError } = await supabase
+      .from("work_blocks")
+      .select("total_minutes")
+      .eq("session_id", session.id)
+      .eq("user_id", profile.id)
+      .eq("status", "done");
+
+    if (dbError) throw dbError;
+
+    const finalTotalMinutes = doneBlocks
+      ? doneBlocks.reduce((acc, b) => acc + (b.total_minutes || 0), 0)
+      : 0;
 
     const { error: updateError } = await supabase
       .from("work_sessions")
@@ -745,11 +777,13 @@ export async function getAdminDashboardData() {
     const activeNow = todayWorkBlocks ? todayWorkBlocks.filter(b => b.status === "active").length : 0;
     const onBreak = sessions ? sessions.filter(s => s.status === "break").length : 0;
     
-    // Sum of worked minutes today (including live elapsed minutes for currently active/break sessions)
+    // Sum of worked minutes today calculated from work blocks
     let totalMinutesToday = 0;
-    if (sessions) {
-      sessions.forEach(session => {
-        totalMinutesToday += calculateSessionDisplayMinutes(session);
+    if (profiles) {
+      profiles.forEach(member => {
+        const memberBlocks = todayWorkBlocks ? todayWorkBlocks.filter(b => b.user_id === member.id) : [];
+        const session = sessions ? sessions.find(s => s.user_id === member.id) : null;
+        totalMinutesToday += calculateWorkBlocksDisplayMinutes(memberBlocks, session);
       });
     }
     const totalHoursToday = parseFloat((totalMinutesToday / 60).toFixed(1));
@@ -868,18 +902,35 @@ export async function getReportsData(range) {
       assignedByName: profileMap[item.assigned_by] || "Unknown"
     })) : [];
 
+    // Fetch work blocks in range
+    const { data: rawWorkBlocks, error: wbErr } = await supabase
+      .from("work_blocks")
+      .select("*")
+      .gte("work_date", startDate)
+      .lte("work_date", endDate)
+      .order("started_at", { ascending: true });
+
+    if (wbErr) throw wbErr;
+
+    // Map member names onto work blocks
+    const workBlocksHistory = rawWorkBlocks ? rawWorkBlocks.map(block => ({
+      ...block,
+      memberName: profileMap[block.user_id] || "Unknown"
+    })) : [];
+
     // Process summary details per member
     const summary = profiles.map(member => {
-      const memberSessions = sessions ? sessions.filter(s => s.user_id === member.id) : [];
+      const memberBlocks = rawWorkBlocks ? rawWorkBlocks.filter(b => b.user_id === member.id) : [];
       const memberLogs = logs ? logs.filter(l => l.user_id === member.id) : [];
+      const todaySession = sessions ? sessions.find(s => s.user_id === member.id && s.work_date === today) : null;
 
-      let totalMinutes = 0;
-      memberSessions.forEach(session => {
-        totalMinutes += calculateSessionDisplayMinutes(session);
-      });
-
+      const totalMinutes = calculateWorkBlocksDisplayMinutes(memberBlocks, todaySession);
       const totalHours = parseFloat((totalMinutes / 60).toFixed(1));
-      const daysWorked = memberSessions.filter(s => s.status !== "offline").length;
+
+      const validBlocks = memberBlocks.filter(b => b.status !== "cancelled");
+      const uniqueDates = new Set(validBlocks.map(b => b.work_date));
+      const daysWorked = uniqueDates.size;
+
       const averageHours = daysWorked > 0 ? parseFloat((totalHours / daysWorked).toFixed(1)) : 0;
       const reportsCount = memberLogs.filter(l => l.submitted_at !== null).length;
 
@@ -903,6 +954,7 @@ export async function getReportsData(range) {
         const matchingProfile = profiles.find(p => p.id === session.user_id);
 
         if (matchingProfile) {
+          const dayBlocks = rawWorkBlocks ? rawWorkBlocks.filter(b => b.user_id === session.user_id && b.work_date === session.work_date) : [];
           history.push({
             id: session.id,
             user_id: session.user_id,
@@ -911,7 +963,7 @@ export async function getReportsData(range) {
             status: session.status,
             current_work_title: session.current_work_title,
             break_minutes: session.break_minutes,
-            total_minutes: calculateSessionDisplayMinutes(session),
+            total_minutes: calculateWorkBlocksDisplayMinutes(dayBlocks, session),
             work_note: matchingLog ? matchingLog.work_note : "",
             blockers: matchingLog ? matchingLog.blockers : "",
             tomorrow_plan: matchingLog ? matchingLog.tomorrow_plan : "",
@@ -928,20 +980,6 @@ export async function getReportsData(range) {
       }
       return a.name.localeCompare(b.name);
     });
-
-    // Fetch work blocks in range
-    const { data: rawWorkBlocks } = await supabase
-      .from("work_blocks")
-      .select("*")
-      .gte("work_date", startDate)
-      .lte("work_date", endDate)
-      .order("started_at", { ascending: true });
-
-    // Map member names onto work blocks
-    const workBlocksHistory = rawWorkBlocks ? rawWorkBlocks.map(block => ({
-      ...block,
-      memberName: profileMap[block.user_id] || "Unknown"
-    })) : [];
 
     return {
       summary,

@@ -363,7 +363,7 @@ export default function MyWorkClient({ initialData }) {
 
           {/* Timer Display Widget */}
           <div className="mb-6">
-            <WorkTimer session={todaySession} />
+            <WorkTimer session={todaySession} workBlocks={todayWorkBlocks} />
           </div>
 
           {/* Live Action Timer Controls (ended state banner) */}

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createAssignment } from "@/lib/admin/actions";
-import { calculateSessionDisplayMinutes, formatMinutes, getTomorrowDateString } from "@/lib/admin/time";
+import { calculateSessionDisplayMinutes, formatMinutes, getTomorrowDateString, calculateWorkBlocksDisplayMinutes } from "@/lib/admin/time";
 import StatusBadge from "./StatusBadge";
 import WorkHoursChart from "./WorkHoursChart";
 import { 
@@ -40,8 +40,9 @@ export default function DashboardClient({ initialData }) {
 
   // Prepare chart data: worked hours today per profile
   const chartData = profiles.map(member => {
+    const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
     const session = sessions.find(s => s.user_id === member.id);
-    const mins = session ? calculateSessionDisplayMinutes(session) : 0;
+    const mins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
     return {
       name: member.name,
       hours: parseFloat((mins / 60).toFixed(1))
@@ -182,7 +183,8 @@ export default function DashboardClient({ initialData }) {
                   {profiles.map(member => {
                     const session = sessions.find(s => s.user_id === member.id);
                     const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
-                    const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+                    const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
+                    const workedMins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
 
                     let displayStatus = "offline";
                     if (!session) {
@@ -360,8 +362,8 @@ export default function DashboardClient({ initialData }) {
             const session = sessions.find(s => s.user_id === member.id);
             const log = logs.find(l => l.user_id === member.id);
             const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
-            
-            const workedMins = session ? calculateSessionDisplayMinutes(session) : 0;
+            const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
+            const workedMins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
             const hasLog = !!log;
             const isSubmitted = !!(log && log.submitted_at);
 

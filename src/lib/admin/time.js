@@ -147,3 +147,38 @@ export function formatDateTime(value, includeTime = true) {
 
   return d.toLocaleString("en-US", options);
 }
+
+/**
+ * Calculates display minutes for an array of work blocks.
+ * - done blocks: total_minutes
+ * - active blocks: live elapsed from started_at to now (minus live break duration if session is on break)
+ * - ignore cancelled blocks
+ * - Never return negative values
+ */
+export function calculateWorkBlocksDisplayMinutes(workBlocks, session = null) {
+  if (!workBlocks || workBlocks.length === 0) return 0;
+  
+  let totalMins = 0;
+  const now = new Date().getTime();
+
+  workBlocks.forEach(block => {
+    if (block.status === "done") {
+      totalMins += Math.max(0, block.total_minutes || 0);
+    } else if (block.status === "active" && block.started_at) {
+      const start = new Date(block.started_at).getTime();
+      let diffMs = now - start;
+
+      // If the session is currently on break, subtract the live active break duration
+      if (session && session.status === "break" && session.break_started_at && session.user_id === block.user_id) {
+        const breakStart = new Date(session.break_started_at).getTime();
+        const currentBreakMs = now - breakStart;
+        diffMs -= currentBreakMs;
+      }
+
+      const diffMins = Math.floor(diffMs / 60000);
+      totalMins += Math.max(0, diffMins);
+    }
+  });
+
+  return Math.max(0, totalMins);
+}

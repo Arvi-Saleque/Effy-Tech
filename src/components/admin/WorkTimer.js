@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-export default function WorkTimer({ session }) {
+export default function WorkTimer({ session, workBlocks = [] }) {
   const [timeState, setTimeState] = useState({
     workedSeconds: 0,
     breakSeconds: 0,
@@ -14,28 +14,39 @@ export default function WorkTimer({ session }) {
       return;
     }
 
-    const start = new Date(session.started_at).getTime();
+    const activeBlock = workBlocks.find(b => b.status === "active");
+    const completedBlocks = workBlocks.filter(b => b.status === "done");
+    const completedSeconds = completedBlocks.reduce((acc, curr) => acc + (curr.total_minutes || 0) * 60, 0);
+
     const recordedBreakMs = (session.break_minutes || 0) * 60 * 1000;
 
     const updateTimer = () => {
       const now = new Date().getTime();
 
-      let workedMs = 0;
-      let breakMs = recordedBreakMs;
+      let workedSecs = completedSeconds;
+      if (activeBlock) {
+        const start = new Date(activeBlock.started_at).getTime();
+        let elapsedMs = now - start;
 
-      if (session.status === "active") {
-        workedMs = now - start - recordedBreakMs;
-      } else if (session.status === "break" && session.break_started_at) {
+        // If the session is currently on break, subtract the live active break duration
+        if (session.status === "break" && session.break_started_at) {
+          const breakStart = new Date(session.break_started_at).getTime();
+          const currentBreakMs = now - breakStart;
+          elapsedMs -= currentBreakMs;
+        }
+
+        workedSecs += Math.max(0, Math.floor(elapsedMs / 1000));
+      }
+
+      let breakMs = recordedBreakMs;
+      if (session.status === "break" && session.break_started_at) {
         const breakStart = new Date(session.break_started_at).getTime();
         const currentBreakMs = now - breakStart;
         breakMs = recordedBreakMs + currentBreakMs;
-        workedMs = breakStart - start - recordedBreakMs;
-      } else if (session.status === "ended" && session.ended_at) {
-        workedMs = (session.total_minutes || 0) * 60 * 1000;
       }
 
       setTimeState({
-        workedSeconds: Math.max(0, Math.floor(workedMs / 1000)),
+        workedSeconds: workedSecs,
         breakSeconds: Math.max(0, Math.floor(breakMs / 1000)),
       });
     };
@@ -47,7 +58,7 @@ export default function WorkTimer({ session }) {
       const intervalId = setInterval(updateTimer, 1000);
       return () => clearInterval(intervalId);
     }
-  }, [session]);
+  }, [session, workBlocks]);
 
   const formatTime = (totalSeconds) => {
     const hrs = Math.floor(totalSeconds / 3600);
