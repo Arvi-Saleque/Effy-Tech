@@ -24,6 +24,7 @@ import Image from "next/image";
 import siteConfig from "@/theme/siteConfig";
 import MagneticButton from "./MagneticButton";
 import { trackCTAClick } from "@/lib/analytics";
+import { SplineScene } from "@/components/ui";
 
 /* ── Animation variants ─────────────────────────────────────── */
 const containerVariants = {
@@ -93,12 +94,12 @@ export default function Hero() {
       id="hero"
       className="relative h-screen overflow-hidden"
     >
-      {/* ── Background Image + Gradient Overlay ─────────────── */}
+      {/* ── Background Image + 3D Scene + Gradient Overlay ─────────────── */}
       <motion.div
         className="absolute inset-0 z-0"
         style={disableParallax ? {} : { y: bgY }}
       >
-        {/* Dark hero background image — replace hero-bg.svg with a real .jpg/.webp for production */}
+        {/* Dark hero background image — acts as base and mobile fallback */}
         <Image
           src="/images/hero-bg.svg"
           alt=""
@@ -110,11 +111,21 @@ export default function Hero() {
           unoptimized
         />
 
-        {/* Diagonal gradient overlay (dark ← teal tint) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-black/95 via-neutral-900/90 to-primary-darkest/80" />
+        {/* Interactive 3D scene (desktop only, disabled on mobile/reduced-motion) */}
+        {!disableParallax && (
+          <div className="absolute top-[15%] left-[-15%] w-[130%] h-[90%] opacity-90">
+            <SplineScene
+              scene="https://prod.spline.design/PizcQFH-CyL6wgv8/scene.splinecode"
+              className="w-full h-full"
+            />
+          </div>
+        )}
 
-        {/* Extra dim layer for text contrast */}
-        <div className="absolute inset-0 bg-neutral-black/30" />
+        {/* Diagonal gradient overlay (dark ← teal tint) - lightened to let 3D asset shine */}
+        <div className="absolute inset-0 bg-gradient-to-br from-neutral-black/75 via-neutral-900/50 to-primary-darkest/30" />
+
+        {/* Soft dim layer for text contrast */}
+        <div className="absolute inset-0 bg-neutral-black/15" />
       </motion.div>
 
       {/* ── Floating Geometric Shapes (parallax depth) ──────── */}
@@ -170,11 +181,10 @@ export default function Hero() {
               <motion.span
                 key={i}
                 variants={wordVariants}
-                className={`inline-block mr-[0.3em] ${
-                  word === "Digital" || word === "Products"
-                    ? "text-gradient-primary"
-                    : "text-text-inverse"
-                }`}
+                className={`inline-block mr-[0.3em] ${word === "Digital" || word === "Products"
+                  ? "text-gradient-primary"
+                  : "text-text-inverse"
+                  }`}
               >
                 {word}
               </motion.span>

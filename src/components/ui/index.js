@@ -14,3 +14,4 @@ export { default as SearchInput } from "./SearchInput";
 export { default as Logo } from "./Logo";
 export { default as SocialLinks } from "./SocialLinks";
 export { default as ImagePlaceholder } from "./ImagePlaceholder";
+export { default as SplineScene } from "./SplineScene";
