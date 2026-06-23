@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Edit, Building2, UserCircle, Mail, Phone, Clock, CalendarDays, BarChart, Info } from "lucide-react";
+import { ArrowLeft, Edit, Building2, UserCircle, Mail, Phone, Clock, CalendarDays, BarChart, Info, FolderKanban, Plus } from "lucide-react";
 import { getClientById } from "@/lib/admin/client-actions";
 import { notFound } from "next/navigation";
 import ClientStatusBadge from "@/components/admin/ClientStatusBadge";
@@ -48,6 +48,7 @@ export default async function ClientDetailsPage({ params }) {
   }
 
   const { projectSummary } = client;
+  const isArchived = client.status === "archived";
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
@@ -169,9 +170,17 @@ export default async function ClientDetailsPage({ params }) {
           <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-sm font-semibold text-neutral-300 uppercase tracking-wider flex items-center gap-2">
-                <BarChart className="w-4 h-4 text-emerald-400" />
+                <FolderKanban className="w-4 h-4 text-emerald-400" />
                 Project Summary
               </h3>
+              {!isArchived && (
+                <Link
+                  href={`/admin/projects/new?clientId=${client.id}`}
+                  className="flex items-center gap-1 text-sm text-emerald-500 hover:text-emerald-400 font-medium"
+                >
+                  <Plus className="w-4 h-4" /> Create Project
+                </Link>
+              )}
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -196,34 +205,35 @@ export default async function ClientDetailsPage({ params }) {
             {/* Latest Projects List */}
             <div>
               <h4 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-4">Latest Projects</h4>
-              {projectSummary.latest.length > 0 ? (
-                <div className="border border-neutral-800/60 rounded-lg overflow-hidden">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-neutral-950/50 text-neutral-500 text-xs">
-                      <tr>
-                        <th className="px-4 py-3 font-medium">Project</th>
-                        <th className="px-4 py-3 font-medium">Status</th>
-                        <th className="px-4 py-3 font-medium">Priority</th>
-                        <th className="px-4 py-3 font-medium">Due Date</th>
-                        <th className="px-4 py-3 font-medium text-right">Progress</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-800/60 bg-neutral-900/20">
-                      {projectSummary.latest.map(project => (
-                        <tr key={project.id} className="hover:bg-neutral-800/20 transition-colors">
-                          <td className="px-4 py-3 font-medium text-neutral-200">{project.name}</td>
-                          <td className="px-4 py-3 text-neutral-400 capitalize">{project.status}</td>
-                          <td className="px-4 py-3 text-neutral-400 capitalize">{project.priority}</td>
-                          <td className="px-4 py-3 text-neutral-400">{formatDate(project.due_date)}</td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="inline-block bg-neutral-800 text-emerald-400 text-xs font-bold px-2 py-1 rounded">
-                              {project.progress_percent}%
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              {projectSummary.latest?.length > 0 ? (
+                <div className="space-y-3">
+                  {projectSummary.latest.map(project => (
+                    <Link
+                      key={project.id}
+                      href={`/admin/projects/${project.id}`}
+                      className="block bg-neutral-950/50 border border-neutral-800/60 p-4 rounded-lg hover:border-neutral-700 transition-colors group"
+                    >
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-sm font-medium text-neutral-200 group-hover:text-emerald-400 transition-colors">{project.name}</span>
+                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                          project.status === "active" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
+                          project.status === "completed" ? "bg-teal-500/10 text-teal-400 border-teal-500/20" :
+                          "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                        }`}>
+                          {project.status.replace("_", " ")}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1 h-1.5 bg-neutral-900 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-emerald-500/80 rounded-full" 
+                            style={{ width: `${project.progress_percent || 0}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-neutral-500">{project.progress_percent || 0}%</span>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               ) : (
                 <div className="text-center p-8 bg-neutral-950/30 border border-dashed border-neutral-800 rounded-lg text-sm text-neutral-500">

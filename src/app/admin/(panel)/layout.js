@@ -1,5 +1,12 @@
 import { getCurrentProfile } from "@/lib/admin/auth";
 import { redirect } from "next/navigation";
+import { 
+  LayoutDashboard, 
+  UsersRound, 
+  FolderKanban,
+  CheckSquare, 
+  BarChart3 
+} from "lucide-react";
 import NavLink from "./NavLink";
 import LogoutButton from "./LogoutButton";
 
@@ -13,6 +20,14 @@ export default async function PanelLayout({ children }) {
   }
 
   const isAdmin = profile.role === "admin";
+
+  const navigation = [
+    { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Clients", href: "/admin/clients", icon: UsersRound },
+    { name: "Projects", href: "/admin/projects", icon: FolderKanban },
+    { name: "My Work", href: "/admin/my-work", icon: CheckSquare },
+    { name: "Reports", href: "/admin/reports", icon: BarChart3 },
+  ];
 
   return (
     <div className="min-h-screen bg-[#020617] text-neutral-100 flex flex-col font-sans">
@@ -41,23 +56,13 @@ export default async function PanelLayout({ children }) {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            <NavLink href="/admin/my-work">
-              My Work
-            </NavLink>
-            
-            {isAdmin && (
-              <>
-                <NavLink href="/admin/dashboard">
-                  Dashboard
+            {navigation.map((item) => (
+              isAdmin || item.name !== "Dashboard" && item.name !== "Clients" && item.name !== "Projects" && item.name !== "Reports" ? (
+                <NavLink key={item.name} href={item.href}>
+                  {item.name}
                 </NavLink>
-                <NavLink href="/admin/clients">
-                  Clients
-                </NavLink>
-                <NavLink href="/admin/reports">
-                  Reports
-                </NavLink>
-              </>
-            )}
+              ) : null
+            ))}
           </nav>
 
           <div className="flex items-center gap-4">
@@ -73,22 +78,13 @@ export default async function PanelLayout({ children }) {
 
       {/* Mobile Navigation bar */}
       <div className="md:hidden border-b border-neutral-800/60 bg-neutral-900/20 py-2 px-4 flex justify-center gap-3 relative z-40">
-        <NavLink href="/admin/my-work">
-          My Work
-        </NavLink>
-        {isAdmin && (
-          <>
-            <NavLink href="/admin/dashboard">
-              Dashboard
+        {navigation.map((item) => (
+          isAdmin || item.name !== "Dashboard" && item.name !== "Clients" && item.name !== "Projects" && item.name !== "Reports" ? (
+            <NavLink key={item.name} href={item.href}>
+              {item.name}
             </NavLink>
-            <NavLink href="/admin/clients">
-              Clients
-            </NavLink>
-            <NavLink href="/admin/reports">
-              Reports
-            </NavLink>
-          </>
-        )}
+          ) : null
+        ))}
       </div>
 
       {/* Main Content Area */}
