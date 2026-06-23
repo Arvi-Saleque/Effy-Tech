@@ -44,3 +44,21 @@ export async function requireAdmin() {
   }
   return profile;
 }
+
+export async function getAllAdmins() {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("admin_profiles")
+      .select("*")
+      .eq("role", "admin")
+      .eq("is_active", true)
+      .order("name");
+
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error) {
+    console.error("Error in getAllAdmins:", error);
+    return { data: [], error: "Unable to load admins." };
+  }
+}
