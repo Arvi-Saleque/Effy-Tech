@@ -50,6 +50,9 @@ export default async function PanelLayout({ children }) {
                 <NavLink href="/admin/dashboard">
                   Dashboard
                 </NavLink>
+                <NavLink href="/admin/clients">
+                  Clients
+                </NavLink>
                 <NavLink href="/admin/reports">
                   Reports
                 </NavLink>
@@ -77,6 +80,9 @@ export default async function PanelLayout({ children }) {
           <>
             <NavLink href="/admin/dashboard">
               Dashboard
+            </NavLink>
+            <NavLink href="/admin/clients">
+              Clients
             </NavLink>
             <NavLink href="/admin/reports">
               Reports
