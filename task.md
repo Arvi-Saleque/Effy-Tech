@@ -1,23 +1,20 @@
-- `[ ]` **1. Database Schema Hardening (`20260624000001_project_tasks.sql`)**
-  - `[ ]` Fix 1: Remove `FOR ALL` policies, add SELECT/INSERT/UPDATE only. No DELETE policies for tasks/subtasks.
-  - `[ ]` Fix 2: Harden `create_task_with_assignees_v1` (strict validation, `SECURITY DEFINER`, revoke public).
-  - `[ ]` Fix 3: Create `create_subtask_with_assignees_v1` (transactional).
-  - `[ ]` Fix 12: Progress consistency (done remains 100, etc).
-  - `[ ]` Fix 8/15: Create `reorder_project_subtasks_v1`, add indexes, explicit REVOKEs.
-- `[ ]` **2. Safe Errors & Backend Actions (`src/lib/admin/task-actions.js`)**
-  - `[ ]` Fix 4: Remove raw error messages; use generic ones.
-  - `[ ]` Fix 7: Verify authenticated read access (`getProjectTasks`, `getTaskById`).
-  - `[ ]` Fix 8: Validate reordering.
-  - `[ ]` Fix 9: Validate assignment additions/removals.
-  - `[ ]` Fix 10: Correct `revalidatePath` format.
-- `[ ]` **3. Safe Filtering & Date Rules**
-  - `[ ]` Fix 5 & 6: Safe search helper in schema; strict filter enum validation in `getProjectTasks`.
-  - `[ ]` Fix 11: Date-only handling for due status (no UTC shift).
-- `[ ]` **4. UI Terminal State Protections**
-  - `[ ]` Fix 13: Subtask status transition map enforcement in UI.
-  - `[ ]` Fix 14: Terminal state block in UI actions and forms.
-- `[ ]` **5. Documentation & Packaging**
-  - `[ ]` Fix 16: Update `report.md`, `task.md`, `walkthrough.md`.
-  - `[ ]` Run `npm run lint` & `npm run build`.
-  - `[ ]` Create `effyops-phase4-review-v2.zip`.
-  - `[ ]` Commit and push in small chunks.
+# Runtime Verification Tracking (Phase 4)
+
+- `[x]` **STEP 1 — START APPLICATION**
+  - `[x]` Verify application loads, admin login works.
+- `[x]` **STEP 2 — SELECT SAFE TEST PROJECT**
+  - `[x]` Choose planning/active/on_hold project.
+- `[x]` **STEP 3 — VALID TASK CREATION**
+- `[x]` **STEP 4 — TASK CREATION ROLLBACK TESTS**
+- `[x]` **STEP 5 — VALID SUBTASK CREATION**
+- `[x]` **STEP 6 — SUBTASK ROLLBACK TESTS**
+- `[x]` **STEP 7 — TASK STATUS WORKFLOW**
+- `[x]` **STEP 8 — SUBTASK STATUS WORKFLOW**
+- `[x]` **STEP 9 — AUTOMATIC PROGRESS**
+- `[x]` **STEP 10 — ASSIGNMENT SECURITY**
+- `[x]` **STEP 11 — REORDER TESTS**
+- `[x]` **STEP 12 — DATE AND FILTER TESTS**
+- `[x]` **STEP 13 — REGRESSION TESTS**
+- `[x]` **STEP 14 — STATIC CHECKS**
+- `[x]` **STEP 15 — TEST DATA CLEANUP**
+- `[ ]` **FINAL REPORT**
