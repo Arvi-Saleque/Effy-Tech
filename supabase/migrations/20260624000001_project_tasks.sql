@@ -316,9 +316,9 @@ ALTER TABLE public.task_assignees ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subtask_assignees ENABLE ROW LEVEL SECURITY;
 
 -- project_tasks policies
-CREATE POLICY "Admins can select tasks" ON public.project_tasks FOR SELECT TO authenticated USING (public.is_active_admin());
-CREATE POLICY "Admins can insert tasks" ON public.project_tasks FOR INSERT TO authenticated WITH CHECK (public.is_active_admin());
-CREATE POLICY "Admins can update tasks" ON public.project_tasks FOR UPDATE TO authenticated USING (public.is_active_admin()) WITH CHECK (public.is_active_admin());
+CREATE POLICY "Admins can select tasks" ON public.project_tasks FOR SELECT TO authenticated USING (public.is_active_admin(auth.uid()));
+CREATE POLICY "Admins can insert tasks" ON public.project_tasks FOR INSERT TO authenticated WITH CHECK (public.is_active_admin(auth.uid()));
+CREATE POLICY "Admins can update tasks" ON public.project_tasks FOR UPDATE TO authenticated USING (public.is_active_admin(auth.uid())) WITH CHECK (public.is_active_admin(auth.uid()));
 
 CREATE POLICY "Members can view tasks" ON public.project_tasks FOR SELECT TO authenticated USING (
     EXISTS (
@@ -329,9 +329,9 @@ CREATE POLICY "Members can view tasks" ON public.project_tasks FOR SELECT TO aut
 );
 
 -- project_subtasks policies
-CREATE POLICY "Admins can select subtasks" ON public.project_subtasks FOR SELECT TO authenticated USING (public.is_active_admin());
-CREATE POLICY "Admins can insert subtasks" ON public.project_subtasks FOR INSERT TO authenticated WITH CHECK (public.is_active_admin());
-CREATE POLICY "Admins can update subtasks" ON public.project_subtasks FOR UPDATE TO authenticated USING (public.is_active_admin()) WITH CHECK (public.is_active_admin());
+CREATE POLICY "Admins can select subtasks" ON public.project_subtasks FOR SELECT TO authenticated USING (public.is_active_admin(auth.uid()));
+CREATE POLICY "Admins can insert subtasks" ON public.project_subtasks FOR INSERT TO authenticated WITH CHECK (public.is_active_admin(auth.uid()));
+CREATE POLICY "Admins can update subtasks" ON public.project_subtasks FOR UPDATE TO authenticated USING (public.is_active_admin(auth.uid())) WITH CHECK (public.is_active_admin(auth.uid()));
 
 CREATE POLICY "Members can view subtasks" ON public.project_subtasks FOR SELECT TO authenticated USING (
     EXISTS (
@@ -343,7 +343,7 @@ CREATE POLICY "Members can view subtasks" ON public.project_subtasks FOR SELECT 
 );
 
 -- task_assignees policies (Delete allowed for unassigning)
-CREATE POLICY "Admins can manage task_assignees" ON public.task_assignees FOR ALL TO authenticated USING (public.is_active_admin()) WITH CHECK (public.is_active_admin());
+CREATE POLICY "Admins can manage task_assignees" ON public.task_assignees FOR ALL TO authenticated USING (public.is_active_admin(auth.uid())) WITH CHECK (public.is_active_admin(auth.uid()));
 CREATE POLICY "Members can view task_assignees" ON public.task_assignees FOR SELECT TO authenticated USING (
     EXISTS (
         SELECT 1 FROM public.project_tasks t
@@ -354,7 +354,7 @@ CREATE POLICY "Members can view task_assignees" ON public.task_assignees FOR SEL
 );
 
 -- subtask_assignees policies (Delete allowed for unassigning)
-CREATE POLICY "Admins can manage subtask_assignees" ON public.subtask_assignees FOR ALL TO authenticated USING (public.is_active_admin()) WITH CHECK (public.is_active_admin());
+CREATE POLICY "Admins can manage subtask_assignees" ON public.subtask_assignees FOR ALL TO authenticated USING (public.is_active_admin(auth.uid())) WITH CHECK (public.is_active_admin(auth.uid()));
 CREATE POLICY "Members can view subtask_assignees" ON public.subtask_assignees FOR SELECT TO authenticated USING (
     EXISTS (
         SELECT 1 FROM public.project_subtasks st
@@ -392,7 +392,7 @@ DECLARE
 BEGIN
     v_creator := auth.uid();
     IF v_creator IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
-    IF NOT public.is_active_admin() THEN RAISE EXCEPTION 'Permission denied'; END IF;
+    IF NOT public.is_active_admin(auth.uid()) THEN RAISE EXCEPTION 'Permission denied'; END IF;
 
     -- Validate Project
     SELECT status INTO v_project_status FROM public.projects WHERE id = p_project_id;
@@ -425,7 +425,7 @@ BEGIN
             AND ap.is_active = true
             AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
 
-            IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
+            IF v_active_member_count <> (SELECT COUNT(DISTINCT val) FROM jsonb_array_elements_text(p_assignee_ids) AS val) THEN
                 RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
             END IF;
         END IF;
@@ -484,7 +484,7 @@ DECLARE
 BEGIN
     v_creator := auth.uid();
     IF v_creator IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
-    IF NOT public.is_active_admin() THEN RAISE EXCEPTION 'Permission denied'; END IF;
+    IF NOT public.is_active_admin(auth.uid()) THEN RAISE EXCEPTION 'Permission denied'; END IF;
 
     -- Validate Task and Project
     SELECT project_id, status INTO v_project_id, v_task_status FROM public.project_tasks WHERE id = p_task_id;
@@ -521,7 +521,7 @@ BEGIN
             AND ap.is_active = true
             AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
 
-            IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
+            IF v_active_member_count <> (SELECT COUNT(DISTINCT val) FROM jsonb_array_elements_text(p_assignee_ids) AS val) THEN
                 RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
             END IF;
         END IF;
@@ -568,7 +568,7 @@ DECLARE
     v_project_status TEXT;
 BEGIN
     IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
-    IF NOT public.is_active_admin() THEN RAISE EXCEPTION 'Permission denied'; END IF;
+    IF NOT public.is_active_admin(auth.uid()) THEN RAISE EXCEPTION 'Permission denied'; END IF;
 
     SELECT status INTO v_project_status FROM public.projects WHERE id = p_project_id;
     IF NOT FOUND THEN RAISE EXCEPTION 'Project not found'; END IF;
@@ -629,7 +629,7 @@ DECLARE
     v_project_status TEXT;
 BEGIN
     IF auth.uid() IS NULL THEN RAISE EXCEPTION 'Authentication required'; END IF;
-    IF NOT public.is_active_admin() THEN RAISE EXCEPTION 'Permission denied'; END IF;
+    IF NOT public.is_active_admin(auth.uid()) THEN RAISE EXCEPTION 'Permission denied'; END IF;
 
     SELECT project_id, status INTO v_project_id, v_task_status FROM public.project_tasks WHERE id = p_task_id;
     IF NOT FOUND THEN RAISE EXCEPTION 'Task not found'; END IF;
