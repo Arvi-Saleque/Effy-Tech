@@ -2,15 +2,15 @@
 CREATE TABLE public.project_tasks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     project_id UUID NOT NULL REFERENCES public.projects(id),
-    title TEXT NOT NULL CHECK (trim(title) <> ''),
-    description TEXT,
-    status TEXT NOT NULL DEFAULT 'backlog' CHECK (status IN ('backlog', 'todo', 'in_progress', 'blocked', 'review', 'done', 'cancelled', 'archived')),
+    title TEXT NOT NULL CHECK (length(trim(title)) >= 1 AND length(trim(title)) <= 250),
+    description TEXT CHECK (description IS NULL OR length(trim(description)) <= 10000),
+    status TEXT NOT NULL DEFAULT 'todo' CHECK (status IN ('backlog', 'todo', 'in_progress', 'blocked', 'review', 'done', 'cancelled', 'archived')),
     priority TEXT NOT NULL DEFAULT 'normal' CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
     start_date DATE,
     due_date DATE,
-    estimated_minutes INTEGER CHECK (estimated_minutes IS NULL OR estimated_minutes >= 0),
+    estimated_minutes INTEGER CHECK (estimated_minutes IS NULL OR (estimated_minutes >= 0 AND estimated_minutes <= 100000)),
     progress_percent INTEGER NOT NULL DEFAULT 0 CHECK (progress_percent >= 0 AND progress_percent <= 100),
-    sort_order INTEGER NOT NULL DEFAULT 0,
+    sort_order INTEGER NOT NULL DEFAULT 0 CHECK (sort_order >= 0),
     created_by UUID NOT NULL REFERENCES public.admin_profiles(id),
     completed_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -21,14 +21,14 @@ CREATE TABLE public.project_tasks (
 CREATE TABLE public.project_subtasks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     task_id UUID NOT NULL REFERENCES public.project_tasks(id),
-    title TEXT NOT NULL CHECK (trim(title) <> ''),
-    description TEXT,
+    title TEXT NOT NULL CHECK (length(trim(title)) >= 1 AND length(trim(title)) <= 250),
+    description TEXT CHECK (description IS NULL OR length(trim(description)) <= 10000),
     status TEXT NOT NULL DEFAULT 'todo' CHECK (status IN ('todo', 'in_progress', 'blocked', 'review', 'done', 'cancelled', 'archived')),
     priority TEXT NOT NULL DEFAULT 'normal' CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
     due_date DATE,
-    estimated_minutes INTEGER CHECK (estimated_minutes IS NULL OR estimated_minutes >= 0),
+    estimated_minutes INTEGER CHECK (estimated_minutes IS NULL OR (estimated_minutes >= 0 AND estimated_minutes <= 100000)),
     progress_percent INTEGER NOT NULL DEFAULT 0 CHECK (progress_percent >= 0 AND progress_percent <= 100),
-    sort_order INTEGER NOT NULL DEFAULT 0,
+    sort_order INTEGER NOT NULL DEFAULT 0 CHECK (sort_order >= 0),
     created_by UUID NOT NULL REFERENCES public.admin_profiles(id),
     completed_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -63,7 +63,7 @@ CREATE INDEX idx_task_assignees_user_id ON public.task_assignees(user_id);
 CREATE INDEX idx_subtask_assignees_subtask_id ON public.subtask_assignees(subtask_id);
 CREATE INDEX idx_subtask_assignees_user_id ON public.subtask_assignees(user_id);
 
--- 2. updated_at triggers
+-- 2. Audit and updated_at triggers
 CREATE TRIGGER set_project_tasks_updated_at
     BEFORE UPDATE ON public.project_tasks
     FOR EACH ROW
@@ -73,6 +73,105 @@ CREATE TRIGGER set_project_subtasks_updated_at
     BEFORE UPDATE ON public.project_subtasks
     FOR EACH ROW
     EXECUTE FUNCTION public.set_updated_at();
+
+-- Immutable field protection
+CREATE OR REPLACE FUNCTION public.trigger_protect_task_audit_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.id = OLD.id;
+    NEW.created_by = OLD.created_by;
+    NEW.created_at = OLD.created_at;
+
+    IF NEW.status = 'done' AND OLD.status <> 'done' THEN
+        NEW.completed_at = now();
+    ELSIF NEW.status <> 'done' AND OLD.status = 'done' THEN
+        NEW.completed_at = NULL;
+    ELSIF NEW.status = OLD.status AND NEW.completed_at IS DISTINCT FROM OLD.completed_at THEN
+        NEW.completed_at = OLD.completed_at;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.trigger_protect_task_audit_fields FROM PUBLIC, anon;
+
+CREATE TRIGGER protect_project_tasks_audit
+    BEFORE UPDATE ON public.project_tasks
+    FOR EACH ROW
+    EXECUTE FUNCTION public.trigger_protect_task_audit_fields();
+
+CREATE OR REPLACE FUNCTION public.trigger_protect_subtask_audit_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.id = OLD.id;
+    NEW.created_by = OLD.created_by;
+    NEW.created_at = OLD.created_at;
+
+    IF NEW.status = 'done' AND OLD.status <> 'done' THEN
+        NEW.completed_at = now();
+    ELSIF NEW.status <> 'done' AND OLD.status = 'done' THEN
+        NEW.completed_at = NULL;
+    ELSIF NEW.status = OLD.status AND NEW.completed_at IS DISTINCT FROM OLD.completed_at THEN
+        NEW.completed_at = OLD.completed_at;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.trigger_protect_subtask_audit_fields FROM PUBLIC, anon;
+
+CREATE TRIGGER protect_project_subtasks_audit
+    BEFORE UPDATE ON public.project_subtasks
+    FOR EACH ROW
+    EXECUTE FUNCTION public.trigger_protect_subtask_audit_fields();
+
+CREATE OR REPLACE FUNCTION public.trigger_protect_task_assignee_audit_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.id = OLD.id;
+    NEW.task_id = OLD.task_id;
+    NEW.user_id = OLD.user_id;
+    NEW.assigned_by = OLD.assigned_by;
+    NEW.assigned_at = OLD.assigned_at;
+    RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.trigger_protect_task_assignee_audit_fields FROM PUBLIC, anon;
+
+CREATE TRIGGER protect_task_assignees_audit
+    BEFORE UPDATE ON public.task_assignees
+    FOR EACH ROW
+    EXECUTE FUNCTION public.trigger_protect_task_assignee_audit_fields();
+
+CREATE OR REPLACE FUNCTION public.trigger_protect_subtask_assignee_audit_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.id = OLD.id;
+    NEW.subtask_id = OLD.subtask_id;
+    NEW.user_id = OLD.user_id;
+    NEW.assigned_by = OLD.assigned_by;
+    NEW.assigned_at = OLD.assigned_at;
+    RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.trigger_protect_subtask_assignee_audit_fields FROM PUBLIC, anon;
+
+CREATE TRIGGER protect_subtask_assignees_audit
+    BEFORE UPDATE ON public.subtask_assignees
+    FOR EACH ROW
+    EXECUTE FUNCTION public.trigger_protect_subtask_assignee_audit_fields();
 
 -- 3. Progress Recalculation Functions (Hardened)
 CREATE OR REPLACE FUNCTION public.recalculate_task_progress_v1(p_task_id UUID)
@@ -112,7 +211,8 @@ BEGIN
     END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.recalculate_task_progress_v1 FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.recalculate_task_progress_v1(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.recalculate_task_progress_v1(UUID) TO authenticated, service_role;
 
 CREATE OR REPLACE FUNCTION public.recalculate_project_progress_v1(p_project_id UUID)
 RETURNS void
@@ -154,7 +254,8 @@ BEGIN
     END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.recalculate_project_progress_v1 FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.recalculate_project_progress_v1(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.recalculate_project_progress_v1(UUID) TO authenticated, service_role;
 
 -- Triggers to auto-recalculate progress
 CREATE OR REPLACE FUNCTION public.trigger_recalculate_task_progress()
@@ -281,7 +382,6 @@ SET search_path = pg_catalog, public, pg_temp
 AS $$
 DECLARE
     v_task_id UUID;
-    v_user_id UUID;
     v_creator UUID;
     v_project_status TEXT;
     v_active_member_count INT;
@@ -298,26 +398,32 @@ BEGIN
     END IF;
 
     -- Validate Task Input
-    IF trim(p_title) = '' OR length(p_title) > 250 THEN RAISE EXCEPTION 'Invalid title'; END IF;
-    IF p_description IS NOT NULL AND length(p_description) > 10000 THEN RAISE EXCEPTION 'Description too long'; END IF;
+    IF trim(p_title) = '' OR length(trim(p_title)) > 250 THEN RAISE EXCEPTION 'Invalid title'; END IF;
+    IF p_description IS NOT NULL AND length(trim(p_description)) > 10000 THEN RAISE EXCEPTION 'Description too long'; END IF;
     IF p_status NOT IN ('backlog', 'todo', 'in_progress', 'blocked') THEN RAISE EXCEPTION 'Invalid initial status'; END IF;
     IF p_priority NOT IN ('low', 'normal', 'high', 'urgent') THEN RAISE EXCEPTION 'Invalid priority'; END IF;
     IF p_progress_percent < 0 OR p_progress_percent > 100 THEN RAISE EXCEPTION 'Invalid progress'; END IF;
     IF p_estimated_minutes IS NOT NULL AND (p_estimated_minutes < 0 OR p_estimated_minutes > 100000) THEN RAISE EXCEPTION 'Invalid estimated minutes'; END IF;
     IF p_start_date IS NOT NULL AND p_due_date IS NOT NULL AND p_due_date < p_start_date THEN RAISE EXCEPTION 'Due date cannot be before start date'; END IF;
+    IF p_sort_order < 0 THEN RAISE EXCEPTION 'Sort order must be zero or greater'; END IF;
 
     -- Validate Assignees array
-    IF p_assignee_ids IS NOT NULL AND jsonb_typeof(p_assignee_ids) = 'array' AND jsonb_array_length(p_assignee_ids) > 0 THEN
-        -- Check if all IDs in JSON are active project members
-        SELECT COUNT(*) INTO v_active_member_count
-        FROM public.project_members pm
-        JOIN public.admin_profiles ap ON pm.user_id = ap.id
-        WHERE pm.project_id = p_project_id
-        AND ap.is_active = true
-        AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
+    IF p_assignee_ids IS NOT NULL THEN
+        IF jsonb_typeof(p_assignee_ids) <> 'array' THEN
+            RAISE EXCEPTION 'Assignees must be a JSON array';
+        END IF;
 
-        IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
-            RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
+        IF jsonb_array_length(p_assignee_ids) > 0 THEN
+            SELECT COUNT(*) INTO v_active_member_count
+            FROM public.project_members pm
+            JOIN public.admin_profiles ap ON pm.user_id = ap.id
+            WHERE pm.project_id = p_project_id
+            AND ap.is_active = true
+            AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
+
+            IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
+                RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
+            END IF;
         END IF;
     END IF;
 
@@ -333,7 +439,7 @@ BEGIN
     ) RETURNING id INTO v_task_id;
 
     -- Insert assignees (safely deduplicated)
-    IF p_assignee_ids IS NOT NULL AND jsonb_typeof(p_assignee_ids) = 'array' AND jsonb_array_length(p_assignee_ids) > 0 THEN
+    IF p_assignee_ids IS NOT NULL AND jsonb_array_length(p_assignee_ids) > 0 THEN
         INSERT INTO public.task_assignees (task_id, user_id, assigned_by)
         SELECT DISTINCT v_task_id, x.val::UUID, v_creator
         FROM jsonb_array_elements_text(p_assignee_ids) AS x(val);
@@ -343,8 +449,8 @@ BEGIN
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.create_task_with_assignees_v1 FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.create_task_with_assignees_v1 TO authenticated, service_role;
+REVOKE ALL ON FUNCTION public.create_task_with_assignees_v1(UUID, TEXT, TEXT, TEXT, TEXT, DATE, DATE, INTEGER, INTEGER, INTEGER, JSONB) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.create_task_with_assignees_v1(UUID, TEXT, TEXT, TEXT, TEXT, DATE, DATE, INTEGER, INTEGER, INTEGER, JSONB) TO authenticated, service_role;
 
 
 CREATE OR REPLACE FUNCTION public.create_subtask_with_assignees_v1(
@@ -389,24 +495,31 @@ BEGIN
     END IF;
 
     -- Validate Subtask Input
-    IF trim(p_title) = '' OR length(p_title) > 250 THEN RAISE EXCEPTION 'Invalid title'; END IF;
-    IF p_description IS NOT NULL AND length(p_description) > 10000 THEN RAISE EXCEPTION 'Description too long'; END IF;
+    IF trim(p_title) = '' OR length(trim(p_title)) > 250 THEN RAISE EXCEPTION 'Invalid title'; END IF;
+    IF p_description IS NOT NULL AND length(trim(p_description)) > 10000 THEN RAISE EXCEPTION 'Description too long'; END IF;
     IF p_status NOT IN ('todo', 'in_progress', 'blocked') THEN RAISE EXCEPTION 'Invalid initial status'; END IF;
     IF p_priority NOT IN ('low', 'normal', 'high', 'urgent') THEN RAISE EXCEPTION 'Invalid priority'; END IF;
     IF p_progress_percent < 0 OR p_progress_percent > 100 THEN RAISE EXCEPTION 'Invalid progress'; END IF;
     IF p_estimated_minutes IS NOT NULL AND (p_estimated_minutes < 0 OR p_estimated_minutes > 100000) THEN RAISE EXCEPTION 'Invalid estimated minutes'; END IF;
+    IF p_sort_order < 0 THEN RAISE EXCEPTION 'Sort order must be zero or greater'; END IF;
 
     -- Validate Assignees array
-    IF p_assignee_ids IS NOT NULL AND jsonb_typeof(p_assignee_ids) = 'array' AND jsonb_array_length(p_assignee_ids) > 0 THEN
-        SELECT COUNT(*) INTO v_active_member_count
-        FROM public.project_members pm
-        JOIN public.admin_profiles ap ON pm.user_id = ap.id
-        WHERE pm.project_id = v_project_id
-        AND ap.is_active = true
-        AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
+    IF p_assignee_ids IS NOT NULL THEN
+        IF jsonb_typeof(p_assignee_ids) <> 'array' THEN
+            RAISE EXCEPTION 'Assignees must be a JSON array';
+        END IF;
 
-        IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
-            RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
+        IF jsonb_array_length(p_assignee_ids) > 0 THEN
+            SELECT COUNT(*) INTO v_active_member_count
+            FROM public.project_members pm
+            JOIN public.admin_profiles ap ON pm.user_id = ap.id
+            WHERE pm.project_id = v_project_id
+            AND ap.is_active = true
+            AND pm.user_id IN (SELECT DISTINCT jsonb_array_elements_text(p_assignee_ids)::UUID);
+
+            IF v_active_member_count <> (SELECT COUNT(DISTINCT jsonb_array_elements_text(p_assignee_ids))) THEN
+                RAISE EXCEPTION 'One or more assignees are invalid or not active project members';
+            END IF;
         END IF;
     END IF;
 
@@ -422,7 +535,7 @@ BEGIN
     ) RETURNING id INTO v_subtask_id;
 
     -- Insert assignees
-    IF p_assignee_ids IS NOT NULL AND jsonb_typeof(p_assignee_ids) = 'array' AND jsonb_array_length(p_assignee_ids) > 0 THEN
+    IF p_assignee_ids IS NOT NULL AND jsonb_array_length(p_assignee_ids) > 0 THEN
         INSERT INTO public.subtask_assignees (subtask_id, user_id, assigned_by)
         SELECT DISTINCT v_subtask_id, x.val::UUID, v_creator
         FROM jsonb_array_elements_text(p_assignee_ids) AS x(val);
@@ -431,8 +544,8 @@ BEGIN
     RETURN v_subtask_id;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.create_subtask_with_assignees_v1 FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.create_subtask_with_assignees_v1 TO authenticated, service_role;
+REVOKE ALL ON FUNCTION public.create_subtask_with_assignees_v1(UUID, TEXT, TEXT, TEXT, TEXT, DATE, INTEGER, INTEGER, INTEGER, JSONB) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.create_subtask_with_assignees_v1(UUID, TEXT, TEXT, TEXT, TEXT, DATE, INTEGER, INTEGER, INTEGER, JSONB) TO authenticated, service_role;
 
 
 CREATE OR REPLACE FUNCTION public.reorder_project_tasks_v1(
@@ -459,29 +572,39 @@ BEGIN
         RAISE EXCEPTION 'Project is not mutable'; 
     END IF;
 
-    IF p_ordered_task_ids IS NOT NULL AND jsonb_typeof(p_ordered_task_ids) = 'array' THEN
-        SELECT COUNT(DISTINCT val) INTO v_count FROM jsonb_array_elements_text(p_ordered_task_ids) AS val;
-        IF v_count <> jsonb_array_length(p_ordered_task_ids) THEN
-            RAISE EXCEPTION 'Duplicate IDs in order array';
-        END IF;
-
-        v_idx := 0;
-        FOR v_task_id IN SELECT jsonb_array_elements_text(p_ordered_task_ids)::UUID
-        LOOP
-            UPDATE public.project_tasks
-            SET sort_order = v_idx, updated_at = now()
-            WHERE id = v_task_id AND project_id = p_project_id AND status NOT IN ('archived');
-            
-            IF NOT FOUND THEN
-                RAISE EXCEPTION 'Task not found, belongs to another project, or is archived';
-            END IF;
-            v_idx := v_idx + 1;
-        END LOOP;
+    IF p_ordered_task_ids IS NULL THEN
+        RAISE EXCEPTION 'Ordered task IDs array cannot be null';
     END IF;
+
+    IF jsonb_typeof(p_ordered_task_ids) <> 'array' THEN
+        RAISE EXCEPTION 'Ordered task IDs must be a JSON array';
+    END IF;
+
+    IF jsonb_array_length(p_ordered_task_ids) = 0 THEN
+        RETURN;
+    END IF;
+
+    SELECT COUNT(DISTINCT val) INTO v_count FROM jsonb_array_elements_text(p_ordered_task_ids) AS val;
+    IF v_count <> jsonb_array_length(p_ordered_task_ids) THEN
+        RAISE EXCEPTION 'Duplicate IDs in order array';
+    END IF;
+
+    v_idx := 0;
+    FOR v_task_id IN SELECT x.val::UUID FROM jsonb_array_elements_text(p_ordered_task_ids) AS x(val)
+    LOOP
+        UPDATE public.project_tasks
+        SET sort_order = v_idx, updated_at = now()
+        WHERE id = v_task_id AND project_id = p_project_id AND status NOT IN ('archived');
+        
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Task not found, belongs to another project, or is archived';
+        END IF;
+        v_idx := v_idx + 1;
+    END LOOP;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.reorder_project_tasks_v1 FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.reorder_project_tasks_v1 TO authenticated, service_role;
+REVOKE ALL ON FUNCTION public.reorder_project_tasks_v1(UUID, JSONB) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.reorder_project_tasks_v1(UUID, JSONB) TO authenticated, service_role;
 
 
 CREATE OR REPLACE FUNCTION public.reorder_project_subtasks_v1(
@@ -515,26 +638,36 @@ BEGIN
         RAISE EXCEPTION 'Project is not mutable'; 
     END IF;
 
-    IF p_ordered_subtask_ids IS NOT NULL AND jsonb_typeof(p_ordered_subtask_ids) = 'array' THEN
-        SELECT COUNT(DISTINCT val) INTO v_count FROM jsonb_array_elements_text(p_ordered_subtask_ids) AS val;
-        IF v_count <> jsonb_array_length(p_ordered_subtask_ids) THEN
-            RAISE EXCEPTION 'Duplicate IDs in order array';
-        END IF;
-
-        v_idx := 0;
-        FOR v_subtask_id IN SELECT jsonb_array_elements_text(p_ordered_subtask_ids)::UUID
-        LOOP
-            UPDATE public.project_subtasks
-            SET sort_order = v_idx, updated_at = now()
-            WHERE id = v_subtask_id AND task_id = p_task_id AND status NOT IN ('archived');
-            
-            IF NOT FOUND THEN
-                RAISE EXCEPTION 'Subtask not found, belongs to another task, or is archived';
-            END IF;
-            v_idx := v_idx + 1;
-        END LOOP;
+    IF p_ordered_subtask_ids IS NULL THEN
+        RAISE EXCEPTION 'Ordered subtask IDs array cannot be null';
     END IF;
+
+    IF jsonb_typeof(p_ordered_subtask_ids) <> 'array' THEN
+        RAISE EXCEPTION 'Ordered subtask IDs must be a JSON array';
+    END IF;
+
+    IF jsonb_array_length(p_ordered_subtask_ids) = 0 THEN
+        RETURN;
+    END IF;
+
+    SELECT COUNT(DISTINCT val) INTO v_count FROM jsonb_array_elements_text(p_ordered_subtask_ids) AS val;
+    IF v_count <> jsonb_array_length(p_ordered_subtask_ids) THEN
+        RAISE EXCEPTION 'Duplicate IDs in order array';
+    END IF;
+
+    v_idx := 0;
+    FOR v_subtask_id IN SELECT x.val::UUID FROM jsonb_array_elements_text(p_ordered_subtask_ids) AS x(val)
+    LOOP
+        UPDATE public.project_subtasks
+        SET sort_order = v_idx, updated_at = now()
+        WHERE id = v_subtask_id AND task_id = p_task_id AND status NOT IN ('archived');
+        
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Subtask not found, belongs to another task, or is archived';
+        END IF;
+        v_idx := v_idx + 1;
+    END LOOP;
 END;
 $$;
-REVOKE ALL ON FUNCTION public.reorder_project_subtasks_v1 FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.reorder_project_subtasks_v1 TO authenticated, service_role;
+REVOKE ALL ON FUNCTION public.reorder_project_subtasks_v1(UUID, JSONB) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.reorder_project_subtasks_v1(UUID, JSONB) TO authenticated, service_role;

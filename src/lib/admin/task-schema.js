@@ -28,7 +28,7 @@ export const createTaskSchema = z.object({
   estimatedMinutes: z.number().int().min(0).max(100000).optional().nullable(),
   startDate: dateStringSchema,
   dueDate: dateStringSchema,
-  sortOrder: z.number().int().default(0),
+  sortOrder: z.number().int().min(0).default(0),
   assignees: z.array(z.string().uuid()).default([])
 }).refine(data => {
   if (data.startDate && data.dueDate) {
@@ -49,7 +49,7 @@ export const updateTaskSchema = z.object({
   estimatedMinutes: z.number().int().min(0).max(100000).optional().nullable(),
   startDate: dateStringSchema,
   dueDate: dateStringSchema,
-  sortOrder: z.number().int().optional(),
+  sortOrder: z.number().int().min(0).optional(),
   assignees: z.array(z.string().uuid()).optional()
 }).refine(data => {
   if (data.startDate && data.dueDate) {
@@ -70,7 +70,7 @@ export const createSubtaskSchema = z.object({
   progressPercent: z.number().int().min(0).max(100).default(0),
   estimatedMinutes: z.number().int().min(0).max(100000).optional().nullable(),
   dueDate: dateStringSchema,
-  sortOrder: z.number().int().default(0),
+  sortOrder: z.number().int().min(0).default(0),
   assignees: z.array(z.string().uuid()).default([])
 });
 
@@ -82,7 +82,7 @@ export const updateSubtaskSchema = z.object({
   progressPercent: z.number().int().min(0).max(100).optional(),
   estimatedMinutes: z.number().int().min(0).max(100000).optional().nullable(),
   dueDate: dateStringSchema,
-  sortOrder: z.number().int().optional(),
+  sortOrder: z.number().int().min(0).optional(),
   assignees: z.array(z.string().uuid()).optional()
 });
 
@@ -128,11 +128,11 @@ export const subtaskAssignmentSchema = z.object({
 });
 
 export const taskReorderSchema = z.object({
-  orderedTaskIds: z.array(z.string().uuid())
+  orderedTaskIds: z.array(z.string().uuid()).refine(arr => new Set(arr).size === arr.length, "Duplicate IDs are not allowed")
 });
 
 export const subtaskReorderSchema = z.object({
-  orderedSubtaskIds: z.array(z.string().uuid())
+  orderedSubtaskIds: z.array(z.string().uuid()).refine(arr => new Set(arr).size === arr.length, "Duplicate IDs are not allowed")
 });
 
 /**

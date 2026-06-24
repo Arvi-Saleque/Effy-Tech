@@ -5,7 +5,7 @@ import { getCurrentProfile } from "@/lib/admin/auth";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import {
-  taskIdSchema, subtaskIdSchema, createTaskSchema, updateTaskSchema, createSubtaskSchema, updateSubtaskSchema, taskStatusFilterSchema, taskPriorityFilterSchema, taskStatusTransitionSchema, subtaskStatusTransitionSchema, safeSearchSchema
+  taskIdSchema, subtaskIdSchema, createTaskSchema, updateTaskSchema, createSubtaskSchema, updateSubtaskSchema, taskStatusFilterSchema, taskPriorityFilterSchema, taskStatusTransitionSchema, subtaskStatusTransitionSchema, safeSearchSchema, taskReorderSchema, subtaskReorderSchema, taskDueStateFilterSchema
 } from "./task-schema";
 
 const uuidSchema = z.string().uuid();
@@ -26,7 +26,12 @@ async function requireReadAccess(projectId) {
 
   // Check if member
   const supabase = await createSupabaseClient();
-  const { data: member } = await supabase.from("project_members").select("user_id").eq("project_id", projectId).eq("user_id", profile.id).single();
+  const { data: member, error: mErr } = await supabase.from("project_members").select("user_id").eq("project_id", projectId).eq("user_id", profile.id).single();
+  if (mErr) {
+    if (mErr.code === "PGRST116") throw new Error("Unauthorized: Not a project member.");
+    console.error("[requireReadAccess]", mErr);
+    throw new Error("Unable to verify project access.");
+  }
   if (!member) throw new Error("Unauthorized: Not a project member.");
   return profile;
 }
@@ -61,8 +66,11 @@ export async function getProjectTasks(projectId, filters = {}) {
       } else {
         query = query.eq("status", validStatus);
       }
-    } else if (filters.includeArchived !== true) {
-      query = query.neq("status", "archived");
+    } else {
+      const incArchived = filters.includeArchived === true || filters.includeArchived === "true";
+      if (!incArchived) {
+        query = query.neq("status", "archived");
+      }
     }
 
     const parsedPriority = taskPriorityFilterSchema.safeParse(filters.priority);
@@ -84,20 +92,23 @@ export async function getProjectTasks(projectId, filters = {}) {
       }
     }
     
-    if (filters.dueState && filters.dueState !== "all") {
+    const parsedDue = taskDueStateFilterSchema.safeParse(filters.dueState);
+    const validDueState = parsedDue.success ? parsedDue.data : "all";
+
+    if (validDueState !== "all") {
       const today = new Date();
       today.setHours(0,0,0,0);
       const soon = new Date(today);
       soon.setDate(soon.getDate() + 3);
 
       filtered = filtered.filter(t => {
-        if (!t.due_date) return filters.dueState === "no_due_date";
+        if (!t.due_date) return validDueState === "no_due_date";
         // Parse YYYY-MM-DD safely
         const [y, m, d] = t.due_date.split('-');
         const dd = new Date(y, m - 1, d);
-        if (filters.dueState === "overdue") return dd < today && t.status !== "done";
-        if (filters.dueState === "due_today") return dd.getTime() === today.getTime();
-        if (filters.dueState === "due_soon") return dd > today && dd <= soon;
+        if (validDueState === "overdue") return dd < today && t.status !== "done";
+        if (validDueState === "due_today") return dd.getTime() === today.getTime();
+        if (validDueState === "due_soon") return dd > today && dd <= soon;
         return false;
       });
     }
@@ -215,7 +226,12 @@ export async function updateTask(taskId, input) {
     const supabase = await createSupabaseClient();
     
     const { data: task, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
-    if (fetchErr || !task) return { data: null, error: "Task not found." };
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[updateTask]", fetchErr);
+      return { data: null, error: "Unable to find the task." };
+    }
+    
     if (["done", "cancelled", "archived"].includes(task.status)) return { data: null, error: "Task is not in an editable state." };
     if (["completed", "cancelled", "archived"].includes(task.projects.status)) return { data: null, error: "Project is no longer editable." };
 
@@ -246,7 +262,12 @@ export async function transitionTaskStatus(taskId, targetStatus) {
 
     const supabase = await createSupabaseClient();
     const { data: task, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
-    if (fetchErr || !task) return { data: null, error: "Task not found." };
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[transitionTaskStatus]", fetchErr);
+      return { data: null, error: "Unable to find the task." };
+    }
+
     if (["completed", "cancelled", "archived"].includes(task.projects.status)) return { data: null, error: "Project is no longer editable." };
 
     if (["archived", "cancelled", "done"].includes(task.status)) {
@@ -288,13 +309,24 @@ export async function transitionTaskStatus(taskId, targetStatus) {
 export async function completeTask(taskId, force = false) {
   try {
     await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
     const supabase = await createSupabaseClient();
     
-    const { data: t } = await supabase.from("project_tasks").select("project_id, projects(status)").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
-    if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
+    const { data: t, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[completeTask]", fetchErr);
+      return { data: null, error: "Unable to complete the task." };
+    }
 
-    const { data: subtasks } = await supabase.from("project_subtasks").select("id, status").eq("task_id", taskId);
+    if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
+    if (["done", "cancelled", "archived"].includes(t.status)) return { data: null, error: "Task is already in a terminal state." };
+
+    const { data: subtasks, error: subErr } = await supabase.from("project_subtasks").select("id, status").eq("task_id", taskId);
+    if (subErr) {
+      console.error("[completeTask] subtasks query error:", subErr);
+      return { data: null, error: "Unable to verify the task's subtasks." };
+    }
     const incomplete = subtasks?.filter(s => s.status !== "done" && s.status !== "cancelled" && s.status !== "archived") || [];
     
     if (incomplete.length > 0 && !force) {
@@ -303,8 +335,7 @@ export async function completeTask(taskId, force = false) {
 
     const { error } = await supabase.from("project_tasks").update({
       status: "done",
-      progress_percent: 100,
-      completed_at: new Date().toISOString()
+      progress_percent: 100
     }).eq("id", taskId);
     
     if (error) {
@@ -325,9 +356,17 @@ export async function completeTask(taskId, force = false) {
 export async function cancelTask(taskId) {
   try {
     await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
     const supabase = await createSupabaseClient();
-    const { data: t } = await supabase.from("project_tasks").select("project_id").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
+    const { data: t, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[cancelTask]", fetchErr);
+      return { data: null, error: "Unable to cancel the task." };
+    }
+
+    if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
+    if (["done", "cancelled", "archived"].includes(t.status)) return { data: null, error: "Task is already in a terminal state." };
 
     const { error } = await supabase.from("project_tasks").update({ status: "cancelled" }).eq("id", taskId);
     if (error) {
@@ -348,9 +387,17 @@ export async function cancelTask(taskId) {
 export async function archiveTask(taskId) {
   try {
     await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
     const supabase = await createSupabaseClient();
-    const { data: t } = await supabase.from("project_tasks").select("project_id").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
+    const { data: t, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[archiveTask]", fetchErr);
+      return { data: null, error: "Unable to archive the task." };
+    }
+
+    if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
+    if (t.status === "archived") return { data: null, error: "Task is already archived." };
 
     const { error } = await supabase.from("project_tasks").update({ status: "archived" }).eq("id", taskId);
     if (error) {
@@ -371,9 +418,17 @@ export async function archiveTask(taskId) {
 export async function restoreTask(taskId) {
   try {
     await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
     const supabase = await createSupabaseClient();
-    const { data: t } = await supabase.from("project_tasks").select("project_id").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
+    const { data: t, error: fetchErr } = await supabase.from("project_tasks").select("status, project_id, projects(status)").eq("id", taskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[restoreTask]", fetchErr);
+      return { data: null, error: "Unable to restore the task." };
+    }
+
+    if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
+    if (t.status !== "archived") return { data: null, error: "Only archived tasks can be restored." };
 
     const { error } = await supabase.from("project_tasks").update({ status: "backlog" }).eq("id", taskId);
     if (error) {
@@ -394,14 +449,27 @@ export async function restoreTask(taskId) {
 export async function addTaskAssignee(taskId, userId) {
   try {
     const profile = await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
+    if (!uuidSchema.safeParse(userId).success) return { data: null, error: "Invalid user ID." };
+
     const supabase = await createSupabaseClient();
     
-    const { data: t } = await supabase.from("project_tasks").select("project_id, status, projects(status)").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
+    const { data: t, error: fetchErr } = await supabase.from("project_tasks").select("project_id, status, projects(status)").eq("id", taskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[addTaskAssignee]", fetchErr);
+      return { data: null, error: "Unable to add assignee." };
+    }
+
     if (["done", "cancelled", "archived"].includes(t.status)) return { data: null, error: "Cannot modify assignees on terminal tasks." };
     if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
 
-    const { data: m } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", t.project_id).eq("user_id", userId).single();
+    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", t.project_id).eq("user_id", userId).single();
+    if (mErr) {
+      if (mErr.code === "PGRST116") return { data: null, error: "User is not an active member of this project." };
+      console.error("[addTaskAssignee] member check error:", mErr);
+      return { data: null, error: "Unable to verify the selected member." };
+    }
     if (!m || !m.admin_profiles.is_active) return { data: null, error: "User is not an active member of this project." };
 
     const { error } = await supabase.from("task_assignees").insert({
@@ -428,12 +496,24 @@ export async function addTaskAssignee(taskId, userId) {
 export async function removeTaskAssignee(taskId, assignmentId) {
   try {
     await requireActiveAdmin();
-    const supabase = await createSupabaseClient();
-    const { data: a } = await supabase.from("task_assignees").select("task_id").eq("id", assignmentId).single();
-    if (!a || a.task_id !== taskId) return { data: null, error: "Assignment not found." };
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
+    if (!uuidSchema.safeParse(assignmentId).success) return { data: null, error: "Invalid assignment ID." };
 
-    const { data: t } = await supabase.from("project_tasks").select("project_id, status, projects(status)").eq("id", taskId).single();
-    if (!t) return { data: null, error: "Task not found." };
+    const supabase = await createSupabaseClient();
+    const { data: a, error: aErr } = await supabase.from("task_assignees").select("task_id").eq("id", assignmentId).single();
+    if (aErr) {
+      if (aErr.code === "PGRST116") return { data: null, error: "Assignment not found." };
+      console.error("[removeTaskAssignee]", aErr);
+      return { data: null, error: "Unable to update the assignment." };
+    }
+    if (a.task_id !== taskId) return { data: null, error: "Assignment does not belong to this task." };
+
+    const { data: t, error: tErr } = await supabase.from("project_tasks").select("project_id, status, projects(status)").eq("id", taskId).single();
+    if (tErr) {
+      if (tErr.code === "PGRST116") return { data: null, error: "Task not found." };
+      console.error("[removeTaskAssignee]", tErr);
+      return { data: null, error: "Unable to update the assignment." };
+    }
     if (["done", "cancelled", "archived"].includes(t.status)) return { data: null, error: "Cannot modify assignees on terminal tasks." };
     if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
 
@@ -455,6 +535,10 @@ export async function removeTaskAssignee(taskId, assignmentId) {
 export async function reorderTasks(projectId, orderedTaskIds) {
   try {
     await requireActiveAdmin();
+    if (!uuidSchema.safeParse(projectId).success) return { data: null, error: "Invalid project ID." };
+    const parsed = taskReorderSchema.safeParse({ orderedTaskIds });
+    if (!parsed.success) return { data: null, error: parsed.error.issues[0].message };
+
     const supabase = await createSupabaseClient();
     const { error } = await supabase.rpc("reorder_project_tasks_v1", {
       p_project_id: projectId,
@@ -525,10 +609,16 @@ export async function updateSubtask(subtaskId, input) {
     if (!parsed.success) return { data: null, error: parsed.error.issues[0].message };
 
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[updateSubtask]", fetchErr);
+      return { data: null, error: "Unable to update the subtask." };
+    }
+
     if (["done", "cancelled", "archived"].includes(st.status)) return { data: null, error: "Subtask is not in an editable state." };
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
     const updateData = { ...parsed.data };
     delete updateData.assignees;
@@ -555,9 +645,15 @@ export async function transitionSubtaskStatus(subtaskId, targetStatus) {
     if (!subtaskStatusTransitionSchema.safeParse(targetStatus).success) return { data: null, error: "Invalid transition status." };
 
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[transitionSubtaskStatus]", fetchErr);
+      return { data: null, error: "Unable to transition the subtask." };
+    }
+
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
     const allowed = {
       todo: ["in_progress", "blocked"],
@@ -590,13 +686,21 @@ export async function transitionSubtaskStatus(subtaskId, targetStatus) {
 export async function completeSubtask(subtaskId) {
   try {
     await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[completeSubtask]", fetchErr);
+      return { data: null, error: "Unable to complete the subtask." };
+    }
+
+    if (["done", "cancelled", "archived"].includes(st.status)) return { data: null, error: "Subtask is already in a terminal state." };
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
     const { error } = await supabase.from("project_subtasks").update({
-      status: "done", progress_percent: 100, completed_at: new Date().toISOString()
+      status: "done", progress_percent: 100
     }).eq("id", subtaskId);
     
     if (error) {
@@ -615,18 +719,26 @@ export async function completeSubtask(subtaskId) {
 export async function cancelSubtask(subtaskId) {
   try {
     await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, project_tasks(project_id)").eq("id", subtaskId).single();
-    
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[cancelSubtask]", fetchErr);
+      return { data: null, error: "Unable to cancel the subtask." };
+    }
+
+    if (["done", "cancelled", "archived"].includes(st.status)) return { data: null, error: "Subtask is already in a terminal state." };
+    if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
+
     const { error } = await supabase.from("project_subtasks").update({ status: "cancelled" }).eq("id", subtaskId);
     if (error) {
       console.error("[cancelSubtask]", error);
       return { data: null, error: "Unable to cancel the subtask." };
     }
-    if (st) {
-      revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks`);
-      revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks/${st.task_id}`);
-    }
+    revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks`);
+    revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks/${st.task_id}`);
     return { data: true, error: null };
   } catch (err) { 
     console.error("[cancelSubtask]", err);
@@ -637,18 +749,26 @@ export async function cancelSubtask(subtaskId) {
 export async function archiveSubtask(subtaskId) {
   try {
     await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, project_tasks(project_id)").eq("id", subtaskId).single();
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[archiveSubtask]", fetchErr);
+      return { data: null, error: "Unable to archive the subtask." };
+    }
+
+    if (st.status === "archived") return { data: null, error: "Subtask is already archived." };
+    if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
     
     const { error } = await supabase.from("project_subtasks").update({ status: "archived" }).eq("id", subtaskId);
     if (error) {
       console.error("[archiveSubtask]", error);
       return { data: null, error: "Unable to archive the subtask." };
     }
-    if (st) {
-      revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks`);
-      revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks/${st.task_id}`);
-    }
+    revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks`);
+    revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks/${st.task_id}`);
     return { data: true, error: null };
   } catch (err) { 
     console.error("[archiveSubtask]", err);
@@ -659,10 +779,18 @@ export async function archiveSubtask(subtaskId) {
 export async function restoreSubtask(subtaskId) {
   try {
     await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[restoreSubtask]", fetchErr);
+      return { data: null, error: "Unable to restore the subtask." };
+    }
+
+    if (st.status !== "archived") return { data: null, error: "Only archived subtasks can be restored." };
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
     const { error } = await supabase.from("project_subtasks").update({ status: "todo" }).eq("id", subtaskId);
     if (error) {
@@ -681,14 +809,26 @@ export async function restoreSubtask(subtaskId) {
 export async function addSubtaskAssignee(subtaskId, userId) {
   try {
     const profile = await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
+    if (!uuidSchema.safeParse(userId).success) return { data: null, error: "Invalid user ID." };
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, status, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
-    if (["done", "cancelled", "archived"].includes(st.status) || ["done", "cancelled", "archived"].includes(st.project_tasks.status)) {
-      return { data: null, error: "Cannot modify assignees on terminal subtasks." };
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[addSubtaskAssignee]", fetchErr);
+      return { data: null, error: "Unable to add assignee." };
     }
 
-    const { data: m } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", st.project_tasks.project_id).eq("user_id", userId).single();
+    if (["done", "cancelled", "archived"].includes(st.status)) return { data: null, error: "Cannot modify assignees on terminal subtasks." };
+    if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
+
+    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", st.project_tasks.project_id).eq("user_id", userId).single();
+    if (mErr) {
+      if (mErr.code === "PGRST116") return { data: null, error: "User is not an active member of this project." };
+      console.error("[addSubtaskAssignee] member check error:", mErr);
+      return { data: null, error: "Unable to verify the selected member." };
+    }
     if (!m || !m.admin_profiles.is_active) return { data: null, error: "User is not an active member of this project." };
 
     const { error } = await supabase.from("subtask_assignees").insert({ subtask_id: subtaskId, user_id: userId, assigned_by: profile.id });
@@ -708,14 +848,30 @@ export async function addSubtaskAssignee(subtaskId, userId) {
 export async function removeSubtaskAssignee(subtaskId, assignmentId) {
   try {
     await requireActiveAdmin();
+    if (!subtaskIdSchema.safeParse(subtaskId).success) return { data: null, error: "Invalid subtask ID." };
+    if (!uuidSchema.safeParse(assignmentId).success) return { data: null, error: "Invalid assignment ID." };
+    
     const supabase = await createSupabaseClient();
-    const { data: st } = await supabase.from("project_subtasks").select("task_id, status, project_tasks(project_id, status)").eq("id", subtaskId).single();
-    if (!st) return { data: null, error: "Subtask not found." };
-    if (["done", "cancelled", "archived"].includes(st.status) || ["done", "cancelled", "archived"].includes(st.project_tasks.status)) {
-      return { data: null, error: "Cannot modify assignees on terminal subtasks." };
+    const { data: a, error: aErr } = await supabase.from("subtask_assignees").select("subtask_id").eq("id", assignmentId).single();
+    if (aErr) {
+      if (aErr.code === "PGRST116") return { data: null, error: "Assignment not found." };
+      console.error("[removeSubtaskAssignee]", aErr);
+      return { data: null, error: "Unable to update the assignment." };
+    }
+    if (a.subtask_id !== subtaskId) return { data: null, error: "Assignment does not belong to this subtask." };
+
+    const { data: st, error: fetchErr } = await supabase.from("project_subtasks").select("status, task_id, project_tasks(project_id, status, projects(status))").eq("id", subtaskId).single();
+    if (fetchErr) {
+      if (fetchErr.code === "PGRST116") return { data: null, error: "Subtask not found." };
+      console.error("[removeSubtaskAssignee]", fetchErr);
+      return { data: null, error: "Unable to remove assignee." };
     }
 
-    const { error } = await supabase.from("subtask_assignees").delete().eq("id", assignmentId).eq("subtask_id", subtaskId);
+    if (["done", "cancelled", "archived"].includes(st.status)) return { data: null, error: "Cannot modify assignees on terminal subtasks." };
+    if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
+    if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
+
+    const { error } = await supabase.from("subtask_assignees").delete().eq("id", assignmentId);
     if (error) {
       console.error("[removeSubtaskAssignee]", error);
       return { data: null, error: "Unable to update the assignment." };
@@ -731,6 +887,10 @@ export async function removeSubtaskAssignee(subtaskId, assignmentId) {
 export async function reorderSubtasks(taskId, orderedSubtaskIds) {
   try {
     await requireActiveAdmin();
+    if (!taskIdSchema.safeParse(taskId).success) return { data: null, error: "Invalid task ID." };
+    const parsed = subtaskReorderSchema.safeParse({ orderedSubtaskIds });
+    if (!parsed.success) return { data: null, error: parsed.error.issues[0].message };
+
     const supabase = await createSupabaseClient();
     const { error } = await supabase.rpc("reorder_project_subtasks_v1", {
       p_task_id: taskId,
