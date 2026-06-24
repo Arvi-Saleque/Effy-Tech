@@ -133,7 +133,8 @@ export default function TaskForm({ projectId, projectMembers, initialData = null
                   <input type="checkbox" checked={formData.assignees.includes(member.user_id)} onChange={() => handleAssigneeToggle(member.user_id)} className="w-4 h-4 rounded border-slate-600 text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900 bg-slate-700" />
                   <div>
                     <div className="text-sm font-medium text-slate-200">{member.admin_profiles.name}</div>
-                    <div className="text-xs text-slate-500 capitalize">{member.project_role}</div>
+                    <div className="text-xs text-slate-400">{member.admin_profiles.email}</div>
+                    <div className="text-xs text-slate-500 capitalize mt-0.5">{member.project_role}</div>
                   </div>
                 </label>
               ))}
