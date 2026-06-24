@@ -1,0 +1,16 @@
+- [x] Fix 1: Make Project Creation Fully Atomic
+- [x] Fix 2: Harden the RPC SQL
+- [x] Fix 3: Update `createProject()` to use `.rpc()`
+- [x] Fix 4: Validate Member Role Updates (`projectRoleSchema`)
+- [x] Fix 5: Validate Member Removal IDs (`projectMembershipIdSchema`)
+- [x] Fix 6: Safe Client Error Classification
+- [x] Fix 7: Remove Orphan Language
+- [x] V4 Fix 1: Next.js 16 SearchParams Handling
+- [x] V4 Fix 2: Correct Migration Location
+- [x] V4 Fix 3: Harden Security-Definer Function
+- [x] Run `npm run lint`
+- [x] Run `npm run build`
+- [x] Update `report.md`
+- [x] Update `walkthrough.md`
+- [x] Extract archive and verify paths
+- [x] Package and verify `effyops-phase3-review-v4.zip`

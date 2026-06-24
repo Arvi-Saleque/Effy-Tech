@@ -1,36 +1,42 @@
-# EffyOps V2 Phase 3: Project Management Implementation Report
+# EffyOps V2 Phase 3 — Project Management Finalization Report (V4)
 
-## Overview
-This report summarizes the implementation of EffyOps V2 Phase 3: Project Management. The implementation includes strict Zod schemas, robust server actions, secure write-operations requiring active admin validation, and a comprehensive user interface.
+## 1. Summary
+The EffyOps V2 Phase 3 implementation has been finalized. This fourth review implements Next.js 16 SearchParams fixes, hardens the RPC security footprint, and ensures accurate packaging and documentation.
 
-## Key Changes & Implementations
+## 2. Files Audited & Modified
+- `src/lib/admin/project-actions.js`
+- `src/lib/admin/project-schema.js`
+- `src/app/admin/(panel)/projects/new/page.js`
 
-### 1. Data Validation & Schemas
-- Implemented `src/lib/admin/project-schema.js` providing dedicated schemas: `createProjectSchema`, `updateProjectSchema`, and `projectMemberSchema`.
-- Maintained immutability rules: Projects cannot be created as `archived`, `completed`, or `cancelled`.
+## 3. Files Created/Hardened
+- `supabase/migrations/20260624000000_create_project_rpc.sql` (Hardened Transactional RPC)
 
-### 2. Server Actions & Security
-- Created `src/lib/admin/project-actions.js` incorporating immutable status constraints and RBAC (owner safeguards).
-- Reused `requireActiveAdmin` helper via `src/lib/admin/auth.js` with a new `getAllAdmins` function to load available admins for assignment.
-- Built explicit lifecycle methods: `createProject`, `updateProject`, `archiveProject`, `restoreProject`, `completeProject`, `cancelProject`, and member management functions (`addProjectMember`, `removeProjectMember`, `updateProjectMemberRole`).
+## 4. Key Fixes Applied
+1. **Fully Atomic Project Creation:** Partial JavaScript project creation was removed. `createProject()` now strictly relies on the `.rpc("create_project_with_members_v1")` method. 
+2. **Hardened RPC Logic:** The RPC enforces internal constraints, limits string boundaries, validates `p_members` arrays, and prevents duplicate user IDs. Orphan-project risk was removed through transactional rollback.
+3. **Validated Role Updates:** Implemented `projectRoleSchema` inside `updateProjectMemberRole` to lock down role variants before ever pinging Supabase.
+4. **Validated Member IDs:** Implemented `projectMembershipIdSchema` UUID validation in `updateProjectMemberRole` and `removeProjectMember`.
+5. **Safe Client Error Classification:** Differentiates strictly between a missing client and a broader Supabase DB error within `createProject()`.
+6. **Next.js 16 SearchParams Handling:** Correctly `await searchParams` in `/admin/projects/new/page.js` prior to accessing `clientId`.
+7. **Hardened Security-Definer Function:** Added `SET search_path = pg_catalog, public, pg_temp` to the RPC and used explicit function signatures for `REVOKE` and `GRANT` to safely scope execution without dynamic SQL.
 
-### 3. UI Components & Pages
-- Created dedicated visual badges: `ProjectStatusBadge` and `ProjectPriorityBadge`.
-- Built the main `ProjectForm.jsx` capable of handling both creation and editing, featuring validation error tracking and dynamic member addition for new projects.
-- Developed `ProjectFilters.jsx` and the projects index `page.js` to enable search across project name, description, and client details, along with multi-faceted filtering.
-- Implemented `/admin/projects/[projectId]/page.js` detailed view featuring a stats sidebar, schedule health evaluation, `ProjectActions` component, and `ProjectMembers` management component.
+## 5. Build & Lint Verification
+- `npm run lint`: **0 errors, 20 warnings** (Warnings pertained solely to non-optimized `<img>` tags on public showcase pages unrelated to EffyOps).
+- `npm run build`: Compiled successfully. No errors in the static generation or routing.
+- *Note: `lint` and `build` represent static verification only.*
 
-### 4. Client Integration
-- Updated `/admin/clients/[clientId]/page.js` to include a dynamic project summary showing the latest linked projects.
-- Upgraded the `/admin/(panel)/layout.js` to officially expose the "Projects" navigation tab to administrators.
+## 6. Constraints & Verifications
+- V1 behavior and routes remained completely untouched.
+- Client Management archive/restore behavior is unchanged.
+- Public website routes were not modified.
+- **Migration has not been applied remotely.**
+- **Project-creation runtime testing has not yet been performed.** The walkthrough still verifies that failed creation leaves no project rows, but this runtime confirmation remains pending the remote migration.
+- No git commits or pushes were made.
+- Extracted archive verified successfully: `createProject` solely calls `.rpc`, no physical deletions exist, searchParams are awaited, `projectMembershipIdSchema` & `projectRoleSchema` exist, search_path is secure, exact function signatures used in GRANTS, migration resides correctly under `supabase/migrations`, and all extracted files are non-zero.
 
-## Validation Checklist
-- [x] Implemented core Zod Schemas
-- [x] Secure Server Actions integrated with Supabase Role Level Security
-- [x] CRUD and Status Lifecycle UI (Create, Edit, Complete, Cancel, Archive, Restore)
-- [x] Project Members management implemented with owner safeguards
-- [x] Verified build processes complete successfully
-- [x] No modifications to existing public files or V1 tasks/timers
 
-## Ready for Deployment
-Code is localized, compiled, and zipped securely as `effyopsGpt.zip` awaiting push.
+## 7. Extracted Archive Verification
+- The zip file was extracted and verified to contain the correct supabase/migrations/20260624000000_create_project_rpc.sql path.
+- Verified all files are non-zero in size.
+- Confirmed wait searchParams is correctly applied in src/app/admin/(panel)/projects/new/page.js.
+- Confirmed SET search_path = pg_catalog, public, pg_temp and full function signature GRANTS inside the RPC migration.

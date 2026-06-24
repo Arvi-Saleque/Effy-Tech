@@ -1,30 +1,56 @@
-# Walkthrough: EffyOps V2 Phase 3 Project Management
+# EffyOps V2 Phase 3 — Project Management Walkthrough (V3)
 
-## What's Included
+This document outlines the final testing steps to verify the V3 implementation locally. 
+Because the new RPC migration (`create_project_with_members_v1.sql`) was NOT applied remotely, runtime testing of project creation will fail until the migration is explicitly applied to your Supabase instance. 
 
-Phase 3 introduces Project Management into the EffyOps workspace. The implementation handles project lifecycles, project details, filtering, and team assignments, establishing the foundation for future task management and time logging operations.
+## Preparation
+1. Start your server with `npm run dev`.
+2. Ensure you have your admin credentials.
+3. **Important:** Run the new migration file against your Supabase database before testing project creation, as `createProject()` now strictly relies on the `.rpc("create_project_with_members_v1")` method to execute transactionally.
 
-### 1. Projects Dashboard & Filtering
-Navigate to **Projects** via the left sidebar. The Projects Dashboard features:
-- **Summary Cards**: At-a-glance view of current, planning, active, on-hold, completed, and archived projects.
-- **Search & Filters**: Search across projects, descriptions, and linked client names. Filter results by Status, Priority, and Client.
+## Test 1: Verify the "All" Filter Includes Archived Projects
+1. Navigate to `http://localhost:3000/admin/projects`.
+2. Notice the "Current" projects count and the list showing Planning, Active, and On Hold statuses.
+3. In the filters bar, change the Status dropdown from "Current" to "All Statuses".
+4. Verify that Archived projects now appear in the list.
+5. In the filters bar, select "Archived". Verify that only Archived projects appear.
 
-### 2. Project Creation & Member Assignment
-Click **Add Project** from the dashboard.
-- Assign the project to an active client.
-- Define statuses (Planning, Active, On Hold) and priorities (Low, Normal, High, Urgent).
-- Initial team members can be defined at creation. The system ensures the project creator is safely assigned as an owner if left off the list.
+## Test 2: Verify Mobile Layout
+1. Open Developer Tools (F12) and toggle device emulation to a mobile device (e.g., iPhone 14).
+2. Navigate to `http://localhost:3000/admin/projects`.
+3. Verify that the table disappears and is replaced by card-based mobile UI.
+4. Verify the cards display the Priority, Due Date, Members count, Updated date, and Progress bar.
 
-### 3. Project Details & Team Management
-Click on any project to view its details:
-- **Status Dashboard**: See calculated schedule health and real-time completion progress.
-- **Project Actions**: Control lifecycles visually with one-click buttons (Activate, Hold, Complete, Cancel, Archive, Restore).
-- **Project Team Panel**: Dynamically add and remove administrators. Manage roles (Owner, Manager, Reviewer, Member) directly from the interface. Owner roles are protected against accidental removal.
+## Test 3: Create a Project (Atomic RPC Workflow)
+*(Requires the SQL migration to be applied to your Supabase instance)*
+1. Navigate to `http://localhost:3000/admin/projects/new`.
+2. Select an active client.
+3. Fill out the project details and add another valid member.
+4. Submit the form. The RPC will atomically validate the payload and insert both the project and your ownership record in a single transaction.
+5. Verify you are redirected correctly, and the project exists with you as an owner.
 
-### 4. Client Interoperability
-In the Client Dashboard, viewing a specific client will now display a detailed list of their associated projects with quick links to navigate directly into those project streams.
+## Test 4: Rollback Behavior (Simulated Failure)
+*(Requires the SQL migration to be applied to your Supabase instance)*
+1. Navigate to create a new project.
+2. Select a client, fill out details.
+3. Forcing a failure via UI is difficult since the UI shields against most invalid states, but if a payload bypasses the UI (e.g., via direct API invocation) with an invalid `priority` or a non-existent `user_id`, the RPC will automatically `RAISE EXCEPTION`.
+4. Verify that **no orphan project** is created when this exception fires.
 
-## Technical Boundaries Respected
-- **Database**: No external modifications. Used existing Phase 1 database tables and roles.
-- **Workflow**: Automated triggers correctly filter out `archived` states during active project editing.
-- **Public Domain**: Zero impact on the public-facing `Effy Tech` website.
+## Test 5: Safe Member Validation
+1. Open an existing project.
+2. Attempt to Demote yourself from "owner" to another role, or remove yourself, when you are the ONLY owner.
+3. The server action (`updateProjectMemberRole` / `removeProjectMember`) will instantly reject the request using the new Zod schemas (`projectMembershipIdSchema`, `projectRoleSchema`) and logical owner checks.
+
+## Test 6: Archive Confirmation Flow
+1. Navigate to a newly created or existing "active" or "on_hold" project.
+2. Under "Actions", click "Archive".
+3. A modal appears warning you that the project is active/on_hold and asks "Are you sure?".
+4. Click "Cancel".
+5. Click "Archive" again. This time click "Force Archive".
+6. The project is archived.
+7. For a "planning" project, clicking "Archive" will show the default, less severe warning and requires only "Confirm Archive".
+
+## Test 7: Verify Cancelled Counting & Planning "Complete"
+1. Return to the Dashboard (`/admin/dashboard`) or Projects (`/admin/projects`).
+2. Verify the "Cancelled" summary card displays accurate counts.
+3. Open a "planning" project. Verify that there is now a "Complete" button available among the actions, next to "Activate" and "Hold".

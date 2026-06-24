@@ -7,7 +7,7 @@ import { createProject, updateProject } from "@/lib/admin/project-actions";
 import { createProjectSchema, updateProjectSchema } from "@/lib/admin/project-schema";
 import { Loader2, AlertCircle, ArrowLeft } from "lucide-react";
 
-export default function ProjectForm({ initialData = null, clients = [], activeAdmins = [] }) {
+export default function ProjectForm({ initialData = null, clients = [], activeAdmins = [], defaultClientId = "" }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState(null);
@@ -16,15 +16,6 @@ export default function ProjectForm({ initialData = null, clients = [], activeAd
   const isEditing = !!initialData;
   const isArchived = initialData?.status === "archived";
   const isCompletedOrCancelled = initialData?.status === "completed" || initialData?.status === "cancelled";
-
-  // Pre-fill URL client if creating new
-  const [searchParams] = useState(() => {
-    if (typeof window !== "undefined") {
-      return new URLSearchParams(window.location.search);
-    }
-    return new URLSearchParams();
-  });
-  const defaultClientId = searchParams.get("clientId") || "";
 
   const [formData, setFormData] = useState({
     client_id: initialData?.client_id || defaultClientId,

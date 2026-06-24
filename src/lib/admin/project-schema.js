@@ -69,11 +69,15 @@ export const updateProjectSchema = baseProjectSchema.extend({
 });
 
 // Member management schema
+export const projectRoleSchema = z.enum(["owner", "manager", "member", "reviewer"], {
+  errorMap: () => ({ message: "Invalid project role." }),
+});
+
+export const projectMembershipIdSchema = uuidSchema;
+
 export const projectMemberSchema = z.object({
   user_id: uuidSchema,
-  project_role: z.enum(["owner", "manager", "member", "reviewer"], {
-    errorMap: () => ({ message: "Invalid project role." }),
-  }),
+  project_role: projectRoleSchema,
 });
 
 export const projectStatusFilterSchema = z.enum([

@@ -11,6 +11,8 @@ import {
   projectStatusFilterSchema,
   projectPriorityFilterSchema,
   projectMemberSchema,
+  projectRoleSchema,
+  projectMembershipIdSchema,
 } from "./project-schema";
 
 async function requireActiveAdmin() {
@@ -49,6 +51,7 @@ export async function getProjects(filters = {}) {
       active: 0,
       onHold: 0,
       completed: 0,
+      cancelled: 0,
       archived: 0,
       visible: 0,
     };
@@ -58,6 +61,7 @@ export async function getProjects(filters = {}) {
       counts.active = countsData.filter(p => p.status === "active").length;
       counts.onHold = countsData.filter(p => p.status === "on_hold").length;
       counts.completed = countsData.filter(p => p.status === "completed").length;
+      counts.cancelled = countsData.filter(p => p.status === "cancelled").length;
       counts.archived = countsData.filter(p => p.status === "archived").length;
       counts.current = counts.planning + counts.active + counts.onHold;
     }
@@ -76,9 +80,6 @@ export async function getProjects(filters = {}) {
       query = query.in("status", ["planning", "active", "on_hold"]);
     } else if (statusFilter !== "all") {
       query = query.eq("status", statusFilter);
-    } else {
-      // Exclude archived by default in 'all' unless specifically requested
-      query = query.neq("status", "archived");
     }
 
     const priorityFilter = projectPriorityFilterSchema.parse(filters.priority);
@@ -93,16 +94,8 @@ export async function getProjects(filters = {}) {
       }
     }
 
-    if (filters.search) {
-      const parsedSearch = searchSchema.safeParse(filters.search);
-      if (parsedSearch.success && parsedSearch.data) {
-        const searchTerm = `%${parsedSearch.data.trim()}%`;
-        // PostgREST foreign table search syntax
-        query = query.or(
-          `name.ilike.${searchTerm},description.ilike.${searchTerm},clients.name.ilike.${searchTerm},clients.company_name.ilike.${searchTerm}`
-        );
-      }
-    }
+    // Removed unsafe PostgREST search that crashes with foreign tables
+    // We will rely purely on the safe post-fetch JS filter for search
 
     const { data, error } = await query;
     if (error) throw error;
@@ -192,7 +185,7 @@ export async function getProjectById(projectId) {
 
 export async function createProject(input) {
   try {
-    const profile = await requireActiveAdmin();
+    await requireActiveAdmin();
     const supabase = await createSupabaseClient();
 
     const normalized = normalizeInput(input);
@@ -202,78 +195,34 @@ export async function createProject(input) {
       return { data: null, error: "Validation failed", details: parsed.error.flatten() };
     }
 
-    // Check client validity
-    const { data: client, error: clientErr } = await supabase
-      .from("clients")
-      .select("status")
-      .eq("id", parsed.data.client_id)
-      .maybeSingle();
-    
-    if (clientErr || !client) return { data: null, error: "Client not found." };
-    if (client.status === "archived") return { data: null, error: "Cannot add project to an archived client." };
+    const payload = parsed.data;
 
-    const { initialMembers, ...projectData } = parsed.data;
+    // Call the transactional RPC
+    const { data: newProjectId, error: rpcError } = await supabase.rpc("create_project_with_members_v1", {
+      p_client_id: payload.client_id,
+      p_name: payload.name,
+      p_description: payload.description,
+      p_priority: payload.priority,
+      p_start_date: payload.start_date,
+      p_due_date: payload.due_date,
+      p_progress_percent: payload.progress_percent,
+      p_status: payload.status,
+      p_members: payload.initialMembers,
+    });
 
-    // 1. Insert Project
-    const newProject = {
-      ...projectData,
-      created_by: profile.id
-    };
-
-    const { data: insertedProject, error: insertError } = await supabase
-      .from("projects")
-      .insert(newProject)
-      .select()
-      .single();
-
-    if (insertError) throw insertError;
-
-    // 2. Insert Members
-    // Ensure creator is an owner if not already in the list
-    let membersToInsert = [...initialMembers];
-    const hasCreatorAsOwner = membersToInsert.some(m => m.user_id === profile.id && m.project_role === "owner");
-    const hasCreatorAnyRole = membersToInsert.some(m => m.user_id === profile.id);
-
-    if (!hasCreatorAnyRole) {
-        membersToInsert.push({ user_id: profile.id, project_role: "owner" });
-    } else if (!hasCreatorAsOwner) {
-        // Find existing creator membership and force it to owner, or ensure at least one owner exists.
-        // Rule: Ensure at least one owner.
-    }
-    
-    const hasAnyOwner = membersToInsert.some(m => m.project_role === "owner");
-    if (!hasAnyOwner) {
-        membersToInsert.push({ user_id: profile.id, project_role: "owner" });
-    }
-
-    // Deduplicate members by user_id, taking the first role provided (which is user's selection or owner default)
-    const uniqueMembers = [];
-    const seenUserIds = new Set();
-    for (const m of membersToInsert) {
-      if (!seenUserIds.has(m.user_id)) {
-        seenUserIds.add(m.user_id);
-        uniqueMembers.push({
-          project_id: insertedProject.id,
-          user_id: m.user_id,
-          project_role: m.project_role,
-          added_by: profile.id
-        });
+    if (rpcError) {
+      console.error("Error calling create_project_with_members_v1:", rpcError);
+      // Determine error type based on message if possible, else generic
+      if (rpcError.message?.includes("Client not found")) {
+        return { data: null, error: "Client not found." };
       }
-    }
-
-    const { error: membersError } = await supabase
-      .from("project_members")
-      .insert(uniqueMembers);
-
-    if (membersError) {
-      console.error("Failed to insert members, manual cleanup required or members left empty.", membersError);
-      // We will allow the project to exist but it's empty (except for creator if it succeeded).
-      // Since no transaction, we won't delete the project. 
+      return { data: null, error: "Unable to verify the selected client or create project." };
     }
 
     revalidatePath("/admin/projects");
-    revalidatePath(`/admin/clients/${parsed.data.client_id}`);
-    return { data: insertedProject, error: null };
+    revalidatePath(`/admin/clients/${payload.client_id}`);
+    
+    return { data: { id: newProjectId }, error: null };
   } catch (error) {
     console.error("Error in createProject:", error);
     return { data: null, error: "Unable to create project." };
@@ -301,22 +250,36 @@ export async function updateProject(projectId, input) {
       .eq("id", projectId)
       .maybeSingle();
 
-    if (fetchError || !existing) return { data: null, error: "Project not found." };
+    if (fetchError) {
+      console.error(fetchError);
+      return { data: null, error: "Unable to verify project." };
+    }
+    if (!existing) return { data: null, error: "Project not found." };
     if (existing.status === "archived") return { data: null, error: "Archived projects cannot be edited. Restore first." };
     if (existing.status === "completed") return { data: null, error: "Completed projects cannot be edited normally." };
     if (existing.status === "cancelled") return { data: null, error: "Cancelled projects cannot be edited normally." };
 
     // Prevent changing client to an archived client
     if (parsed.data.client_id !== existing.client_id) {
-       const { data: newClient } = await supabase.from("clients").select("status").eq("id", parsed.data.client_id).single();
-       if (newClient?.status === "archived") {
+       const { data: newClient, error: newClientErr } = await supabase.from("clients").select("status").eq("id", parsed.data.client_id).maybeSingle();
+       if (newClientErr) {
+           console.error(newClientErr);
+           return { data: null, error: "Unable to verify client status." };
+       }
+       if (!newClient) return { data: null, error: "Client not found." };
+       if (newClient.status === "archived") {
            return { data: null, error: "Cannot move project to an archived client." };
        }
     }
 
+    const updatePayload = {
+      ...parsed.data,
+      updated_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
       .from("projects")
-      .update(parsed.data)
+      .update(updatePayload)
       .eq("id", projectId)
       .select()
       .single();
@@ -484,14 +447,38 @@ export async function addProjectMember(projectId, input) {
     const parsed = projectMemberSchema.safeParse(input);
     if (!parsed.success) return { data: null, error: "Invalid member input." };
 
+    // Check project and target profile
+    const [{ data: projectData, error: projErr }, { data: targetProfile, error: profErr }] = await Promise.all([
+      supabase.from("projects").select("status").eq("id", projectId).maybeSingle(),
+      supabase.from("admin_profiles").select("id, is_active").eq("id", parsed.data.user_id).maybeSingle()
+    ]);
+
+    if (projErr) {
+      console.error(projErr);
+      return { data: null, error: "Unable to verify project status." };
+    }
+    if (!projectData) return { data: null, error: "Project not found." };
+    if (projectData.status === "archived") return { data: null, error: "Cannot modify members of an archived project." };
+
+    if (profErr) {
+      console.error(profErr);
+      return { data: null, error: "Unable to verify admin profile." };
+    }
+    if (!targetProfile) return { data: null, error: "Target profile not found." };
+    if (!targetProfile.is_active) return { data: null, error: "Cannot assign an inactive admin to the project." };
+
     // Check if member already exists
-    const { data: existingMember } = await supabase
+    const { data: existingMember, error: memCheckErr } = await supabase
       .from("project_members")
       .select("id")
       .eq("project_id", projectId)
       .eq("user_id", parsed.data.user_id)
       .maybeSingle();
       
+    if (memCheckErr) {
+      console.error(memCheckErr);
+      return { data: null, error: "Unable to verify existing members." };
+    }
     if (existingMember) return { data: null, error: "User is already a member of this project." };
 
     const { data, error } = await supabase
@@ -517,8 +504,32 @@ export async function addProjectMember(projectId, input) {
 
 export async function updateProjectMemberRole(projectId, membershipId, role) {
   try {
+    const pIdCheck = uuidSchema.safeParse(projectId);
+    const mIdCheck = projectMembershipIdSchema.safeParse(membershipId);
+    const roleCheck = projectRoleSchema.safeParse(role);
+
+    if (!pIdCheck.success || !mIdCheck.success) {
+      return { data: null, error: "Invalid UUID format." };
+    }
+    if (!roleCheck.success) {
+      return { data: null, error: "Invalid role specified." };
+    }
+
     await requireActiveAdmin();
     const supabase = await createSupabaseClient();
+
+    const { data: projectData, error: projErr } = await supabase
+      .from("projects")
+      .select("status")
+      .eq("id", projectId)
+      .maybeSingle();
+
+    if (projErr) {
+      console.error(projErr);
+      return { data: null, error: "Unable to verify project status." };
+    }
+    if (!projectData) return { data: null, error: "Project not found." };
+    if (projectData.status === "archived") return { data: null, error: "Cannot modify members of an archived project." };
 
     const { data: allMembers, error: membersErr } = await supabase
       .from("project_members")
@@ -557,8 +568,28 @@ export async function updateProjectMemberRole(projectId, membershipId, role) {
 
 export async function removeProjectMember(projectId, membershipId) {
   try {
+    const pIdCheck = uuidSchema.safeParse(projectId);
+    const mIdCheck = projectMembershipIdSchema.safeParse(membershipId);
+
+    if (!pIdCheck.success || !mIdCheck.success) {
+      return { data: null, error: "Invalid UUID format." };
+    }
+
     await requireActiveAdmin();
     const supabase = await createSupabaseClient();
+
+    const { data: projectData, error: projErr } = await supabase
+      .from("projects")
+      .select("status")
+      .eq("id", projectId)
+      .maybeSingle();
+
+    if (projErr) {
+      console.error(projErr);
+      return { data: null, error: "Unable to verify project status." };
+    }
+    if (!projectData) return { data: null, error: "Project not found." };
+    if (projectData.status === "archived") return { data: null, error: "Cannot modify members of an archived project." };
 
     const { data: allMembers, error: membersErr } = await supabase
       .from("project_members")
@@ -590,5 +621,58 @@ export async function removeProjectMember(projectId, membershipId) {
   } catch (error) {
     console.error("Error in removeProjectMember:", error);
     return { data: null, error: "Unable to remove project member." };
+  }
+}
+
+export async function transitionProjectStatus(projectId, newStatus) {
+  try {
+    const uuidCheck = uuidSchema.safeParse(projectId);
+    if (!uuidCheck.success) return { data: null, error: "Invalid UUID format." };
+
+    const validStatuses = ["planning", "active", "on_hold"];
+    if (!validStatuses.includes(newStatus)) {
+      return { data: null, error: "Invalid target status." };
+    }
+
+    await requireActiveAdmin();
+    const supabase = await createSupabaseClient();
+
+    const { data: existing, error: fetchErr } = await supabase.from("projects").select("status, client_id").eq("id", projectId).maybeSingle();
+    if (fetchErr) {
+      console.error(fetchErr);
+      return { data: null, error: "Unable to verify project status." };
+    }
+    if (!existing) return { data: null, error: "Project not found." };
+
+    if (existing.status === "completed" || existing.status === "cancelled" || existing.status === "archived") {
+      return { data: null, error: `Cannot transition a ${existing.status} project.` };
+    }
+
+    const validTransitions = {
+      planning: ["active", "on_hold"],
+      active: ["on_hold"],
+      on_hold: ["active"]
+    };
+
+    if (!validTransitions[existing.status] || !validTransitions[existing.status].includes(newStatus)) {
+      return { data: null, error: "Transition not allowed." };
+    }
+
+    const { data, error } = await supabase
+      .from("projects")
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .eq("id", projectId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath("/admin/projects");
+    revalidatePath(`/admin/projects/${projectId}`);
+    revalidatePath(`/admin/clients/${existing.client_id}`);
+    return { data, error: null };
+  } catch (error) {
+    console.error("Error in transitionProjectStatus:", error);
+    return { data: null, error: "Unable to update project status." };
   }
 }

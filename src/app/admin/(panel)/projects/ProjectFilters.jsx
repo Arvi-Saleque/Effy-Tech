@@ -4,13 +4,14 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 
-export default function ProjectFilters({ clients = [] }) {
+export default function ProjectFilters({ clients = [], admins = [] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const currentStatus = searchParams.get("status") || "current";
   const currentPriority = searchParams.get("priority") || "all";
   const currentClient = searchParams.get("clientId") || "all";
+  const currentMember = searchParams.get("memberId") || "all";
   const currentSearch = searchParams.get("search") || "";
 
   const handleFilterChange = (key, value) => {
@@ -81,6 +82,17 @@ export default function ProjectFilters({ clients = [] }) {
           <option value="all">All Clients</option>
           {clients.map(c => (
             <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
+
+        <select
+          value={currentMember}
+          onChange={(e) => handleFilterChange("memberId", e.target.value)}
+          className="bg-[#1C1C1E] border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50 whitespace-nowrap min-w-[160px]"
+        >
+          <option value="all">All Members</option>
+          {admins.map(a => (
+            <option key={a.id} value={a.id}>{a.name}</option>
           ))}
         </select>
       </div>

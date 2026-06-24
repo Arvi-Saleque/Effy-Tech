@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { archiveProject, restoreProject, completeProject, cancelProject, updateProject } from "@/lib/admin/project-actions";
+import { archiveProject, restoreProject, completeProject, cancelProject, transitionProjectStatus } from "@/lib/admin/project-actions";
 import { useRouter } from "next/navigation";
 import { Play, Pause, CheckCircle2, XCircle, Archive, RefreshCw, Loader2, AlertCircle } from "lucide-react";
 
@@ -27,7 +27,7 @@ export default function ProjectActions({ project, compact = false }) {
     startTransition(async () => {
       const result = await actionFn(...args);
       if (result?.requiresConfirmation && actionFn === archiveProject) {
-        setArchiveStep(1); // Force warning
+        setArchiveStep(2); // Escalate to stronger warning
       } else if (result?.error) {
         setError(result.error);
       } else {
@@ -38,7 +38,7 @@ export default function ProjectActions({ project, compact = false }) {
   };
 
   const handleStatusTransition = (newStatus) => {
-    executeAction(updateProject, [project.id, { status: newStatus }]);
+    executeAction(transitionProjectStatus, [project.id, newStatus]);
   };
 
   const { status } = project;
@@ -59,7 +59,7 @@ export default function ProjectActions({ project, compact = false }) {
               <button onClick={() => executeAction(restoreProject, [project.id])} disabled={isPending} className="text-blue-500 hover:text-blue-400 text-sm font-medium">Restore</button>
            )}
            {status !== "archived" && (
-              <button onClick={() => executeAction(archiveProject, [project.id, { force: false }])} disabled={isPending} className="text-slate-500 hover:text-slate-400 text-sm font-medium">Archive</button>
+              <button onClick={() => setArchiveStep(1)} disabled={isPending} className="text-slate-500 hover:text-slate-400 text-sm font-medium">Archive</button>
            )}
         </div>
      );
@@ -75,6 +75,9 @@ export default function ProjectActions({ project, compact = false }) {
             </button>
             <button onClick={() => handleStatusTransition("on_hold")} disabled={isPending} className="btn-action bg-amber-500/10 text-amber-500 hover:bg-amber-500/20">
               <Pause className="w-4 h-4" /> Hold
+            </button>
+            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-teal-500/10 text-teal-500 hover:bg-teal-500/20">
+              <CheckCircle2 className="w-4 h-4" /> Complete
             </button>
           </>
         )}
@@ -106,7 +109,7 @@ export default function ProjectActions({ project, compact = false }) {
         )}
 
         {status !== "archived" && (
-          <button onClick={() => executeAction(archiveProject, [project.id, { force: false }])} disabled={isPending} className="btn-action bg-slate-500/10 text-slate-400 hover:bg-slate-500/20">
+          <button onClick={() => setArchiveStep(1)} disabled={isPending} className="btn-action bg-slate-500/10 text-slate-400 hover:bg-slate-500/20">
             <Archive className="w-4 h-4" /> Archive
           </button>
         )}
@@ -139,8 +142,26 @@ export default function ProjectActions({ project, compact = false }) {
                 {error && <p className="text-red-500 text-sm mb-4 bg-red-500/10 p-2 rounded">{error}</p>}
                 <div className="flex justify-end gap-3">
                   <button onClick={resetModals} disabled={isPending} className="px-4 py-2 text-neutral-400 hover:text-white transition-colors">Cancel</button>
-                  <button onClick={() => executeAction(archiveProject, [project.id, { force: true }])} disabled={isPending} className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg flex items-center">
+                  <button onClick={() => executeAction(archiveProject, [project.id, { force: false }])} disabled={isPending} className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg flex items-center">
                     {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Confirm Archive"}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {archiveStep === 2 && (
+              <>
+                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 text-amber-500" /> Active Project Warning
+                </h3>
+                <p className="text-neutral-400 mb-6">
+                  This project is currently active or on hold. Archiving it will hide it from normal views. Are you absolutely sure?
+                </p>
+                {error && <p className="text-red-500 text-sm mb-4 bg-red-500/10 p-2 rounded">{error}</p>}
+                <div className="flex justify-end gap-3">
+                  <button onClick={resetModals} disabled={isPending} className="px-4 py-2 text-neutral-400 hover:text-white transition-colors">Cancel</button>
+                  <button onClick={() => executeAction(archiveProject, [project.id, { force: true }])} disabled={isPending} className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-500 rounded-lg flex items-center">
+                    {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Force Archive"}
                   </button>
                 </div>
               </>

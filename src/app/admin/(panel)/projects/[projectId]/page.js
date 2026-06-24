@@ -15,6 +15,16 @@ export const metadata = {
 
 function formatDate(dateStr) {
   if (!dateStr) return "--";
+  
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [year, month, day] = dateStr.split('-');
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
