@@ -27,7 +27,7 @@ const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA"];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname);
+  const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname) || pathname?.startsWith("/admin");
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
