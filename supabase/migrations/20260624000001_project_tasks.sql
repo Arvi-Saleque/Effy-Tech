@@ -79,6 +79,7 @@ CREATE OR REPLACE FUNCTION public.trigger_protect_task_audit_fields()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = pg_catalog, public, pg_temp
 AS $$
 BEGIN
     NEW.id = OLD.id;
@@ -107,6 +108,7 @@ CREATE OR REPLACE FUNCTION public.trigger_protect_subtask_audit_fields()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = pg_catalog, public, pg_temp
 AS $$
 BEGIN
     NEW.id = OLD.id;
@@ -135,6 +137,7 @@ CREATE OR REPLACE FUNCTION public.trigger_protect_task_assignee_audit_fields()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = pg_catalog, public, pg_temp
 AS $$
 BEGIN
     NEW.id = OLD.id;
@@ -156,6 +159,7 @@ CREATE OR REPLACE FUNCTION public.trigger_protect_subtask_assignee_audit_fields(
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = pg_catalog, public, pg_temp
 AS $$
 BEGIN
     NEW.id = OLD.id;
