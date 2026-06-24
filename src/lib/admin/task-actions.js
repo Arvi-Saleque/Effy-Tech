@@ -230,8 +230,17 @@ export async function updateTask(taskId, input) {
     if (["done", "cancelled", "archived"].includes(task.status)) return { data: null, error: "Task is not in an editable state." };
     if (["completed", "cancelled", "archived"].includes(task.projects.status)) return { data: null, error: "Project is no longer editable." };
 
-    const updateData = { ...parsed.data };
-    delete updateData.assignees;
+    const d = parsed.data;
+    const updateData = {};
+    if (d.title !== undefined) updateData.title = d.title;
+    if (d.description !== undefined) updateData.description = d.description;
+    if (d.status !== undefined) updateData.status = d.status;
+    if (d.priority !== undefined) updateData.priority = d.priority;
+    if (d.progressPercent !== undefined) updateData.progress_percent = d.progressPercent;
+    if (d.estimatedMinutes !== undefined) updateData.estimated_minutes = d.estimatedMinutes;
+    if (d.startDate !== undefined) updateData.start_date = d.startDate;
+    if (d.dueDate !== undefined) updateData.due_date = d.dueDate;
+    if (d.sortOrder !== undefined) updateData.sort_order = d.sortOrder;
 
     const { error: updErr } = await supabase.from("project_tasks").update(updateData).eq("id", taskId);
     if (updErr) {
@@ -615,8 +624,16 @@ export async function updateSubtask(subtaskId, input) {
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
     if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
-    const updateData = { ...parsed.data };
-    delete updateData.assignees;
+    const d = parsed.data;
+    const updateData = {};
+    if (d.title !== undefined) updateData.title = d.title;
+    if (d.description !== undefined) updateData.description = d.description;
+    if (d.status !== undefined) updateData.status = d.status;
+    if (d.priority !== undefined) updateData.priority = d.priority;
+    if (d.progressPercent !== undefined) updateData.progress_percent = d.progressPercent;
+    if (d.estimatedMinutes !== undefined) updateData.estimated_minutes = d.estimatedMinutes;
+    if (d.dueDate !== undefined) updateData.due_date = d.dueDate;
+    if (d.sortOrder !== undefined) updateData.sort_order = d.sortOrder;
 
     const { error: updErr } = await supabase.from("project_subtasks").update(updateData).eq("id", subtaskId);
     if (updErr) {
