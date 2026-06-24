@@ -30,13 +30,21 @@ export default function SubtasksPanel({ taskId, subtasks = [], isTaskEditable = 
     } else {
       setAdding(false);
       setFormData({ title: "", estimatedMinutes: "", priority: "normal" });
+      router.refresh();
     }
     setLoading(false);
   };
 
   const handleAction = async (actionFn, subtaskId, ...args) => {
+    setError(null);
+    setLoading(true);
     const res = await actionFn(subtaskId, ...args);
-    if (res.error) alert(res.error); // simple error handling for row actions
+    if (res.error) {
+      setError(res.error);
+    } else {
+      router.refresh();
+    }
+    setLoading(false);
   };
 
   return (
@@ -102,7 +110,8 @@ export default function SubtasksPanel({ taskId, subtasks = [], isTaskEditable = 
                       <select 
                         value={s.status}
                         onChange={(e) => handleAction(transitionSubtaskStatus, s.id, e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300"
+                        disabled={loading}
+                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300 disabled:opacity-50"
                       >
                         <option value={s.status} disabled>{s.status.replace("_", " ")}</option>
                         {s.status === "todo" && <option value="in_progress">In Progress</option>}
@@ -118,7 +127,7 @@ export default function SubtasksPanel({ taskId, subtasks = [], isTaskEditable = 
                         {s.status === "review" && <option value="in_progress">In Progress</option>}
                       </select>
                       {["review", "in_progress"].includes(s.status) && (
-                        <button onClick={() => handleAction(completeSubtask, s.id)} className="px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs rounded border border-emerald-700/50">Done</button>
+                        <button disabled={loading} onClick={() => handleAction(completeSubtask, s.id)} className="px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs rounded border border-emerald-700/50 disabled:opacity-50">Done</button>
                       )}
                     </>
                   )}
