@@ -35,8 +35,9 @@ function formatDate(dateStr) {
 }
 
 export default async function ProjectsPage({ searchParams }) {
+  const resolvedSearchParams = await searchParams;
   const [{ data: projects, counts, error }, { data: clientsData }, { data: admins }] = await Promise.all([
-    getProjects(searchParams),
+    getProjects(resolvedSearchParams),
     getClients({ status: "all" }),
     getAllAdmins()
   ]);

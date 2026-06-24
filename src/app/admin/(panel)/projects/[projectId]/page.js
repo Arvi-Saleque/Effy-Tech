@@ -58,10 +58,11 @@ function calculateDuration(startDate, endDate) {
 }
 
 export default async function ProjectDetailsPage({ params }) {
+  const resolvedParams = await params;
   const [{ data: project, error }, { data: admins }, { data: tasksData }] = await Promise.all([
-    getProjectById(params.projectId),
+    getProjectById(resolvedParams.projectId),
     getAllAdmins(),
-    getProjectTasks(params.projectId)
+    getProjectTasks(resolvedParams.projectId)
   ]);
 
   if (error || !project) {

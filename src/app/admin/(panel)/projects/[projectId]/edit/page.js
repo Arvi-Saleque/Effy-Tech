@@ -10,8 +10,9 @@ export const metadata = {
 };
 
 export default async function EditProjectPage({ params }) {
+  const resolvedParams = await params;
   const [{ data: project, error }, { data: clients }] = await Promise.all([
-    getProjectById(params.projectId),
+    getProjectById(resolvedParams.projectId),
     getClients({ status: "all" })
   ]);
 
