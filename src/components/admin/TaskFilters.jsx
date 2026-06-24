@@ -21,8 +21,13 @@ export default function TaskFilters({ assignees = [] }) {
 
   const setFilter = (key, val) => {
     const q = new URLSearchParams(searchParams.toString());
-    if (val && val !== "all") q.set(key, val);
+    let defaultVal = "all";
+    if (key === "status") defaultVal = "current";
+    if (key === "view") defaultVal = "board";
+
+    if (val && val !== defaultVal) q.set(key, val);
     else q.delete(key);
+    
     router.replace(`${pathname}?${q.toString()}`);
   };
 

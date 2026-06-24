@@ -66,11 +66,6 @@ export async function getProjectTasks(projectId, filters = {}) {
       } else {
         query = query.eq("status", validStatus);
       }
-    } else {
-      const incArchived = filters.includeArchived === true || filters.includeArchived === "true";
-      if (!incArchived) {
-        query = query.neq("status", "archived");
-      }
     }
 
     const parsedPriority = taskPriorityFilterSchema.safeParse(filters.priority);

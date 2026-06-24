@@ -8,7 +8,9 @@ const BOARD_COLUMNS = [
   { id: "in_progress", label: "In Progress", border: "border-blue-800" },
   { id: "blocked", label: "Blocked", border: "border-red-900" },
   { id: "review", label: "Review", border: "border-purple-800" },
-  { id: "done", label: "Done", border: "border-emerald-800" }
+  { id: "done", label: "Done", border: "border-emerald-800" },
+  { id: "cancelled", label: "Cancelled", border: "border-red-900/50" },
+  { id: "archived", label: "Archived", border: "border-slate-800" }
 ];
 
 export default function TaskBoard({ tasks, projectId }) {
