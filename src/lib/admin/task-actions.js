@@ -211,7 +211,7 @@ export async function createTask(input) {
 
 export async function updateTask(taskId, input) {
   try {
-    await requireActiveAdmin();
+    const profile = await requireActiveAdmin();
     const idCheck = taskIdSchema.safeParse(taskId);
     if (!idCheck.success) return { data: null, error: "Invalid task ID." };
     
@@ -231,6 +231,32 @@ export async function updateTask(taskId, input) {
     if (["completed", "cancelled", "archived"].includes(task.projects.status)) return { data: null, error: "Project is no longer editable." };
 
     const d = parsed.data;
+    
+    // Validate assignees before touching the task
+    let validAssigneeIds = [];
+    if (d.assignees !== undefined) {
+      if (d.assignees.length > 0) {
+        const { data: validMembers, error: membersErr } = await supabase
+          .from("project_members")
+          .select("user_id, admin_profiles!project_members_user_id_fkey!inner(is_active)")
+          .eq("project_id", task.project_id)
+          .in("user_id", d.assignees);
+          
+        if (membersErr) {
+          console.error("[updateTask] member validation error:", membersErr);
+          return { data: null, error: "Unable to validate assignees." };
+        }
+        
+        validAssigneeIds = validMembers
+          .filter(m => m.admin_profiles.is_active)
+          .map(m => m.user_id);
+          
+        if (validAssigneeIds.length !== d.assignees.length) {
+           return { data: null, error: "One or more assignees are invalid or not active members of this project." };
+        }
+      }
+    }
+
     const updateData = {};
     if (d.title !== undefined) updateData.title = d.title;
     if (d.description !== undefined) updateData.description = d.description;
@@ -246,6 +272,49 @@ export async function updateTask(taskId, input) {
     if (updErr) {
       console.error("[updateTask]", updErr);
       return { data: null, error: "Unable to update the task." };
+    }
+
+    if (d.assignees !== undefined) {
+      const { data: existing, error: existErr } = await supabase
+        .from("task_assignees")
+        .select("user_id")
+        .eq("task_id", taskId);
+        
+      if (existErr) {
+        console.error("[updateTask] existing assignees error:", existErr);
+        return { data: null, error: "Task updated, but unable to sync assignees." };
+      }
+      
+      const existingIds = existing.map(a => a.user_id);
+      const toRemove = existingIds.filter(id => !validAssigneeIds.includes(id));
+      const toAdd = validAssigneeIds.filter(id => !existingIds.includes(id));
+      
+      if (toRemove.length > 0) {
+        const { error: rmErr } = await supabase
+          .from("task_assignees")
+          .delete()
+          .eq("task_id", taskId)
+          .in("user_id", toRemove);
+        if (rmErr) {
+          console.error("[updateTask] remove assignees error:", rmErr);
+          return { data: null, error: "Task updated, but unable to remove old assignees." };
+        }
+      }
+      
+      if (toAdd.length > 0) {
+        const inserts = toAdd.map(id => ({
+          task_id: taskId,
+          user_id: id,
+          assigned_by: profile.id
+        }));
+        const { error: addErr } = await supabase
+          .from("task_assignees")
+          .insert(inserts);
+        if (addErr) {
+          console.error("[updateTask] add assignees error:", addErr);
+          return { data: null, error: "Task updated, but unable to add new assignees." };
+        }
+      }
     }
 
     revalidatePath(`/admin/projects/${task.project_id}`);
@@ -468,7 +537,7 @@ export async function addTaskAssignee(taskId, userId) {
     if (["done", "cancelled", "archived"].includes(t.status)) return { data: null, error: "Cannot modify assignees on terminal tasks." };
     if (["completed", "cancelled", "archived"].includes(t.projects.status)) return { data: null, error: "Project is no longer editable." };
 
-    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", t.project_id).eq("user_id", userId).single();
+    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!project_members_user_id_fkey!inner(is_active)").eq("project_id", t.project_id).eq("user_id", userId).single();
     if (mErr) {
       if (mErr.code === "PGRST116") return { data: null, error: "User is not an active member of this project." };
       console.error("[addTaskAssignee] member check error:", mErr);
@@ -605,7 +674,7 @@ export async function createSubtask(input) {
 
 export async function updateSubtask(subtaskId, input) {
   try {
-    await requireActiveAdmin();
+    const profile = await requireActiveAdmin();
     const idCheck = subtaskIdSchema.safeParse(subtaskId);
     if (!idCheck.success) return { data: null, error: "Invalid subtask ID." };
     
@@ -625,6 +694,32 @@ export async function updateSubtask(subtaskId, input) {
     if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
     const d = parsed.data;
+    
+    // Validate assignees before touching the subtask
+    let validAssigneeIds = [];
+    if (d.assignees !== undefined) {
+      if (d.assignees.length > 0) {
+        const { data: validMembers, error: membersErr } = await supabase
+          .from("project_members")
+          .select("user_id, admin_profiles!project_members_user_id_fkey!inner(is_active)")
+          .eq("project_id", st.project_tasks.project_id)
+          .in("user_id", d.assignees);
+          
+        if (membersErr) {
+          console.error("[updateSubtask] member validation error:", membersErr);
+          return { data: null, error: "Unable to validate assignees." };
+        }
+        
+        validAssigneeIds = validMembers
+          .filter(m => m.admin_profiles.is_active)
+          .map(m => m.user_id);
+          
+        if (validAssigneeIds.length !== d.assignees.length) {
+           return { data: null, error: "One or more assignees are invalid or not active members of this project." };
+        }
+      }
+    }
+
     const updateData = {};
     if (d.title !== undefined) updateData.title = d.title;
     if (d.description !== undefined) updateData.description = d.description;
@@ -639,6 +734,49 @@ export async function updateSubtask(subtaskId, input) {
     if (updErr) {
       console.error("[updateSubtask]", updErr);
       return { data: null, error: "Unable to update the subtask." };
+    }
+
+    if (d.assignees !== undefined) {
+      const { data: existing, error: existErr } = await supabase
+        .from("subtask_assignees")
+        .select("user_id")
+        .eq("subtask_id", subtaskId);
+        
+      if (existErr) {
+        console.error("[updateSubtask] existing assignees error:", existErr);
+        return { data: null, error: "Subtask updated, but unable to sync assignees." };
+      }
+      
+      const existingIds = existing.map(a => a.user_id);
+      const toRemove = existingIds.filter(id => !validAssigneeIds.includes(id));
+      const toAdd = validAssigneeIds.filter(id => !existingIds.includes(id));
+      
+      if (toRemove.length > 0) {
+        const { error: rmErr } = await supabase
+          .from("subtask_assignees")
+          .delete()
+          .eq("subtask_id", subtaskId)
+          .in("user_id", toRemove);
+        if (rmErr) {
+          console.error("[updateSubtask] remove assignees error:", rmErr);
+          return { data: null, error: "Subtask updated, but unable to remove old assignees." };
+        }
+      }
+      
+      if (toAdd.length > 0) {
+        const inserts = toAdd.map(id => ({
+          subtask_id: subtaskId,
+          user_id: id,
+          assigned_by: profile.id
+        }));
+        const { error: addErr } = await supabase
+          .from("subtask_assignees")
+          .insert(inserts);
+        if (addErr) {
+          console.error("[updateSubtask] add assignees error:", addErr);
+          return { data: null, error: "Subtask updated, but unable to add new assignees." };
+        }
+      }
     }
 
     revalidatePath(`/admin/projects/${st.project_tasks.project_id}/tasks`);
@@ -835,7 +973,7 @@ export async function addSubtaskAssignee(subtaskId, userId) {
     if (["done", "cancelled", "archived"].includes(st.project_tasks.status)) return { data: null, error: "Parent task is not editable." };
     if (["completed", "cancelled", "archived"].includes(st.project_tasks.projects?.status)) return { data: null, error: "Project is no longer editable." };
 
-    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!inner(is_active)").eq("project_id", st.project_tasks.project_id).eq("user_id", userId).single();
+    const { data: m, error: mErr } = await supabase.from("project_members").select("user_id, admin_profiles!project_members_user_id_fkey!inner(is_active)").eq("project_id", st.project_tasks.project_id).eq("user_id", userId).single();
     if (mErr) {
       if (mErr.code === "PGRST116") return { data: null, error: "User is not an active member of this project." };
       console.error("[addSubtaskAssignee] member check error:", mErr);
