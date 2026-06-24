@@ -572,13 +572,13 @@ export async function createSubtask(input) {
     const { data: subtaskId, error: rpcErr } = await supabase.rpc("create_subtask_with_assignees_v1", {
       p_task_id: d.taskId,
       p_title: d.title,
-      p_description: d.description,
+      p_description: d.description ?? null,
       p_status: d.status,
       p_priority: d.priority,
-      p_due_date: d.dueDate,
-      p_estimated_minutes: d.estimatedMinutes,
-      p_progress_percent: d.progressPercent,
-      p_sort_order: d.sortOrder,
+      p_due_date: d.dueDate ?? null,
+      p_estimated_minutes: d.estimatedMinutes ?? null,
+      p_progress_percent: d.progressPercent ?? 0,
+      p_sort_order: d.sortOrder ?? 0,
       p_assignee_ids: d.assignees || []
     });
 
