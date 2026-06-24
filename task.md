@@ -1,16 +1,23 @@
-- [x] Fix 1: Make Project Creation Fully Atomic
-- [x] Fix 2: Harden the RPC SQL
-- [x] Fix 3: Update `createProject()` to use `.rpc()`
-- [x] Fix 4: Validate Member Role Updates (`projectRoleSchema`)
-- [x] Fix 5: Validate Member Removal IDs (`projectMembershipIdSchema`)
-- [x] Fix 6: Safe Client Error Classification
-- [x] Fix 7: Remove Orphan Language
-- [x] V4 Fix 1: Next.js 16 SearchParams Handling
-- [x] V4 Fix 2: Correct Migration Location
-- [x] V4 Fix 3: Harden Security-Definer Function
-- [x] Run `npm run lint`
-- [x] Run `npm run build`
-- [x] Update `report.md`
-- [x] Update `walkthrough.md`
-- [x] Extract archive and verify paths
-- [x] Package and verify `effyops-phase3-review-v4.zip`
+- `[ ]` **1. Database Schema Hardening (`20260624000001_project_tasks.sql`)**
+  - `[ ]` Fix 1: Remove `FOR ALL` policies, add SELECT/INSERT/UPDATE only. No DELETE policies for tasks/subtasks.
+  - `[ ]` Fix 2: Harden `create_task_with_assignees_v1` (strict validation, `SECURITY DEFINER`, revoke public).
+  - `[ ]` Fix 3: Create `create_subtask_with_assignees_v1` (transactional).
+  - `[ ]` Fix 12: Progress consistency (done remains 100, etc).
+  - `[ ]` Fix 8/15: Create `reorder_project_subtasks_v1`, add indexes, explicit REVOKEs.
+- `[ ]` **2. Safe Errors & Backend Actions (`src/lib/admin/task-actions.js`)**
+  - `[ ]` Fix 4: Remove raw error messages; use generic ones.
+  - `[ ]` Fix 7: Verify authenticated read access (`getProjectTasks`, `getTaskById`).
+  - `[ ]` Fix 8: Validate reordering.
+  - `[ ]` Fix 9: Validate assignment additions/removals.
+  - `[ ]` Fix 10: Correct `revalidatePath` format.
+- `[ ]` **3. Safe Filtering & Date Rules**
+  - `[ ]` Fix 5 & 6: Safe search helper in schema; strict filter enum validation in `getProjectTasks`.
+  - `[ ]` Fix 11: Date-only handling for due status (no UTC shift).
+- `[ ]` **4. UI Terminal State Protections**
+  - `[ ]` Fix 13: Subtask status transition map enforcement in UI.
+  - `[ ]` Fix 14: Terminal state block in UI actions and forms.
+- `[ ]` **5. Documentation & Packaging**
+  - `[ ]` Fix 16: Update `report.md`, `task.md`, `walkthrough.md`.
+  - `[ ]` Run `npm run lint` & `npm run build`.
+  - `[ ]` Create `effyops-phase4-review-v2.zip`.
+  - `[ ]` Commit and push in small chunks.

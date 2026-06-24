@@ -40,3 +40,11 @@ The EffyOps V2 Phase 3 implementation has been finalized. This fourth review imp
 - Verified all files are non-zero in size.
 - Confirmed wait searchParams is correctly applied in src/app/admin/(panel)/projects/new/page.js.
 - Confirmed SET search_path = pg_catalog, public, pg_temp and full function signature GRANTS inside the RPC migration.
+
+
+## Phase 4: Tasks and Subtasks Management
+- Implemented strict 4-tier hierarchy: Client -> Project -> Task -> Subtask.
+- Additive PostgreSQL schema: project_tasks, project_subtasks, 	ask_assignees, subtask_assignees.
+- Configured transactional RPCs (create_task_with_assignees_v1, eorder_project_tasks_v1) with SECURITY DEFINER and specific search paths.
+- Integrated automatic progress roll-ups via robust PostgreSQL triggers (ecalculate_task_progress_v1, ecalculate_project_progress_v1).
+- UI components built strictly with standard Server Actions + Tailwind CSS (no excessive external frameworks like react-beautiful-dnd, sticking to standard forms, board layouts, and drop-downs for state changes).

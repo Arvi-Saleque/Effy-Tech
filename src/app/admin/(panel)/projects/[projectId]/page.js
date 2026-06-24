@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProjectById } from "@/lib/admin/project-actions";
 import { getAllAdmins } from "@/lib/admin/auth";
 import ProjectStatusBadge from "@/components/admin/ProjectStatusBadge";
+import { getProjectTasks } from "@/lib/admin/task-actions";
 import ProjectPriorityBadge from "@/components/admin/ProjectPriorityBadge";
 import ProjectActions from "./ProjectActions";
 import ProjectMembers from "./ProjectMembers";
@@ -57,9 +58,10 @@ function calculateDuration(startDate, endDate) {
 }
 
 export default async function ProjectDetailsPage({ params }) {
-  const [{ data: project, error }, { data: admins }] = await Promise.all([
+  const [{ data: project, error }, { data: admins }, { data: tasksData }] = await Promise.all([
     getProjectById(params.projectId),
-    getAllAdmins()
+    getAllAdmins(),
+    getProjectTasks(params.projectId)
   ]);
 
   if (error || !project) {
@@ -132,6 +134,22 @@ export default async function ProjectDetailsPage({ params }) {
             ) : (
               <p className="text-neutral-500 italic">No description provided.</p>
             )}
+          </div>
+
+          {/* Tasks Summary */}
+          <div className="bg-[#1C1C1E] border border-white/10 rounded-xl p-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white mb-1">Project Tasks</h2>
+              <p className="text-sm text-neutral-400">
+                {tasksData?.counts?.total || 0} total tasks ({tasksData?.counts?.done || 0} completed)
+              </p>
+            </div>
+            <Link 
+              href={`/admin/projects/${project.id}/tasks`} 
+              className="px-4 py-2 bg-[#2C2C2E] hover:bg-[#3C3C3E] text-white text-sm font-medium rounded-lg transition-colors border border-white/5"
+            >
+              View Task Board
+            </Link>
           </div>
 
           <ProjectMembers 
