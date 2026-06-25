@@ -85,6 +85,18 @@ export async function fetchFilteredLegacy(supabase, filters = {}) {
   return data || [];
 }
 
+export async function fetchFilteredProjectMembers(supabase) {
+  const { data, error } = await supabase.from("project_members").select("*");
+  if (error) { console.error("Error fetching project members:", error); return []; }
+  return data || [];
+}
+
+export async function fetchFilteredTaskAssignees(supabase) {
+  const { data, error } = await supabase.from("task_assignees").select("*");
+  if (error) { console.error("Error fetching task assignees:", error); return []; }
+  return data || [];
+}
+
 /**
  * Deduplicate reports: group by task_id + submitted_by, keep highest version_number.
  */
@@ -214,5 +226,106 @@ export async function getOverviewData(filters) {
       reportStatusDistribution,
       sourceDistribution
     }
+  };
+}
+
+export async function getTeamPerformanceData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+  const today = getTodayDateString();
+
+  const [
+    profiles,
+    projects,
+    projectMembers,
+    tasks,
+    taskAssignees,
+    reports,
+    blocks,
+    sessions,
+    legacy
+  ] = await Promise.all([
+    fetchFilteredProfiles(supabase),
+    fetchFilteredProjects(supabase, filters),
+    fetchFilteredProjectMembers(supabase),
+    fetchFilteredTasks(supabase, filters),
+    fetchFilteredTaskAssignees(supabase),
+    fetchFilteredReports(supabase, filters),
+    fetchFilteredBlocks(supabase, filters),
+    fetchFilteredSessions(supabase, filters),
+    fetchFilteredLegacy(supabase, filters)
+  ]);
+
+  const latestReports = getLatestReports(reports);
+
+  const teamData = profiles.map(member => {
+    const memberBlocks = blocks.filter(b => b.user_id === member.id);
+    const activeSession = sessions.find(s => s.user_id === member.id && s.status !== "ended");
+    const totalTrackedSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
+    
+    let totalBreakSeconds = 0;
+    const memberSessions = sessions.filter(s => s.user_id === member.id);
+    memberSessions.forEach(s => {
+      totalBreakSeconds += (s.break_seconds || 0);
+      if (s.status === "break" && s.break_started_at) {
+        const start = new Date(s.break_started_at).getTime();
+        const now = new Date().getTime();
+        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+      }
+    });
+
+    const netProductiveSeconds = Math.max(0, totalTrackedSeconds - totalBreakSeconds);
+
+    const projectMemberships = projectMembers.filter(pm => pm.user_id === member.id).length;
+    
+    // Member's assigned tasks
+    const memberAssignedTaskIds = new Set(taskAssignees.filter(ta => ta.user_id === member.id).map(ta => ta.task_id));
+    const memberTasks = tasks.filter(t => memberAssignedTaskIds.has(t.id));
+    const completedProjectTasks = memberTasks.filter(t => t.status === "done" && (!filters.startDate || (t.updated_at && t.updated_at >= filters.startDate)));
+    
+    const overdueAssignedTasks = memberTasks.filter(t => {
+      if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
+      return t.due_date.split("T")[0] < today;
+    }).length;
+
+    const blockedAssignedTasks = memberTasks.filter(t => t.status === "blocked").length;
+
+    // Legacy
+    const completedLegacy = legacy.filter(l => l.assigned_to === member.id && l.status === "done");
+
+    // Reports submitted by this member
+    const memberReports = latestReports.filter(r => r.submitted_by === member.id);
+    const reportsSubmitted = memberReports.length;
+    const reportsApproved = memberReports.filter(r => r.completion_status === "approved").length;
+    const revisionRequestsReceived = memberReports.filter(r => r.completion_status === "revision_requested").length;
+    const rejectedReports = memberReports.filter(r => r.completion_status === "rejected").length;
+
+    const lastActivityBlock = memberBlocks.sort((a, b) => new Date(b.started_at) - new Date(a.started_at))[0];
+    const lastActivityDate = lastActivityBlock ? lastActivityBlock.started_at : null;
+
+    return {
+      id: member.id,
+      name: member.name,
+      email: member.email,
+      projectMemberships,
+      totalTrackedSeconds,
+      totalBreakSeconds,
+      netProductiveSeconds,
+      workBlocksCount: memberBlocks.length,
+      completedProjectTasks: completedProjectTasks.length,
+      completedLegacyAssignments: completedLegacy.length,
+      reportsSubmitted,
+      reportsApproved,
+      revisionRequestsReceived,
+      rejectedReports,
+      overdueAssignedTasks,
+      blockedAssignedTasks,
+      lastActivityDate
+    };
+  });
+
+  return {
+    hasError: false,
+    teamData
   };
 }
