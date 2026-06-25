@@ -112,7 +112,7 @@ export default function Home() {
     </section>
 
     <div className="ticker" aria-label="Important updates">
-      <div className="ticker-label"><Sparkles size={16}/>Latest News</div>
+      <div className="ticker-label"><Sparkles size={16}/>Announcements</div>
       <div className="ticker-window">
         <div className="ticker-track">
           {[...tickerNotices, ...tickerNotices].map((item, index)=>
