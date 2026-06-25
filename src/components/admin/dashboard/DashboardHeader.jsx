@@ -32,7 +32,7 @@ export default function DashboardHeader({ onRefresh, isRefreshing }) {
         <button
           onClick={handleRefresh}
           disabled={isRefreshing}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors border border-neutral-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors border border-neutral-700 disabled:opacity-50 cursor-pointer"
         >
           <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           <span>Refresh</span>
