@@ -12,8 +12,8 @@ export default function DepartmentsSection({ compact = true }) {
       <div className="pgc-container">
         <SectionHeader
           eyebrow="বিভাগসমূহ"
-          title="বিভাগভিত্তিক শিক্ষা ও নোটিশ কাঠামো"
-          subtitle="প্রতিটি বিভাগ ভবিষ্যতে শিক্ষক তালিকা, বিভাগীয় নোটিশ ও পাঠক্রম তথ্যের সঙ্গে যুক্ত করা যাবে।"
+          title="বিভাগভিত্তিক শিক্ষা ও শিক্ষক তালিকা"
+          subtitle="অনার্স ও উচ্চশিক্ষা কার্যক্রমের বিভাগগুলো শিক্ষার্থীদের বিষয়ভিত্তিক পাঠদান, পরামর্শ ও একাডেমিক সহায়তা দেয়।"
           action={
             compact ? { label: "সব বিভাগ দেখুন", href: `${ROUTE_BASE}/departments` } : undefined
           }
@@ -28,7 +28,7 @@ export default function DepartmentsSection({ compact = true }) {
               <p>{department.description}</p>
               <div>
                 <Link href={`${ROUTE_BASE}/teachers`}>শিক্ষকবৃন্দ</Link>
-                <Link href={`${ROUTE_BASE}/notices`}>বিভাগীয় নোটিশ</Link>
+                <Link href={`${ROUTE_BASE}/academic`}>পাঠ্যক্রম</Link>
               </div>
             </article>
           ))}

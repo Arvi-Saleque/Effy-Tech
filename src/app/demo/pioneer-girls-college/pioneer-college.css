@@ -737,6 +737,7 @@
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow-sm);
+  scroll-margin-top: 110px;
 }
 
 .pgc-notice-card.is-urgent {
@@ -1247,49 +1248,6 @@
   line-height: 1.45;
 }
 
-.pgc-map-placeholder {
-  position: relative;
-  min-height: 360px;
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background: var(--accent-sky);
-}
-
-.pgc-map-placeholder__grid {
-  position: absolute;
-  inset: -60px;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
-    linear-gradient(30deg, transparent 45%, rgba(11, 125, 53, 0.14) 46%, rgba(11, 125, 53, 0.14) 54%, transparent 55%);
-  background-size: 42px 42px, 42px 42px, 100% 100%;
-  transform: rotate(-5deg) scale(1.1);
-}
-
-.pgc-map-placeholder__card {
-  position: absolute;
-  left: 24px;
-  bottom: 24px;
-  max-width: 320px;
-  display: grid;
-  gap: 6px;
-  padding: 18px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: #ffffff;
-  box-shadow: var(--shadow-md);
-}
-
-.pgc-map-placeholder__card svg {
-  color: var(--danger);
-}
-
-.pgc-map-placeholder__card span {
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
 .pgc-map-frame {
   position: relative;
   min-height: 380px;
@@ -1403,6 +1361,102 @@
   line-height: 1.75;
 }
 
+.pgc-panel .pgc-button + .pgc-button {
+  margin-left: 10px;
+}
+
+.pgc-academic-subjects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.pgc-table-wrap {
+  width: 100%;
+  margin: 18px 0 26px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.pgc-data-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+}
+
+.pgc-data-table th,
+.pgc-data-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 13px 15px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.pgc-data-table th {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 900;
+}
+
+.pgc-data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.pgc-library-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding-left: 22px;
+  color: var(--text-primary);
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+.pgc-timeline {
+  display: grid;
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pgc-timeline__item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.pgc-timeline__item > span {
+  display: inline-flex;
+  width: max-content;
+  min-height: 38px;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: var(--accent-gold-soft);
+  color: var(--warning);
+  font-weight: 900;
+}
+
+.pgc-timeline__item h2 {
+  margin: 0 0 8px;
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+}
+
+.pgc-timeline__item p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.72;
+}
+
 .pgc-simple-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1426,6 +1480,117 @@
   margin: 0;
   color: var(--text-muted);
   line-height: 1.65;
+}
+
+.pgc-empty-state {
+  grid-column: 1 / -1;
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: 22px;
+  background: #ffffff;
+  color: var(--text-muted);
+  text-align: center;
+  font-weight: 800;
+}
+
+.pgc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.pgc-directory-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.pgc-search-field,
+.pgc-select-field {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  background: #ffffff;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.pgc-search-field input,
+.pgc-select-field select {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.pgc-select-field span {
+  color: var(--primary-dark);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.pgc-teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pgc-teacher-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  min-height: 150px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.pgc-teacher-card__avatar {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.pgc-teacher-card h3 {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.pgc-teacher-card p {
+  margin: 6px 0;
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.pgc-teacher-card span {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .pgc-footer {
@@ -1545,7 +1710,9 @@
 
   .pgc-notice-grid,
   .pgc-program-grid,
-  .pgc-news-grid {
+  .pgc-news-grid,
+  .pgc-academic-subjects,
+  .pgc-teacher-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -1631,7 +1798,19 @@
   .pgc-facility-grid,
   .pgc-news-grid,
   .pgc-link-grid,
-  .pgc-simple-grid {
+  .pgc-simple-grid,
+  .pgc-academic-subjects,
+  .pgc-directory-tools,
+  .pgc-teacher-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pgc-panel .pgc-button + .pgc-button {
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .pgc-timeline__item {
     grid-template-columns: 1fr;
   }
 

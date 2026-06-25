@@ -9,7 +9,7 @@ export default function AcademicPrograms() {
         <SectionHeader
           eyebrow="একাডেমিক"
           title="পর্যায়ভিত্তিক শিক্ষা কার্যক্রম"
-          subtitle="উচ্চমাধ্যমিক, ডিগ্রি ও অনার্স কার্যক্রমকে ভবিষ্যৎ ডাটাবেজের সঙ্গে যুক্ত করার উপযোগীভাবে সাজানো হয়েছে।"
+          subtitle="উচ্চমাধ্যমিক, ডিগ্রি ও অনার্স পর্যায়ে বোর্ড ও জাতীয় বিশ্ববিদ্যালয়ের অধিভুক্ত পাঠ্যক্রম অনুসারে শিক্ষা কার্যক্রম পরিচালিত হয়।"
           action={{ label: "একাডেমিক পেজ", href: `${ROUTE_BASE}/academic` }}
         />
         <div className="pgc-program-grid">

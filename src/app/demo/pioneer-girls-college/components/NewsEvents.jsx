@@ -11,7 +11,7 @@ export default function NewsEvents() {
         <SectionHeader
           eyebrow="খবর ও আয়োজন"
           title="ক্যাম্পাস কার্যক্রম ও শিক্ষার্থী অংশগ্রহণ"
-          subtitle="পুরোনো ওয়েবসাইটের অনুষ্ঠানভিত্তিক কনটেন্ট কাঠামো অনুসরণ করে আধুনিক নিউজ কার্ড।"
+          subtitle="সাংস্কৃতিক আয়োজন, পরিবেশ কার্যক্রম ও শিক্ষার্থী অংশগ্রহণের উল্লেখযোগ্য মুহূর্ত।"
         />
         <div className="pgc-news-grid">
           {newsEvents.map((event) => (
