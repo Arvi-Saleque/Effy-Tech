@@ -8,6 +8,7 @@ import { navItems } from "../data/college-data";
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
+  const triggerRef = useRef(null);
 
   useEffect(() => {
     if (!open) {
@@ -15,10 +16,42 @@ export default function MobileNav() {
       return undefined;
     }
 
+    const previouslyFocused = document.activeElement;
+    const triggerElement = triggerRef.current;
     document.body.style.overflow = "hidden";
+
+    const getFocusableItems = () =>
+      Array.from(
+        panelRef.current?.querySelectorAll(
+          'a[href], button:not([disabled]), summary, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) || [],
+      );
+
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableItems = getFocusableItems();
+      if (focusableItems.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstItem = focusableItems[0];
+      const lastItem = focusableItems[focusableItems.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstItem) {
+        event.preventDefault();
+        lastItem.focus();
+      } else if (!event.shiftKey && document.activeElement === lastItem) {
+        event.preventDefault();
+        firstItem.focus();
       }
     };
 
@@ -26,6 +59,11 @@ export default function MobileNav() {
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKeyDown);
+      if (previouslyFocused instanceof HTMLElement) {
+        previouslyFocused.focus();
+      } else {
+        triggerElement?.focus();
+      }
     };
   }, [open]);
 
@@ -40,6 +78,7 @@ export default function MobileNav() {
       <button
         className="pgc-menu-button"
         type="button"
+        ref={triggerRef}
         aria-label={open ? "মেনু বন্ধ করুন" : "মেনু খুলুন"}
         aria-expanded={open}
         aria-controls="pgc-mobile-menu"
