@@ -338,6 +338,20 @@ export default function MyWorkClient({ initialData }) {
           : "bg-neutral-900/40 border-neutral-800/80 hover:border-neutral-700/60"
     } ${isProjectTask ? "cursor-pointer hover:bg-neutral-800/40" : ""}`;
 
+    const activeReport = isProjectTask && task.task_work_reports?.length > 0 ? task.task_work_reports[0] : null;
+    const reportStatus = activeReport?.completion_status;
+    const hasApprovedReport = isProjectTask && task.task_work_reports?.some(r => r.completion_status === "approved");
+    const canSubmitReport = isProjectTask && !hasApprovedReport && !["archived", "cancelled", "done"].includes(task.status) && (!activeReport || activeReport.completion_status === "revision_requested");
+
+    const renderReportBadge = () => {
+      if (!activeReport) return null;
+      if (reportStatus === "submitted") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0">Awaiting Review</span>;
+      if (reportStatus === "revision_requested") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">Revision Requested</span>;
+      if (reportStatus === "rejected") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-400 shrink-0">Report Rejected</span>;
+      if (reportStatus === "approved") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">Report Approved</span>;
+      return null;
+    };
+
     const cardContent = (
       <>
         <div className="flex items-start justify-between gap-4 mb-2">
@@ -368,6 +382,7 @@ export default function MyWorkClient({ initialData }) {
                 Legacy Assignment
               </span>
             )}
+            {renderReportBadge()}
             <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
               isDone ? "bg-neutral-850 border-neutral-800 text-neutral-450" :
               (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
@@ -395,17 +410,28 @@ export default function MyWorkClient({ initialData }) {
         )}
 
         {/* Action Button */}
-        {buttonText && !isEnded && (
-          <div className="pt-2 border-t border-neutral-800/40 flex justify-end">
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id, isProjectTask); }}
-              disabled={!!activeBlock || isEnded || !!optimisticState}
-              title={activeBlock ? "Finish or complete the active task first." : ""}
-              className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Play className="h-3 w-3 fill-emerald-400/20" />
-              {buttonText}
-            </button>
+        {(buttonText || canSubmitReport) && !isEnded && (
+          <div className="pt-2 border-t border-neutral-800/40 flex justify-end gap-2 mt-2">
+            {canSubmitReport && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/admin/projects/${task.project_id}/tasks/${task.id}`); }}
+                className="px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 hover:border-indigo-500/40 text-indigo-400 text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1"
+              >
+                <ClipboardList className="h-3 w-3" />
+                {reportStatus === 'revision_requested' ? 'Resubmit Report' : 'Submit Report'}
+              </button>
+            )}
+            {buttonText && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id, isProjectTask); }}
+                disabled={!!activeBlock || isEnded || !!optimisticState}
+                title={activeBlock ? "Finish or complete the active task first." : ""}
+                className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Play className="h-3 w-3 fill-emerald-400/20" />
+                {buttonText}
+              </button>
+            )}
           </div>
         )}
       </>
