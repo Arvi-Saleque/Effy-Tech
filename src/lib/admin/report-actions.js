@@ -485,6 +485,7 @@ export async function getTaskReportsData(filters) {
 
     return {
       id: t.id,
+      projectId: t.project_id,
       title: t.title,
       projectName: p ? p.name : "Unknown",
       clientName: c ? c.name : "Unknown",
