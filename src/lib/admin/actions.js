@@ -478,7 +478,9 @@ export async function endWork() {
         total_minutes: finalTotalMinutes,
         current_work_title: null,
         current_work_note: "",
-        assignment_id: null
+        assignment_id: null,
+        project_task_id: null,
+        source_type: null
       })
       .eq("id", session.id);
 
@@ -565,7 +567,7 @@ async function finishActiveBlock(supabase, profileId, today, now, completeTask) 
       current_work_note: "",
       assignment_id: null,
       project_task_id: null,
-      source_type: "legacy_assignment"
+      source_type: null
     })
     .eq("id", session.id);
 
