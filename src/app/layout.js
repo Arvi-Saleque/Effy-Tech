@@ -2,15 +2,6 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import siteConfig from "@/theme/siteConfig";
-import Navbar from "@/components/layout/Navbar";
-import Preloader from "@/components/ui/Preloader";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import {
-  GoogleTagManagerScript,
-  GoogleTagManagerNoscript,
-} from "@/components/analytics/GoogleTagManager";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,18 +54,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${banglaborno.variable} ${nakhatra.variable}`}>
-      <head>
-        <GoogleTagManagerScript />
-      </head>
-      <body>
-        <GoogleTagManagerNoscript />
-        <Preloader />
-        <Navbar />
-        {children}
-        <WhatsAppButton />
-        <Analytics />
-        <SpeedInsights />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
