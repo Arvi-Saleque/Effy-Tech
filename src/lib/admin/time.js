@@ -2,28 +2,15 @@
  * Time utility functions for EffyOps
  */
 
-/**
- * Formats a number of minutes into a human-readable string.
- * Examples:
- * 0 -> "0m"
- * 45 -> "45m"
- * 90 -> "1h 30m"
- * 480 -> "8h"
- */
-export function formatMinutes(minutes) {
-  const mins = Math.max(0, Math.round(minutes || 0));
-  if (mins === 0) return "0m";
+export function formatDuration(totalSeconds) {
+  const secs = Math.max(0, Math.round(totalSeconds || 0));
+  if (secs === 0) return "00:00:00";
 
-  const hrs = Math.floor(mins / 60);
-  const remainingMins = mins % 60;
+  const hrs = Math.floor(secs / 3600);
+  const mins = Math.floor((secs % 3600) / 60);
+  const remainingSecs = secs % 60;
 
-  if (hrs > 0 && remainingMins > 0) {
-    return `${hrs}h ${remainingMins}m`;
-  } else if (hrs > 0) {
-    return `${hrs}h`;
-  } else {
-    return `${remainingMins}m`;
-  }
+  return `${String(hrs).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(remainingSecs).padStart(2, "0")}`;
 }
 
 const APP_TIME_ZONE = "Asia/Dhaka";
@@ -95,22 +82,25 @@ export function getCurrentMonthStartDateString() {
 }
 
 /**
- * Calculates display minutes for an active, break, or ended session.
+ * Calculates display seconds for an active, break, or ended session.
  * For UI display:
- * - If ended: use total_minutes.
- * - If active: now - started_at - break_minutes.
- * - If break: break_started_at - started_at - break_minutes (break time doesn't count).
+ * - If ended: use total_minutes * 60 (or exact seconds if stored, but total_minutes is legacy fallback).
+ * - If active: now - started_at - break_seconds.
+ * - If break: break_started_at - started_at - break_seconds (break time doesn't count).
  * - Never return negative value.
  */
-export function calculateSessionDisplayMinutes(session) {
+export function calculateSessionDisplaySeconds(session) {
   if (!session || !session.started_at) return 0;
 
   if (session.status === "ended" || session.ended_at) {
-    return Math.max(0, session.total_minutes || 0);
+    // If ended, we rely on the DB's accumulated sum. For sessions, total_minutes is the sum of block minutes.
+    // For exactness, session exact elapsed is better derived from block sum in getReportsData,
+    // but here we just return the stored total_minutes * 60 as fallback.
+    return Math.max(0, (session.total_minutes || 0) * 60);
   }
 
   const start = new Date(session.started_at).getTime();
-  const breakMinutes = session.break_minutes || 0;
+  const breakMs = (session.break_minutes || 0) * 60000;
 
   let end;
   if (session.status === "break" && session.break_started_at) {
@@ -120,9 +110,9 @@ export function calculateSessionDisplayMinutes(session) {
   }
 
   const elapsedMs = end - start;
-  const elapsedMins = Math.floor(elapsedMs / 60000);
+  const elapsedSecs = Math.floor((elapsedMs - breakMs) / 1000);
   
-  return Math.max(0, elapsedMins - breakMinutes);
+  return Math.max(0, elapsedSecs);
 }
 
 /**
@@ -149,21 +139,25 @@ export function formatDateTime(value, includeTime = true) {
 }
 
 /**
- * Calculates display minutes for an array of work blocks.
- * - done blocks: total_minutes
+ * Calculates exact display seconds for an array of work blocks.
+ * - done blocks: exact ms between started_at and ended_at, falling back to total_minutes if missing ended_at
  * - active blocks: live elapsed from started_at to now (minus live break duration if session is on break)
  * - ignore cancelled blocks
  * - Never return negative values
  */
-export function calculateWorkBlocksDisplayMinutes(workBlocks, session = null) {
+export function calculateWorkBlocksDisplaySeconds(workBlocks, session = null) {
   if (!workBlocks || workBlocks.length === 0) return 0;
   
-  let totalMins = 0;
+  let totalMs = 0;
   const now = new Date().getTime();
 
   workBlocks.forEach(block => {
     if (block.status === "done") {
-      totalMins += Math.max(0, block.total_minutes || 0);
+      if (block.started_at && block.ended_at) {
+        totalMs += Math.max(0, new Date(block.ended_at).getTime() - new Date(block.started_at).getTime());
+      } else {
+        totalMs += Math.max(0, (block.total_minutes || 0) * 60000);
+      }
     } else if (block.status === "active" && block.started_at) {
       const start = new Date(block.started_at).getTime();
       let diffMs = now - start;
@@ -175,10 +169,9 @@ export function calculateWorkBlocksDisplayMinutes(workBlocks, session = null) {
         diffMs -= currentBreakMs;
       }
 
-      const diffMins = Math.floor(diffMs / 60000);
-      totalMins += Math.max(0, diffMins);
+      totalMs += Math.max(0, diffMs);
     }
   });
 
-  return Math.max(0, totalMins);
+  return Math.max(0, Math.floor(totalMs / 1000));
 }

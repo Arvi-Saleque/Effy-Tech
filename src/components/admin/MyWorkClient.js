@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { startWork, takeBreak, resumeWork, endWork, markAssignmentDone, finishCurrentWorkForNow, completeCurrentTask } from "@/lib/admin/actions";
 import StatusBadge from "./StatusBadge";
 import WorkTimer from "./WorkTimer";
-import { formatDateTime } from "@/lib/admin/time";
+import { formatDateTime, formatDuration } from "@/lib/admin/time";
 import { Loader2, AlertCircle, CheckCircle2, Play, CornerDownRight, ClipboardList, Calendar, Coffee, Clock } from "lucide-react";
 
-function ActiveBlockTimer({ startedAt, session }) {
+function ActiveBlockTimer({ startedAt, session, previousAccumulatedMs = 0 }) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function ActiveBlockTimer({ startedAt, session }) {
         elapsedMs -= currentBreakMs;
       }
 
-      setSeconds(Math.max(0, Math.floor(elapsedMs / 1000)));
+      setSeconds(Math.max(0, Math.floor((elapsedMs + previousAccumulatedMs) / 1000)));
     };
     update();
 
@@ -81,6 +81,8 @@ export default function MyWorkClient({ initialData }) {
   ];
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const isPageLoading = isLoading || isPending;
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
@@ -89,7 +91,23 @@ export default function MyWorkClient({ initialData }) {
   const isEnded = status === "ended";
 
   const activeBlock = todayWorkBlocks.find(b => b.status === "active");
-  const completedWorkBlocks = todayWorkBlocks.filter(b => b.status !== "active");
+  const completedWorkBlocks = todayWorkBlocks.filter(b => b.status === "done");
+
+  let activeBlockAccumulatedMs = 0;
+  if (activeBlock) {
+    const taskId = activeBlock.assignment_id || activeBlock.project_task_id;
+    if (taskId) {
+      completedWorkBlocks.forEach(b => {
+        if (b.assignment_id === taskId || b.project_task_id === taskId) {
+          if (b.started_at && b.ended_at) {
+            activeBlockAccumulatedMs += new Date(b.ended_at).getTime() - new Date(b.started_at).getTime();
+          } else {
+            activeBlockAccumulatedMs += (b.total_minutes || 0) * 60000;
+          }
+        }
+      });
+    }
+  }
 
   // Derived display status
   let displayStatus = "offline";
@@ -100,7 +118,8 @@ export default function MyWorkClient({ initialData }) {
   } else if (todaySession.status === "break") {
     displayStatus = "break";
   } else if (todaySession.status === "active") {
-    displayStatus = activeBlock ? "task_active" : "workday_open";
+    // Treat as "workday_open" immediately if we are transitioning to finish task
+    displayStatus = (activeBlock && !isPending) ? "task_active" : "workday_open";
   }
 
   const clearMessages = () => {
@@ -118,7 +137,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused for now. It remains In Progress.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg("Failed to pause task.");
@@ -137,7 +158,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task completed and moved to Done!");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg("Failed to complete task.");
@@ -163,7 +186,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg(`Started task: "${title}"`);
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg(`Failed to start ${isProjectTask ? "project task" : "assignment"}.`);
@@ -182,7 +207,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg("Failed to pause task.");
@@ -201,7 +228,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task resumed.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg("Failed to resume task.");
@@ -230,7 +259,9 @@ export default function MyWorkClient({ initialData }) {
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Workday ended successfully.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
       setErrorMsg("Failed to end workday.");
@@ -414,7 +445,7 @@ export default function MyWorkClient({ initialData }) {
                     Task Elapsed
                   </span>
                   <div className="text-2xl">
-                    <ActiveBlockTimer startedAt={activeBlock.started_at} session={todaySession} />
+                    <ActiveBlockTimer startedAt={activeBlock.started_at} session={todaySession} previousAccumulatedMs={activeBlockAccumulatedMs} />
                   </div>
                 </div>
               </div>
@@ -635,17 +666,27 @@ export default function MyWorkClient({ initialData }) {
           </h3>
           <div className="space-y-3">
             {completedWorkBlocks.map((block) => {
-              const linkedAssignment = myTasks.find(a => a.id === block.assignment_id) || 
+              const linkedLegacy = myTasks.find(a => a.id === block.assignment_id) || 
                                        recentDoneTasks.find(a => a.id === block.assignment_id);
-              const formatBlockDuration = (minutes) => {
-                if (!minutes || minutes <= 0) return "0m";
-                const hrs = Math.floor(minutes / 60);
-                const mins = minutes % 60;
-                if (hrs > 0) {
-                  return `${hrs}h ${mins}m`;
-                }
-                return `${mins}m`;
-              };
+              const linkedProjectTask = projectTasks.find(p => p.id === block.project_task_id);
+              
+              let blockDurationSecs = 0;
+              if (block.started_at && block.ended_at) {
+                blockDurationSecs = Math.max(0, Math.floor((new Date(block.ended_at).getTime() - new Date(block.started_at).getTime()) / 1000));
+              } else {
+                blockDurationSecs = (block.total_minutes || 0) * 60;
+              }
+
+              let sourceLabel = "Manual Work";
+              let taskTitle = "";
+              if (block.source_type === "project_task" && linkedProjectTask) {
+                sourceLabel = "Project Task";
+                taskTitle = linkedProjectTask.title;
+              } else if ((block.source_type === "legacy_assignment" || block.assignment_id) && linkedLegacy) {
+                sourceLabel = "Legacy Assignment";
+                taskTitle = linkedLegacy.title;
+              }
+
               return (
                 <div 
                   key={block.id} 
@@ -654,34 +695,27 @@ export default function MyWorkClient({ initialData }) {
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-neutral-200">{block.title}</span>
-                        {linkedAssignment ? (
+                        <span className="font-semibold text-neutral-200">{block.title || (block.source_type === "project_task" ? "Project Task Session" : "Task Session")}</span>
+                        {taskTitle ? (
                           <span className="text-[10px] bg-neutral-850 text-neutral-450 px-1.5 py-0.5 rounded border border-neutral-800/40">
-                            Task: {linkedAssignment.title}
+                            {sourceLabel}: {taskTitle}
                           </span>
                         ) : (
                           <span className="text-[10px] bg-neutral-950/20 text-neutral-505 px-1.5 py-0.5 rounded border border-neutral-800/20 italic">
-                            Manual work block
+                            {sourceLabel}
                           </span>
                         )}
                       </div>
                       {block.note && (
                         <p className="text-neutral-450 italic font-light">&ldquo;{block.note}&rdquo;</p>
                       )}
-                      <div className="text-[10px] text-neutral-500 flex items-center gap-2">
-                        <span>Started: {formatDateTime(block.started_at, true)}</span>
-                        {block.ended_at && (
-                          <span>• Ended: {formatDateTime(block.ended_at, true)}</span>
-                        )}
+                      <div className="text-[10px] text-neutral-600 font-mono">
+                        {formatDateTime(block.started_at)} &mdash; {formatDateTime(block.ended_at)}
                       </div>
                     </div>
-
-                    <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
-                      <span className="text-[9px] font-semibold tracking-wide uppercase px-1.5 py-0.5 rounded bg-neutral-850 border border-neutral-850 text-neutral-450">
-                        Done
-                      </span>
-                      <span className="font-mono font-medium text-neutral-400">
-                        {formatBlockDuration(block.total_minutes)}
+                    <div className="text-right">
+                      <span className="text-sm font-mono font-bold text-neutral-300">
+                        {formatDuration(blockDurationSecs)}
                       </span>
                     </div>
                   </div>

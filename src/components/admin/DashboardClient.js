@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createAssignment } from "@/lib/admin/actions";
-import { calculateSessionDisplayMinutes, formatMinutes, getTodayDateString, getTomorrowDateString, calculateWorkBlocksDisplayMinutes } from "@/lib/admin/time";
+import { calculateSessionDisplaySeconds, formatDuration, getTodayDateString, getTomorrowDateString, calculateWorkBlocksDisplaySeconds } from "@/lib/admin/time";
 import StatusBadge from "./StatusBadge";
 import WorkHoursChart from "./WorkHoursChart";
 import { 
@@ -42,10 +42,10 @@ export default function DashboardClient({ initialData }) {
   const chartData = profiles.map(member => {
     const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
     const session = sessions.find(s => s.user_id === member.id);
-    const mins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
+    const secs = calculateWorkBlocksDisplaySeconds(memberBlocks, session);
     return {
       name: member.name,
-      hours: parseFloat((mins / 60).toFixed(1))
+      hours: parseFloat((secs / 3600).toFixed(1))
     };
   });
 
@@ -172,7 +172,7 @@ export default function DashboardClient({ initialData }) {
                     const session = sessions.find(s => s.user_id === member.id);
                     const activeBlock = todayWorkBlocks.find(b => b.user_id === member.id && b.status === "active");
                     const memberBlocks = todayWorkBlocks.filter(b => b.user_id === member.id);
-                    const workedMins = calculateWorkBlocksDisplayMinutes(memberBlocks, session);
+                    const workedSecs = calculateWorkBlocksDisplaySeconds(memberBlocks, session);
 
                     let displayStatus = "offline";
                     if (!session) {
@@ -223,7 +223,7 @@ export default function DashboardClient({ initialData }) {
                           )}
                         </td>
                         <td className="py-3.5 font-mono text-xs text-neutral-200">
-                          {formatMinutes(workedMins)}
+                          {formatDuration(workedSecs)}
                         </td>
                       </tr>
                     );

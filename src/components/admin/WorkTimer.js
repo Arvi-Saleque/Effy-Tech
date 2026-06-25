@@ -16,7 +16,12 @@ export default function WorkTimer({ session, workBlocks = [] }) {
 
     const activeBlock = workBlocks.find(b => b.status === "active");
     const completedBlocks = workBlocks.filter(b => b.status === "done");
-    const completedSeconds = completedBlocks.reduce((acc, curr) => acc + (curr.total_minutes || 0) * 60, 0);
+    const completedSeconds = completedBlocks.reduce((acc, curr) => {
+      if (curr.started_at && curr.ended_at) {
+        return acc + Math.floor((new Date(curr.ended_at).getTime() - new Date(curr.started_at).getTime()) / 1000);
+      }
+      return acc + (curr.total_minutes || 0) * 60;
+    }, 0);
 
     const recordedBreakMs = (session.break_minutes || 0) * 60 * 1000;
 

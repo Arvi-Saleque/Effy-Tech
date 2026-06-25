@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { formatMinutes } from "@/lib/admin/time";
+import { formatDuration } from "@/lib/admin/time";
 import WorkHoursChart from "./WorkHoursChart";
 import { 
   Calendar, 
@@ -208,13 +208,12 @@ export default function ReportsClient({ initialData, currentRange }) {
                 </thead>
                 <tbody className="divide-y divide-neutral-800/40 text-xs">
                   {workBlocksHistory.map(block => {
-                    const formatBlockDuration = (minutes) => {
-                      if (!minutes || minutes <= 0) return "0m";
-                      const hrs = Math.floor(minutes / 60);
-                      const mins = minutes % 60;
-                      if (hrs > 0) return `${hrs}h ${mins}m`;
-                      return `${mins}m`;
-                    };
+                    let blockDurationSecs = 0;
+                    if (block.started_at && block.ended_at) {
+                      blockDurationSecs = Math.max(0, Math.floor((new Date(block.ended_at).getTime() - new Date(block.started_at).getTime()) / 1000));
+                    } else {
+                      blockDurationSecs = (block.total_minutes || 0) * 60;
+                    }
 
                     return (
                       <tr key={block.id} className="text-neutral-300">
@@ -238,7 +237,7 @@ export default function ReportsClient({ initialData, currentRange }) {
                           {block.status === "active" ? (
                             <span className="text-emerald-450 font-semibold">Active</span>
                           ) : (
-                            formatBlockDuration(block.total_minutes)
+                            formatDuration(blockDurationSecs)
                           )}
                         </td>
                         <td className="py-3.5">
@@ -291,7 +290,7 @@ export default function ReportsClient({ initialData, currentRange }) {
 
                     <div className="flex items-center gap-3 text-xs">
                       <span className="text-neutral-500 font-mono">
-                        Hours Worked: <strong className="text-neutral-200">{(log.total_minutes / 60).toFixed(1)}h</strong> ({formatMinutes(log.total_minutes)})
+                        Hours Worked: <strong className="text-neutral-200">{(log.total_minutes / 60).toFixed(1)}h</strong> ({formatDuration(log.total_minutes * 60)})
                       </span>
                       <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border ${
                         log.status === "ended" 

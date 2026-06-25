@@ -5,10 +5,10 @@ import { requireAuth, requireAdmin } from "@/lib/admin/auth";
 import { 
   getTodayDateString, 
   getTomorrowDateString, 
-  calculateSessionDisplayMinutes,
+  calculateSessionDisplaySeconds,
   getDateStringWithOffset,
   getCurrentMonthStartDateString,
-  calculateWorkBlocksDisplayMinutes
+  calculateWorkBlocksDisplaySeconds
 } from "@/lib/admin/time";
 import { revalidatePath } from "next/cache";
 
@@ -754,15 +754,17 @@ export async function getAdminDashboardData() {
     const onBreak = sessions ? sessions.filter(s => s.status === "break").length : 0;
     
     // Sum of worked minutes today calculated from work blocks
-    let totalMinutesToday = 0;
+    let totalSecondsToday = 0;
     if (profiles) {
       profiles.forEach(member => {
         const memberBlocks = todayWorkBlocks ? todayWorkBlocks.filter(b => b.user_id === member.id) : [];
         const session = sessions ? sessions.find(s => s.user_id === member.id) : null;
-        totalMinutesToday += calculateWorkBlocksDisplayMinutes(memberBlocks, session);
+        if (session) {
+          totalSecondsToday += calculateWorkBlocksDisplaySeconds(memberBlocks, session);
+        }
       });
     }
-    const totalHoursToday = parseFloat((totalMinutesToday / 60).toFixed(1));
+    const totalHoursToday = parseFloat((totalSecondsToday / 3600).toFixed(1));
 
     // Helper map to lookup profile names
     const profileMap = {};
@@ -887,8 +889,8 @@ export async function getReportsData(range) {
       const memberBlocks = rawWorkBlocks ? rawWorkBlocks.filter(b => b.user_id === member.id) : [];
       const todaySession = sessions ? sessions.find(s => s.user_id === member.id && s.work_date === today) : null;
 
-      const totalMinutes = calculateWorkBlocksDisplayMinutes(memberBlocks, todaySession);
-      const totalHours = parseFloat((totalMinutes / 60).toFixed(1));
+      const totalSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, todaySession);
+      const totalHours = parseFloat((totalSeconds / 3600).toFixed(1));
 
       const validBlocks = memberBlocks.filter(b => b.status !== "cancelled");
       const uniqueDates = new Set(validBlocks.map(b => b.work_date));
@@ -923,7 +925,7 @@ export async function getReportsData(range) {
             status: session.status,
             current_work_title: session.current_work_title,
             break_minutes: session.break_minutes,
-            total_minutes: calculateWorkBlocksDisplayMinutes(dayBlocks, session)
+            total_minutes: calculateWorkBlocksDisplaySeconds(dayBlocks, session) / 60
           });
         }
       });
