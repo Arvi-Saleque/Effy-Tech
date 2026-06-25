@@ -50,7 +50,35 @@ function ActiveBlockTimer({ startedAt, session }) {
 
 export default function MyWorkClient({ initialData }) {
   const router = useRouter();
-  const { profile, todaySession, todayWorkBlocks = [], myTasks = [], recentDoneTasks = [] } = initialData;
+  const { profile, todaySession, todayWorkBlocks = [], myTasks = [], recentDoneTasks = [], projectTasks = [] } = initialData;
+
+  const mappedProjectTasks = projectTasks.map(pt => {
+    let mappedStatus = "pending";
+    if (["backlog", "todo"].includes(pt.status)) mappedStatus = "pending";
+    if (["in_progress", "blocked", "review"].includes(pt.status)) mappedStatus = "in_progress";
+    if (pt.status === "done") mappedStatus = "done";
+    
+    return {
+      ...pt,
+      is_project_task: true,
+      mapped_status: mappedStatus
+    };
+  });
+
+  const allPending = [
+    ...myTasks.filter(t => t.status === "pending"),
+    ...mappedProjectTasks.filter(t => t.mapped_status === "pending")
+  ];
+
+  const allInProgress = [
+    ...myTasks.filter(t => t.status === "in_progress"),
+    ...mappedProjectTasks.filter(t => t.mapped_status === "in_progress")
+  ];
+
+  const allDone = [
+    ...recentDoneTasks,
+    ...mappedProjectTasks.filter(t => t.mapped_status === "done")
+  ];
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -210,39 +238,66 @@ export default function MyWorkClient({ initialData }) {
     }
   };
 
-  const renderBoardTaskCard = (task, buttonText) => {
-    const isDone = task.status === "done";
-    const isCurrentlyTracking = activeBlock && activeBlock.assignment_id === task.id;
+  const renderBoardTaskCard = (task, buttonText, isProjectTask = false) => {
+    const isDone = isProjectTask ? task.mapped_status === "done" : task.status === "done";
+    const isCurrentlyTracking = !isProjectTask && activeBlock && activeBlock.assignment_id === task.id;
 
-    return (
-      <div key={task.id} className={`p-4 rounded-xl border transition-all duration-200 text-left ${
-        isCurrentlyTracking 
-          ? "bg-emerald-950/15 border-emerald-500/40" 
-          : isDone 
-            ? "bg-neutral-950/10 border-neutral-800/40 opacity-70"
-            : "bg-neutral-900/40 border-neutral-800/80 hover:border-neutral-700/60"
-      }`}>
+    const label = isProjectTask ? task.status.replace("_", " ") : "";
+
+    const cardClasses = `p-4 rounded-xl border transition-all duration-200 text-left block w-full ${
+      isCurrentlyTracking 
+        ? "bg-emerald-950/15 border-emerald-500/40" 
+        : isDone 
+          ? "bg-neutral-950/10 border-neutral-800/40 opacity-70"
+          : "bg-neutral-900/40 border-neutral-800/80 hover:border-neutral-700/60"
+    } ${isProjectTask ? "cursor-pointer hover:bg-neutral-800/40" : ""}`;
+
+    const cardContent = (
+      <>
         <div className="flex items-start justify-between gap-4 mb-2">
           <div className="space-y-1">
             <h5 className={`font-semibold text-sm ${isDone ? "line-through text-neutral-400" : "text-neutral-200"}`}>
               {task.title}
             </h5>
-            {task.description && (
+            {isProjectTask ? (
               <p className={`text-xs leading-relaxed whitespace-pre-wrap ${isDone ? "text-neutral-500" : "text-neutral-450"}`}>
-                {task.description}
+                <span className="font-medium text-blue-400">{task.projects?.name}</span>
+                {task.projects?.clients?.name && ` • ${task.projects.clients.name}`}
               </p>
+            ) : (
+              task.description && (
+                <p className={`text-xs leading-relaxed whitespace-pre-wrap ${isDone ? "text-neutral-500" : "text-neutral-450"}`}>
+                  {task.description}
+                </p>
+              )
             )}
           </div>
-          <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
-            isDone ? "bg-neutral-850 border-neutral-800 text-neutral-450" :
-            task.status === "in_progress" ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
-            "bg-amber-500/10 border-amber-500/20 text-amber-400"
-          }`}>
-            {isDone ? "Done" : task.status === "in_progress" ? "In Progress" : "To Do"}
-          </span>
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            {isProjectTask && (
+              <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400 shrink-0">
+                Project Task
+              </span>
+            )}
+            <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
+              isDone ? "bg-neutral-850 border-neutral-800 text-neutral-450" :
+              (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
+              "bg-amber-500/10 border-amber-500/20 text-amber-400"
+            }`}>
+              {isDone ? "Done" : (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "In Progress" : "To Do"}
+            </span>
+          </div>
         </div>
 
-        {task.work_date && (
+        {isProjectTask && (
+           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-neutral-500 font-mono mb-2 mt-2">
+             <span className="capitalize">Priority: {task.priority}</span>
+             <span>Progress: {task.progress_percent || 0}%</span>
+             {task.due_date && <span>Due: {task.due_date}</span>}
+             <span className="capitalize">Status: {label}</span>
+           </div>
+        )}
+
+        {!isProjectTask && task.work_date && (
           <div className="flex items-center gap-1.5 text-[10px] text-neutral-500 font-mono mb-2">
             <Calendar className="h-3 w-3" />
             <span>Target: {task.work_date}</span>
@@ -250,10 +305,10 @@ export default function MyWorkClient({ initialData }) {
         )}
 
         {/* Action Button */}
-        {buttonText && !isEnded && (
+        {!isProjectTask && buttonText && !isEnded && (
           <div className="pt-2 border-t border-neutral-800/40 flex justify-end">
             <button
-              onClick={() => handleStartAssignment(task.title, task.id)}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id); }}
               disabled={!!activeBlock || isEnded}
               title={activeBlock ? "Finish or complete the active task first." : ""}
               className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -263,7 +318,20 @@ export default function MyWorkClient({ initialData }) {
             </button>
           </div>
         )}
-      </div>
+      </>
+    );
+
+    return (
+      <button 
+        key={task.id} 
+        className={cardClasses}
+        onClick={() => {
+          if (isProjectTask) router.push(`/admin/projects/${task.project_id}/tasks/${task.id}`);
+        }}
+        type="button"
+      >
+        {cardContent}
+      </button>
     );
   };
 
@@ -508,14 +576,14 @@ export default function MyWorkClient({ initialData }) {
             <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
               <h4 className="text-sm font-bold text-neutral-300">To Do</h4>
               <span className="px-2 py-0.5 text-xs font-semibold bg-neutral-800 text-neutral-400 rounded-md">
-                {myTasks.filter(t => t.status === "pending").length}
+                {allPending.length}
               </span>
             </div>
             <div className="space-y-3">
-              {myTasks.filter(t => t.status === "pending").length === 0 ? (
+              {allPending.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks in To Do.</div>
               ) : (
-                myTasks.filter(t => t.status === "pending").map(task => renderBoardTaskCard(task, "Start Task"))
+                allPending.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Start Task", task.is_project_task))
               )}
             </div>
           </div>
@@ -525,14 +593,14 @@ export default function MyWorkClient({ initialData }) {
             <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
               <h4 className="text-sm font-bold text-blue-400">In Progress</h4>
               <span className="px-2 py-0.5 text-xs font-semibold bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
-                {myTasks.filter(t => t.status === "in_progress").length}
+                {allInProgress.length}
               </span>
             </div>
             <div className="space-y-3">
-              {myTasks.filter(t => t.status === "in_progress").length === 0 ? (
+              {allInProgress.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks In Progress.</div>
               ) : (
-                myTasks.filter(t => t.status === "in_progress").map(task => renderBoardTaskCard(task, "Continue Task"))
+                allInProgress.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Continue Task", task.is_project_task))
               )}
             </div>
           </div>
@@ -542,14 +610,14 @@ export default function MyWorkClient({ initialData }) {
             <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
               <h4 className="text-sm font-bold text-emerald-400">Done</h4>
               <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 rounded-md border border-emerald-500/20">
-                {recentDoneTasks.length}
+                {allDone.length}
               </span>
             </div>
             <div className="space-y-3">
-              {recentDoneTasks.length === 0 ? (
+              {allDone.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No recently completed tasks.</div>
               ) : (
-                recentDoneTasks.map(task => renderBoardTaskCard(task, null))
+                allDone.map(task => renderBoardTaskCard(task, null, task.is_project_task))
               )}
             </div>
           </div>

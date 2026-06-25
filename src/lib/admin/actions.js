@@ -71,6 +71,19 @@ export async function getMyWorkData() {
       .order("updated_at", { ascending: false })
       .limit(10);
 
+    // Fetch active project tasks assigned to this user
+    const { data: projectTasks } = await supabase
+      .from("project_tasks")
+      .select(`
+        *,
+        projects (name, clients (name)),
+        task_assignees!inner(user_id)
+      `)
+      .eq("task_assignees.user_id", profile.id)
+      .neq("status", "archived")
+      .neq("status", "cancelled")
+      .order("updated_at", { ascending: false });
+
     return {
       profile,
       todaySession: todaySession || null,
@@ -78,7 +91,8 @@ export async function getMyWorkData() {
       tomorrowAssignments: tomorrowAssignments || [],
       todayWorkBlocks: todayWorkBlocks || [],
       myTasks: myTasks || [],
-      recentDoneTasks: recentDoneTasks || []
+      recentDoneTasks: recentDoneTasks || [],
+      projectTasks: projectTasks || []
     };
   } catch (error) {
     console.error("Error in getMyWorkData:", error);
@@ -89,7 +103,8 @@ export async function getMyWorkData() {
       tomorrowAssignments: [],
       todayWorkBlocks: [],
       myTasks: [],
-      recentDoneTasks: []
+      recentDoneTasks: [],
+      projectTasks: []
     };
   }
 }
