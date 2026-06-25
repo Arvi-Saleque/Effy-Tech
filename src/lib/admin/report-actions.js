@@ -510,3 +510,225 @@ export async function getTaskReportsData(filters) {
 
   return { hasError: false, taskData };
 }
+
+export async function getTimeReportsData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+  const today = getTodayDateString();
+
+  const [
+    blocks,
+    sessions,
+    profiles,
+    tasks,
+    legacy
+  ] = await Promise.all([
+    fetchFilteredBlocks(supabase, filters),
+    fetchFilteredSessions(supabase, filters),
+    fetchFilteredProfiles(supabase),
+    supabase.from("project_tasks").select("id, title"),
+    supabase.from("work_assignments").select("id, title")
+  ]);
+
+  const tasksMap = new Map(tasks.data?.map(t => [t.id, t.title]) || []);
+  const legacyMap = new Map(legacy.data?.map(l => [l.id, l.title]) || []);
+
+  const timeData = profiles.map(member => {
+    const memberBlocks = blocks.filter(b => b.user_id === member.id);
+    const memberSessions = sessions.filter(s => s.user_id === member.id);
+    const activeSession = memberSessions.find(s => s.status !== "ended");
+
+    const totalTrackedSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
+    
+    let totalBreakSeconds = 0;
+    memberSessions.forEach(s => {
+      totalBreakSeconds += (s.break_seconds || 0);
+      if (s.status === "break" && s.break_started_at) {
+        const start = new Date(s.break_started_at).getTime();
+        const now = new Date().getTime();
+        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+      }
+    });
+
+    const netProductiveSeconds = Math.max(0, totalTrackedSeconds - totalBreakSeconds);
+
+    let firstWorkStart = null;
+    let lastWorkEnd = null;
+    let maxBlockDuration = 0;
+    
+    let projectTaskSeconds = 0;
+    let legacySeconds = 0;
+    let manualSeconds = 0;
+
+    memberBlocks.forEach(b => {
+      if (b.started_at) {
+        const t = new Date(b.started_at);
+        if (!firstWorkStart || t < new Date(firstWorkStart)) firstWorkStart = b.started_at;
+      }
+      
+      let blockSecs = 0;
+      if (b.status === "done") {
+        if (b.started_at && b.ended_at) {
+          blockSecs = Math.max(0, Math.floor((new Date(b.ended_at) - new Date(b.started_at)) / 1000));
+          const endT = new Date(b.ended_at);
+          if (!lastWorkEnd || endT > new Date(lastWorkEnd)) lastWorkEnd = b.ended_at;
+        } else {
+          blockSecs = (b.total_minutes || 0) * 60;
+        }
+      } else if (b.status === "active" && b.started_at) {
+        const start = new Date(b.started_at).getTime();
+        let diffMs = new Date().getTime() - start;
+        if (activeSession && activeSession.status === "break" && activeSession.break_started_at) {
+          const breakStart = new Date(activeSession.break_started_at).getTime();
+          diffMs -= (new Date().getTime() - breakStart);
+        }
+        blockSecs = Math.max(0, Math.floor(diffMs / 1000));
+        lastWorkEnd = "Active Now";
+      }
+
+      if (blockSecs > maxBlockDuration) maxBlockDuration = blockSecs;
+
+      if (b.source_type === "project_task") projectTaskSeconds += blockSecs;
+      else if (b.source_type === "legacy_assignment") legacySeconds += blockSecs;
+      else manualSeconds += blockSecs;
+    });
+
+    const avgBlockSeconds = memberBlocks.length > 0 ? Math.floor(totalTrackedSeconds / memberBlocks.length) : 0;
+
+    return {
+      id: member.id,
+      name: member.name,
+      totalTrackedSeconds,
+      totalBreakSeconds,
+      netProductiveSeconds,
+      sessionsCount: memberSessions.length,
+      blocksCount: memberBlocks.length,
+      firstWorkStart,
+      lastWorkEnd,
+      maxBlockDuration,
+      avgBlockSeconds,
+      projectTaskSeconds,
+      legacySeconds,
+      manualSeconds,
+      hasActiveSession: !!activeSession
+    };
+  });
+
+  return { hasError: false, timeData };
+}
+
+export async function getWorkReportAnalysisData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+
+  const [
+    reports,
+    profiles,
+    tasks,
+    projects
+  ] = await Promise.all([
+    fetchFilteredReports(supabase, filters),
+    fetchFilteredProfiles(supabase),
+    fetchFilteredTasks(supabase, filters),
+    fetchFilteredProjects(supabase, filters)
+  ]);
+
+  const latestReports = getLatestReports(reports);
+  
+  let reviewTimeTotal = 0;
+  let reviewedCount = 0;
+  
+  const analysisData = latestReports.map(r => {
+    const t = tasks.find(tsk => tsk.id === r.task_id);
+    const p = t ? projects.find(proj => proj.id === t.project_id) : null;
+    const author = profiles.find(prof => prof.id === r.submitted_by);
+    const reviewer = profiles.find(prof => prof.id === r.reviewed_by);
+
+    let reviewAge = 0;
+    if (r.completion_status === "submitted" && r.created_at) {
+      reviewAge = Math.floor((new Date() - new Date(r.created_at)) / (1000 * 60 * 60 * 24));
+    }
+    
+    if (r.reviewed_at && r.created_at) {
+      const rt = Math.floor((new Date(r.reviewed_at) - new Date(r.created_at)) / 1000);
+      reviewTimeTotal += rt;
+      reviewedCount++;
+    }
+
+    const isAfterDueDate = t && t.due_date && r.submitted_date ? r.submitted_date > t.due_date.split("T")[0] : false;
+    
+    // Calendar duration
+    let calendarDays = 0;
+    if (r.actual_start_date && r.submitted_date) {
+      const s = new Date(r.actual_start_date);
+      const e = new Date(r.submitted_date);
+      calendarDays = Math.max(0, Math.round((e - s) / (1000 * 60 * 60 * 24)));
+    }
+
+    return {
+      id: r.id,
+      taskId: r.task_id,
+      taskTitle: t ? t.title : "Unknown",
+      projectName: p ? p.name : "Unknown",
+      submittedBy: author ? author.name : "Unknown",
+      versionNumber: r.version_number,
+      actualStartDate: r.actual_start_date,
+      submittedDate: r.submitted_date,
+      completionDurationDays: calendarDays,
+      status: r.completion_status,
+      reviewedBy: reviewer ? reviewer.name : null,
+      reviewedAt: r.reviewed_at,
+      reviewAge,
+      isAfterDueDate,
+      hasWorkLinks: Array.isArray(r.work_links) && r.work_links.length > 0,
+      createdAt: r.created_at
+    };
+  });
+
+  const avgReviewSeconds = reviewedCount > 0 ? Math.floor(reviewTimeTotal / reviewedCount) : 0;
+  
+  const pendingReports = analysisData.filter(d => d.status === "submitted");
+  pendingReports.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  const oldestPending = pendingReports[0] || null;
+
+  return {
+    hasError: false,
+    analysisData,
+    avgReviewSeconds,
+    oldestPending
+  };
+}
+
+export async function getLegacyHistoryData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+
+  const [
+    legacy,
+    profiles
+  ] = await Promise.all([
+    fetchFilteredLegacy(supabase, filters),
+    fetchFilteredProfiles(supabase)
+  ]);
+
+  const legacyData = legacy.map(l => {
+    const assignee = profiles.find(p => p.id === l.assigned_to);
+    
+    return {
+      id: l.id,
+      title: l.title,
+      assignedTo: assignee ? assignee.name : "Unknown",
+      status: l.status,
+      targetDate: l.work_date,
+      sessionsCount: l.work_sessions?.length || 0,
+      totalMinutes: l.total_minutes || 0,
+      completionDate: l.status === "done" ? l.updated_at : null,
+      notes: l.historical_notes || null
+    };
+  });
+
+  return {
+    hasError: false,
+    legacyData
+  };
+}
