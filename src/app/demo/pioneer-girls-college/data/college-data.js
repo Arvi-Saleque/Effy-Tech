@@ -21,7 +21,10 @@ export const institution = {
     phone: "কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য",
     email: "কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য",
     hours: "কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য",
-    address: "খুলনা, বাংলাদেশ - পূর্ণ ঠিকানা কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য",
+    address: "Government Pioneer Women's College, Khulna, Bangladesh",
+    mapUrl: "https://maps.app.goo.gl/pWxD4uQv2gRNSpTm7",
+    mapEmbedUrl:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d400.2112610886933!2d89.56780367124469!3d22.810775467071686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ff901feb938063%3A0xf843ced6888607e1!2sGovernment%20Pioneer%20Women%27s%20College%2C%20Khulna!5e0!3m2!1sen!2sbd!4v1782424577932!5m2!1sen!2sbd",
   },
 };
 

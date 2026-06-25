@@ -1,4 +1,4 @@
-import { Clock3, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Clock3, Mail, MapPin, Phone } from "lucide-react";
 import { institution } from "../data/college-data";
 import SectionHeader from "./SectionHeader";
 
@@ -17,7 +17,7 @@ export default function ContactSection() {
           <SectionHeader
             eyebrow="যোগাযোগ"
             title="কলেজ অফিস ও অবস্থান"
-            subtitle="বর্তমান ফোন, ই-মেইল, অফিস সময় ও নির্ভুল ম্যাপ কর্তৃপক্ষ যাচাইয়ের পর যুক্ত করার জন্য এই অংশ প্রস্তুত।"
+            subtitle="কলেজের যাচাইকৃত ম্যাপ যুক্ত করা হয়েছে। ফোন, ই-মেইল ও অফিস সময় কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য।"
           />
           <div className="pgc-contact-list">
             {contactRows.map(({ icon: IconComponent, label, value }) => (
@@ -29,12 +29,21 @@ export default function ContactSection() {
             ))}
           </div>
         </div>
-        <div className="pgc-map-placeholder" role="img" aria-label="যাচাইকৃত ম্যাপ যুক্ত করার স্থান">
-          <div className="pgc-map-placeholder__grid" />
-          <div className="pgc-map-placeholder__card">
-            <MapPin size={24} aria-hidden="true" />
-            <strong>যাচাইকৃত ম্যাপ যুক্ত করা হবে</strong>
-            <span>ভুল লোকেশন এড়াতে Google Map এমবেড করা হয়নি।</span>
+        <div className="pgc-map-frame">
+          <iframe
+            title="Government Pioneer Women's College, Khulna map"
+            src={institution.contact.mapEmbedUrl}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+          <div className="pgc-map-frame__card">
+            <MapPin size={22} aria-hidden="true" />
+            <strong>{institution.contact.address}</strong>
+            <a href={institution.contact.mapUrl} target="_blank" rel="noopener noreferrer">
+              Google Maps এ খুলুন
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
           </div>
         </div>
       </div>
