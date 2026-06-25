@@ -65,19 +65,50 @@ export default function MyWorkClient({ initialData }) {
     };
   });
 
+  const [activeTab, setActiveTab] = useState("board");
+  
+  useEffect(() => {
+    const saved = localStorage.getItem("effy_mywork_tab");
+    if (saved) setActiveTab(saved);
+  }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    localStorage.setItem("effy_mywork_tab", tab);
+  };
+
+  const CUTOFF_DATE = new Date("2026-06-23T00:00:00Z");
+
+  const isOldLegacy = (task) => {
+    if (task.is_project_task) return false;
+    return new Date(task.created_at) < CUTOFF_DATE;
+  };
+
+  const filteredMyTasks = activeTab === "history" 
+    ? myTasks.filter(isOldLegacy)
+    : myTasks.filter(t => !isOldLegacy(t));
+
+  const filteredProjectTasks = activeTab === "history"
+    ? [] 
+    : mappedProjectTasks;
+
+  const filteredRecentDone = activeTab === "history"
+    ? recentDoneTasks.filter(isOldLegacy)
+    : recentDoneTasks.filter(t => !isOldLegacy(t));
+
   const allPending = [
-    ...myTasks.filter(t => t.status === "pending"),
-    ...mappedProjectTasks.filter(t => t.mapped_status === "pending")
+    ...filteredMyTasks.filter(t => t.status === "pending"),
+    ...filteredProjectTasks.filter(t => t.mapped_status === "pending")
   ];
 
   const allInProgress = [
-    ...myTasks.filter(t => t.status === "in_progress"),
-    ...mappedProjectTasks.filter(t => t.mapped_status === "in_progress")
+    ...filteredMyTasks.filter(t => t.status === "in_progress"),
+    ...filteredProjectTasks.filter(t => t.mapped_status === "in_progress")
   ];
 
   const allDone = [
-    ...recentDoneTasks,
-    ...mappedProjectTasks.filter(t => t.mapped_status === "done")
+    ...filteredRecentDone,
+    ...filteredProjectTasks.filter(t => t.mapped_status === "done")
   ];
 
   const [optimisticState, setOptimisticState] = useState(null);
@@ -328,9 +359,13 @@ export default function MyWorkClient({ initialData }) {
             )}
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            {isProjectTask && (
+            {isProjectTask ? (
               <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400 shrink-0">
                 Project Task
+              </span>
+            ) : (
+              <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-orange-400 shrink-0">
+                Legacy Assignment
               </span>
             )}
             <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
@@ -619,10 +654,34 @@ export default function MyWorkClient({ initialData }) {
 
       {/* Bottom Section: My Task Board */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
-          <ClipboardList className="h-5 w-5 text-emerald-400" />
-          My Task Board
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h3 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-emerald-400" />
+            {activeTab === "history" ? "Older Assignments (History)" : "My Task Board"}
+          </h3>
+          <div className="flex bg-neutral-900/60 border border-neutral-800/80 p-1 rounded-xl">
+            <button
+              onClick={() => handleTabChange("board")}
+              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 ${
+                activeTab === "board" 
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20" 
+                  : "text-neutral-500 hover:text-neutral-300 border border-transparent"
+              }`}
+            >
+              Default Board
+            </button>
+            <button
+              onClick={() => handleTabChange("history")}
+              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 ${
+                activeTab === "history" 
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20" 
+                  : "text-neutral-500 hover:text-neutral-300 border border-transparent"
+              }`}
+            >
+              History
+            </button>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* To Do column */}
