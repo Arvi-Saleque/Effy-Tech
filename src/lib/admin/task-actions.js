@@ -153,7 +153,7 @@ export async function getTaskById(taskId) {
     // We fetch first to know projectId, then authorize
     const { data, error } = await supabase
       .from("project_tasks")
-      .select("*, project:projects(id, name, client_id, status, clients(id, name)), task_assignees(id, user_id, assigned_by, assigned_at, admin_profiles!task_assignees_user_id_fkey(name, role, is_active)), project_subtasks(*, subtask_assignees(id, user_id, admin_profiles!subtask_assignees_user_id_fkey(name, is_active))), created_by_profile:admin_profiles!project_tasks_created_by_fkey(name)")
+      .select("*, project:projects(id, name, client_id, status, clients(id, name)), task_assignees(id, user_id, assigned_by, assigned_at, admin_profiles!task_assignees_user_id_fkey(name, role, is_active)), project_subtasks(*, subtask_assignees(id, user_id, admin_profiles!subtask_assignees_user_id_fkey(name, is_active))), created_by_profile:admin_profiles!project_tasks_created_by_fkey(name), task_work_reports(*, submitter:admin_profiles!task_work_reports_submitted_by_fkey(name), reviewer:admin_profiles!task_work_reports_reviewed_by_fkey(name))")
       .eq("id", taskId)
       .single();
 
@@ -164,6 +164,16 @@ export async function getTaskById(taskId) {
     }
 
     await requireReadAccess(data.project_id);
+
+    // Fetch work blocks to calculate tracked work time and first start date
+    const { data: workBlocks } = await supabase
+      .from("work_blocks")
+      .select("started_at, ended_at")
+      .eq("source_type", "project_task")
+      .eq("project_task_id", taskId);
+
+    data.task_work_reports = data.task_work_reports?.sort((a, b) => b.version_number - a.version_number) || [];
+    data.work_blocks = workBlocks || [];
 
     return { data, error: null };
   } catch (error) {
