@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { AlertCircle, ArrowRight, ExternalLink, FileText } from "lucide-react";
+import { AlertCircle, ArrowRight, FileText } from "lucide-react";
 import { ROUTE_BASE } from "../data/college-data";
 
 export default function NoticeCard({ notice }) {
-  const actionUrl = notice.attachmentUrl || notice.sourceUrl || `${ROUTE_BASE}/notices#${notice.id}`;
+  const actionUrl = notice.attachmentUrl || `${ROUTE_BASE}/notices#${notice.id}`;
   const isExternal = actionUrl.startsWith("http");
 
   return (
@@ -35,7 +35,7 @@ export default function NoticeCard({ notice }) {
           </span>
         ) : (
           <span>
-            <ExternalLink size={15} aria-hidden="true" /> পুরোনো ওয়েবসাইটে দেখুন
+            <FileText size={15} aria-hidden="true" /> নোটিশ
           </span>
         )}
         <Link
@@ -43,7 +43,7 @@ export default function NoticeCard({ notice }) {
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
         >
-          {notice.attachmentUrl ? "ডাউনলোড" : "দেখুন"}
+          {notice.attachmentUrl ? "ডাউনলোড" : "বিস্তারিত"}
           <ArrowRight size={15} aria-hidden="true" />
         </Link>
       </div>

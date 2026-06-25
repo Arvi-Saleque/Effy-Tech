@@ -9,7 +9,7 @@ export default function GalleryPage() {
       <PageHero
         eyebrow="গ্যালারি"
         title="ক্যাম্পাস, অনুষ্ঠান ও শিক্ষার্থী কার্যক্রম"
-        description="পুরোনো ওয়েবসাইট থেকে সংগৃহীত প্রাতিষ্ঠানিক ছবিগুলো পরিশীলিত গ্যালারি আকারে সাজানো হয়েছে।"
+        description="কলেজের ক্যাম্পাস, অনুষ্ঠান, সবুজায়ন ও শিক্ষার্থী কার্যক্রমের নির্বাচিত প্রাতিষ্ঠানিক ছবি।"
         breadcrumbs={[{ label: "গ্যালারি" }]}
       />
       <GallerySection compact={false} />

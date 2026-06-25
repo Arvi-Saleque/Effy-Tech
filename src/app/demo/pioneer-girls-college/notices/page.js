@@ -8,7 +8,7 @@ export default function NoticesPage() {
       <PageHero
         eyebrow="নোটিশ"
         title="নোটিশ বোর্ড ও ঘোষণাসমূহ"
-        description="পুরোনো অফিসিয়াল ওয়েবসাইটের প্রকাশিত নোটিশ শিরোনাম ও তারিখ থেকে সাজানো সাম্প্রতিক ঘোষণা।"
+        description="কলেজের সাম্প্রতিক নোটিশ, পরীক্ষার নির্দেশনা, ফলাফল, বৃত্তি ও অনুষ্ঠানসংক্রান্ত ঘোষণা।"
         breadcrumbs={[{ label: "নোটিশ" }]}
       />
       <NoticeBoard />
