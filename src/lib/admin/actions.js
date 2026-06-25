@@ -353,8 +353,9 @@ export async function resumeWork() {
     const now = new Date();
     const breakStart = new Date(session.break_started_at);
     const diffMs = now.getTime() - breakStart.getTime();
-    const diffMinsExact = diffMs / 60000;
-    const newBreakMinutes = (session.break_minutes || 0) + diffMinsExact;
+    const currentBreakMs = (session.break_minutes || 0) * 60000;
+    const totalBreakMs = currentBreakMs + diffMs;
+    const newBreakMinutes = Math.floor(totalBreakMs / 60000);
 
     const { error: updateError } = await supabase
       .from("work_sessions")
@@ -450,8 +451,9 @@ export async function endWork() {
     if (session.status === "break" && session.break_started_at) {
       const breakStart = new Date(session.break_started_at);
       const diffMs = now.getTime() - breakStart.getTime();
-      const diffMinsExact = diffMs / 60000;
-      finalBreakMinutes += diffMinsExact;
+      const currentBreakMs = finalBreakMinutes * 60000;
+      const totalBreakMs = currentBreakMs + diffMs;
+      finalBreakMinutes = Math.floor(totalBreakMs / 60000);
     }
 
     // Fetch all today work_blocks for this session and user and sum total_minutes where status = done
