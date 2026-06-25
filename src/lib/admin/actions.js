@@ -719,7 +719,7 @@ export async function createAssignment({ assignedTo, title, description, workDat
 }
 
 /**
- * Fetch all data for the administrator dashboard view. Admin only.
+ * Fetch all data for the modern administrator dashboard view. Admin only.
  */
 export async function getAdminDashboardData() {
   const profile = await requireAdmin();
@@ -728,105 +728,155 @@ export async function getAdminDashboardData() {
     const today = getTodayDateString();
     const tomorrow = getTomorrowDateString();
 
-    // Fetch active admin profiles
-    const { data: profiles, error: profilesError } = await supabase
-      .from("admin_profiles")
-      .select("*")
-      .eq("is_active", true)
-      .order("name", { ascending: true });
+    // Run independent queries in parallel
+    const [
+      profilesRes,
+      clientsRes,
+      projectsRes,
+      tasksRes,
+      reportsRes,
+      sessionsRes,
+      blocksRes,
+      legacyAssignmentsRes
+    ] = await Promise.all([
+      // 1. Active Admins
+      supabase.from("admin_profiles").select("*").eq("is_active", true).order("name", { ascending: true }),
+      // 2. Clients
+      supabase.from("clients").select("id, name, status"),
+      // 3. Projects with members
+      supabase.from("projects").select(`
+        *,
+        clients (name, company_name),
+        project_members (user_id, project_role)
+      `),
+      // 4. Project Tasks with assignees
+      supabase.from("project_tasks").select(`
+        *,
+        task_assignees (user_id)
+      `),
+      // 5. Work Reports (needed for Awaiting Review state)
+      // Using a simpler query, then we'll filter latest per task+user in JS
+      supabase.from("task_work_reports").select(`
+        id, task_id, version_number, completion_status, submitted_by, submitted_date,
+        calendar_completion_duration, tracked_work_seconds, current_task_status
+      `).order("version_number", { ascending: false }),
+      // 6. Work Sessions (today)
+      supabase.from("work_sessions").select("*").eq("work_date", today),
+      // 7. Work Blocks (today)
+      supabase.from("work_blocks").select("*").eq("work_date", today).order("started_at", { ascending: true }),
+      // 8. Legacy Assignments (pending, in progress) for active count & attention
+      supabase.from("work_assignments").select("*").in("status", ["pending", "in_progress"])
+    ]);
 
-    if (profilesError) throw profilesError;
+    const profiles = profilesRes.data || [];
+    const clients = clientsRes.data || [];
+    const projects = projectsRes.data || [];
+    const tasks = tasksRes.data || [];
+    const reports = reportsRes.data || [];
+    const sessions = sessionsRes.data || [];
+    const blocks = blocksRes.data || [];
+    const legacyAssignments = legacyAssignmentsRes.data || [];
 
-    // Fetch today's work sessions
-    const { data: sessions } = await supabase
-      .from("work_sessions")
-      .select("*")
-      .eq("work_date", today);
+    // --- AGGREGATIONS ---
 
-    // Fetch today's assignments
-    const { data: todayAssignments } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("work_date", today);
-
-    // Fetch tomorrow's assignments
-    const { data: tomorrowAssignments } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("work_date", tomorrow);
-
-    // Fetch today's work blocks for all users
-    const { data: todayWorkBlocks } = await supabase
-      .from("work_blocks")
-      .select("*")
-      .eq("work_date", today)
-      .order("started_at", { ascending: true });
-
-    // Fetch active/completed tasks for all founders
-    const { data: rawTeamTasks } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .in("status", ["pending", "in_progress", "done"])
-      .order("created_at", { ascending: false })
-      .limit(100);
-
-    // Summary counts
-    const activeNow = todayWorkBlocks ? todayWorkBlocks.filter(b => b.status === "active").length : 0;
-    const onBreak = sessions ? sessions.filter(s => s.status === "break").length : 0;
-    
-    // Sum of worked minutes today calculated from work blocks
+    // 1. Working Now & Time
+    const activeNow = blocks.filter(b => b.status === "active").length;
+    const onBreak = sessions.filter(s => s.status === "break").length;
     let totalSecondsToday = 0;
-    if (profiles) {
-      profiles.forEach(member => {
-        const memberBlocks = todayWorkBlocks ? todayWorkBlocks.filter(b => b.user_id === member.id) : [];
-        const session = sessions ? sessions.find(s => s.user_id === member.id) : null;
-        if (session) {
-          totalSecondsToday += calculateWorkBlocksDisplaySeconds(memberBlocks, session);
-        }
-      });
-    }
+    profiles.forEach(member => {
+      const memberBlocks = blocks.filter(b => b.user_id === member.id);
+      const session = sessions.find(s => s.user_id === member.id);
+      if (session) {
+        totalSecondsToday += calculateWorkBlocksDisplaySeconds(memberBlocks, session);
+      }
+    });
     const totalHoursToday = parseFloat((totalSecondsToday / 3600).toFixed(1));
 
-    // Helper map to lookup profile names
-    const profileMap = {};
-    if (profiles) {
-      profiles.forEach(p => {
-        profileMap[p.id] = p.name;
-      });
-    }
+    // 2. Latest Reports map to determine review counts
+    // Group by task_id + submitted_by, take the first (since ordered by version descending)
+    const latestReportsMap = new Map();
+    reports.forEach(r => {
+      const key = `${r.task_id}_${r.submitted_by}`;
+      if (!latestReportsMap.has(key)) {
+        latestReportsMap.set(key, r);
+      }
+    });
+    const latestReports = Array.from(latestReportsMap.values());
+    const awaitingReviewReports = latestReports.filter(r => r.completion_status === "submitted");
+    const revisionRequestedReports = latestReports.filter(r => r.completion_status === "revision_requested");
 
-    const mapAssignmentNames = (list) => {
-      if (!list) return [];
-      return list.map(item => ({
-        ...item,
-        assignedToName: profileMap[item.assigned_to] || "Unknown",
-        assignedByName: profileMap[item.assigned_by] || "Unknown"
-      }));
+    // 3. Projects
+    const currentProjects = projects.filter(p => ["planning", "active", "on_hold"].includes(p.status));
+    const activeProjects = projects.filter(p => p.status === "active");
+    const onHoldProjects = projects.filter(p => p.status === "on_hold");
+
+    // 4. Tasks
+    // exclude archived and cancelled
+    const activeTasks = tasks.filter(t => !["archived", "cancelled", "done"].includes(t.status));
+    const overdueTasks = tasks.filter(t => {
+      if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
+      return new Date(t.due_date) < new Date(today);
+    });
+    const blockedTasks = tasks.filter(t => t.status === "blocked");
+    
+    // Status counts
+    const taskStatusCounts = {
+      backlog: tasks.filter(t => t.status === "backlog").length,
+      todo: tasks.filter(t => t.status === "todo").length,
+      in_progress: tasks.filter(t => t.status === "in_progress").length,
+      blocked: blockedTasks.length,
+      review: tasks.filter(t => t.status === "review").length,
+      done: tasks.filter(t => t.status === "done").length,
     };
 
+    // Helper map for profiles
+    const profileMap = {};
+    profiles.forEach(p => {
+      profileMap[p.id] = p.name;
+    });
+
     return {
-      profiles: profiles || [],
-      sessions: sessions || [],
-      todayAssignments: mapAssignmentNames(todayAssignments),
-      tomorrowAssignments: mapAssignmentNames(tomorrowAssignments),
-      todayWorkBlocks: todayWorkBlocks || [],
-      teamTasks: mapAssignmentNames(rawTeamTasks),
+      profiles,
+      clients,
+      projects,
+      tasks,
+      latestReports,
+      sessions,
+      blocks,
+      legacyAssignments,
       stats: {
         activeNow,
         onBreak,
-        totalHoursToday
+        totalHoursToday,
+        totalClients: clients.length,
+        currentProjects: currentProjects.length,
+        activeProjects: activeProjects.length,
+        onHoldProjects: onHoldProjects.length,
+        activeTasks: activeTasks.length,
+        overdueTasks: overdueTasks.length,
+        blockedTasks: blockedTasks.length,
+        reportsAwaitingReview: awaitingReviewReports.length,
+        revisionRequestedReports: revisionRequestedReports.length,
+        taskStatusCounts
       }
     };
   } catch (error) {
     console.error("Error in getAdminDashboardData:", error);
     return {
       profiles: [],
+      clients: [],
+      projects: [],
+      tasks: [],
+      latestReports: [],
       sessions: [],
-      todayAssignments: [],
-      tomorrowAssignments: [],
-      todayWorkBlocks: [],
-      teamTasks: [],
-      stats: { activeNow: 0, onBreak: 0, totalHoursToday: 0 }
+      blocks: [],
+      legacyAssignments: [],
+      stats: { 
+        activeNow: 0, onBreak: 0, totalHoursToday: 0, 
+        totalClients: 0, currentProjects: 0, activeProjects: 0, onHoldProjects: 0,
+        activeTasks: 0, overdueTasks: 0, blockedTasks: 0, reportsAwaitingReview: 0, revisionRequestedReports: 0,
+        taskStatusCounts: { backlog: 0, todo: 0, in_progress: 0, blocked: 0, review: 0, done: 0 }
+      }
     };
   }
 }
