@@ -16,7 +16,8 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
               <th className="pb-3 font-semibold">Member</th>
               <th className="pb-3 font-semibold">Status</th>
               <th className="pb-3 font-semibold">Current Work</th>
-              <th className="pb-3 font-semibold text-right">Worked Today</th>
+              <th className="pb-3 font-semibold text-right">Worked</th>
+              <th className="pb-3 font-semibold text-right">Break</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-800/40">
@@ -27,6 +28,7 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
               
               // Calculate exact tracked time
               let exactSeconds = 0;
+              const nowMs = new Date().getTime();
               memberBlocks.forEach(b => {
                 if (b.status === "done") {
                   if (b.started_at && b.ended_at) {
@@ -35,12 +37,23 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
                     exactSeconds += (b.total_minutes || 0) * 60;
                   }
                 } else if (b.status === "active" && b.started_at) {
-                  // If active, add elapsed time
                   const startMs = new Date(b.started_at).getTime();
-                  const diffMs = new Date().getTime() - startMs;
+                  let diffMs = nowMs - startMs;
+                  
+                  // If on break, subtract active break time from work block diff
+                  if (session && session.status === "break" && session.break_started_at) {
+                    const breakStartMs = new Date(session.break_started_at).getTime();
+                    diffMs -= (nowMs - breakStartMs);
+                  }
                   exactSeconds += Math.max(0, diffMs) / 1000;
                 }
               });
+
+              // Calculate break time
+              let breakSeconds = session ? (session.break_seconds || 0) : 0;
+              if (session && session.status === "break" && session.break_started_at) {
+                breakSeconds += Math.max(0, nowMs - new Date(session.break_started_at).getTime()) / 1000;
+              }
 
               let displayStatus = "Offline";
               let statusColor = "bg-neutral-500/10 text-neutral-400 border-neutral-500/20";
@@ -67,10 +80,12 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
               }
 
               let currentWorkLabel = "Offline";
-              if (displayStatus === "Working") {
-                currentWorkLabel = activeBlock.title;
+              if (displayStatus === "Working" && activeBlock) {
+                const source = activeBlock.source_type === 'project_task' ? 'Project Task' : activeBlock.source_type === 'legacy_assignment' ? 'Legacy Assignment' : 'Manual Work';
+                currentWorkLabel = `[${source}] ${activeBlock.title}`;
               } else if (displayStatus === "Break") {
-                currentWorkLabel = activeBlock ? `${activeBlock.title} (Paused)` : "No active task (Paused)";
+                const source = activeBlock ? (activeBlock.source_type === 'project_task' ? 'Project Task' : activeBlock.source_type === 'legacy_assignment' ? 'Legacy Assignment' : 'Manual Work') : null;
+                currentWorkLabel = activeBlock ? `[${source}] ${activeBlock.title} (Paused)` : "No active task (Paused)";
               } else if (displayStatus === "Open") {
                 currentWorkLabel = "No active task";
               } else if (displayStatus === "Ended") {
@@ -95,6 +110,9 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
                   </td>
                   <td className="py-3 text-right font-mono text-neutral-300">
                     {formatDuration(exactSeconds)}
+                  </td>
+                  <td className="py-3 text-right font-mono text-neutral-400">
+                    {formatDuration(breakSeconds)}
                   </td>
                 </tr>
               );

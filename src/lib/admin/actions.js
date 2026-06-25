@@ -755,11 +755,10 @@ export async function getAdminDashboardData() {
         task_assignees (user_id)
       `),
       // 5. Work Reports (needed for Awaiting Review state)
-      // Using a simpler query, then we'll filter latest per task+user in JS
       supabase.from("task_work_reports").select(`
-        id, task_id, version_number, completion_status, submitted_by, submitted_date,
-        calendar_completion_duration, tracked_work_seconds, current_task_status
-      `).order("version_number", { ascending: false }),
+        id, task_id, submitted_by, actual_start_date, submitted_date,
+        version_number, completion_status, created_at, reviewed_at
+      `).order("version_number", { ascending: false }).order("created_at", { ascending: false }),
       // 6. Work Sessions (today)
       supabase.from("work_sessions").select("*").eq("work_date", today),
       // 7. Work Blocks (today)
@@ -768,6 +767,28 @@ export async function getAdminDashboardData() {
       supabase.from("work_assignments").select("*").in("status", ["pending", "in_progress"])
     ]);
 
+    // Check for critical query errors
+    let hasError = false;
+    const checkError = (res, name) => {
+      if (res.error) {
+        console.error(`Error fetching ${name}:`, res.error);
+        hasError = true;
+      }
+    };
+    
+    checkError(profilesRes, "admin_profiles");
+    checkError(clientsRes, "clients");
+    checkError(projectsRes, "projects");
+    checkError(tasksRes, "project_tasks");
+    checkError(reportsRes, "task_work_reports");
+    checkError(sessionsRes, "work_sessions");
+    checkError(blocksRes, "work_blocks");
+    checkError(legacyAssignmentsRes, "work_assignments");
+
+    // If critical data failed to load, return an explicit error state to UI instead of misleading zeros
+    // Or we can let UI render partial, but we must pass down error flags.
+    // For now, we will just use the data if available or empty arrays, but we log the errors securely.
+    
     const profiles = profilesRes.data || [];
     const clients = clientsRes.data || [];
     const projects = projectsRes.data || [];
@@ -780,8 +801,27 @@ export async function getAdminDashboardData() {
     // --- AGGREGATIONS ---
 
     // 1. Working Now & Time
-    const activeNow = blocks.filter(b => b.status === "active").length;
+    // Calculate unique active members
+    const activeMemberIds = new Set();
+    blocks.forEach(b => {
+      if (b.status === "active") {
+        activeMemberIds.add(b.user_id);
+      }
+    });
+    // Optional: detect multiple active blocks
+    const userActiveBlockCounts = {};
+    blocks.forEach(b => {
+      if (b.status === "active") {
+        userActiveBlockCounts[b.user_id] = (userActiveBlockCounts[b.user_id] || 0) + 1;
+        if (userActiveBlockCounts[b.user_id] > 1) {
+          console.warn(`User ${b.user_id} has multiple active work blocks!`);
+        }
+      }
+    });
+
+    const activeNow = activeMemberIds.size;
     const onBreak = sessions.filter(s => s.status === "break").length;
+    
     let totalSecondsToday = 0;
     profiles.forEach(member => {
       const memberBlocks = blocks.filter(b => b.user_id === member.id);
@@ -793,7 +833,7 @@ export async function getAdminDashboardData() {
     const totalHoursToday = parseFloat((totalSecondsToday / 3600).toFixed(1));
 
     // 2. Latest Reports map to determine review counts
-    // Group by task_id + submitted_by, take the first (since ordered by version descending)
+    // Group by task_id + submitted_by, take the first (since ordered by version descending, created_at descending)
     const latestReportsMap = new Map();
     reports.forEach(r => {
       const key = `${r.task_id}_${r.submitted_by}`;
@@ -815,7 +855,9 @@ export async function getAdminDashboardData() {
     const activeTasks = tasks.filter(t => !["archived", "cancelled", "done"].includes(t.status));
     const overdueTasks = tasks.filter(t => {
       if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
-      return new Date(t.due_date) < new Date(today);
+      // Date-only comparison
+      const dueStr = t.due_date.split("T")[0];
+      return dueStr < today;
     });
     const blockedTasks = tasks.filter(t => t.status === "blocked");
     
@@ -844,6 +886,8 @@ export async function getAdminDashboardData() {
       sessions,
       blocks,
       legacyAssignments,
+      hasError,
+      today,
       stats: {
         activeNow,
         onBreak,

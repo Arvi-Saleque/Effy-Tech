@@ -3,7 +3,7 @@ import Link from "next/link";
 import StatusBadge from "@/components/admin/StatusBadge";
 
 
-export default function ProjectHealth({ projects, tasks, reports }) {
+export default function ProjectHealth({ projects, tasks }) {
   // We want to show active or important projects
   const activeProjects = projects.filter(p => ["planning", "active", "on_hold"].includes(p.status));
 

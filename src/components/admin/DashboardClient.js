@@ -9,7 +9,8 @@ import ProjectHealth from "./dashboard/ProjectHealth";
 import TaskOverview from "./dashboard/TaskOverview";
 import WorkReportOverview from "./dashboard/WorkReportOverview";
 import Link from "next/link";
-import { FolderGit2 } from "lucide-react";
+import { FolderGit2, AlertTriangle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardClient({ initialData }) {
   const { 
@@ -20,18 +21,20 @@ export default function DashboardClient({ initialData }) {
     sessions, 
     blocks, 
     legacyAssignments, 
-    stats 
+    stats,
+    hasError,
+    today
   } = initialData;
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const router = useRouter();
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-    // Usually handled by router.refresh() in Next.js App router, 
-    // but we let the header handle it natively and just show UI feedback momentarily
+    router.refresh();
     setTimeout(() => {
-      window.location.reload();
-    }, 200);
+      setIsRefreshing(false);
+    }, 500);
   };
 
   const pendingLegacyCount = legacyAssignments.length;
@@ -39,6 +42,18 @@ export default function DashboardClient({ initialData }) {
   return (
     <div className="space-y-6 font-sans animate-fade-in max-w-[1600px] mx-auto">
       
+      {hasError && (
+        <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-rose-400 shrink-0 mt-0.5" />
+          <div>
+            <h4 className="text-sm font-bold text-rose-400">Data Load Incomplete</h4>
+            <p className="text-xs text-rose-400/80 mt-1">
+              Some dashboard data failed to load correctly. The information shown below may be incomplete or outdated.
+            </p>
+          </div>
+        </div>
+      )}
+
       <DashboardHeader onRefresh={handleRefresh} isRefreshing={isRefreshing} />
 
       <ExecutiveSummary stats={stats} />
@@ -47,7 +62,7 @@ export default function DashboardClient({ initialData }) {
         tasks={tasks} 
         reports={latestReports} 
         projects={projects} 
-        today={new Date().toISOString().split('T')[0]} 
+        today={today} 
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

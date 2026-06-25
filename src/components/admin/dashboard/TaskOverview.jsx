@@ -4,12 +4,12 @@ import { ClipboardList } from "lucide-react";
 
 export default function TaskOverview({ statusCounts }) {
   const statusItems = [
-    { label: "Backlog", count: statusCounts.backlog, color: "bg-neutral-500", url: "/admin/projects?status=backlog" },
-    { label: "To Do", count: statusCounts.todo, color: "bg-blue-500", url: "/admin/projects?status=todo" },
-    { label: "In Progress", count: statusCounts.in_progress, color: "bg-indigo-500", url: "/admin/projects?status=in_progress" },
-    { label: "Blocked", count: statusCounts.blocked, color: "bg-rose-500", url: "/admin/projects?status=blocked" },
-    { label: "Review", count: statusCounts.review, color: "bg-amber-500", url: "/admin/projects?status=review" },
-    { label: "Done", count: statusCounts.done, color: "bg-emerald-500", url: "/admin/projects?status=done" }
+    { label: "Backlog", count: statusCounts.backlog, color: "bg-neutral-500" },
+    { label: "To Do", count: statusCounts.todo, color: "bg-blue-500" },
+    { label: "In Progress", count: statusCounts.in_progress, color: "bg-indigo-500" },
+    { label: "Blocked", count: statusCounts.blocked, color: "bg-rose-500" },
+    { label: "Review", count: statusCounts.review, color: "bg-amber-500" },
+    { label: "Done", count: statusCounts.done, color: "bg-emerald-500" }
   ];
 
   return (

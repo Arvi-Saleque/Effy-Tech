@@ -29,7 +29,7 @@ export default function ExecutiveSummary({ stats }) {
       color: "text-indigo-400",
       bg: "bg-indigo-500/10",
       border: "border-indigo-500/20",
-      href: "/admin/projects" // could link to a global tasks view if one existed
+      href: null
     },
     {
       title: "Blocked Tasks",
@@ -38,7 +38,7 @@ export default function ExecutiveSummary({ stats }) {
       color: "text-rose-400",
       bg: "bg-rose-500/10",
       border: "border-rose-500/20",
-      href: "/admin/projects"
+      href: null
     },
     {
       title: "Overdue Tasks",
@@ -47,7 +47,7 @@ export default function ExecutiveSummary({ stats }) {
       color: "text-orange-400",
       bg: "bg-orange-500/10",
       border: "border-orange-500/20",
-      href: "/admin/projects"
+      href: null
     },
     {
       title: "Reports Awaiting Review",

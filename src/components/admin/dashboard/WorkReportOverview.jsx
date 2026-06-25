@@ -64,7 +64,7 @@ export default function WorkReportOverview({ reports, profiles, tasks, stats }) 
                   {r.completion_status.replace("_", " ")}
                 </span>
                 <Link 
-                  href={`/admin/projects/${getProjectId(r.task_id)}/tasks/${r.task_id}`} 
+                  href={getProjectId(r.task_id) ? `/admin/projects/${getProjectId(r.task_id)}/tasks/${r.task_id}` : `/admin/reports`}
                   className="p-1.5 rounded-lg bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white transition-colors"
                   title="Review Report"
                 >

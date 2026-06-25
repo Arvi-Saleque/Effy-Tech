@@ -38,12 +38,16 @@ export default function AttentionRequired({ tasks, reports, projects, today }) {
   // 3. Awaiting Review reports
   reports.forEach(r => {
     if (r.completion_status === "submitted") {
+      const task = tasks.find(t => t.id === r.task_id);
+      const projectId = task ? task.project_id : null;
+      const href = projectId ? `/admin/projects/${projectId}/tasks/${r.task_id}` : `/admin/reports`;
+
       alerts.push({
         type: "awaiting_review",
         severity: 3,
         entityName: `Report v${r.version_number}`,
-        context: `Submitted ${formatDistanceToNow(new Date(r.submitted_date), { addSuffix: true })}`,
-        href: `/admin/projects/0/tasks/${r.task_id}` // Using 0 if project_id isn't in report directly (we'd fix href normally, but let's just point to reports page or task)
+        context: `Submitted ${formatDistanceToNow(r.submitted_date)}`,
+        href: href
       });
     }
   });
