@@ -26,7 +26,7 @@ export default async function TaskDetailsPage({ params }) {
   // Get project active members for assignees component
   const supabase = await createClient();
   const { data: members } = await supabase.from("project_members")
-    .select("user_id, project_role, admin_profiles!inner(name, is_active, role)")
+    .select("user_id, project_role, admin_profiles!project_members_user_id_fkey!inner(name, is_active, role)")
     .eq("project_id", projectId);
 
   const activeMembers = members?.filter(m => m.admin_profiles.is_active) || [];

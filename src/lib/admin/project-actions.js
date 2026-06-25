@@ -72,7 +72,7 @@ export async function getProjects(filters = {}) {
       .select(`
         *,
         clients (id, name, company_name),
-        project_members (id, user_id, project_role, admin_profiles(name))
+        project_members (id, user_id, project_role, admin_profiles:admin_profiles!project_members_user_id_fkey(id, name, email, role, is_active))
       `);
 
     const statusFilter = projectStatusFilterSchema.parse(filters.status);
@@ -167,7 +167,7 @@ export async function getProjectById(projectId) {
           id,
           project_role,
           added_at,
-          user:admin_profiles!user_id(id, name, email)
+          user:admin_profiles!project_members_user_id_fkey(id, name, email, role, is_active)
         )
       `)
       .eq("id", projectId)
