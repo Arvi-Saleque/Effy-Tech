@@ -65,7 +65,7 @@ export default function DashboardClient({ initialData }) {
         today={today} 
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Left column: Projects and Work Reports */}
         <div className="lg:col-span-2 space-y-8">
           <ProjectHealth projects={projects} tasks={tasks} reports={latestReports} />
@@ -73,7 +73,7 @@ export default function DashboardClient({ initialData }) {
         </div>
 
         {/* Right column: Task Overview and Team Activity */}
-        <div className="space-y-8">
+        <div className="space-y-8 min-w-0">
           <TaskOverview statusCounts={stats.taskStatusCounts} />
           <TeamActivity profiles={profiles} sessions={sessions} blocks={blocks} />
           

@@ -4,7 +4,7 @@ import { formatDuration } from "@/lib/admin/time";
 export default function TeamActivity({ profiles, sessions, blocks }) {
   // We need to calculate precise seconds for each profile.
   return (
-    <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl h-full flex flex-col">
+    <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col">
       <h3 className="text-base font-bold text-neutral-100 mb-4">
         Team Activity
       </h3>
@@ -105,7 +105,7 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
                       {displayStatus}
                     </div>
                   </td>
-                  <td className="py-3 text-neutral-300 truncate max-w-[200px]" title={currentWorkLabel}>
+                  <td className="py-3 text-neutral-300 break-words whitespace-normal text-xs" title={currentWorkLabel}>
                     {currentWorkLabel}
                   </td>
                   <td className="py-3 text-right font-mono text-neutral-300">
