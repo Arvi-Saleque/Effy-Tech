@@ -329,3 +329,184 @@ export async function getTeamPerformanceData(filters) {
     teamData
   };
 }
+
+export async function getProjectReportsData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+  const today = getTodayDateString();
+
+  const [
+    projects,
+    clients,
+    projectMembers,
+    tasks,
+    reports,
+    blocks
+  ] = await Promise.all([
+    fetchFilteredProjects(supabase, filters),
+    supabase.from("clients").select("*").then(res => res.data || []),
+    fetchFilteredProjectMembers(supabase),
+    fetchFilteredTasks(supabase, filters),
+    fetchFilteredReports(supabase, filters),
+    fetchFilteredBlocks(supabase, filters)
+  ]);
+
+  const latestReports = getLatestReports(reports);
+
+  const projectData = projects.map(p => {
+    const pClient = clients.find(c => c.id === p.client_id);
+    const pMembersCount = projectMembers.filter(pm => pm.project_id === p.id).length;
+    const pTasks = tasks.filter(t => t.project_id === p.id);
+    
+    const totalTasks = pTasks.length;
+    const completedTasks = pTasks.filter(t => t.status === "done");
+    const activeTasks = pTasks.filter(t => !["archived", "cancelled", "done"].includes(t.status));
+    
+    const overdueTasks = pTasks.filter(t => {
+      if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
+      return t.due_date.split("T")[0] < today;
+    }).length;
+    const blockedTasks = pTasks.filter(t => t.status === "blocked").length;
+    
+    // Determine Unassigned tasks (no task_assignees). We don't fetch task_assignees globally here to save payload, 
+    // but we can query it or if it's already in task data. We didn't fetch task_assignees in this Promise.all.
+    // I'll add task_assignees fetch to this function below.
+    
+    const pTaskIds = new Set(pTasks.map(t => t.id));
+    const pReports = latestReports.filter(r => pTaskIds.has(r.task_id));
+    const reportsAwaiting = pReports.filter(r => r.completion_status === "submitted").length;
+    const reportsRevision = pReports.filter(r => r.completion_status === "revision_requested").length;
+
+    // Time calculations
+    const pBlocks = blocks.filter(b => b.source_type === "project_task" && pTaskIds.has(b.task_id));
+    const totalTrackedSeconds = calculateWorkBlocksDisplaySeconds(pBlocks); 
+    // Break time for projects is tricky because breaks are at session level, not task level.
+    // For project reports, we can't easily attribute a general session break to a specific project.
+    // So break time might be 0 unless stored explicitly per block.
+    
+    const lastActivityBlock = pBlocks.sort((a, b) => new Date(b.started_at) - new Date(a.started_at))[0];
+    const lastActivityDate = lastActivityBlock ? lastActivityBlock.started_at : null;
+
+    let projectHealth = "On Track";
+    if (p.status === "completed") projectHealth = "Completed";
+    else if (blockedTasks > 0) projectHealth = "Blocked Risk";
+    else if (p.due_date && p.due_date.split("T")[0] < today) projectHealth = "Overdue";
+    else if (p.due_date && (new Date(p.due_date) - new Date()) / (1000*60*60*24) <= 3) projectHealth = "Due Soon";
+    else if (activeTasks.length === 0) projectHealth = "No Active Work";
+    else if (!p.due_date) projectHealth = "No Due Date";
+
+    return {
+      id: p.id,
+      name: p.name,
+      clientName: pClient ? pClient.name : "Unknown",
+      status: p.status,
+      priority: p.priority,
+      startDate: p.start_date,
+      dueDate: p.due_date,
+      progress: p.progress,
+      memberCount: pMembersCount,
+      totalTasks,
+      completedTasks: completedTasks.length,
+      activeTasks: activeTasks.length,
+      overdueTasks,
+      blockedTasks,
+      reportsAwaiting,
+      reportsRevision,
+      totalTrackedSeconds,
+      totalBreakSeconds: 0,
+      netProductiveSeconds: totalTrackedSeconds,
+      lastActivityDate,
+      projectHealth
+    };
+  });
+
+  return { hasError: false, projectData };
+}
+
+export async function getTaskReportsData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+  const today = getTodayDateString();
+
+  const [
+    tasks,
+    projects,
+    clients,
+    taskAssignees,
+    profiles,
+    reports,
+    blocks
+  ] = await Promise.all([
+    fetchFilteredTasks(supabase, filters),
+    fetchFilteredProjects(supabase, filters),
+    supabase.from("clients").select("*").then(res => res.data || []),
+    fetchFilteredTaskAssignees(supabase),
+    fetchFilteredProfiles(supabase),
+    fetchFilteredReports(supabase, filters),
+    fetchFilteredBlocks(supabase, filters)
+  ]);
+
+  const latestReports = getLatestReports(reports);
+
+  const taskData = tasks.map(t => {
+    const p = projects.find(proj => proj.id === t.project_id);
+    const c = p ? clients.find(cl => cl.id === p.client_id) : null;
+    
+    const assignees = taskAssignees.filter(ta => ta.task_id === t.id).map(ta => {
+      const prof = profiles.find(pr => pr.id === ta.user_id);
+      return prof ? prof.name : "Unknown";
+    });
+
+    const tBlocks = blocks.filter(b => b.source_type === "project_task" && b.task_id === t.id);
+    const firstBlock = tBlocks.sort((a, b) => new Date(a.started_at) - new Date(b.started_at))[0];
+    const firstTimerStartDate = firstBlock ? firstBlock.started_at : null;
+
+    const totalTrackedSeconds = calculateWorkBlocksDisplaySeconds(tBlocks);
+    
+    // Use the latest report for current status
+    const tReports = latestReports.filter(r => r.task_id === t.id);
+    const currentReport = tReports.sort((a, b) => b.version_number - a.version_number)[0];
+    
+    const allVersions = reports.filter(r => r.task_id === t.id);
+    const reportVersionCount = allVersions.length;
+    const revisionCount = allVersions.filter(r => r.completion_status === "revision_requested").length;
+
+    let isOverdue = false;
+    if (!["archived", "cancelled", "done"].includes(t.status) && t.due_date) {
+      isOverdue = t.due_date.split("T")[0] < today;
+    }
+
+    // Subtask completion
+    let subtaskCompletion = "0/0";
+    if (t.subtasks && Array.isArray(t.subtasks)) {
+      const completed = t.subtasks.filter(st => st.completed).length;
+      subtaskCompletion = `${completed}/${t.subtasks.length}`;
+    }
+
+    return {
+      id: t.id,
+      title: t.title,
+      projectName: p ? p.name : "Unknown",
+      clientName: c ? c.name : "Unknown",
+      assignees,
+      status: t.status,
+      priority: t.priority,
+      createdDate: t.created_at,
+      plannedStartDate: t.start_date,
+      dueDate: t.due_date,
+      firstTimerStartDate,
+      reportedActualStartDate: currentReport ? currentReport.actual_start_date : null,
+      reportSubmittedDate: currentReport ? currentReport.submitted_date : null,
+      completedDate: t.status === "done" ? t.updated_at : null, // Fallback to updated_at
+      totalTrackedSeconds,
+      progress: t.progress,
+      subtaskCompletion,
+      workReportStatus: currentReport ? currentReport.completion_status : "none",
+      reportVersionCount,
+      revisionCount,
+      isOverdue
+    };
+  });
+
+  return { hasError: false, taskData };
+}
