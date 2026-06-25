@@ -23,7 +23,9 @@ export default function WorkTimer({ session, workBlocks = [] }) {
       return acc + (curr.total_minutes || 0) * 60;
     }, 0);
 
-    const recordedBreakMs = (session.break_minutes || 0) * 60 * 1000;
+    const recordedBreakMs = session.break_seconds !== undefined
+      ? session.break_seconds * 1000
+      : (session.break_minutes || 0) * 60 * 1000;
 
     const updateTimer = () => {
       const now = new Date().getTime();

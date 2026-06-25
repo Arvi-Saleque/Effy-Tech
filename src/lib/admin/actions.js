@@ -232,6 +232,7 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           source_type: sourceType,
           started_at: now,
           break_minutes: 0,
+          break_seconds: 0,
           total_minutes: 0
         })
         .select()
@@ -353,15 +354,16 @@ export async function resumeWork() {
     const now = new Date();
     const breakStart = new Date(session.break_started_at);
     const diffMs = now.getTime() - breakStart.getTime();
-    const currentBreakMs = (session.break_minutes || 0) * 60000;
-    const totalBreakMs = currentBreakMs + diffMs;
-    const newBreakMinutes = Math.floor(totalBreakMs / 60000);
+    const diffSecs = Math.floor(diffMs / 1000);
+    const newBreakSeconds = (session.break_seconds || 0) + diffSecs;
+    const newBreakMinutes = Math.floor(newBreakSeconds / 60);
 
     const { error: updateError } = await supabase
       .from("work_sessions")
       .update({
         status: "active",
         break_started_at: null,
+        break_seconds: newBreakSeconds,
         break_minutes: newBreakMinutes
       })
       .eq("id", session.id);
@@ -448,12 +450,13 @@ export async function endWork() {
     }
 
     let finalBreakMinutes = session.break_minutes || 0;
+    let finalBreakSeconds = session.break_seconds || 0;
     if (session.status === "break" && session.break_started_at) {
       const breakStart = new Date(session.break_started_at);
       const diffMs = now.getTime() - breakStart.getTime();
-      const currentBreakMs = finalBreakMinutes * 60000;
-      const totalBreakMs = currentBreakMs + diffMs;
-      finalBreakMinutes = Math.floor(totalBreakMs / 60000);
+      const diffSecs = Math.floor(diffMs / 1000);
+      finalBreakSeconds += diffSecs;
+      finalBreakMinutes = Math.floor(finalBreakSeconds / 60);
     }
 
     // Fetch all today work_blocks for this session and user and sum total_minutes where status = done
@@ -485,6 +488,7 @@ export async function endWork() {
         status: "ended",
         ended_at: now.toISOString(),
         break_started_at: null,
+        break_seconds: finalBreakSeconds,
         break_minutes: finalBreakMinutes,
         total_minutes: finalTotalMinutes,
         current_work_title: null,

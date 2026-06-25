@@ -80,17 +80,41 @@ export default function MyWorkClient({ initialData }) {
     ...mappedProjectTasks.filter(t => t.mapped_status === "done")
   ];
 
+  const [optimisticState, setOptimisticState] = useState(null);
+  
+  useEffect(() => {
+    setOptimisticState(null);
+  }, [todaySession, todayWorkBlocks, myTasks, projectTasks]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const isPageLoading = isLoading || isPending;
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
-  const status = todaySession ? todaySession.status : "offline";
+  const baseStatus = todaySession ? todaySession.status : "offline";
+  const status = optimisticState?.action === "take_break" ? "break"
+               : optimisticState?.action === "resume" ? "active"
+               : baseStatus;
+               
   const isWorking = status === "active" || status === "break";
-  const isEnded = status === "ended";
+  const isEnded = status === "ended" || optimisticState?.action === "end_work";
 
-  const activeBlock = todayWorkBlocks.find(b => b.status === "active");
+  let activeBlock = todayWorkBlocks.find(b => b.status === "active");
+  if (optimisticState) {
+    if (optimisticState.action === "finish" || optimisticState.action === "complete" || optimisticState.action === "end_work") {
+      activeBlock = null;
+    } else if (optimisticState.action === "start" || optimisticState.action === "resume") {
+      activeBlock = {
+        status: "active",
+        assignment_id: optimisticState.isProjectTask === false ? optimisticState.taskId : activeBlock?.assignment_id,
+        project_task_id: optimisticState.isProjectTask === true ? optimisticState.taskId : activeBlock?.project_task_id,
+        started_at: optimisticState.timestamp ? new Date(optimisticState.timestamp).toISOString() : (activeBlock?.started_at || new Date().toISOString()),
+        source_type: optimisticState.isProjectTask ? "project_task" : "legacy_assignment",
+      };
+    }
+  }
+
   const completedWorkBlocks = todayWorkBlocks.filter(b => b.status === "done");
 
   let activeBlockAccumulatedMs = 0;
@@ -111,15 +135,14 @@ export default function MyWorkClient({ initialData }) {
 
   // Derived display status
   let displayStatus = "offline";
-  if (!todaySession) {
+  if (!todaySession && !optimisticState) {
     displayStatus = "offline";
-  } else if (todaySession.status === "ended") {
+  } else if (isEnded) {
     displayStatus = "workday_ended";
-  } else if (todaySession.status === "break") {
+  } else if (status === "break") {
     displayStatus = "break";
-  } else if (todaySession.status === "active") {
-    // Treat as "workday_open" immediately if we are transitioning to finish task
-    displayStatus = (activeBlock && !isPending) ? "task_active" : "workday_open";
+  } else if (status === "active" || optimisticState?.action === "start") {
+    displayStatus = activeBlock ? "task_active" : "workday_open";
   }
 
   const clearMessages = () => {
@@ -128,12 +151,13 @@ export default function MyWorkClient({ initialData }) {
   };
 
   const handleFinishCurrentWorkForNow = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "finish" });
     clearMessages();
 
     try {
       const res = await finishCurrentWorkForNow();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused for now. It remains In Progress.");
@@ -142,19 +166,19 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to pause task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleCompleteCurrentTask = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "complete" });
     clearMessages();
 
     try {
       const res = await completeCurrentTask();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task completed and moved to Done!");
@@ -163,15 +187,14 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to complete task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
 
   const handleStartAssignment = async (title, id, isProjectTask = false) => {
-    setIsLoading(true);
+    setOptimisticState({ action: "start", taskId: id, title, isProjectTask, timestamp: Date.now() });
     clearMessages();
 
     try {
@@ -183,6 +206,7 @@ export default function MyWorkClient({ initialData }) {
       });
 
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg(`Started task: "${title}"`);
@@ -191,19 +215,19 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg(`Failed to start ${isProjectTask ? "project task" : "assignment"}.`);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleTakeBreak = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "take_break", timestamp: Date.now() });
     clearMessages();
 
     try {
       const res = await takeBreak();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused.");
@@ -212,19 +236,19 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to pause task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleResumeWork = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "resume" });
     clearMessages();
 
     try {
       const res = await resumeWork();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task resumed.");
@@ -233,9 +257,8 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to resume task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -250,12 +273,13 @@ export default function MyWorkClient({ initialData }) {
     );
     if (!secondConfirm) return;
 
-    setIsLoading(true);
+    setOptimisticState({ action: "end_work" });
     clearMessages();
 
     try {
       const res = await endWork();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Workday ended successfully.");
@@ -264,9 +288,8 @@ export default function MyWorkClient({ initialData }) {
         });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to end workday.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -341,7 +364,7 @@ export default function MyWorkClient({ initialData }) {
           <div className="pt-2 border-t border-neutral-800/40 flex justify-end">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id, isProjectTask); }}
-              disabled={!!activeBlock || isEnded}
+              disabled={!!activeBlock || isEnded || !!optimisticState}
               title={activeBlock ? "Finish or complete the active task first." : ""}
               className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -453,7 +476,7 @@ export default function MyWorkClient({ initialData }) {
               {/* Task Actions (Pause / Resume / Finish / Complete) */}
               <div className="mt-5 space-y-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  {isLoading ? (
+                  {optimisticState ? (
                     <div className="flex items-center gap-2 text-xs text-neutral-400 py-2">
                       <Loader2 className="h-4 w-4 animate-spin text-emerald-400" />
                       <span>Processing...</span>
@@ -515,7 +538,7 @@ export default function MyWorkClient({ initialData }) {
                 </div>
 
                 {/* Explanation text */}
-                {!isLoading && status === "active" && (
+                {!optimisticState && status === "active" && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-neutral-800/40 text-[11px] text-neutral-500 leading-relaxed">
                     <p>
                       <strong className="text-blue-400/80">Finish For Now:</strong> Stops the timer but keeps this task In Progress.
@@ -560,7 +583,7 @@ export default function MyWorkClient({ initialData }) {
               <div className="pt-1">
                 <button
                   onClick={handleEndWork}
-                  disabled={isLoading}
+                  disabled={!!optimisticState}
                   className="py-2.5 px-5 bg-red-500/15 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-bold rounded-xl transition-all duration-200 disabled:opacity-50"
                 >
                   End Full Workday
