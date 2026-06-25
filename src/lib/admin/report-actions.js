@@ -1,183 +1,218 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProfile } from "@/lib/admin/auth";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { requireAdmin } from "@/lib/admin/auth";
+import { calculateWorkBlocksDisplaySeconds, getTodayDateString } from "@/lib/admin/time";
 
-const ReportPayloadSchema = z.object({
-  taskId: z.string().uuid("Invalid task ID"),
-  projectId: z.string().uuid("Invalid project ID"),
-  actualStartDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid start date format"),
-  submittedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid submitted date format"),
-  workSummary: z.string().trim().min(1, "Work summary is required").max(10000, "Summary too long"),
-  workLink: z.string().trim().url("Invalid URL").optional().or(z.literal("")),
-  note: z.string().trim().max(10000, "Note too long").optional().or(z.literal(""))
-}).refine(data => new Date(data.submittedDate) >= new Date(data.actualStartDate), {
-  message: "Submitted date cannot be before actual start date.",
-  path: ["submittedDate"]
-});
+const buildDateFilter = (query, dateColumn, startDate, endDate) => {
+  if (startDate) query.gte(dateColumn, `${startDate}T00:00:00.000Z`);
+  if (endDate) query.lte(dateColumn, `${endDate}T23:59:59.999Z`);
+  return query;
+};
 
-const UpdatePayloadSchema = ReportPayloadSchema.extend({
-  reportId: z.string().uuid("Invalid report ID")
-});
+// Base fetchers for reuse
+export async function fetchFilteredProfiles(supabase) {
+  const { data } = await supabase.from("admin_profiles").select("id, name, email, is_active, role").order("name");
+  return data || [];
+}
 
-const ReviewSchema = z.object({
-  reportId: z.string().uuid("Invalid report ID"),
-  taskId: z.string().uuid("Invalid task ID").optional(),
-  projectId: z.string().uuid("Invalid project ID").optional(),
-  action: z.enum(["approve", "reject", "revision_requested"], { errorMap: () => ({ message: "Invalid review action." }) }),
-  reviewNote: z.string().trim().max(10000, "Review note too long").optional().or(z.literal("")),
-  markTaskDone: z.boolean().optional()
-}).refine(data => {
-  if (data.action === "revision_requested" && (!data.reviewNote || data.reviewNote.trim() === "")) {
-    return false;
+export async function fetchFilteredProjects(supabase, filters = {}) {
+  let query = supabase.from("projects").select("*");
+  if (filters.client) query.eq("client_id", filters.client);
+  if (filters.project) query.eq("id", filters.project);
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching projects:", error); return []; }
+  return data || [];
+}
+
+export async function fetchFilteredTasks(supabase, filters = {}) {
+  let query = supabase.from("project_tasks").select("*");
+  if (filters.project) query.eq("project_id", filters.project);
+  if (filters.taskStatus && filters.taskStatus !== "all") query.eq("status", filters.taskStatus);
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching tasks:", error); return []; }
+  return data || [];
+}
+
+export async function fetchFilteredReports(supabase, filters = {}) {
+  let query = supabase.from("task_work_reports").select("*");
+  if (filters.member) query.eq("submitted_by", filters.member);
+  if (filters.reportStatus && filters.reportStatus !== "all") query.eq("completion_status", filters.reportStatus);
+  // For reports, date range usually applies to submitted_date
+  if (filters.startDate || filters.endDate) {
+    if (filters.startDate) query.gte("submitted_date", filters.startDate);
+    if (filters.endDate) query.lte("submitted_date", filters.endDate);
   }
-  return true;
-}, {
-  message: "A review note is required when requesting revision.",
-  path: ["reviewNote"]
-});
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching reports:", error); return []; }
+  return data || [];
+}
 
-/**
- * Submit or resubmit a task work report.
- * If resubmitting, we create a new row and link it via supersedes_report_id.
- */
-export async function submitTaskReport(payload) {
-  try {
-    const profile = await getCurrentProfile();
-    if (!profile) return { error: "Unauthorized" };
-
-    const parsed = ReportPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      return { error: parsed.error.errors[0].message };
-    }
-    const data = parsed.data;
-
-    const supabase = await createClient();
-
-    const { data: rpcData, error: rpcErr } = await supabase.rpc("submit_task_work_report", {
-      p_task_id: data.taskId,
-      p_actual_start_date: data.actualStartDate,
-      p_submitted_date: data.submittedDate,
-      p_work_summary: data.workSummary,
-      p_work_link: data.workLink || null,
-      p_note: data.note || null
-    });
-
-    if (rpcErr) {
-      console.error("[submitTaskReport] RPC Error:", rpcErr);
-      return { error: rpcErr.message || "Failed to submit report. Please try again." };
-    }
-
-    if (!rpcData || rpcData.length !== 1) {
-      return { error: "Submission failed or returned unexpected data." };
-    }
-
-    const { task_id, project_id } = rpcData[0];
-    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
-    
-    revalidatePath(`/admin/my-work`);
-    return { success: true };
-  } catch (error) {
-    console.error("[submitTaskReport] Exception:", error);
-    return { error: error.message || "An unexpected error occurred." };
+export async function fetchFilteredBlocks(supabase, filters = {}) {
+  let query = supabase.from("work_blocks").select("*");
+  if (filters.member) query.eq("user_id", filters.member);
+  if (filters.sourceType && filters.sourceType !== "all") query.eq("source_type", filters.sourceType);
+  if (filters.startDate || filters.endDate) {
+    if (filters.startDate) query.gte("work_date", filters.startDate);
+    if (filters.endDate) query.lte("work_date", filters.endDate);
   }
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching blocks:", error); return []; }
+  return data || [];
+}
+
+export async function fetchFilteredSessions(supabase, filters = {}) {
+  let query = supabase.from("work_sessions").select("*");
+  if (filters.member) query.eq("user_id", filters.member);
+  if (filters.startDate || filters.endDate) {
+    if (filters.startDate) query.gte("work_date", filters.startDate);
+    if (filters.endDate) query.lte("work_date", filters.endDate);
+  }
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching sessions:", error); return []; }
+  return data || [];
+}
+
+export async function fetchFilteredLegacy(supabase, filters = {}) {
+  let query = supabase.from("work_assignments").select("*");
+  if (filters.member) query.eq("assigned_to", filters.member);
+  if (filters.startDate || filters.endDate) {
+    if (filters.startDate) query.gte("work_date", filters.startDate);
+    if (filters.endDate) query.lte("work_date", filters.endDate);
+  }
+  const { data, error } = await query;
+  if (error) { console.error("Error fetching legacy assignments:", error); return []; }
+  return data || [];
 }
 
 /**
- * Update an unapproved report (for typos)
+ * Deduplicate reports: group by task_id + submitted_by, keep highest version_number.
  */
-export async function updateTaskReport(reportId, payload) {
-  try {
-    const profile = await getCurrentProfile();
-    if (!profile) return { error: "Unauthorized" };
-
-    const parsed = UpdatePayloadSchema.safeParse({ reportId, ...payload });
-    if (!parsed.success) {
-      return { error: parsed.error.errors[0].message };
+export function getLatestReports(reports) {
+  const map = new Map();
+  reports.forEach(r => {
+    const key = `${r.task_id}_${r.submitted_by}`;
+    if (!map.has(key)) {
+      map.set(key, r);
+    } else {
+      const existing = map.get(key);
+      if (r.version_number > existing.version_number) {
+        map.set(key, r);
+      } else if (r.version_number === existing.version_number && new Date(r.created_at) > new Date(existing.created_at)) {
+        map.set(key, r);
+      }
     }
-    const data = parsed.data;
-
-    const supabase = await createClient();
-
-    const { data: rpcData, error: rpcErr } = await supabase.rpc("update_task_work_report", {
-      p_report_id: data.reportId,
-      p_actual_start_date: data.actualStartDate,
-      p_submitted_date: data.submittedDate,
-      p_work_summary: data.workSummary,
-      p_work_link: data.workLink || null,
-      p_note: data.note || null
-    });
-
-    if (rpcErr) {
-      console.error("[updateTaskReport] RPC Error:", rpcErr);
-      return { error: rpcErr.message || "Failed to update report." };
-    }
-
-    if (!rpcData || rpcData.length !== 1) {
-      return { error: "Update failed or returned unexpected data." };
-    }
-
-    const { task_id, project_id } = rpcData[0];
-    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
-
-    return { success: true };
-  } catch (error) {
-    console.error("[updateTaskReport] Exception:", error);
-    return { error: error.message || "An unexpected error occurred." };
-  }
+  });
+  return Array.from(map.values());
 }
 
-/**
- * Admin review of a report
- */
-export async function reviewTaskReport(reportId, taskId, projectId, action, reviewNote, markTaskDone = false) {
-  try {
-    const profile = await getCurrentProfile();
-    if (!profile || profile.role !== "admin" || !profile.is_active) {
-      return { error: "Unauthorized: Active admin required." };
-    }
+export async function getOverviewData(filters) {
+  const profile = await requireAdmin();
+  const supabase = await createClient();
+  const today = getTodayDateString();
 
-    const parsed = ReviewSchema.safeParse({ reportId, taskId, projectId, action, reviewNote, markTaskDone });
-    if (!parsed.success) {
-      return { error: parsed.error.errors[0].message };
-    }
-    const data = parsed.data;
+  const [
+    profiles,
+    projects,
+    tasks,
+    reports,
+    blocks,
+    sessions,
+    legacy
+  ] = await Promise.all([
+    fetchFilteredProfiles(supabase),
+    fetchFilteredProjects(supabase, filters),
+    fetchFilteredTasks(supabase, filters),
+    fetchFilteredReports(supabase, filters),
+    fetchFilteredBlocks(supabase, filters),
+    fetchFilteredSessions(supabase, filters),
+    fetchFilteredLegacy(supabase, filters)
+  ]);
 
-    const validStatuses = {
-      "approve": "approved",
-      "reject": "rejected",
-      "revision_requested": "revision_requested"
-    };
+  const latestReports = getLatestReports(reports);
 
-    const newStatus = validStatuses[data.action];
+  // Time calculations
+  let totalTrackedSeconds = 0;
+  let totalBreakSeconds = 0;
+  
+  profiles.forEach(member => {
+    const memberBlocks = blocks.filter(b => b.user_id === member.id);
+    const activeSession = sessions.find(s => s.user_id === member.id && s.status !== "ended");
+    totalTrackedSeconds += calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
     
-    const supabase = await createClient();
-
-    const { data: rpcData, error: rpcErr } = await supabase.rpc("review_task_work_report", {
-      p_report_id: data.reportId,
-      p_review_action: newStatus,
-      p_review_note: data.reviewNote || null,
-      p_mark_task_done: data.markTaskDone || false
+    const memberSessions = sessions.filter(s => s.user_id === member.id);
+    memberSessions.forEach(s => {
+      totalBreakSeconds += (s.break_seconds || 0);
+      if (s.status === "break" && s.break_started_at) {
+        const start = new Date(s.break_started_at).getTime();
+        const now = new Date().getTime();
+        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+      }
     });
+  });
 
-    if (rpcErr) {
-      console.error("[reviewTaskReport] RPC Error:", rpcErr);
-      return { error: rpcErr.message || "Failed to apply review." };
+  const netProductiveSeconds = Math.max(0, totalTrackedSeconds - totalBreakSeconds);
+
+  const completedTasks = tasks.filter(t => t.status === "done" && (!filters.startDate || (t.updated_at && t.updated_at >= filters.startDate)));
+  const completedLegacy = legacy.filter(l => l.status === "done");
+  
+  const reportsSubmitted = latestReports.length;
+  const reportsApproved = latestReports.filter(r => r.completion_status === "approved").length;
+  const reportsAwaiting = latestReports.filter(r => r.completion_status === "submitted").length;
+  const reportsRevision = latestReports.filter(r => r.completion_status === "revision_requested").length;
+  
+  const overdueTasks = tasks.filter(t => {
+    if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
+    return t.due_date.split("T")[0] < today;
+  }).length;
+  const blockedTasks = tasks.filter(t => t.status === "blocked").length;
+
+  const activeProjects = projects.filter(p => p.status === "active").length;
+  const completedProjects = projects.filter(p => p.status === "completed").length;
+
+  const taskStatusDistribution = tasks.reduce((acc, t) => {
+    acc[t.status] = (acc[t.status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const projectStatusDistribution = projects.reduce((acc, p) => {
+    acc[p.status] = (acc[p.status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const reportStatusDistribution = latestReports.reduce((acc, r) => {
+    acc[r.completion_status] = (acc[r.completion_status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const sourceDistribution = blocks.reduce((acc, b) => {
+    const type = b.source_type || "manual";
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+  }, {});
+
+  return {
+    hasError: false,
+    metrics: {
+      totalTrackedSeconds,
+      totalBreakSeconds,
+      netProductiveSeconds,
+      completedTasks: completedTasks.length,
+      completedLegacy: completedLegacy.length,
+      reportsSubmitted,
+      reportsApproved,
+      reportsAwaiting,
+      reportsRevision,
+      overdueTasks,
+      blockedTasks,
+      activeProjects,
+      completedProjects
+    },
+    distributions: {
+      taskStatusDistribution,
+      projectStatusDistribution,
+      reportStatusDistribution,
+      sourceDistribution
     }
-
-    if (!rpcData || rpcData.length !== 1) {
-      return { error: "Review failed or returned unexpected data." };
-    }
-
-    const { task_id, project_id } = rpcData[0];
-    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
-    
-    revalidatePath(`/admin/my-work`);
-    return { success: true };
-  } catch (error) {
-    console.error("[reviewTaskReport] Exception:", error);
-    return { error: error.message || "An unexpected error occurred." };
-  }
+  };
 }
