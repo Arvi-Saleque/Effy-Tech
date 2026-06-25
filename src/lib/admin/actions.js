@@ -72,17 +72,23 @@ export async function getMyWorkData() {
       .limit(10);
 
     // Fetch active project tasks assigned to this user
-    const { data: projectTasks } = await supabase
+    const { data: projectTasksRaw } = await supabase
       .from("project_tasks")
       .select(`
         *,
         projects (name, clients (name)),
-        task_assignees!inner(user_id)
+        task_assignees!inner(user_id),
+        task_work_reports(id, version_number, completion_status, submitted_date)
       `)
       .eq("task_assignees.user_id", profile.id)
       .neq("status", "archived")
       .neq("status", "cancelled")
       .order("updated_at", { ascending: false });
+
+    const projectTasks = projectTasksRaw?.map(t => ({
+      ...t,
+      task_work_reports: t.task_work_reports?.sort((a, b) => b.version_number - a.version_number) || []
+    })) || [];
 
     return {
       profile,
