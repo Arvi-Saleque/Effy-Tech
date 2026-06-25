@@ -22,11 +22,30 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
   const canSubmit = isAssigned && !hasApproved && !["archived", "cancelled"].includes(task.status) && (!activeReport || activeReport.completion_status === "revision_requested");
   const canEdit = isAssigned && activeReport && activeReport.completion_status === "submitted" && activeReport.submitted_by === profile.id;
 
+  // Strict YYYY-MM-DD formatter for HTML5 native date inputs
+  const formatDateForInput = (dateValue) => {
+    if (!dateValue) return new Date().toISOString().split("T")[0];
+    try {
+      // If it's already YYYY-MM-DD string, return as is to avoid timezone shift
+      if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue.trim())) {
+        return dateValue.trim();
+      }
+      const d = new Date(dateValue);
+      if (isNaN(d.getTime())) return new Date().toISOString().split("T")[0];
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch {
+      return new Date().toISOString().split("T")[0];
+    }
+  };
+
   // Form State
-  const defaultStartDate = activeReport?.actual_start_date || task.start_date || new Date().toISOString().split("T")[0];
+  const defaultStartDate = formatDateForInput(activeReport?.actual_start_date || task.start_date);
   const [formData, setFormData] = useState({
     actualStartDate: defaultStartDate,
-    submittedDate: new Date().toISOString().split("T")[0],
+    submittedDate: formatDateForInput(),
     workSummary: "",
     workLink: "",
     note: ""
@@ -34,8 +53,8 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
 
   const openSubmitModal = () => {
     setFormData({
-      actualStartDate: activeReport?.actual_start_date || task.start_date || new Date().toISOString().split("T")[0],
-      submittedDate: new Date().toISOString().split("T")[0],
+      actualStartDate: formatDateForInput(activeReport?.actual_start_date || task.start_date),
+      submittedDate: formatDateForInput(),
       workSummary: "",
       workLink: "",
       note: ""
@@ -47,8 +66,8 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
 
   const openEditModal = () => {
     setFormData({
-      actualStartDate: activeReport.actual_start_date,
-      submittedDate: activeReport.submitted_date,
+      actualStartDate: formatDateForInput(activeReport.actual_start_date),
+      submittedDate: formatDateForInput(activeReport.submitted_date),
       workSummary: activeReport.work_summary,
       workLink: activeReport.work_link || "",
       note: activeReport.note || ""

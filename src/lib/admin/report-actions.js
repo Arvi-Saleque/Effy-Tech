@@ -3,6 +3,41 @@
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile } from "@/lib/admin/auth";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const ReportPayloadSchema = z.object({
+  taskId: z.string().uuid("Invalid task ID"),
+  projectId: z.string().uuid("Invalid project ID"),
+  actualStartDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid start date format"),
+  submittedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid submitted date format"),
+  workSummary: z.string().trim().min(1, "Work summary is required").max(10000, "Summary too long"),
+  workLink: z.string().trim().url("Invalid URL").optional().or(z.literal("")),
+  note: z.string().trim().max(10000, "Note too long").optional().or(z.literal(""))
+}).refine(data => new Date(data.submittedDate) >= new Date(data.actualStartDate), {
+  message: "Submitted date cannot be before actual start date.",
+  path: ["submittedDate"]
+});
+
+const UpdatePayloadSchema = ReportPayloadSchema.extend({
+  reportId: z.string().uuid("Invalid report ID")
+});
+
+const ReviewSchema = z.object({
+  reportId: z.string().uuid("Invalid report ID"),
+  taskId: z.string().uuid("Invalid task ID").optional(),
+  projectId: z.string().uuid("Invalid project ID").optional(),
+  action: z.enum(["approve", "reject", "revision_requested"], { errorMap: () => ({ message: "Invalid review action." }) }),
+  reviewNote: z.string().trim().max(10000, "Review note too long").optional().or(z.literal("")),
+  markTaskDone: z.boolean().optional()
+}).refine(data => {
+  if (data.action === "revision_requested" && (!data.reviewNote || data.reviewNote.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "A review note is required when requesting revision.",
+  path: ["reviewNote"]
+});
 
 /**
  * Submit or resubmit a task work report.
@@ -13,67 +48,35 @@ export async function submitTaskReport(payload) {
     const profile = await getCurrentProfile();
     if (!profile) return { error: "Unauthorized" };
 
+    const parsed = ReportPayloadSchema.safeParse(payload);
+    if (!parsed.success) {
+      return { error: parsed.error.errors[0].message };
+    }
+    const data = parsed.data;
+
     const supabase = await createClient();
 
-    // Verify user is assigned to task
-    const { data: assignment, error: assignErr } = await supabase
-      .from("task_assignees")
-      .select("id")
-      .eq("task_id", payload.taskId)
-      .eq("user_id", profile.id)
-      .single();
+    const { data: rpcData, error: rpcErr } = await supabase.rpc("submit_task_work_report", {
+      p_task_id: data.taskId,
+      p_actual_start_date: data.actualStartDate,
+      p_submitted_date: data.submittedDate,
+      p_work_summary: data.workSummary,
+      p_work_link: data.workLink || null,
+      p_note: data.note || null
+    });
 
-    if (assignErr || !assignment) {
-      return { error: "You are not assigned to this task." };
+    if (rpcErr) {
+      console.error("[submitTaskReport] RPC Error:", rpcErr);
+      return { error: rpcErr.message || "Failed to submit report. Please try again." };
     }
 
-    // Check if there's an existing report that is blocking submission (e.g. approved)
-    const { data: existingReport } = await supabase
-      .from("task_work_reports")
-      .select("id, version_number, completion_status")
-      .eq("task_id", payload.taskId)
-      .eq("submitted_by", profile.id)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
-
-    if (existingReport?.completion_status === "approved") {
-      return { error: "An approved report already exists for this task." };
+    if (!rpcData || rpcData.length !== 1) {
+      return { error: "Submission failed or returned unexpected data." };
     }
 
-    const versionNumber = existingReport ? existingReport.version_number + 1 : 1;
-    const supersedesId = existingReport ? existingReport.id : null;
-
-    // Validate dates
-    if (new Date(payload.submittedDate) < new Date(payload.actualStartDate)) {
-      return { error: "Submitted date cannot be before actual start date." };
-    }
-
-    if (!payload.workSummary?.trim()) {
-      return { error: "Work summary is required." };
-    }
-
-    const { error: insertErr } = await supabase
-      .from("task_work_reports")
-      .insert({
-        task_id: payload.taskId,
-        submitted_by: profile.id,
-        actual_start_date: payload.actualStartDate,
-        submitted_date: payload.submittedDate,
-        work_summary: payload.workSummary.trim(),
-        work_link: payload.workLink?.trim() || null,
-        note: payload.note?.trim() || null,
-        completion_status: "submitted",
-        version_number: versionNumber,
-        supersedes_report_id: supersedesId
-      });
-
-    if (insertErr) {
-      console.error("[submitTaskReport] DB Error:", insertErr);
-      return { error: "Failed to submit report. Please try again." };
-    }
-
-    revalidatePath(`/admin/projects/${payload.projectId}/tasks/${payload.taskId}`);
+    const { task_id, project_id } = rpcData[0];
+    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
+    
     revalidatePath(`/admin/my-work`);
     return { success: true };
   } catch (error) {
@@ -90,35 +93,35 @@ export async function updateTaskReport(reportId, payload) {
     const profile = await getCurrentProfile();
     if (!profile) return { error: "Unauthorized" };
 
+    const parsed = UpdatePayloadSchema.safeParse({ reportId, ...payload });
+    if (!parsed.success) {
+      return { error: parsed.error.errors[0].message };
+    }
+    const data = parsed.data;
+
     const supabase = await createClient();
 
-    if (new Date(payload.submittedDate) < new Date(payload.actualStartDate)) {
-      return { error: "Submitted date cannot be before actual start date." };
+    const { data: rpcData, error: rpcErr } = await supabase.rpc("update_task_work_report", {
+      p_report_id: data.reportId,
+      p_actual_start_date: data.actualStartDate,
+      p_submitted_date: data.submittedDate,
+      p_work_summary: data.workSummary,
+      p_work_link: data.workLink || null,
+      p_note: data.note || null
+    });
+
+    if (rpcErr) {
+      console.error("[updateTaskReport] RPC Error:", rpcErr);
+      return { error: rpcErr.message || "Failed to update report." };
     }
 
-    if (!payload.workSummary?.trim()) {
-      return { error: "Work summary is required." };
+    if (!rpcData || rpcData.length !== 1) {
+      return { error: "Update failed or returned unexpected data." };
     }
 
-    const { error: updateErr } = await supabase
-      .from("task_work_reports")
-      .update({
-        actual_start_date: payload.actualStartDate,
-        submitted_date: payload.submittedDate,
-        work_summary: payload.workSummary.trim(),
-        work_link: payload.workLink?.trim() || null,
-        note: payload.note?.trim() || null
-      })
-      .eq("id", reportId)
-      .eq("submitted_by", profile.id)
-      .in("completion_status", ["submitted", "revision_requested"]);
+    const { task_id, project_id } = rpcData[0];
+    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
 
-    if (updateErr) {
-      console.error("[updateTaskReport] DB Error:", updateErr);
-      return { error: "Failed to update report." };
-    }
-
-    revalidatePath(`/admin/projects/${payload.projectId}/tasks/${payload.taskId}`);
     return { success: true };
   } catch (error) {
     console.error("[updateTaskReport] Exception:", error);
@@ -136,9 +139,11 @@ export async function reviewTaskReport(reportId, taskId, projectId, action, revi
       return { error: "Unauthorized: Active admin required." };
     }
 
-    if (action === "revision_requested" && !reviewNote?.trim()) {
-      return { error: "A review note is required when requesting revision." };
+    const parsed = ReviewSchema.safeParse({ reportId, taskId, projectId, action, reviewNote, markTaskDone });
+    if (!parsed.success) {
+      return { error: parsed.error.errors[0].message };
     }
+    const data = parsed.data;
 
     const validStatuses = {
       "approve": "approved",
@@ -146,45 +151,29 @@ export async function reviewTaskReport(reportId, taskId, projectId, action, revi
       "revision_requested": "revision_requested"
     };
 
-    const newStatus = validStatuses[action];
-    if (!newStatus) return { error: "Invalid review action." };
-
+    const newStatus = validStatuses[data.action];
+    
     const supabase = await createClient();
 
-    // 1. Update report
-    const { error: updateErr } = await supabase
-      .from("task_work_reports")
-      .update({
-        completion_status: newStatus,
-        reviewed_by: profile.id,
-        reviewed_at: new Date().toISOString(),
-        review_note: reviewNote?.trim() || null
-      })
-      .eq("id", reportId);
+    const { data: rpcData, error: rpcErr } = await supabase.rpc("review_task_work_report", {
+      p_report_id: data.reportId,
+      p_review_action: newStatus,
+      p_review_note: data.reviewNote || null,
+      p_mark_task_done: data.markTaskDone || false
+    });
 
-    if (updateErr) {
-      console.error("[reviewTaskReport] Update Error:", updateErr);
-      return { error: "Failed to apply review." };
+    if (rpcErr) {
+      console.error("[reviewTaskReport] RPC Error:", rpcErr);
+      return { error: rpcErr.message || "Failed to apply review." };
     }
 
-    // 2. Mark task done if requested and approved
-    if (newStatus === "approved" && markTaskDone) {
-      const { error: taskErr } = await supabase
-        .from("project_tasks")
-        .update({
-          status: "done",
-          progress_percent: 100
-        })
-        .eq("id", taskId)
-        .neq("status", "done");
-
-      if (taskErr) {
-        console.error("[reviewTaskReport] Task Update Error:", taskErr);
-        return { success: true, warning: "Report approved, but failed to mark task as done." };
-      }
+    if (!rpcData || rpcData.length !== 1) {
+      return { error: "Review failed or returned unexpected data." };
     }
 
-    revalidatePath(`/admin/projects/${projectId}/tasks/${taskId}`);
+    const { task_id, project_id } = rpcData[0];
+    revalidatePath(`/admin/projects/${project_id}/tasks/${task_id}`);
+    
     revalidatePath(`/admin/my-work`);
     return { success: true };
   } catch (error) {
