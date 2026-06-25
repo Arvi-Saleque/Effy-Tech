@@ -3,7 +3,6 @@ import AcademicPrograms from "./components/AcademicPrograms";
 import CampusFacilities from "./components/CampusFacilities";
 import ContactSection from "./components/ContactSection";
 import DepartmentsSection from "./components/DepartmentsSection";
-import EmergencyNotice from "./components/EmergencyNotice";
 import GallerySection from "./components/GallerySection";
 import HeroSection from "./components/HeroSection";
 import ImportantLinks from "./components/ImportantLinks";
@@ -16,7 +15,6 @@ import StatisticsSection from "./components/StatisticsSection";
 export default function PioneerGirlsCollegeHome() {
   return (
     <SiteShell>
-      <EmergencyNotice />
       <HeroSection />
       <QuickServices />
       <NoticeBoard compact />
