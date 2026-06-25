@@ -16,13 +16,18 @@ export default function ProjectFilters({ clients = [], admins = [] }) {
 
   const handleFilterChange = (key, value) => {
     const params = new URLSearchParams(searchParams);
-    if (value && value !== "all") {
+    
+    // Determine the default value for the given filter key
+    let defaultValue = "all";
+    if (key === "status") defaultValue = "current";
+    if (key === "search") defaultValue = "";
+
+    if (value && value !== defaultValue) {
       params.set(key, value);
     } else {
       params.delete(key);
     }
-    // If status isn't current, but we cleared it, don't leave it blank if that's not desired.
-    // URL will just lack status, which page.js will interpret as "current" by default fallback.
+    
     router.push(`/admin/projects?${params.toString()}`);
   };
 

@@ -11,9 +11,7 @@ export default async function NewTaskPage({ params }) {
   if (!project) {
     return <div className="p-8 text-red-400">Project not found</div>;
   }
-  if (project.status === "archived" || project.status === "cancelled" || project.status === "completed") {
-    return <div className="p-8 text-red-400">Cannot add tasks to archived, cancelled, or completed projects.</div>;
-  }
+  const isTerminal = ["completed", "cancelled", "archived"].includes(project.status);
 
   const supabase = await createClient();
   const { data: members } = await supabase.from("project_members")
@@ -32,7 +30,13 @@ export default async function NewTaskPage({ params }) {
         <p className="text-slate-400 text-sm mt-1">Add a new task to {project.name}</p>
       </div>
 
-      <TaskForm projectId={projectId} projectMembers={activeMembers} />
+      {isTerminal && (
+        <div className="mb-6 p-4 bg-red-900/40 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400">
+          <p className="text-sm font-medium">Tasks cannot be added because this project is {project.status}.</p>
+        </div>
+      )}
+
+      <TaskForm projectId={projectId} projectMembers={activeMembers} isTerminal={isTerminal} />
     </div>
   );
 }

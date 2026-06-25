@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createTask, updateTask } from "@/lib/admin/task-actions";
 
-export default function TaskForm({ projectId, projectMembers, initialData = null }) {
+export default function TaskForm({ projectId, projectMembers, initialData = null, isTerminal = false }) {
   const router = useRouter();
   const isEdit = !!initialData;
   const [error, setError] = useState(null);
@@ -145,7 +145,7 @@ export default function TaskForm({ projectId, projectMembers, initialData = null
 
       <div className="mt-8 flex justify-end gap-3">
         <button type="button" onClick={() => router.back()} className="px-4 py-2 text-sm text-slate-300 hover:text-white transition-colors">Cancel</button>
-        <button type="submit" disabled={loading} className="px-6 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-colors shadow shadow-blue-900/20">
+        <button type="submit" disabled={loading || isTerminal} className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${isTerminal ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 text-white shadow shadow-blue-900/20'}`}>
           {loading ? "Saving..." : isEdit ? "Update Task" : "Create Task"}
         </button>
       </div>
