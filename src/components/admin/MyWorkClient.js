@@ -147,15 +147,16 @@ export default function MyWorkClient({ initialData }) {
   };
 
 
-  const handleStartAssignment = async (title, id) => {
+  const handleStartAssignment = async (title, id, isProjectTask = false) => {
     setIsLoading(true);
     clearMessages();
 
     try {
       const res = await startWork({
         currentWorkTitle: title,
-        currentWorkNote: `Working on assignment: ${title}`,
-        assignmentId: id
+        currentWorkNote: `Working on ${isProjectTask ? "project task" : "assignment"}: ${title}`,
+        assignmentId: id,
+        sourceType: isProjectTask ? "project_task" : "legacy_assignment"
       });
 
       if (res.error) {
@@ -165,7 +166,7 @@ export default function MyWorkClient({ initialData }) {
         router.refresh();
       }
     } catch (err) {
-      setErrorMsg("Failed to start assignment task.");
+      setErrorMsg(`Failed to start ${isProjectTask ? "project task" : "assignment"}.`);
     } finally {
       setIsLoading(false);
     }
@@ -305,10 +306,10 @@ export default function MyWorkClient({ initialData }) {
         )}
 
         {/* Action Button */}
-        {!isProjectTask && buttonText && !isEnded && (
+        {buttonText && !isEnded && (
           <div className="pt-2 border-t border-neutral-800/40 flex justify-end">
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id, isProjectTask); }}
               disabled={!!activeBlock || isEnded}
               title={activeBlock ? "Finish or complete the active task first." : ""}
               className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -322,16 +323,15 @@ export default function MyWorkClient({ initialData }) {
     );
 
     return (
-      <button 
+      <div 
         key={task.id} 
         className={cardClasses}
         onClick={() => {
           if (isProjectTask) router.push(`/admin/projects/${task.project_id}/tasks/${task.id}`);
         }}
-        type="button"
       >
         {cardContent}
-      </button>
+      </div>
     );
   };
 
@@ -583,7 +583,7 @@ export default function MyWorkClient({ initialData }) {
               {allPending.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks in To Do.</div>
               ) : (
-                allPending.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Start Task", task.is_project_task))
+                allPending.map(task => renderBoardTaskCard(task, "Start Task", task.is_project_task))
               )}
             </div>
           </div>
@@ -600,7 +600,7 @@ export default function MyWorkClient({ initialData }) {
               {allInProgress.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks In Progress.</div>
               ) : (
-                allInProgress.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Continue Task", task.is_project_task))
+                allInProgress.map(task => renderBoardTaskCard(task, "Continue Task", task.is_project_task))
               )}
             </div>
           </div>

@@ -112,7 +112,7 @@ export async function getMyWorkData() {
 /**
  * Start or update today's work session.
  */
-export async function startWork({ currentWorkTitle, currentWorkNote, assignmentId }) {
+export async function startWork({ currentWorkTitle, currentWorkNote, assignmentId, sourceType = "legacy_assignment" }) {
   const profile = await requireAuth();
   try {
     if (!assignmentId) {
@@ -153,20 +153,42 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       }
     }
 
-    // Verify assignment
-    const { data: assignment, error: assignError } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("id", assignmentId)
-      .eq("assigned_to", profile.id)
-      .maybeSingle();
+    // Verify assignment or project task
+    let assignment = null;
+    let assignError = null;
+    
+    if (sourceType === "project_task") {
+      const { data, error } = await supabase
+        .from("project_tasks")
+        .select("*, task_assignees!inner(user_id)")
+        .eq("id", assignmentId)
+        .eq("task_assignees.user_id", profile.id)
+        .maybeSingle();
+      assignment = data;
+      assignError = error;
 
-    if (assignError || !assignment) {
-      return { error: "Selected assignment does not belong to you or does not exist." };
-    }
+      if (assignError || !assignment) {
+        return { error: "Selected project task does not belong to you or does not exist." };
+      }
+      if (assignment.status === "archived" || assignment.status === "cancelled") {
+        return { error: "Selected project task is already archived or cancelled." };
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("work_assignments")
+        .select("*")
+        .eq("id", assignmentId)
+        .eq("assigned_to", profile.id)
+        .maybeSingle();
+      assignment = data;
+      assignError = error;
 
-    if (assignment.status !== "pending" && assignment.status !== "in_progress") {
-      return { error: "Selected assignment is already done or cancelled." };
+      if (assignError || !assignment) {
+        return { error: "Selected assignment does not belong to you or does not exist." };
+      }
+      if (assignment.status !== "pending" && assignment.status !== "in_progress") {
+        return { error: "Selected assignment is already done or cancelled." };
+      }
     }
 
     const titleToUse = (currentWorkTitle || assignment.title || "").trim();
@@ -185,7 +207,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           status: "active",
           current_work_title: titleToUse,
           current_work_note: noteToUse,
-          assignment_id: assignmentId,
+          assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+          project_task_id: sourceType === "project_task" ? assignmentId : null,
+          source_type: sourceType,
           started_at: existingSession.started_at || now,
           ended_at: null,
           break_started_at: null
@@ -203,7 +227,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           status: "active",
           current_work_title: titleToUse,
           current_work_note: noteToUse,
-          assignment_id: assignmentId,
+          assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+          project_task_id: sourceType === "project_task" ? assignmentId : null,
+          source_type: sourceType,
           started_at: now,
           break_minutes: 0,
           total_minutes: 0
@@ -216,10 +242,17 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
     }
 
     // Update assignment to in_progress
-    await supabase
-      .from("work_assignments")
-      .update({ status: "in_progress" })
-      .eq("id", assignmentId);
+    if (sourceType === "project_task") {
+      await supabase
+        .from("project_tasks")
+        .update({ status: "in_progress" })
+        .eq("id", assignmentId);
+    } else {
+      await supabase
+        .from("work_assignments")
+        .update({ status: "in_progress" })
+        .eq("id", assignmentId);
+    }
 
     // Create work block
     const { error: blockInsertError } = await supabase
@@ -227,7 +260,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       .insert({
         user_id: profile.id,
         session_id: sessionId,
-        assignment_id: assignmentId,
+        assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+        project_task_id: sourceType === "project_task" ? assignmentId : null,
+        source_type: sourceType,
         work_date: today,
         title: titleToUse,
         note: noteToUse,
@@ -503,23 +538,34 @@ async function finishActiveBlock(supabase, profileId, today, now, completeTask) 
 
   if (blockErr) throw blockErr;
 
-  if (activeBlock.assignment_id && completeTask) {
-    const { error: assignErr } = await supabase
-      .from("work_assignments")
-      .update({ status: "done" })
-      .eq("id", activeBlock.assignment_id)
-      .eq("assigned_to", profileId);
-      
-    if (assignErr) throw assignErr;
+  if (completeTask) {
+    if (activeBlock.source_type === "project_task" && activeBlock.project_task_id) {
+      const { error: assignErr } = await supabase
+        .from("project_tasks")
+        .update({ status: "done", progress_percent: 100, completed_at: now.toISOString() })
+        .eq("id", activeBlock.project_task_id);
+        
+      if (assignErr) throw assignErr;
+    } else if (activeBlock.assignment_id) {
+      const { error: assignErr } = await supabase
+        .from("work_assignments")
+        .update({ status: "done" })
+        .eq("id", activeBlock.assignment_id)
+        .eq("assigned_to", profileId);
+        
+      if (assignErr) throw assignErr;
+    }
   }
 
-  // Clear session current work fields (title = null, current_work_note = '', assignment_id = null)
+  // Clear session current work fields
   const { error: sessionErr } = await supabase
     .from("work_sessions")
     .update({
       current_work_title: null,
       current_work_note: "",
-      assignment_id: null
+      assignment_id: null,
+      project_task_id: null,
+      source_type: "legacy_assignment"
     })
     .eq("id", session.id);
 
