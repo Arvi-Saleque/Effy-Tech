@@ -66,7 +66,7 @@ export default function OverviewTab({ data }) {
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <MetricCard title="Net Productive Time" value={formatDuration(metrics.netProductiveSeconds)} icon={Clock} colorClass="text-emerald-400" />
-        <MetricCard title="Total Break Time" value={formatDuration(metrics.totalBreakSeconds)} icon={Clock} colorClass="text-amber-400" />
+        <MetricCard title="Total Break Time" value={metrics.totalBreakSeconds !== null ? formatDuration(metrics.totalBreakSeconds) : "Unavailable"} icon={Clock} colorClass="text-amber-400" />
         <MetricCard title="Total Tracked Time" value={formatDuration(metrics.totalTrackedSeconds)} icon={Clock} colorClass="text-indigo-400" />
       </div>
 

@@ -89,7 +89,7 @@ export default function TimeReportsTab({ data }) {
                 {formatDuration(member.totalTrackedSeconds)}
               </td>
               <td className="py-4 font-mono text-xs text-amber-400">
-                {formatDuration(member.totalBreakSeconds)}
+                {member.totalBreakSeconds !== null ? formatDuration(member.totalBreakSeconds) : "Unavailable"}
               </td>
               <td className="py-4 font-mono text-xs">{member.sessionsCount}</td>
               <td className="py-4 font-mono text-xs">{member.blocksCount}</td>

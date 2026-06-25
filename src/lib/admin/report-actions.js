@@ -1,8 +1,9 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { requireAdmin } from "@/lib/admin/auth";
+import { requireAdmin, getCurrentProfile } from "@/lib/admin/auth";
 import { calculateWorkBlocksDisplaySeconds, getTodayDateString } from "@/lib/admin/time";
+import { revalidatePath } from "next/cache";
 
 const buildDateFilter = (query, dateColumn, startDate, endDate, isTimestamptz = false) => {
   if (startDate) {
@@ -111,7 +112,7 @@ export async function fetchFilteredTaskAssignees(supabase, taskIds = null, membe
 /**
  * Deduplicate reports: group by task_id + submitted_by, keep highest version_number.
  */
-export function getLatestReports(reports) {
+function getLatestReports(reports) {
   const map = new Map();
   reports.forEach(r => {
     const key = `${r.task_id}_${r.submitted_by}`;
@@ -187,6 +188,18 @@ async function resolveDataForAggregators(supabase, filters, needsSubtasks = fals
   let reports = reportsRes.data;
   let latestReports = getLatestReports(reports);
 
+  let profiles = profilesRes.data;
+  if (filters.member && filters.member !== "all") {
+    profiles = profiles.filter(p => p.id === filters.member);
+  }
+
+  let legacy = legacyRes.data;
+  if ((filters.project && filters.project !== "all") || (filters.client && filters.client !== "all")) {
+    legacy = [];
+  } else if (filters.sourceType && filters.sourceType !== "all" && filters.sourceType !== "legacy_assignment") {
+    legacy = [];
+  }
+
   // Apply report status filter to tasks if needed
   if (filters.reportStatus && filters.reportStatus !== "all") {
     latestReports = latestReports.filter(r => r.completion_status === filters.reportStatus);
@@ -230,12 +243,12 @@ async function resolveDataForAggregators(supabase, filters, needsSubtasks = fals
   return {
     projects,
     tasks,
-    profiles: profilesRes.data,
+    profiles,
     reports,
     latestReports,
     blocks,
     sessions: sessionsRes.data,
-    legacy: legacyRes.data,
+    legacy,
     projectMembers: projectMembersRes.data,
     taskAssignees: taskAssigneesRes.data,
     subtasks: subtasksRes.data
@@ -266,23 +279,30 @@ export async function getOverviewData(filters) {
   if (dataRes.error) return { hasError: true };
   const { profiles, projects, tasks, latestReports, reports, blocks, sessions, legacy } = dataRes;
 
+  const isBreakTimeReliable = !(filters.project && filters.project !== "all") &&
+                              !(filters.client && filters.client !== "all") &&
+                              !(filters.sourceType && filters.sourceType !== "all") &&
+                              !(filters.reportStatus && filters.reportStatus !== "all");
+
   let totalTrackedSeconds = 0;
-  let totalBreakSeconds = 0;
+  let totalBreakSeconds = isBreakTimeReliable ? 0 : null;
   
   profiles.forEach(member => {
     const memberBlocks = blocks.filter(b => b.user_id === member.id);
     const activeSession = sessions.find(s => s.user_id === member.id && ["task_active", "break", "workday_open"].includes(s.status));
     totalTrackedSeconds += calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
 
-    const memberSessions = sessions.filter(s => s.user_id === member.id);
-    memberSessions.forEach(s => {
-      totalBreakSeconds += (s.break_seconds || 0);
-      if (s.status === "break" && s.break_started_at) {
-        const start = new Date(s.break_started_at).getTime();
-        const now = new Date().getTime();
-        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
-      }
-    });
+    if (isBreakTimeReliable) {
+      const memberSessions = sessions.filter(s => s.user_id === member.id);
+      memberSessions.forEach(s => {
+        totalBreakSeconds += (s.break_seconds || 0);
+        if (s.status === "break" && s.break_started_at) {
+          const start = new Date(s.break_started_at).getTime();
+          const now = new Date().getTime();
+          totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+        }
+      });
+    }
   });
 
   const netProductiveSeconds = totalTrackedSeconds; 
@@ -368,6 +388,11 @@ export async function getTeamPerformanceData(filters) {
   if (dataRes.error) return { hasError: true };
   const { profiles, projects, projectMembers, tasks, taskAssignees, reports, latestReports, blocks, sessions, legacy } = dataRes;
 
+  const isBreakTimeReliable = !(filters.project && filters.project !== "all") &&
+                              !(filters.client && filters.client !== "all") &&
+                              !(filters.sourceType && filters.sourceType !== "all") &&
+                              !(filters.reportStatus && filters.reportStatus !== "all");
+
   const teamData = profiles.map(member => {
     const memberBlocks = blocks.filter(b => b.user_id === member.id);
     const memberSessions = sessions.filter(s => s.user_id === member.id);
@@ -375,15 +400,17 @@ export async function getTeamPerformanceData(filters) {
     
     const netProductiveSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
 
-    let totalBreakSeconds = 0;
-    memberSessions.forEach(s => {
-      totalBreakSeconds += (s.break_seconds || 0);
-      if (s.status === "break" && s.break_started_at) {
-        const start = new Date(s.break_started_at).getTime();
-        const now = new Date().getTime();
-        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
-      }
-    });
+    let totalBreakSeconds = isBreakTimeReliable ? 0 : null;
+    if (isBreakTimeReliable) {
+      memberSessions.forEach(s => {
+        totalBreakSeconds += (s.break_seconds || 0);
+        if (s.status === "break" && s.break_started_at) {
+          const start = new Date(s.break_started_at).getTime();
+          const now = new Date().getTime();
+          totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+        }
+      });
+    }
 
     const projectMemberships = projectMembers.filter(pm => pm.user_id === member.id).length;
     
@@ -601,6 +628,11 @@ export async function getTimeReportsData(filters) {
   if (dataRes.error) return { hasError: true };
   const { blocks, sessions, profiles } = dataRes;
 
+  const isBreakTimeReliable = !(filters.project && filters.project !== "all") &&
+                              !(filters.client && filters.client !== "all") &&
+                              !(filters.sourceType && filters.sourceType !== "all") &&
+                              !(filters.reportStatus && filters.reportStatus !== "all");
+
   const timeData = profiles.map(member => {
     const memberBlocks = blocks.filter(b => b.user_id === member.id);
     const memberSessions = sessions.filter(s => s.user_id === member.id);
@@ -608,15 +640,17 @@ export async function getTimeReportsData(filters) {
 
     const netProductiveSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, activeSession);
     
-    let totalBreakSeconds = 0;
-    memberSessions.forEach(s => {
-      totalBreakSeconds += (s.break_seconds || 0);
-      if (s.status === "break" && s.break_started_at) {
-        const start = new Date(s.break_started_at).getTime();
-        const now = new Date().getTime();
-        totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
-      }
-    });
+    let totalBreakSeconds = isBreakTimeReliable ? 0 : null;
+    if (isBreakTimeReliable) {
+      memberSessions.forEach(s => {
+        totalBreakSeconds += (s.break_seconds || 0);
+        if (s.status === "break" && s.break_started_at) {
+          const start = new Date(s.break_started_at).getTime();
+          const now = new Date().getTime();
+          totalBreakSeconds += Math.max(0, Math.floor((now - start) / 1000));
+        }
+      });
+    }
 
     let firstWorkStart = null;
     let lastWorkEnd = null;
@@ -766,10 +800,14 @@ export async function getLegacyHistoryData(filters) {
 
   const dataRes = await resolveDataForAggregators(supabase, filters);
   if (dataRes.error) return { hasError: true };
-  const { legacy, profiles } = dataRes;
+  const { legacy, profiles, blocks } = dataRes;
 
   const legacyData = legacy.map(l => {
     const assignee = profiles.find(p => p.id === l.assigned_to);
+    
+    const lBlocks = blocks.filter(b => b.source_type === "legacy_assignment" && b.assignment_id === l.id);
+    const uniqueSessions = new Set(lBlocks.map(b => b.session_id).filter(Boolean));
+    const totalTrackedSeconds = calculateWorkBlocksDisplaySeconds(lBlocks);
     
     return {
       id: l.id,
@@ -777,9 +815,11 @@ export async function getLegacyHistoryData(filters) {
       assignedTo: assignee ? assignee.name : "Unknown",
       status: l.status,
       targetDate: l.work_date,
-      sessionsCount: l.work_sessions?.length || 0,
-      totalMinutes: l.total_minutes || 0,
-      completionDate: l.status === "done" ? l.updated_at : null,
+      sessionsCount: uniqueSessions.size,
+      blocksCount: lBlocks.length,
+      totalTrackedSeconds,
+      completionDate: l.status === "done" ? l.completed_at || l.updated_at : null,
+      completionDateIsFallback: l.status === "done" && !l.completed_at,
       notes: l.historical_notes || null
     };
   });
@@ -788,4 +828,192 @@ export async function getLegacyHistoryData(filters) {
     hasError: false,
     legacyData
   };
+}
+/**
+ * Submit or resubmit a task work report.
+ * If resubmitting, we create a new row and link it via supersedes_report_id.
+ */
+export async function submitTaskReport(payload) {
+  try {
+    const profile = await getCurrentProfile();
+    if (!profile) return { error: "Unauthorized" };
+
+    const supabase = await createClient();
+
+    // Verify user is assigned to task
+    const { data: assignment, error: assignErr } = await supabase
+      .from("task_assignees")
+      .select("id")
+      .eq("task_id", payload.taskId)
+      .eq("user_id", profile.id)
+      .single();
+
+    if (assignErr || !assignment) {
+      return { error: "You are not assigned to this task." };
+    }
+
+    // Check if there's an existing report that is blocking submission (e.g. approved)
+    const { data: existingReport } = await supabase
+      .from("task_work_reports")
+      .select("id, version_number, completion_status")
+      .eq("task_id", payload.taskId)
+      .eq("submitted_by", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (existingReport?.completion_status === "approved") {
+      return { error: "An approved report already exists for this task." };
+    }
+
+    const versionNumber = existingReport ? existingReport.version_number + 1 : 1;
+    const supersedesId = existingReport ? existingReport.id : null;
+
+    // Validate dates
+    if (new Date(payload.submittedDate) < new Date(payload.actualStartDate)) {
+      return { error: "Submitted date cannot be before actual start date." };
+    }
+
+    if (!payload.workSummary?.trim()) {
+      return { error: "Work summary is required." };
+    }
+
+    const { error: insertErr } = await supabase
+      .from("task_work_reports")
+      .insert({
+        task_id: payload.taskId,
+        submitted_by: profile.id,
+        actual_start_date: payload.actualStartDate,
+        submitted_date: payload.submittedDate,
+        work_summary: payload.workSummary.trim(),
+        work_link: payload.workLink?.trim() || null,
+        note: payload.note?.trim() || null,
+        completion_status: "submitted",
+        version_number: versionNumber,
+        supersedes_report_id: supersedesId
+      });
+
+    if (insertErr) {
+      console.error("[submitTaskReport] DB Error:", insertErr);
+      return { error: "Failed to submit report. Please try again." };
+    }
+
+    revalidatePath(`/admin/projects/${payload.projectId}/tasks/${payload.taskId}`);
+    revalidatePath(`/admin/my-work`);
+    return { success: true };
+  } catch (error) {
+    console.error("[submitTaskReport] Exception:", error);
+    return { error: error.message || "An unexpected error occurred." };
+  }
+}
+
+/**
+ * Update an unapproved report (for typos)
+ */
+export async function updateTaskReport(reportId, payload) {
+  try {
+    const profile = await getCurrentProfile();
+    if (!profile) return { error: "Unauthorized" };
+
+    const supabase = await createClient();
+
+    if (new Date(payload.submittedDate) < new Date(payload.actualStartDate)) {
+      return { error: "Submitted date cannot be before actual start date." };
+    }
+
+    if (!payload.workSummary?.trim()) {
+      return { error: "Work summary is required." };
+    }
+
+    const { error: updateErr } = await supabase
+      .from("task_work_reports")
+      .update({
+        actual_start_date: payload.actualStartDate,
+        submitted_date: payload.submittedDate,
+        work_summary: payload.workSummary.trim(),
+        work_link: payload.workLink?.trim() || null,
+        note: payload.note?.trim() || null
+      })
+      .eq("id", reportId)
+      .eq("submitted_by", profile.id)
+      .in("completion_status", ["submitted", "revision_requested"]);
+
+    if (updateErr) {
+      console.error("[updateTaskReport] DB Error:", updateErr);
+      return { error: "Failed to update report." };
+    }
+
+    revalidatePath(`/admin/projects/${payload.projectId}/tasks/${payload.taskId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("[updateTaskReport] Exception:", error);
+    return { error: error.message || "An unexpected error occurred." };
+  }
+}
+
+/**
+ * Admin review of a report
+ */
+export async function reviewTaskReport(reportId, taskId, projectId, action, reviewNote, markTaskDone = false) {
+  try {
+    const profile = await getCurrentProfile();
+    if (!profile || profile.role !== "admin" || !profile.is_active) {
+      return { error: "Unauthorized: Active admin required." };
+    }
+
+    if (action === "revision_requested" && !reviewNote?.trim()) {
+      return { error: "A review note is required when requesting revision." };
+    }
+
+    const validStatuses = {
+      "approve": "approved",
+      "reject": "rejected",
+      "revision_requested": "revision_requested"
+    };
+
+    const newStatus = validStatuses[action];
+    if (!newStatus) return { error: "Invalid review action." };
+
+    const supabase = await createClient();
+
+    // 1. Update report
+    const { error: updateErr } = await supabase
+      .from("task_work_reports")
+      .update({
+        completion_status: newStatus,
+        reviewed_by: profile.id,
+        reviewed_at: new Date().toISOString(),
+        review_note: reviewNote?.trim() || null
+      })
+      .eq("id", reportId);
+
+    if (updateErr) {
+      console.error("[reviewTaskReport] Update Error:", updateErr);
+      return { error: "Failed to apply review." };
+    }
+
+    // 2. Mark task done if requested and approved
+    if (newStatus === "approved" && markTaskDone) {
+      const { error: taskErr } = await supabase
+        .from("project_tasks")
+        .update({
+          status: "done",
+          progress_percent: 100
+        })
+        .eq("id", taskId)
+        .neq("status", "done");
+
+      if (taskErr) {
+        console.error("[reviewTaskReport] Task Update Error:", taskErr);
+        return { success: true, warning: "Report approved, but failed to mark task as done." };
+      }
+    }
+
+    revalidatePath(`/admin/projects/${projectId}/tasks/${taskId}`);
+    revalidatePath(`/admin/my-work`);
+    return { success: true };
+  } catch (error) {
+    console.error("[reviewTaskReport] Exception:", error);
+    return { error: error.message || "An unexpected error occurred." };
+  }
 }

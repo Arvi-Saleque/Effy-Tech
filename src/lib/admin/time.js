@@ -48,6 +48,16 @@ export function getTodayDateString() {
   return getDateStringInTimeZone(0);
 }
 
+export function formatDhakaDate() {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: APP_TIME_ZONE,
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date());
+}
+
 /**
  * Returns tomorrow's date in YYYY-MM-DD format (Asia/Dhaka timezone).
  */

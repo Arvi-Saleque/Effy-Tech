@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatDateTime } from "@/lib/admin/time";
+import { formatDateTime, formatDuration } from "@/lib/admin/time";
 import { ChevronDown, ChevronUp, History, Info } from "lucide-react";
 
 export default function LegacyHistoryTab({ data }) {
@@ -37,13 +37,14 @@ export default function LegacyHistoryTab({ data }) {
   };
 
   const headers = [
-    { key: "title", label: "Legacy Assignment" },
-    { key: "assignedTo", label: "Assigned To" },
-    { key: "status", label: "Status" },
-    { key: "targetDate", label: "Target Date" },
-    { key: "sessionsCount", label: "Sessions" },
-    { key: "totalMinutes", label: "Tracked Minutes" },
-    { key: "completionDate", label: "Completion Date" },
+    { key: 'title', label: 'Assignment' },
+    { key: 'assignedTo', label: 'Assignee' },
+    { key: 'status', label: 'Status' },
+    { key: 'targetDate', label: 'Target Date' },
+    { key: 'sessionsCount', label: 'Sessions' },
+    { key: 'blocksCount', label: 'Blocks' },
+    { key: 'totalTrackedSeconds', label: 'Tracked Time' },
+    { key: 'completionDate', label: 'Completed Date' }
   ];
 
   return (
@@ -102,9 +103,15 @@ export default function LegacyHistoryTab({ data }) {
                 </td>
                 <td className="py-4 text-xs font-mono">{item.targetDate || "-"}</td>
                 <td className="py-4 text-xs font-mono">{item.sessionsCount}</td>
-                <td className="py-4 text-xs font-mono text-emerald-400 font-bold">{item.totalMinutes}m</td>
+                <td className="py-4 text-xs font-mono">{item.blocksCount}</td>
+                <td className="py-4 text-xs font-mono text-emerald-400 font-bold">{formatDuration(item.totalTrackedSeconds)}</td>
                 <td className="py-4 text-xs text-neutral-400">
-                  {item.completionDate ? formatDateTime(item.completionDate, false) : "-"}
+                  {item.completionDate ? (
+                    <div className="flex flex-col">
+                      <span>{formatDateTime(item.completionDate, false)}</span>
+                      {item.completionDateIsFallback && <span className="text-[9px] text-amber-500/80 mt-0.5">Legacy fallback date</span>}
+                    </div>
+                  ) : "-"}
                 </td>
               </tr>
             ))}
