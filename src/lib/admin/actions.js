@@ -353,8 +353,8 @@ export async function resumeWork() {
     const now = new Date();
     const breakStart = new Date(session.break_started_at);
     const diffMs = now.getTime() - breakStart.getTime();
-    const diffMins = Math.max(0, Math.round(diffMs / 60000));
-    const newBreakMinutes = (session.break_minutes || 0) + diffMins;
+    const diffMinsExact = diffMs / 60000;
+    const newBreakMinutes = (session.break_minutes || 0) + diffMinsExact;
 
     const { error: updateError } = await supabase
       .from("work_sessions")
@@ -434,7 +434,7 @@ export async function endWork() {
     if (activeBlock) {
       const start = new Date(activeBlock.started_at);
       const diffMs = now.getTime() - start.getTime();
-      const diffMins = Math.max(0, Math.round(diffMs / 60000));
+      const diffMins = Math.max(0, Math.floor(diffMs / 60000));
 
       await supabase
         .from("work_blocks")
@@ -450,23 +450,32 @@ export async function endWork() {
     if (session.status === "break" && session.break_started_at) {
       const breakStart = new Date(session.break_started_at);
       const diffMs = now.getTime() - breakStart.getTime();
-      const diffMins = Math.max(0, Math.round(diffMs / 60000));
-      finalBreakMinutes += diffMins;
+      const diffMinsExact = diffMs / 60000;
+      finalBreakMinutes += diffMinsExact;
     }
 
     // Fetch all today work_blocks for this session and user and sum total_minutes where status = done
     const { data: doneBlocks, error: dbError } = await supabase
       .from("work_blocks")
-      .select("total_minutes")
+      .select("started_at, ended_at, total_minutes")
       .eq("session_id", session.id)
       .eq("user_id", profile.id)
       .eq("status", "done");
 
     if (dbError) throw dbError;
 
-    const finalTotalMinutes = doneBlocks
-      ? doneBlocks.reduce((acc, b) => acc + (b.total_minutes || 0), 0)
-      : 0;
+    let exactMsSum = 0;
+    if (doneBlocks) {
+      doneBlocks.forEach(b => {
+        if (b.started_at && b.ended_at) {
+          exactMsSum += Math.max(0, new Date(b.ended_at).getTime() - new Date(b.started_at).getTime());
+        } else {
+          exactMsSum += (b.total_minutes || 0) * 60000;
+        }
+      });
+    }
+    
+    const finalTotalMinutes = Math.floor(exactMsSum / 60000);
 
     const { error: updateError } = await supabase
       .from("work_sessions")
@@ -526,7 +535,7 @@ async function finishActiveBlock(supabase, profileId, today, now, completeTask) 
 
   const start = new Date(activeBlock.started_at);
   const diffMs = now.getTime() - start.getTime();
-  const diffMins = Math.max(0, Math.round(diffMs / 60000));
+  const diffMins = Math.max(0, Math.floor(diffMs / 60000));
 
   // Set work_block done
   const { error: blockErr } = await supabase
