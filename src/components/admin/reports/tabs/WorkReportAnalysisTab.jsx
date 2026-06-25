@@ -134,7 +134,7 @@ export default function WorkReportAnalysisTab({ data }) {
             {sortedData.map(report => (
               <tr key={report.id} className="text-neutral-300 hover:bg-neutral-800/20 transition-colors">
                 <td className="py-4 font-semibold text-neutral-100">
-                  <Link href={`/admin/reports/${report.taskId}`} className="text-indigo-400 hover:text-indigo-300 transition-colors">
+                  <Link href={`/admin/projects/${report.projectId}/tasks/${report.taskId}`} className="text-indigo-400 hover:text-indigo-300 transition-colors">
                     {report.taskTitle}
                   </Link>
                 </td>

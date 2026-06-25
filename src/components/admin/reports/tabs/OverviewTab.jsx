@@ -41,7 +41,7 @@ function DistributionList({ title, data, colorClass }) {
               <div className="w-full bg-neutral-800/50 rounded-full h-1.5">
                 <div 
                   className={`h-1.5 rounded-full ${colorClass}`} 
-                  style={{ width: \`\${(val / total) * 100}%\` }}
+                  style={{ width: `${(val / total) * 100}%` }}
                 ></div>
               </div>
             </div>

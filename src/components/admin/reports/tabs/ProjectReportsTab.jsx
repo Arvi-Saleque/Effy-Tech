@@ -101,7 +101,7 @@ export default function ProjectReportsTab({ data }) {
                   <div className="w-16 h-1.5 bg-neutral-800 rounded-full">
                     <div 
                       className="h-1.5 bg-indigo-500 rounded-full" 
-                      style={{ width: \`\${project.progress}%\` }}
+                      style={{ width: `${project.progress}%` }}
                     />
                   </div>
                 </div>

@@ -9,6 +9,7 @@ import {
   getLegacyHistoryData,
   fetchFilteredProfiles
 } from "@/lib/admin/report-actions";
+import { getTodayDateString, getDateStringWithOffset, getCurrentMonthStartDateString } from "@/lib/admin/time";
 import ReportsController from "@/components/admin/reports/ReportsController";
 
 export const dynamic = "force-dynamic";
@@ -30,23 +31,18 @@ export default async function ReportsPage(props) {
   };
 
   // Resolve standard date ranges if not custom
-  const todayStr = new Date(Date.now() + 6*60*60*1000).toISOString().split("T")[0]; // Dhaka approximate fallback
+  const todayStr = getTodayDateString();
   if (currentFilters.range === "today" && !currentFilters.startDate) {
     currentFilters.startDate = todayStr;
     currentFilters.endDate = todayStr;
   } else if (currentFilters.range === "week" && !currentFilters.startDate) {
-    const d = new Date(Date.now() + 6*60*60*1000);
-    d.setDate(d.getDate() - 6);
-    currentFilters.startDate = d.toISOString().split("T")[0];
+    currentFilters.startDate = getDateStringWithOffset(-6);
     currentFilters.endDate = todayStr;
   } else if (currentFilters.range === "month" && !currentFilters.startDate) {
-    const d = new Date(Date.now() + 6*60*60*1000);
-    currentFilters.startDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;
+    currentFilters.startDate = getCurrentMonthStartDateString();
     currentFilters.endDate = todayStr;
   } else if (currentFilters.range === "last30" && !currentFilters.startDate) {
-    const d = new Date(Date.now() + 6*60*60*1000);
-    d.setDate(d.getDate() - 30);
-    currentFilters.startDate = d.toISOString().split("T")[0];
+    currentFilters.startDate = getDateStringWithOffset(-30);
     currentFilters.endDate = todayStr;
   }
   
@@ -68,9 +64,18 @@ export default async function ReportsPage(props) {
     supabase.from("clients").select("id, name").order("name"),
     supabase.from("projects").select("id, name").order("name")
   ]);
+
+  if (membersRes.error || clientsRes.error || projectsRes.error) {
+    return (
+      <div className="p-8 text-center text-red-400 bg-neutral-900 rounded-xl border border-red-900">
+        <h2 className="text-xl font-bold mb-2">Filters Unavailable</h2>
+        <p>Failed to load filter options. Please try again later.</p>
+      </div>
+    );
+  }
   
   const filterOptions = {
-    members: membersRes,
+    members: membersRes.data || [],
     clients: clientsRes.data || [],
     projects: projectsRes.data || []
   };

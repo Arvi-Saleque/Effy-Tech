@@ -134,7 +134,12 @@ export default function TaskReportsTab({ data }) {
                 {task.reportSubmittedDate || "-"}
               </td>
               <td className="py-4 text-xs text-neutral-400">
-                {task.completedDate ? formatDateTime(task.completedDate, false) : "-"}
+                {task.completedDate ? (
+                  <div className="flex flex-col">
+                    <span>{formatDateTime(task.completedDate, false)}</span>
+                    {task.completedDateIsFallback && <span className="text-[9px] text-amber-500/80 mt-0.5">Legacy fallback date</span>}
+                  </div>
+                ) : "-"}
               </td>
             </tr>
           ))}
