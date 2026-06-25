@@ -1,10 +1,16 @@
 import Link from "next/link";
-import { AlertCircle, ArrowRight, FileText } from "lucide-react";
+import { AlertCircle, ArrowRight, ExternalLink, FileText } from "lucide-react";
 import { ROUTE_BASE } from "../data/college-data";
 
 export default function NoticeCard({ notice }) {
+  const actionUrl = notice.attachmentUrl || notice.sourceUrl || `${ROUTE_BASE}/notices#${notice.id}`;
+  const isExternal = actionUrl.startsWith("http");
+
   return (
-    <article className={notice.urgent ? "pgc-notice-card is-urgent" : "pgc-notice-card"}>
+    <article
+      className={notice.urgent ? "pgc-notice-card is-urgent" : "pgc-notice-card"}
+      id={notice.id}
+    >
       <div className="pgc-notice-card__meta">
         <span className={`pgc-category pgc-category--${categoryClass(notice.category)}`}>
           {notice.category}
@@ -19,25 +25,25 @@ export default function NoticeCard({ notice }) {
       <dl>
         <div>
           <dt>প্রকাশ</dt>
-          <dd>{notice.date}</dd>
+          <dd>{notice.publishedAt}</dd>
         </div>
-        {notice.deadline ? (
-          <div>
-            <dt>শেষ তারিখ</dt>
-            <dd>{notice.deadline}</dd>
-          </div>
-        ) : null}
       </dl>
       <div className="pgc-notice-card__footer">
-        {notice.attachment ? (
+        {notice.attachmentUrl ? (
           <span>
             <FileText size={15} aria-hidden="true" /> সংযুক্তি
           </span>
         ) : (
-          <span>বিস্তারিত দেখুন</span>
+          <span>
+            <ExternalLink size={15} aria-hidden="true" /> পুরোনো ওয়েবসাইটে দেখুন
+          </span>
         )}
-        <Link href={`${ROUTE_BASE}/notices#${notice.id}`}>
-          বিস্তারিত
+        <Link
+          href={actionUrl}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+        >
+          {notice.attachmentUrl ? "ডাউনলোড" : "দেখুন"}
           <ArrowRight size={15} aria-hidden="true" />
         </Link>
       </div>

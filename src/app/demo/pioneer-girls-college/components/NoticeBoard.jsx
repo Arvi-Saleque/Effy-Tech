@@ -24,19 +24,18 @@ export default function NoticeBoard({ compact = false }) {
         <SectionHeader
           eyebrow="নোটিশ বোর্ড"
           title="সাম্প্রতিক ঘোষণা ও নির্দেশনা"
-          subtitle="এটি একটি ডেমো নোটিশ বোর্ড। বাস্তব নোটিশ যুক্ত হলে একই কাঠামোতে বিভাগ, তারিখ ও সংযুক্তি দেখানো যাবে।"
+          subtitle="কলেজের প্রকাশিত গুরুত্বপূর্ণ নোটিশ, পরীক্ষা, ফলাফল, বৃত্তি ও অনুষ্ঠানসংক্রান্ত ঘোষণা।"
           action={
             compact
               ? { label: "সব নোটিশ দেখুন", href: `${ROUTE_BASE}/notices` }
               : undefined
           }
         />
-        <div className="pgc-filter-tabs" role="tablist" aria-label="নোটিশ ফিল্টার">
+        <div className="pgc-filter-tabs" aria-label="নোটিশ ফিল্টার">
           {noticeCategories.map((category) => (
             <button
               type="button"
-              role="tab"
-              aria-selected={activeCategory === category}
+              aria-pressed={activeCategory === category}
               className={activeCategory === category ? "is-active" : undefined}
               key={category}
               onClick={() => setActiveCategory(category)}
@@ -46,9 +45,11 @@ export default function NoticeBoard({ compact = false }) {
           ))}
         </div>
         <div className="pgc-notice-grid">
-          {visibleNotices.map((notice) => (
-            <NoticeCard notice={notice} key={notice.id} />
-          ))}
+          {visibleNotices.length > 0 ? (
+            visibleNotices.map((notice) => <NoticeCard notice={notice} key={notice.id} />)
+          ) : (
+            <p className="pgc-empty-state">এই বিভাগে বর্তমানে কোনো নোটিশ পাওয়া যায়নি।</p>
+          )}
         </div>
         {!compact ? null : (
           <div className="pgc-section-action">

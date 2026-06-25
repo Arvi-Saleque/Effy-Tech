@@ -15,8 +15,8 @@ export default function HeroSection() {
     <section className="pgc-hero">
       <Image
         className="pgc-hero__image"
-        src={`${ASSET_PATH}/official-campus-05.jpg`}
-        alt="পাইওনিয়ার কলেজ ক্যাম্পাসে শিক্ষার্থী সচেতনতার দেয়ালচিত্র"
+        src={`${ASSET_PATH}/official-campus-04.jpeg`}
+        alt="সরকারি পাইওনিয়ার মহিলা কলেজ ক্যাম্পাসে বৃক্ষরোপণ কর্মসূচি"
         fill
         priority
         sizes="100vw"
@@ -28,7 +28,7 @@ export default function HeroSection() {
           <h1>{institution.tagline}</h1>
           <p>
             {institution.nameBn} জ্ঞান, মূল্যবোধ, আত্মবিশ্বাস ও দায়িত্বশীল নাগরিকত্বের
-            চর্চার মাধ্যমে শিক্ষার্থীদের উচ্চশিক্ষা ও ভবিষ্যৎ জীবনের জন্য প্রস্তুত করে।
+            চর্চার মাধ্যমে শিক্ষার্থীদের উচ্চশিক্ষা ও সুন্দর জীবনের জন্য প্রস্তুত করে।
           </p>
           <div className="pgc-hero__actions">
             <Link className="pgc-button pgc-button--gold" href={`${ROUTE_BASE}/about`}>

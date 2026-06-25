@@ -8,7 +8,7 @@ export default function ResultsPage() {
       <PageHero
         eyebrow="পরীক্ষা ও ফলাফল"
         title="রুটিন, ফলাফল, এডমিট কার্ড ও রেজিস্ট্রেশন"
-        description="পরীক্ষা-সম্পর্কিত সেবাগুলোকে আলাদা মডিউল হিসেবে সাজানো হয়েছে।"
+        description="পরীক্ষার রুটিন, ফলাফল, এডমিট কার্ড ও রেজিস্ট্রেশন কার্ড সংক্রান্ত নির্দেশনা নোটিশ বোর্ডের সঙ্গে যুক্ত।"
         breadcrumbs={[{ label: "পরীক্ষা ও ফলাফল" }]}
       />
       <section className="pgc-section">

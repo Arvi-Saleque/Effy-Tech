@@ -1,13 +1,12 @@
-import { ArrowUpRight, Clock3, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { institution } from "../data/college-data";
 import SectionHeader from "./SectionHeader";
 
 export default function ContactSection() {
   const contactRows = [
     { icon: MapPin, label: "ঠিকানা", value: institution.contact.address },
-    { icon: Phone, label: "ফোন", value: institution.contact.phone },
+    { icon: Phone, label: "অফিস ফোন", value: institution.contact.phone },
     { icon: Mail, label: "ই-মেইল", value: institution.contact.email },
-    { icon: Clock3, label: "অফিস সময়", value: institution.contact.hours },
   ];
 
   return (
@@ -17,7 +16,7 @@ export default function ContactSection() {
           <SectionHeader
             eyebrow="যোগাযোগ"
             title="কলেজ অফিস ও অবস্থান"
-            subtitle="কলেজের যাচাইকৃত ম্যাপ যুক্ত করা হয়েছে। ফোন, ই-মেইল ও অফিস সময় কর্তৃপক্ষের মাধ্যমে হালনাগাদযোগ্য।"
+            subtitle="কলেজ অফিস, ঠিকানা, অফিস ফোন, ই-মেইল এবং যাচাইকৃত Google Maps অবস্থান।"
           />
           <div className="pgc-contact-list">
             {contactRows.map(({ icon: IconComponent, label, value }) => (

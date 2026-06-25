@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import PageHero from "../components/PageHero";
 import SiteShell from "../components/SiteShell";
-import { admissionSteps, ROUTE_BASE } from "../data/college-data";
+import { admissionSteps, ROUTE_BASE, studentPayLinks } from "../data/college-data";
 
 export default function AdmissionPage() {
   return (
@@ -10,7 +10,7 @@ export default function AdmissionPage() {
       <PageHero
         eyebrow="ভর্তি"
         title="ভর্তি নির্দেশনা ও শিক্ষার্থী সেবা"
-        description="অনলাইন ভর্তি, ফি নির্দেশনা, প্রয়োজনীয় কাগজপত্র ও শিক্ষার্থী লগইন সেবার জন্য ডেমো কাঠামো।"
+        description="ভর্তি বিজ্ঞপ্তি, প্রয়োজনীয় কাগজপত্র, অনলাইন আবেদন, আবেদন ফি এবং শিক্ষার্থী সেবার গুরুত্বপূর্ণ প্রবেশপথ।"
         breadcrumbs={[{ label: "ভর্তি" }]}
       />
       <section className="pgc-section">
@@ -23,19 +23,35 @@ export default function AdmissionPage() {
               ))}
             </ul>
             <p>
-              আসল আবেদন লিংক, ফি, সময়সীমা ও নীতিমালা কলেজ কর্তৃপক্ষের যাচাই অনুযায়ী
-              যুক্ত করা হবে। এই পেজে কোনো সক্রিয় পেমেন্ট URL ব্যবহার করা হয়নি।
+              ভর্তি সংক্রান্ত সময়সীমা, যোগ্যতা ও বিস্তারিত নির্দেশনা নোটিশ বোর্ডে
+              প্রকাশিত হলে শিক্ষার্থীরা তা অনুসরণ করবে।
             </p>
-            <Link className="pgc-button pgc-button--primary" href={`${ROUTE_BASE}/notices`}>
+            <a className="pgc-button pgc-button--primary" href={studentPayLinks.onlineAdmission} target="_blank" rel="noopener noreferrer">
+              অনলাইন ভর্তি আবেদন
+              <ArrowRight size={17} aria-hidden="true" />
+            </a>
+            <Link className="pgc-button pgc-button--light" href={`${ROUTE_BASE}/notices`}>
               ভর্তি নোটিশ দেখুন
               <ArrowRight size={17} aria-hidden="true" />
             </Link>
           </article>
           <aside className="pgc-side-panel" id="student-services">
             <h2>শিক্ষার্থী সেবা</h2>
-            <p>শিক্ষার্থী লগইন, রেজিস্ট্রেশন, এডমিট কার্ড ও ফলাফল সেবার ডেমো প্রবেশপথ।</p>
+            <p>
+              StudentPay সেবার মাধ্যমে শিক্ষার্থী লগইন, অনলাইন ভর্তি ও প্রাথমিক
+              আবেদন ফি সংক্রান্ত প্রবেশপথ পাওয়া যায়।
+            </p>
+            <p>
+              <a className="pgc-text-link" href={studentPayLinks.login} target="_blank" rel="noopener noreferrer">
+                শিক্ষার্থী লগইন <ArrowRight size={15} aria-hidden="true" />
+              </a>
+            </p>
             <h2 id="fees">ফি প্রদান</h2>
-            <p>পেমেন্ট গেটওয়ে যাচাই না হওয়ায় এখানে নিরাপদ ডেমো নির্দেশনা রাখা হয়েছে।</p>
+            <p>
+              <a className="pgc-text-link" href={studentPayLinks.applyFees} target="_blank" rel="noopener noreferrer">
+                প্রাথমিক আবেদন ফি প্রদান <ArrowRight size={15} aria-hidden="true" />
+              </a>
+            </p>
           </aside>
         </div>
       </section>

@@ -32,8 +32,8 @@ export default function Footer() {
         <div className="pgc-footer__identity">
           <Brand compact />
           <p>{institution.identityNote}</p>
-          <Link className="pgc-footer__credit" href="/" target="_blank" rel="noopener noreferrer">
-            Designed & Developed by Effy Tech
+          <Link className="pgc-footer__credit" href="/">
+            ওয়েবসাইট ডিজাইন ও উন্নয়ন: Effy Tech
           </Link>
         </div>
         <FooterColumn title="দ্রুত লিংক" links={quickLinks} />
@@ -54,7 +54,7 @@ export default function Footer() {
             <MapPin size={15} aria-hidden="true" /> {institution.contact.address}
           </span>
           <span>
-            <Phone size={15} aria-hidden="true" /> {institution.contact.phone}
+            <Phone size={15} aria-hidden="true" /> অফিস ফোন: {institution.contact.phone}
           </span>
           <span>
             <Mail size={15} aria-hidden="true" /> {institution.contact.email}
@@ -63,7 +63,7 @@ export default function Footer() {
       </div>
       <div className="pgc-container pgc-footer__bottom">
         <span>© ২০২৬ {institution.nameBn}. সর্বস্বত্ব সংরক্ষিত।</span>
-        <span>এই ওয়েবসাইটটি ক্লায়েন্ট প্রেজেন্টেশনের জন্য Effy Tech demo.</span>
+        <span>ওয়েবসাইট ডিজাইন ও উন্নয়ন: Effy Tech</span>
       </div>
     </footer>
   );

@@ -9,7 +9,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="যোগাযোগ"
         title="কলেজ অফিস, সরকারি লিংক ও অবস্থান"
-        description="নির্ভুল যোগাযোগ তথ্য যাচাইয়ের আগে ফোন, ই-মেইল ও ম্যাপকে হালনাগাদযোগ্য হিসেবে রাখা হয়েছে।"
+        description="কলেজ অফিসের ঠিকানা, ফোন, ই-মেইল, সরকারি লিংক এবং Google Maps অবস্থান।"
         breadcrumbs={[{ label: "যোগাযোগ" }]}
       />
       <ContactSection />
