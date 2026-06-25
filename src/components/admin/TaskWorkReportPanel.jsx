@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useRef } from "react";
 import { formatDuration } from "@/lib/admin/time";
 import { submitTaskReport, reviewTaskReport, updateTaskReport } from "@/lib/admin/report-actions";
 import { CheckCircle2, Clock, CalendarDays, ExternalLink, Paperclip, AlertCircle, RefreshCw, X, Play } from "lucide-react";
@@ -10,6 +10,25 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
   const [showModal, setShowModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+
+  const actualStartDateRef = useRef(null);
+  const submittedDateRef = useRef(null);
+
+  const openDatePicker = (ref) => {
+    const input = ref.current;
+    if (!input) return;
+
+    try {
+      if (typeof input.showPicker === "function") {
+        input.showPicker();
+      } else {
+        input.focus();
+        input.click();
+      }
+    } catch {
+      input.focus();
+    }
+  };
 
   const reports = task.task_work_reports || [];
   const activeReport = reports.length > 0 ? reports[0] : null;
@@ -359,25 +378,63 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
               
               <form id="reportForm" onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">Actual Start Date *</label>
-                    <input 
-                      type="date" 
-                      required
-                      value={formData.actualStartDate}
-                      onChange={e => setFormData({...formData, actualStartDate: e.target.value})}
-                      className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-lg p-2.5 focus:border-indigo-500 outline-none"
-                    />
+                  <div className="cursor-pointer" onClick={() => openDatePicker(actualStartDateRef)}>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1 pointer-events-none">Actual Start Date *</label>
+                    <div className="relative">
+                      <input 
+                        ref={actualStartDateRef}
+                        type="date" 
+                        required
+                        value={formData.actualStartDate}
+                        onChange={e => setFormData({...formData, actualStartDate: e.target.value})}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDatePicker(actualStartDateRef);
+                        }}
+                        className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-lg p-2.5 pl-10 focus:border-indigo-500 outline-none cursor-pointer relative z-10"
+                        style={{ colorScheme: "dark" }}
+                      />
+                      <button
+                        type="button"
+                        tabIndex={-1}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 cursor-pointer text-indigo-400 hover:text-indigo-300 flex items-center justify-center p-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDatePicker(actualStartDateRef);
+                        }}
+                      >
+                        <CalendarDays className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">Submitted Date *</label>
-                    <input 
-                      type="date" 
-                      required
-                      value={formData.submittedDate}
-                      onChange={e => setFormData({...formData, submittedDate: e.target.value})}
-                      className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-lg p-2.5 focus:border-indigo-500 outline-none"
-                    />
+                  <div className="cursor-pointer" onClick={() => openDatePicker(submittedDateRef)}>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1 pointer-events-none">Submitted Date *</label>
+                    <div className="relative">
+                      <input 
+                        ref={submittedDateRef}
+                        type="date" 
+                        required
+                        value={formData.submittedDate}
+                        onChange={e => setFormData({...formData, submittedDate: e.target.value})}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDatePicker(submittedDateRef);
+                        }}
+                        className="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-lg p-2.5 pl-10 focus:border-indigo-500 outline-none cursor-pointer relative z-10"
+                        style={{ colorScheme: "dark" }}
+                      />
+                      <button
+                        type="button"
+                        tabIndex={-1}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 cursor-pointer text-indigo-400 hover:text-indigo-300 flex items-center justify-center p-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDatePicker(submittedDateRef);
+                        }}
+                      >
+                        <CalendarDays className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
