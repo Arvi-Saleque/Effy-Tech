@@ -5,10 +5,10 @@ import { requireAuth, requireAdmin } from "@/lib/admin/auth";
 import { 
   getTodayDateString, 
   getTomorrowDateString, 
-  calculateSessionDisplayMinutes,
+  calculateSessionDisplaySeconds,
   getDateStringWithOffset,
   getCurrentMonthStartDateString,
-  calculateWorkBlocksDisplayMinutes
+  calculateWorkBlocksDisplaySeconds
 } from "@/lib/admin/time";
 import { revalidatePath } from "next/cache";
 
@@ -72,17 +72,23 @@ export async function getMyWorkData() {
       .limit(10);
 
     // Fetch active project tasks assigned to this user
-    const { data: projectTasks } = await supabase
+    const { data: projectTasksRaw } = await supabase
       .from("project_tasks")
       .select(`
         *,
         projects (name, clients (name)),
-        task_assignees!inner(user_id)
+        task_assignees!inner(user_id),
+        task_work_reports(id, version_number, completion_status, submitted_date)
       `)
       .eq("task_assignees.user_id", profile.id)
       .neq("status", "archived")
       .neq("status", "cancelled")
       .order("updated_at", { ascending: false });
+
+    const projectTasks = projectTasksRaw?.map(t => ({
+      ...t,
+      task_work_reports: t.task_work_reports?.sort((a, b) => b.version_number - a.version_number) || []
+    })) || [];
 
     return {
       profile,
@@ -112,7 +118,7 @@ export async function getMyWorkData() {
 /**
  * Start or update today's work session.
  */
-export async function startWork({ currentWorkTitle, currentWorkNote, assignmentId }) {
+export async function startWork({ currentWorkTitle, currentWorkNote, assignmentId, sourceType = "legacy_assignment" }) {
   const profile = await requireAuth();
   try {
     if (!assignmentId) {
@@ -153,20 +159,42 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       }
     }
 
-    // Verify assignment
-    const { data: assignment, error: assignError } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("id", assignmentId)
-      .eq("assigned_to", profile.id)
-      .maybeSingle();
+    // Verify assignment or project task
+    let assignment = null;
+    let assignError = null;
+    
+    if (sourceType === "project_task") {
+      const { data, error } = await supabase
+        .from("project_tasks")
+        .select("*, task_assignees!inner(user_id)")
+        .eq("id", assignmentId)
+        .eq("task_assignees.user_id", profile.id)
+        .maybeSingle();
+      assignment = data;
+      assignError = error;
 
-    if (assignError || !assignment) {
-      return { error: "Selected assignment does not belong to you or does not exist." };
-    }
+      if (assignError || !assignment) {
+        return { error: "Selected project task does not belong to you or does not exist." };
+      }
+      if (assignment.status === "archived" || assignment.status === "cancelled") {
+        return { error: "Selected project task is already archived or cancelled." };
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("work_assignments")
+        .select("*")
+        .eq("id", assignmentId)
+        .eq("assigned_to", profile.id)
+        .maybeSingle();
+      assignment = data;
+      assignError = error;
 
-    if (assignment.status !== "pending" && assignment.status !== "in_progress") {
-      return { error: "Selected assignment is already done or cancelled." };
+      if (assignError || !assignment) {
+        return { error: "Selected assignment does not belong to you or does not exist." };
+      }
+      if (assignment.status !== "pending" && assignment.status !== "in_progress") {
+        return { error: "Selected assignment is already done or cancelled." };
+      }
     }
 
     const titleToUse = (currentWorkTitle || assignment.title || "").trim();
@@ -185,7 +213,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           status: "active",
           current_work_title: titleToUse,
           current_work_note: noteToUse,
-          assignment_id: assignmentId,
+          assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+          project_task_id: sourceType === "project_task" ? assignmentId : null,
+          source_type: sourceType,
           started_at: existingSession.started_at || now,
           ended_at: null,
           break_started_at: null
@@ -203,9 +233,12 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
           status: "active",
           current_work_title: titleToUse,
           current_work_note: noteToUse,
-          assignment_id: assignmentId,
+          assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+          project_task_id: sourceType === "project_task" ? assignmentId : null,
+          source_type: sourceType,
           started_at: now,
           break_minutes: 0,
+          break_seconds: 0,
           total_minutes: 0
         })
         .select()
@@ -216,10 +249,17 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
     }
 
     // Update assignment to in_progress
-    await supabase
-      .from("work_assignments")
-      .update({ status: "in_progress" })
-      .eq("id", assignmentId);
+    if (sourceType === "project_task") {
+      await supabase
+        .from("project_tasks")
+        .update({ status: "in_progress" })
+        .eq("id", assignmentId);
+    } else {
+      await supabase
+        .from("work_assignments")
+        .update({ status: "in_progress" })
+        .eq("id", assignmentId);
+    }
 
     // Create work block
     const { error: blockInsertError } = await supabase
@@ -227,7 +267,9 @@ export async function startWork({ currentWorkTitle, currentWorkNote, assignmentI
       .insert({
         user_id: profile.id,
         session_id: sessionId,
-        assignment_id: assignmentId,
+        assignment_id: sourceType === "legacy_assignment" ? assignmentId : null,
+        project_task_id: sourceType === "project_task" ? assignmentId : null,
+        source_type: sourceType,
         work_date: today,
         title: titleToUse,
         note: noteToUse,
@@ -318,14 +360,16 @@ export async function resumeWork() {
     const now = new Date();
     const breakStart = new Date(session.break_started_at);
     const diffMs = now.getTime() - breakStart.getTime();
-    const diffMins = Math.max(0, Math.round(diffMs / 60000));
-    const newBreakMinutes = (session.break_minutes || 0) + diffMins;
+    const diffSecs = Math.floor(diffMs / 1000);
+    const newBreakSeconds = (session.break_seconds || 0) + diffSecs;
+    const newBreakMinutes = Math.floor(newBreakSeconds / 60);
 
     const { error: updateError } = await supabase
       .from("work_sessions")
       .update({
         status: "active",
         break_started_at: null,
+        break_seconds: newBreakSeconds,
         break_minutes: newBreakMinutes
       })
       .eq("id", session.id);
@@ -399,7 +443,7 @@ export async function endWork() {
     if (activeBlock) {
       const start = new Date(activeBlock.started_at);
       const diffMs = now.getTime() - start.getTime();
-      const diffMins = Math.max(0, Math.round(diffMs / 60000));
+      const diffMins = Math.max(0, Math.floor(diffMs / 60000));
 
       await supabase
         .from("work_blocks")
@@ -412,26 +456,37 @@ export async function endWork() {
     }
 
     let finalBreakMinutes = session.break_minutes || 0;
+    let finalBreakSeconds = session.break_seconds || 0;
     if (session.status === "break" && session.break_started_at) {
       const breakStart = new Date(session.break_started_at);
       const diffMs = now.getTime() - breakStart.getTime();
-      const diffMins = Math.max(0, Math.round(diffMs / 60000));
-      finalBreakMinutes += diffMins;
+      const diffSecs = Math.floor(diffMs / 1000);
+      finalBreakSeconds += diffSecs;
+      finalBreakMinutes = Math.floor(finalBreakSeconds / 60);
     }
 
     // Fetch all today work_blocks for this session and user and sum total_minutes where status = done
     const { data: doneBlocks, error: dbError } = await supabase
       .from("work_blocks")
-      .select("total_minutes")
+      .select("started_at, ended_at, total_minutes")
       .eq("session_id", session.id)
       .eq("user_id", profile.id)
       .eq("status", "done");
 
     if (dbError) throw dbError;
 
-    const finalTotalMinutes = doneBlocks
-      ? doneBlocks.reduce((acc, b) => acc + (b.total_minutes || 0), 0)
-      : 0;
+    let exactMsSum = 0;
+    if (doneBlocks) {
+      doneBlocks.forEach(b => {
+        if (b.started_at && b.ended_at) {
+          exactMsSum += Math.max(0, new Date(b.ended_at).getTime() - new Date(b.started_at).getTime());
+        } else {
+          exactMsSum += (b.total_minutes || 0) * 60000;
+        }
+      });
+    }
+    
+    const finalTotalMinutes = Math.floor(exactMsSum / 60000);
 
     const { error: updateError } = await supabase
       .from("work_sessions")
@@ -439,11 +494,14 @@ export async function endWork() {
         status: "ended",
         ended_at: now.toISOString(),
         break_started_at: null,
+        break_seconds: finalBreakSeconds,
         break_minutes: finalBreakMinutes,
         total_minutes: finalTotalMinutes,
         current_work_title: null,
         current_work_note: "",
-        assignment_id: null
+        assignment_id: null,
+        project_task_id: null,
+        source_type: null
       })
       .eq("id", session.id);
 
@@ -489,7 +547,7 @@ async function finishActiveBlock(supabase, profileId, today, now, completeTask) 
 
   const start = new Date(activeBlock.started_at);
   const diffMs = now.getTime() - start.getTime();
-  const diffMins = Math.max(0, Math.round(diffMs / 60000));
+  const diffMins = Math.max(0, Math.floor(diffMs / 60000));
 
   // Set work_block done
   const { error: blockErr } = await supabase
@@ -503,23 +561,34 @@ async function finishActiveBlock(supabase, profileId, today, now, completeTask) 
 
   if (blockErr) throw blockErr;
 
-  if (activeBlock.assignment_id && completeTask) {
-    const { error: assignErr } = await supabase
-      .from("work_assignments")
-      .update({ status: "done" })
-      .eq("id", activeBlock.assignment_id)
-      .eq("assigned_to", profileId);
-      
-    if (assignErr) throw assignErr;
+  if (completeTask) {
+    if (activeBlock.source_type === "project_task" && activeBlock.project_task_id) {
+      const { error: assignErr } = await supabase
+        .from("project_tasks")
+        .update({ status: "done", progress_percent: 100, completed_at: now.toISOString() })
+        .eq("id", activeBlock.project_task_id);
+        
+      if (assignErr) throw assignErr;
+    } else if (activeBlock.assignment_id) {
+      const { error: assignErr } = await supabase
+        .from("work_assignments")
+        .update({ status: "done" })
+        .eq("id", activeBlock.assignment_id)
+        .eq("assigned_to", profileId);
+        
+      if (assignErr) throw assignErr;
+    }
   }
 
-  // Clear session current work fields (title = null, current_work_note = '', assignment_id = null)
+  // Clear session current work fields
   const { error: sessionErr } = await supabase
     .from("work_sessions")
     .update({
       current_work_title: null,
       current_work_note: "",
-      assignment_id: null
+      assignment_id: null,
+      project_task_id: null,
+      source_type: null
     })
     .eq("id", session.id);
 
@@ -650,7 +719,7 @@ export async function createAssignment({ assignedTo, title, description, workDat
 }
 
 /**
- * Fetch all data for the administrator dashboard view. Admin only.
+ * Fetch all data for the modern administrator dashboard view. Admin only.
  */
 export async function getAdminDashboardData() {
   const profile = await requireAdmin();
@@ -659,103 +728,199 @@ export async function getAdminDashboardData() {
     const today = getTodayDateString();
     const tomorrow = getTomorrowDateString();
 
-    // Fetch active admin profiles
-    const { data: profiles, error: profilesError } = await supabase
-      .from("admin_profiles")
-      .select("*")
-      .eq("is_active", true)
-      .order("name", { ascending: true });
+    // Run independent queries in parallel
+    const [
+      profilesRes,
+      clientsRes,
+      projectsRes,
+      tasksRes,
+      reportsRes,
+      sessionsRes,
+      blocksRes,
+      legacyAssignmentsRes
+    ] = await Promise.all([
+      // 1. Active Admins
+      supabase.from("admin_profiles").select("*").eq("is_active", true).order("name", { ascending: true }),
+      // 2. Clients
+      supabase.from("clients").select("id, name, status"),
+      // 3. Projects with members
+      supabase.from("projects").select(`
+        *,
+        clients (name, company_name),
+        project_members (user_id, project_role)
+      `),
+      // 4. Project Tasks with assignees
+      supabase.from("project_tasks").select(`
+        *,
+        task_assignees (user_id)
+      `),
+      // 5. Work Reports (needed for Awaiting Review state)
+      supabase.from("task_work_reports").select(`
+        id, task_id, submitted_by, actual_start_date, submitted_date,
+        version_number, completion_status, created_at, reviewed_at
+      `).order("version_number", { ascending: false }).order("created_at", { ascending: false }),
+      // 6. Work Sessions (today)
+      supabase.from("work_sessions").select("*").eq("work_date", today),
+      // 7. Work Blocks (today)
+      supabase.from("work_blocks").select("*").eq("work_date", today).order("started_at", { ascending: true }),
+      // 8. Legacy Assignments (pending, in progress) for active count & attention
+      supabase.from("work_assignments").select("*").in("status", ["pending", "in_progress"])
+    ]);
 
-    if (profilesError) throw profilesError;
-
-    // Fetch today's work sessions
-    const { data: sessions } = await supabase
-      .from("work_sessions")
-      .select("*")
-      .eq("work_date", today);
-
-    // Fetch today's assignments
-    const { data: todayAssignments } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("work_date", today);
-
-    // Fetch tomorrow's assignments
-    const { data: tomorrowAssignments } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .eq("work_date", tomorrow);
-
-    // Fetch today's work blocks for all users
-    const { data: todayWorkBlocks } = await supabase
-      .from("work_blocks")
-      .select("*")
-      .eq("work_date", today)
-      .order("started_at", { ascending: true });
-
-    // Fetch active/completed tasks for all founders
-    const { data: rawTeamTasks } = await supabase
-      .from("work_assignments")
-      .select("*")
-      .in("status", ["pending", "in_progress", "done"])
-      .order("created_at", { ascending: false })
-      .limit(100);
-
-    // Summary counts
-    const activeNow = todayWorkBlocks ? todayWorkBlocks.filter(b => b.status === "active").length : 0;
-    const onBreak = sessions ? sessions.filter(s => s.status === "break").length : 0;
+    // Check for critical query errors
+    let hasError = false;
+    const checkError = (res, name) => {
+      if (res.error) {
+        console.error(`Error fetching ${name}:`, res.error);
+        hasError = true;
+      }
+    };
     
-    // Sum of worked minutes today calculated from work blocks
-    let totalMinutesToday = 0;
-    if (profiles) {
-      profiles.forEach(member => {
-        const memberBlocks = todayWorkBlocks ? todayWorkBlocks.filter(b => b.user_id === member.id) : [];
-        const session = sessions ? sessions.find(s => s.user_id === member.id) : null;
-        totalMinutesToday += calculateWorkBlocksDisplayMinutes(memberBlocks, session);
-      });
-    }
-    const totalHoursToday = parseFloat((totalMinutesToday / 60).toFixed(1));
+    checkError(profilesRes, "admin_profiles");
+    checkError(clientsRes, "clients");
+    checkError(projectsRes, "projects");
+    checkError(tasksRes, "project_tasks");
+    checkError(reportsRes, "task_work_reports");
+    checkError(sessionsRes, "work_sessions");
+    checkError(blocksRes, "work_blocks");
+    checkError(legacyAssignmentsRes, "work_assignments");
 
-    // Helper map to lookup profile names
-    const profileMap = {};
-    if (profiles) {
-      profiles.forEach(p => {
-        profileMap[p.id] = p.name;
-      });
-    }
+    // If critical data failed to load, return an explicit error state to UI instead of misleading zeros
+    // Or we can let UI render partial, but we must pass down error flags.
+    // For now, we will just use the data if available or empty arrays, but we log the errors securely.
+    
+    const profiles = profilesRes.data || [];
+    const clients = clientsRes.data || [];
+    const projects = projectsRes.data || [];
+    const tasks = tasksRes.data || [];
+    const reports = reportsRes.data || [];
+    const sessions = sessionsRes.data || [];
+    const blocks = blocksRes.data || [];
+    const legacyAssignments = legacyAssignmentsRes.data || [];
 
-    const mapAssignmentNames = (list) => {
-      if (!list) return [];
-      return list.map(item => ({
-        ...item,
-        assignedToName: profileMap[item.assigned_to] || "Unknown",
-        assignedByName: profileMap[item.assigned_by] || "Unknown"
-      }));
+    // --- AGGREGATIONS ---
+
+    // 1. Working Now & Time
+    // Calculate unique active members
+    const activeMemberIds = new Set();
+    blocks.forEach(b => {
+      if (b.status === "active") {
+        activeMemberIds.add(b.user_id);
+      }
+    });
+    // Optional: detect multiple active blocks
+    const userActiveBlockCounts = {};
+    blocks.forEach(b => {
+      if (b.status === "active") {
+        userActiveBlockCounts[b.user_id] = (userActiveBlockCounts[b.user_id] || 0) + 1;
+        if (userActiveBlockCounts[b.user_id] > 1) {
+          console.warn(`User ${b.user_id} has multiple active work blocks!`);
+        }
+      }
+    });
+
+    const activeNow = activeMemberIds.size;
+    const onBreak = sessions.filter(s => s.status === "break").length;
+    
+    let totalSecondsToday = 0;
+    profiles.forEach(member => {
+      const memberBlocks = blocks.filter(b => b.user_id === member.id);
+      const session = sessions.find(s => s.user_id === member.id);
+      if (session) {
+        totalSecondsToday += calculateWorkBlocksDisplaySeconds(memberBlocks, session);
+      }
+    });
+    const totalHoursToday = parseFloat((totalSecondsToday / 3600).toFixed(1));
+
+    // 2. Latest Reports map to determine review counts
+    // Group by task_id + submitted_by, take the first (since ordered by version descending, created_at descending)
+    const latestReportsMap = new Map();
+    reports.forEach(r => {
+      const key = `${r.task_id}_${r.submitted_by}`;
+      if (!latestReportsMap.has(key)) {
+        latestReportsMap.set(key, r);
+      }
+    });
+    const latestReports = Array.from(latestReportsMap.values());
+    const awaitingReviewReports = latestReports.filter(r => r.completion_status === "submitted");
+    const revisionRequestedReports = latestReports.filter(r => r.completion_status === "revision_requested");
+
+    // 3. Projects
+    const currentProjects = projects.filter(p => ["planning", "active", "on_hold"].includes(p.status));
+    const activeProjects = projects.filter(p => p.status === "active");
+    const onHoldProjects = projects.filter(p => p.status === "on_hold");
+
+    // 4. Tasks
+    // exclude archived and cancelled
+    const activeTasks = tasks.filter(t => !["archived", "cancelled", "done"].includes(t.status));
+    const overdueTasks = tasks.filter(t => {
+      if (["archived", "cancelled", "done"].includes(t.status) || !t.due_date) return false;
+      // Date-only comparison
+      const dueStr = t.due_date.split("T")[0];
+      return dueStr < today;
+    });
+    const blockedTasks = tasks.filter(t => t.status === "blocked");
+    
+    // Status counts
+    const taskStatusCounts = {
+      backlog: tasks.filter(t => t.status === "backlog").length,
+      todo: tasks.filter(t => t.status === "todo").length,
+      in_progress: tasks.filter(t => t.status === "in_progress").length,
+      blocked: blockedTasks.length,
+      review: tasks.filter(t => t.status === "review").length,
+      done: tasks.filter(t => t.status === "done").length,
     };
 
+    // Helper map for profiles
+    const profileMap = {};
+    profiles.forEach(p => {
+      profileMap[p.id] = p.name;
+    });
+
     return {
-      profiles: profiles || [],
-      sessions: sessions || [],
-      todayAssignments: mapAssignmentNames(todayAssignments),
-      tomorrowAssignments: mapAssignmentNames(tomorrowAssignments),
-      todayWorkBlocks: todayWorkBlocks || [],
-      teamTasks: mapAssignmentNames(rawTeamTasks),
+      profiles,
+      clients,
+      projects,
+      tasks,
+      latestReports,
+      sessions,
+      blocks,
+      legacyAssignments,
+      hasError,
+      today,
       stats: {
         activeNow,
         onBreak,
-        totalHoursToday
+        totalHoursToday,
+        totalClients: clients.length,
+        currentProjects: currentProjects.length,
+        activeProjects: activeProjects.length,
+        onHoldProjects: onHoldProjects.length,
+        activeTasks: activeTasks.length,
+        overdueTasks: overdueTasks.length,
+        blockedTasks: blockedTasks.length,
+        reportsAwaitingReview: awaitingReviewReports.length,
+        revisionRequestedReports: revisionRequestedReports.length,
+        taskStatusCounts
       }
     };
   } catch (error) {
     console.error("Error in getAdminDashboardData:", error);
     return {
       profiles: [],
+      clients: [],
+      projects: [],
+      tasks: [],
+      latestReports: [],
       sessions: [],
-      todayAssignments: [],
-      tomorrowAssignments: [],
-      todayWorkBlocks: [],
-      teamTasks: [],
-      stats: { activeNow: 0, onBreak: 0, totalHoursToday: 0 }
+      blocks: [],
+      legacyAssignments: [],
+      stats: { 
+        activeNow: 0, onBreak: 0, totalHoursToday: 0, 
+        totalClients: 0, currentProjects: 0, activeProjects: 0, onHoldProjects: 0,
+        activeTasks: 0, overdueTasks: 0, blockedTasks: 0, reportsAwaitingReview: 0, revisionRequestedReports: 0,
+        taskStatusCounts: { backlog: 0, todo: 0, in_progress: 0, blocked: 0, review: 0, done: 0 }
+      }
     };
   }
 }
@@ -839,8 +1004,8 @@ export async function getReportsData(range) {
       const memberBlocks = rawWorkBlocks ? rawWorkBlocks.filter(b => b.user_id === member.id) : [];
       const todaySession = sessions ? sessions.find(s => s.user_id === member.id && s.work_date === today) : null;
 
-      const totalMinutes = calculateWorkBlocksDisplayMinutes(memberBlocks, todaySession);
-      const totalHours = parseFloat((totalMinutes / 60).toFixed(1));
+      const totalSeconds = calculateWorkBlocksDisplaySeconds(memberBlocks, todaySession);
+      const totalHours = parseFloat((totalSeconds / 3600).toFixed(1));
 
       const validBlocks = memberBlocks.filter(b => b.status !== "cancelled");
       const uniqueDates = new Set(validBlocks.map(b => b.work_date));
@@ -875,7 +1040,7 @@ export async function getReportsData(range) {
             status: session.status,
             current_work_title: session.current_work_title,
             break_minutes: session.break_minutes,
-            total_minutes: calculateWorkBlocksDisplayMinutes(dayBlocks, session)
+            total_minutes: calculateWorkBlocksDisplaySeconds(dayBlocks, session) / 60
           });
         }
       });

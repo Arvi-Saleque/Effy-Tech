@@ -8,10 +8,14 @@ import DueStatusBadge from "@/components/admin/DueStatusBadge";
 import TaskActions from "@/components/admin/TaskActions";
 import TaskAssignees from "@/components/admin/TaskAssignees";
 import SubtasksPanel from "@/components/admin/SubtasksPanel";
+import TaskWorkReportPanel from "@/components/admin/TaskWorkReportPanel";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/admin/auth";
 
 export default async function TaskDetailsPage({ params }) {
   const { projectId, taskId } = await params;
+  
+  const profile = await getCurrentProfile();
   
   const { data: task, error, notFound } = await getTaskById(taskId);
 
@@ -62,33 +66,57 @@ export default async function TaskDetailsPage({ params }) {
           </div>
 
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-            <h3 className="text-sm font-medium text-slate-300 mb-4">Details</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div>
-                <p className="text-xs text-slate-500 mb-1">Start Date</p>
-                <p className="text-sm text-slate-200">{task.start_date ? new Date(task.start_date).toLocaleDateString() : "-"}</p>
-              </div>
-              <div>
-                <p className="text-xs text-slate-500 mb-1">Due Date</p>
-                <div className="mt-0.5">
-                  {task.due_date ? <DueStatusBadge dueDate={task.due_date} isDone={task.status === "done"} /> : <span className="text-slate-600">-</span>}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs text-slate-500 mb-1">Est. Minutes</p>
-                <p className="text-sm text-slate-200">{task.estimated_minutes ? `${task.estimated_minutes}m` : "-"}</p>
-              </div>
-              <div>
-                <p className="text-xs text-slate-500 mb-1">Progress</p>
-                <div className="flex items-center gap-2">
-                  <ProgressBar progress={task.progress_percent} className="flex-1" />
-                  <span className="text-xs text-slate-400">{task.progress_percent}%</span>
-                </div>
-              </div>
+            <h3 className="text-sm font-medium text-slate-300 mb-4">Timeline & Details</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {(() => {
+                const firstTimer = task.work_blocks?.length > 0 ? [...task.work_blocks].sort((a, b) => new Date(a.started_at) - new Date(b.started_at))[0] : null;
+                const activeReport = task.task_work_reports?.length > 0 ? task.task_work_reports[0] : null;
+                const firstAssign = task.task_assignees?.length > 0 ? [...task.task_assignees].sort((a, b) => new Date(a.assigned_at) - new Date(b.assigned_at))[0] : null;
+
+                const actualStartedAt = firstTimer?.started_at || activeReport?.actual_start_date || task.start_date;
+                const assignedAt = firstAssign?.assigned_at;
+                const reportSubmittedAt = activeReport?.submitted_date;
+
+                return (
+                  <>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Started</p>
+                      <p className="text-sm text-slate-200">{actualStartedAt ? new Date(actualStartedAt).toLocaleDateString() : "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Assigned</p>
+                      <p className="text-sm text-slate-200">{assignedAt ? new Date(assignedAt).toLocaleDateString() : "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Due Date</p>
+                      <div className="mt-0.5">
+                        {task.due_date ? <DueStatusBadge dueDate={task.due_date} isDone={task.status === "done"} /> : <span className="text-slate-600">-</span>}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Report Submitted</p>
+                      <p className="text-sm text-slate-200">{reportSubmittedAt ? new Date(reportSubmittedAt).toLocaleDateString() : "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Est. Minutes</p>
+                      <p className="text-sm text-slate-200">{task.estimated_minutes ? `${task.estimated_minutes}m` : "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Progress</p>
+                      <div className="flex items-center gap-2">
+                        <ProgressBar progress={task.progress_percent} className="flex-1" />
+                        <span className="text-xs text-slate-400">{task.progress_percent}%</span>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
 
           <SubtasksPanel taskId={taskId} subtasks={task.project_subtasks} isTaskEditable={isEditable} />
+          
+          <TaskWorkReportPanel task={task} profile={profile} projectId={projectId} />
         </div>
 
         <div className="flex flex-col gap-6">

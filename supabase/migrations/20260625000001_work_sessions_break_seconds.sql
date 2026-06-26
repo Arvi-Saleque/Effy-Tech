@@ -1,0 +1,2 @@
+ALTER TABLE work_sessions
+ADD COLUMN break_seconds INTEGER NOT NULL DEFAULT 0;

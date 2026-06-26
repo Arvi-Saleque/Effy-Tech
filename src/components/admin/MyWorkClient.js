@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { startWork, takeBreak, resumeWork, endWork, markAssignmentDone, finishCurrentWorkForNow, completeCurrentTask } from "@/lib/admin/actions";
 import StatusBadge from "./StatusBadge";
 import WorkTimer from "./WorkTimer";
-import { formatDateTime } from "@/lib/admin/time";
+import { formatDateTime, formatDuration } from "@/lib/admin/time";
 import { Loader2, AlertCircle, CheckCircle2, Play, CornerDownRight, ClipboardList, Calendar, Coffee, Clock } from "lucide-react";
 
-function ActiveBlockTimer({ startedAt, session }) {
+function ActiveBlockTimer({ startedAt, session, previousAccumulatedMs = 0 }) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function ActiveBlockTimer({ startedAt, session }) {
         elapsedMs -= currentBreakMs;
       }
 
-      setSeconds(Math.max(0, Math.floor(elapsedMs / 1000)));
+      setSeconds(Math.max(0, Math.floor((elapsedMs + previousAccumulatedMs) / 1000)));
     };
     update();
 
@@ -65,41 +65,114 @@ export default function MyWorkClient({ initialData }) {
     };
   });
 
+  const [activeTab, setActiveTab] = useState("board");
+  
+  useEffect(() => {
+    const saved = localStorage.getItem("effy_mywork_tab");
+    if (saved) setActiveTab(saved);
+  }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    localStorage.setItem("effy_mywork_tab", tab);
+  };
+
+  const CUTOFF_DATE = new Date("2026-06-23T00:00:00Z");
+
+  const isOldLegacy = (task) => {
+    if (task.is_project_task) return false;
+    return new Date(task.created_at) < CUTOFF_DATE;
+  };
+
+  const filteredMyTasks = activeTab === "history" 
+    ? myTasks.filter(isOldLegacy)
+    : myTasks.filter(t => !isOldLegacy(t));
+
+  const filteredProjectTasks = activeTab === "history"
+    ? [] 
+    : mappedProjectTasks;
+
+  const filteredRecentDone = activeTab === "history"
+    ? recentDoneTasks.filter(isOldLegacy)
+    : recentDoneTasks.filter(t => !isOldLegacy(t));
+
   const allPending = [
-    ...myTasks.filter(t => t.status === "pending"),
-    ...mappedProjectTasks.filter(t => t.mapped_status === "pending")
+    ...filteredMyTasks.filter(t => t.status === "pending"),
+    ...filteredProjectTasks.filter(t => t.mapped_status === "pending")
   ];
 
   const allInProgress = [
-    ...myTasks.filter(t => t.status === "in_progress"),
-    ...mappedProjectTasks.filter(t => t.mapped_status === "in_progress")
+    ...filteredMyTasks.filter(t => t.status === "in_progress"),
+    ...filteredProjectTasks.filter(t => t.mapped_status === "in_progress")
   ];
 
   const allDone = [
-    ...recentDoneTasks,
-    ...mappedProjectTasks.filter(t => t.mapped_status === "done")
+    ...filteredRecentDone,
+    ...filteredProjectTasks.filter(t => t.mapped_status === "done")
   ];
 
+  const [optimisticState, setOptimisticState] = useState(null);
+  
+  useEffect(() => {
+    setOptimisticState(null);
+  }, [todaySession, todayWorkBlocks, myTasks, projectTasks]);
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const isPageLoading = isLoading || isPending;
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
-  const status = todaySession ? todaySession.status : "offline";
+  const baseStatus = todaySession ? todaySession.status : "offline";
+  const status = optimisticState?.action === "take_break" ? "break"
+               : optimisticState?.action === "resume" ? "active"
+               : baseStatus;
+               
   const isWorking = status === "active" || status === "break";
-  const isEnded = status === "ended";
+  const isEnded = status === "ended" || optimisticState?.action === "end_work";
 
-  const activeBlock = todayWorkBlocks.find(b => b.status === "active");
-  const completedWorkBlocks = todayWorkBlocks.filter(b => b.status !== "active");
+  let activeBlock = todayWorkBlocks.find(b => b.status === "active");
+  if (optimisticState) {
+    if (optimisticState.action === "finish" || optimisticState.action === "complete" || optimisticState.action === "end_work") {
+      activeBlock = null;
+    } else if (optimisticState.action === "start" || optimisticState.action === "resume") {
+      activeBlock = {
+        status: "active",
+        assignment_id: optimisticState.isProjectTask === false ? optimisticState.taskId : activeBlock?.assignment_id,
+        project_task_id: optimisticState.isProjectTask === true ? optimisticState.taskId : activeBlock?.project_task_id,
+        started_at: optimisticState.timestamp ? new Date(optimisticState.timestamp).toISOString() : (activeBlock?.started_at || new Date().toISOString()),
+        source_type: optimisticState.isProjectTask ? "project_task" : "legacy_assignment",
+      };
+    }
+  }
+
+  const completedWorkBlocks = todayWorkBlocks.filter(b => b.status === "done");
+
+  let activeBlockAccumulatedMs = 0;
+  if (activeBlock) {
+    const taskId = activeBlock.assignment_id || activeBlock.project_task_id;
+    if (taskId) {
+      completedWorkBlocks.forEach(b => {
+        if (b.assignment_id === taskId || b.project_task_id === taskId) {
+          if (b.started_at && b.ended_at) {
+            activeBlockAccumulatedMs += new Date(b.ended_at).getTime() - new Date(b.started_at).getTime();
+          } else {
+            activeBlockAccumulatedMs += (b.total_minutes || 0) * 60000;
+          }
+        }
+      });
+    }
+  }
 
   // Derived display status
   let displayStatus = "offline";
-  if (!todaySession) {
+  if (!todaySession && !optimisticState) {
     displayStatus = "offline";
-  } else if (todaySession.status === "ended") {
+  } else if (isEnded) {
     displayStatus = "workday_ended";
-  } else if (todaySession.status === "break") {
+  } else if (status === "break") {
     displayStatus = "break";
-  } else if (todaySession.status === "active") {
+  } else if (status === "active" || optimisticState?.action === "start") {
     displayStatus = activeBlock ? "task_active" : "workday_open";
   }
 
@@ -109,103 +182,114 @@ export default function MyWorkClient({ initialData }) {
   };
 
   const handleFinishCurrentWorkForNow = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "finish" });
     clearMessages();
 
     try {
       const res = await finishCurrentWorkForNow();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused for now. It remains In Progress.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to pause task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleCompleteCurrentTask = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "complete" });
     clearMessages();
 
     try {
       const res = await completeCurrentTask();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task completed and moved to Done!");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to complete task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
 
-  const handleStartAssignment = async (title, id) => {
-    setIsLoading(true);
+  const handleStartAssignment = async (title, id, isProjectTask = false) => {
+    setOptimisticState({ action: "start", taskId: id, title, isProjectTask, timestamp: Date.now() });
     clearMessages();
 
     try {
       const res = await startWork({
         currentWorkTitle: title,
-        currentWorkNote: `Working on assignment: ${title}`,
-        assignmentId: id
+        currentWorkNote: `Working on ${isProjectTask ? "project task" : "assignment"}: ${title}`,
+        assignmentId: id,
+        sourceType: isProjectTask ? "project_task" : "legacy_assignment"
       });
 
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg(`Started task: "${title}"`);
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
-      setErrorMsg("Failed to start assignment task.");
-    } finally {
-      setIsLoading(false);
+      setOptimisticState(null);
+      setErrorMsg(`Failed to start ${isProjectTask ? "project task" : "assignment"}.`);
     }
   };
 
   const handleTakeBreak = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "take_break", timestamp: Date.now() });
     clearMessages();
 
     try {
       const res = await takeBreak();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task paused.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to pause task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleResumeWork = async () => {
-    setIsLoading(true);
+    setOptimisticState({ action: "resume" });
     clearMessages();
 
     try {
       const res = await resumeWork();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Task resumed.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to resume task.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -220,21 +304,23 @@ export default function MyWorkClient({ initialData }) {
     );
     if (!secondConfirm) return;
 
-    setIsLoading(true);
+    setOptimisticState({ action: "end_work" });
     clearMessages();
 
     try {
       const res = await endWork();
       if (res.error) {
+        setOptimisticState(null);
         setErrorMsg(res.error);
       } else {
         setSuccessMsg("Workday ended successfully.");
-        router.refresh();
+        startTransition(() => {
+          router.refresh();
+        });
       }
     } catch (err) {
+      setOptimisticState(null);
       setErrorMsg("Failed to end workday.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -251,6 +337,20 @@ export default function MyWorkClient({ initialData }) {
           ? "bg-neutral-950/10 border-neutral-800/40 opacity-70"
           : "bg-neutral-900/40 border-neutral-800/80 hover:border-neutral-700/60"
     } ${isProjectTask ? "cursor-pointer hover:bg-neutral-800/40" : ""}`;
+
+    const activeReport = isProjectTask && task.task_work_reports?.length > 0 ? task.task_work_reports[0] : null;
+    const reportStatus = activeReport?.completion_status;
+    const hasApprovedReport = isProjectTask && task.task_work_reports?.some(r => r.completion_status === "approved");
+    const canSubmitReport = isProjectTask && !hasApprovedReport && !["archived", "cancelled", "done"].includes(task.status) && (!activeReport || activeReport.completion_status === "revision_requested");
+
+    const renderReportBadge = () => {
+      if (!activeReport) return null;
+      if (reportStatus === "submitted") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0">Awaiting Review</span>;
+      if (reportStatus === "revision_requested") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">Revision Requested</span>;
+      if (reportStatus === "rejected") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-400 shrink-0">Report Rejected</span>;
+      if (reportStatus === "approved") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">Report Approved</span>;
+      return null;
+    };
 
     const cardContent = (
       <>
@@ -273,11 +373,16 @@ export default function MyWorkClient({ initialData }) {
             )}
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            {isProjectTask && (
+            {isProjectTask ? (
               <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400 shrink-0">
                 Project Task
               </span>
+            ) : (
+              <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-orange-400 shrink-0">
+                Legacy Assignment
+              </span>
             )}
+            {renderReportBadge()}
             <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
               isDone ? "bg-neutral-850 border-neutral-800 text-neutral-450" :
               (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
@@ -305,33 +410,43 @@ export default function MyWorkClient({ initialData }) {
         )}
 
         {/* Action Button */}
-        {!isProjectTask && buttonText && !isEnded && (
-          <div className="pt-2 border-t border-neutral-800/40 flex justify-end">
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id); }}
-              disabled={!!activeBlock || isEnded}
-              title={activeBlock ? "Finish or complete the active task first." : ""}
-              className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Play className="h-3 w-3 fill-emerald-400/20" />
-              {buttonText}
-            </button>
+        {(buttonText || canSubmitReport) && !isEnded && (
+          <div className="pt-2 border-t border-neutral-800/40 flex justify-end gap-2 mt-2">
+            {canSubmitReport && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/admin/projects/${task.project_id}/tasks/${task.id}`); }}
+                className="px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 hover:border-indigo-500/40 text-indigo-400 text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1"
+              >
+                <ClipboardList className="h-3 w-3" />
+                {reportStatus === 'revision_requested' ? 'Resubmit Report' : 'Submit Report'}
+              </button>
+            )}
+            {buttonText && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleStartAssignment(task.title, task.id, isProjectTask); }}
+                disabled={!!activeBlock || isEnded || !!optimisticState}
+                title={activeBlock ? "Finish or complete the active task first." : ""}
+                className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 disabled:text-neutral-600 disabled:border-neutral-800/50 disabled:bg-transparent text-xs font-semibold rounded-lg transition-all duration-200 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Play className="h-3 w-3 fill-emerald-400/20" />
+                {buttonText}
+              </button>
+            )}
           </div>
         )}
       </>
     );
 
     return (
-      <button 
+      <div 
         key={task.id} 
         className={cardClasses}
         onClick={() => {
           if (isProjectTask) router.push(`/admin/projects/${task.project_id}/tasks/${task.id}`);
         }}
-        type="button"
       >
         {cardContent}
-      </button>
+      </div>
     );
   };
 
@@ -414,7 +529,7 @@ export default function MyWorkClient({ initialData }) {
                     Task Elapsed
                   </span>
                   <div className="text-2xl">
-                    <ActiveBlockTimer startedAt={activeBlock.started_at} session={todaySession} />
+                    <ActiveBlockTimer startedAt={activeBlock.started_at} session={todaySession} previousAccumulatedMs={activeBlockAccumulatedMs} />
                   </div>
                 </div>
               </div>
@@ -422,7 +537,7 @@ export default function MyWorkClient({ initialData }) {
               {/* Task Actions (Pause / Resume / Finish / Complete) */}
               <div className="mt-5 space-y-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  {isLoading ? (
+                  {optimisticState ? (
                     <div className="flex items-center gap-2 text-xs text-neutral-400 py-2">
                       <Loader2 className="h-4 w-4 animate-spin text-emerald-400" />
                       <span>Processing...</span>
@@ -484,7 +599,7 @@ export default function MyWorkClient({ initialData }) {
                 </div>
 
                 {/* Explanation text */}
-                {!isLoading && status === "active" && (
+                {!optimisticState && status === "active" && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-neutral-800/40 text-[11px] text-neutral-500 leading-relaxed">
                     <p>
                       <strong className="text-blue-400/80">Finish For Now:</strong> Stops the timer but keeps this task In Progress.
@@ -529,7 +644,7 @@ export default function MyWorkClient({ initialData }) {
               <div className="pt-1">
                 <button
                   onClick={handleEndWork}
-                  disabled={isLoading}
+                  disabled={!!optimisticState}
                   className="py-2.5 px-5 bg-red-500/15 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-bold rounded-xl transition-all duration-200 disabled:opacity-50"
                 >
                   End Full Workday
@@ -565,10 +680,34 @@ export default function MyWorkClient({ initialData }) {
 
       {/* Bottom Section: My Task Board */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
-          <ClipboardList className="h-5 w-5 text-emerald-400" />
-          My Task Board
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h3 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-emerald-400" />
+            {activeTab === "history" ? "Older Assignments (History)" : "My Task Board"}
+          </h3>
+          <div className="flex bg-neutral-900/60 border border-neutral-800/80 p-1 rounded-xl">
+            <button
+              onClick={() => handleTabChange("board")}
+              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 ${
+                activeTab === "board" 
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20" 
+                  : "text-neutral-500 hover:text-neutral-300 border border-transparent"
+              }`}
+            >
+              Default Board
+            </button>
+            <button
+              onClick={() => handleTabChange("history")}
+              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 ${
+                activeTab === "history" 
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20" 
+                  : "text-neutral-500 hover:text-neutral-300 border border-transparent"
+              }`}
+            >
+              History
+            </button>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* To Do column */}
@@ -583,7 +722,7 @@ export default function MyWorkClient({ initialData }) {
               {allPending.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks in To Do.</div>
               ) : (
-                allPending.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Start Task", task.is_project_task))
+                allPending.map(task => renderBoardTaskCard(task, "Start Task", task.is_project_task))
               )}
             </div>
           </div>
@@ -600,7 +739,7 @@ export default function MyWorkClient({ initialData }) {
               {allInProgress.length === 0 ? (
                 <div className="text-center py-12 text-xs text-neutral-600 italic">No tasks In Progress.</div>
               ) : (
-                allInProgress.map(task => renderBoardTaskCard(task, task.is_project_task ? null : "Continue Task", task.is_project_task))
+                allInProgress.map(task => renderBoardTaskCard(task, "Continue Task", task.is_project_task))
               )}
             </div>
           </div>
@@ -635,17 +774,27 @@ export default function MyWorkClient({ initialData }) {
           </h3>
           <div className="space-y-3">
             {completedWorkBlocks.map((block) => {
-              const linkedAssignment = myTasks.find(a => a.id === block.assignment_id) || 
+              const linkedLegacy = myTasks.find(a => a.id === block.assignment_id) || 
                                        recentDoneTasks.find(a => a.id === block.assignment_id);
-              const formatBlockDuration = (minutes) => {
-                if (!minutes || minutes <= 0) return "0m";
-                const hrs = Math.floor(minutes / 60);
-                const mins = minutes % 60;
-                if (hrs > 0) {
-                  return `${hrs}h ${mins}m`;
-                }
-                return `${mins}m`;
-              };
+              const linkedProjectTask = projectTasks.find(p => p.id === block.project_task_id);
+              
+              let blockDurationSecs = 0;
+              if (block.started_at && block.ended_at) {
+                blockDurationSecs = Math.max(0, Math.floor((new Date(block.ended_at).getTime() - new Date(block.started_at).getTime()) / 1000));
+              } else {
+                blockDurationSecs = (block.total_minutes || 0) * 60;
+              }
+
+              let sourceLabel = "Manual Work";
+              let taskTitle = "";
+              if (block.source_type === "project_task" && linkedProjectTask) {
+                sourceLabel = "Project Task";
+                taskTitle = linkedProjectTask.title;
+              } else if ((block.source_type === "legacy_assignment" || block.assignment_id) && linkedLegacy) {
+                sourceLabel = "Legacy Assignment";
+                taskTitle = linkedLegacy.title;
+              }
+
               return (
                 <div 
                   key={block.id} 
@@ -654,34 +803,27 @@ export default function MyWorkClient({ initialData }) {
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-neutral-200">{block.title}</span>
-                        {linkedAssignment ? (
+                        <span className="font-semibold text-neutral-200">{block.title || (block.source_type === "project_task" ? "Project Task Session" : "Task Session")}</span>
+                        {taskTitle ? (
                           <span className="text-[10px] bg-neutral-850 text-neutral-450 px-1.5 py-0.5 rounded border border-neutral-800/40">
-                            Task: {linkedAssignment.title}
+                            {sourceLabel}: {taskTitle}
                           </span>
                         ) : (
                           <span className="text-[10px] bg-neutral-950/20 text-neutral-505 px-1.5 py-0.5 rounded border border-neutral-800/20 italic">
-                            Manual work block
+                            {sourceLabel}
                           </span>
                         )}
                       </div>
                       {block.note && (
                         <p className="text-neutral-450 italic font-light">&ldquo;{block.note}&rdquo;</p>
                       )}
-                      <div className="text-[10px] text-neutral-500 flex items-center gap-2">
-                        <span>Started: {formatDateTime(block.started_at, true)}</span>
-                        {block.ended_at && (
-                          <span>• Ended: {formatDateTime(block.ended_at, true)}</span>
-                        )}
+                      <div className="text-[10px] text-neutral-600 font-mono">
+                        {formatDateTime(block.started_at)} &mdash; {formatDateTime(block.ended_at)}
                       </div>
                     </div>
-
-                    <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
-                      <span className="text-[9px] font-semibold tracking-wide uppercase px-1.5 py-0.5 rounded bg-neutral-850 border border-neutral-850 text-neutral-450">
-                        Done
-                      </span>
-                      <span className="font-mono font-medium text-neutral-400">
-                        {formatBlockDuration(block.total_minutes)}
+                    <div className="text-right">
+                      <span className="text-sm font-mono font-bold text-neutral-300">
+                        {formatDuration(blockDurationSecs)}
                       </span>
                     </div>
                   </div>
