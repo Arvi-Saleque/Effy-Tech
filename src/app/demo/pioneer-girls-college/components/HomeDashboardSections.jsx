@@ -17,8 +17,8 @@ const visibleImportantLinks = importantLinks.slice(0, 6);
 const visibleNotices = notices.slice(0, 5);
 const visibleFacts = institutionalFacts.slice(0, 6);
 const visibleFacilities = facilities.slice(0, 8);
-const visibleNews = newsEvents.slice(0, 4);
-const visibleGallery = galleryItems.slice(0, 4);
+const visibleNews = [...newsEvents, ...newsEvents].slice(0, 4);
+const visibleGallery = [...galleryItems, ...galleryItems].slice(0, 4);
 
 export default function HomeDashboardSections() {
   return (
@@ -147,30 +147,32 @@ function NewsPanel() {
   return (
     <article className="pgc-home-card pgc-home-news-panel">
       <DashboardHeader title="সংবাদ ও আপডেট" href={`${ROUTE_BASE}/gallery`} action="সব সংবাদ" />
-      {featured ? (
-        <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
-          <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 760px) 100vw, 42vw" />
-          <span className="pgc-home-news-date">
-            <strong>{getNoticeDateParts(featured.date).day}</strong>
-            <small>{getNoticeDateParts(featured.date).monthYear}</small>
-          </span>
-          <span className="pgc-home-feature-news__text">
-            <strong>{featured.title}</strong>
-            <small>{featured.summary}</small>
-          </span>
-        </Link>
-      ) : null}
-      <div className="pgc-home-news-list">
-        {otherNews.map((event) => (
-          <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
-            <Image src={event.image} alt={event.title} width={120} height={82} sizes="120px" />
-            <span>
-              <time>{event.date}</time>
-              <strong>{event.title}</strong>
+      <div className="pgc-home-news-content">
+        {featured ? (
+          <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
+            <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 760px) 100vw, 28vw" />
+            <span className="pgc-home-news-date">
+              <strong>{getNoticeDateParts(featured.date).day}</strong>
+              <small>{getNoticeDateParts(featured.date).monthYear}</small>
             </span>
-            <ArrowRight size={15} aria-hidden="true" />
+            <span className="pgc-home-feature-news__text">
+              <strong>{featured.title}</strong>
+              <small>{featured.summary}</small>
+            </span>
           </Link>
-        ))}
+        ) : null}
+        <div className="pgc-home-news-list">
+          {otherNews.map((event, index) => (
+            <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={`${event.title}-${index}`}>
+              <Image src={event.image} alt={event.title} width={132} height={92} sizes="132px" />
+              <span>
+                <time>{event.date}</time>
+                <strong>{event.title}</strong>
+              </span>
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
       </div>
     </article>
   );
