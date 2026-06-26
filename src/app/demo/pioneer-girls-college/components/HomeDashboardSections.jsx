@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import {
   academicPrograms,
   facilities,
@@ -13,7 +13,7 @@ import {
 } from "../data/college-data";
 import Icon from "./Icon";
 
-const visibleImportantLinks = importantLinks.slice(0, 9);
+const visibleImportantLinks = importantLinks.slice(0, 6);
 const visibleNotices = notices.slice(0, 5);
 const visibleFacts = institutionalFacts.slice(0, 6);
 const visibleFacilities = facilities.slice(0, 8);
@@ -98,16 +98,22 @@ function InstitutionSummaryCard() {
 
 function ImportantLinksCard() {
   return (
-    <article className="pgc-home-card pgc-home-important-links">
-      <h2>গুরুত্বপূর্ণ লিঙ্ক</h2>
-      <div className="pgc-home-important-list">
+    <article className="pgc-home-card pgc-home-services">
+      <DashboardHeader title="গুরুত্বপূর্ণ লিঙ্ক" />
+      <div className="pgc-home-service-list">
         {visibleImportantLinks.map((link) => (
-          <a className="pgc-home-important-row" href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>
-            <CheckCircle2 size={17} aria-hidden="true" />
-            <span>{link.label}</span>
+          <a className="pgc-home-service-row" href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>
+            <span>
+              <Icon name="ExternalLink" size={19} />
+            </span>
+            <strong>{link.label}</strong>
+            <ChevronRight size={17} aria-hidden="true" />
           </a>
         ))}
       </div>
+      <a className="pgc-home-service-cta" href="https://www.pioneergirlscollege.edu.bd/" target="_blank" rel="noopener noreferrer">
+        সকল গুরুত্বপূর্ণ লিঙ্ক
+      </a>
     </article>
   );
 }
