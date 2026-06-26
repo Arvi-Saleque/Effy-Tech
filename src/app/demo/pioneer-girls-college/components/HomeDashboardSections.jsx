@@ -1,12 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, ChevronRight, ExternalLink, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import {
   academicPrograms,
   facilities,
   galleryItems,
-  importantLinks,
-  institution,
   institutionalFacts,
   newsEvents,
   notices,
@@ -226,44 +224,6 @@ function DashboardHeader({ title, href, action, id }) {
           <ArrowRight size={15} aria-hidden="true" />
         </Link>
       ) : null}
-    </div>
-  );
-}
-
-export function FooterMapPanel() {
-  return (
-    <div className="pgc-footer-map">
-      <h2>আমাদের অবস্থান</h2>
-      <iframe
-        title="Government Pioneer Women's College, Khulna map"
-        src={institution.contact.mapEmbedUrl}
-        allowFullScreen
-        loading="lazy"
-        referrerPolicy="strict-origin-when-cross-origin"
-      />
-      <a href={institution.contact.mapUrl} target="_blank" rel="noopener noreferrer">
-        Google Maps এ দেখুন
-        <ExternalLink size={13} aria-hidden="true" />
-      </a>
-    </div>
-  );
-}
-
-export function FooterContactList() {
-  return (
-    <div className="pgc-footer-contact-list">
-      <span>
-        <MapPin size={15} aria-hidden="true" /> {institution.contact.address}
-      </span>
-      <span>
-        <Phone size={15} aria-hidden="true" /> {institution.contact.phone}
-      </span>
-      <span>
-        <Mail size={15} aria-hidden="true" /> {institution.contact.email}
-      </span>
-      <span>
-        <CalendarDays size={15} aria-hidden="true" /> রবি - বৃহস্পতিবার: সকাল ৯:০০ - বিকাল ৪:০০
-      </span>
     </div>
   );
 }
