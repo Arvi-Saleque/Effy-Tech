@@ -1013,7 +1013,6 @@
   cursor: pointer;
   transform: none;
   transition:
-    width 320ms ease,
     background-color 250ms ease,
     border-color 250ms ease,
     transform 250ms ease;
@@ -1021,7 +1020,6 @@
 
 .pgc-hero-control:hover,
 .pgc-hero-control:focus-visible {
-  width: 128px;
   border-color: rgba(212, 160, 23, 0.8);
   background: rgba(11, 93, 59, 0.94);
   transform: translateY(-2px);
@@ -1064,23 +1062,16 @@
 }
 
 .pgc-hero-control__label {
-  min-width: max-content;
-  color: #ffffff;
-  font-size: 0.84rem;
-  font-weight: 900;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 220ms ease, transform 220ms ease;
+  display: none;
 }
 
 .pgc-hero-control--previous .pgc-hero-control__label {
-  order: 2;
+  display: none;
 }
 
 .pgc-hero-control:hover .pgc-hero-control__label,
 .pgc-hero-control:focus-visible .pgc-hero-control__label {
-  opacity: 1;
-  transform: translateX(0);
+  display: none;
 }
 
 .pgc-hero-status {
