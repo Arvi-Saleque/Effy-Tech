@@ -1,0 +1,277 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, CalendarDays, ChevronRight, ExternalLink, Mail, MapPin, Phone } from "lucide-react";
+import {
+  academicPrograms,
+  facilities,
+  galleryItems,
+  importantLinks,
+  institution,
+  institutionalFacts,
+  newsEvents,
+  notices,
+  quickServices,
+  ROUTE_BASE,
+} from "../data/college-data";
+import Icon from "./Icon";
+
+const studentServices = quickServices.slice(3, 8);
+const visibleNotices = notices.slice(0, 5);
+const visibleFacts = institutionalFacts.slice(0, 6);
+const visibleFacilities = facilities.slice(0, 8);
+const visibleNews = newsEvents.slice(0, 4);
+const visibleGallery = galleryItems.slice(0, 4);
+
+export default function HomeDashboardSections() {
+  return (
+    <div className="pgc-home-dashboard">
+      <section className="pgc-home-overview" aria-label="কলেজ তথ্য ও সেবা">
+        <div className="pgc-container pgc-home-overview__grid">
+          <NoticeSummaryCard />
+          <InstitutionSummaryCard />
+          <StudentServicesCard />
+        </div>
+      </section>
+      <FacilitiesStrip />
+      <section className="pgc-home-media" aria-label="সংবাদ ও গ্যালারি">
+        <div className="pgc-container pgc-home-media__grid">
+          <NewsPanel />
+          <GalleryPanel />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function NoticeSummaryCard() {
+  return (
+    <article className="pgc-home-card pgc-home-notices">
+      <DashboardHeader title="নোটিশ বোর্ড" href={`${ROUTE_BASE}/notices`} action="সব নোটিশ" />
+      <div className="pgc-home-notice-list">
+        {visibleNotices.map((notice) => {
+          const date = getNoticeDateParts(notice.publishedAt);
+
+          return (
+            <Link className="pgc-home-notice-row" href={`${ROUTE_BASE}/notices#${notice.id}`} key={notice.id}>
+              <span className="pgc-home-notice-date">
+                <strong>{date.day}</strong>
+                <small>{date.monthYear}</small>
+              </span>
+              <span className="pgc-home-notice-text">
+                <span>
+                  {notice.title}
+                  {notice.urgent ? <b>নতুন</b> : null}
+                </span>
+              </span>
+              <ChevronRight size={16} aria-hidden="true" />
+            </Link>
+          );
+        })}
+      </div>
+      <Link className="pgc-home-card__footer" href={`${ROUTE_BASE}/notices`}>
+        সব নোটিশ দেখুন
+        <ArrowRight size={16} aria-hidden="true" />
+      </Link>
+    </article>
+  );
+}
+
+function InstitutionSummaryCard() {
+  return (
+    <article className="pgc-home-card pgc-home-institution">
+      <DashboardHeader title="একাডেমিক সংক্ষিপ্ত" />
+      <div className="pgc-home-fact-grid">
+        {visibleFacts.map((fact) => (
+          <div className="pgc-home-fact" key={fact.label}>
+            <span>{fact.label}</span>
+            <strong>{fact.value}</strong>
+          </div>
+        ))}
+      </div>
+      <h3>প্রোগ্রামসমূহ</h3>
+      <div className="pgc-home-program-pills">
+        {academicPrograms.flatMap((program) => program.points).slice(0, 6).map((point) => (
+          <span key={point}>{point}</span>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function StudentServicesCard() {
+  return (
+    <article className="pgc-home-card pgc-home-services">
+      <DashboardHeader title="শিক্ষার্থী সেবা" />
+      <div className="pgc-home-service-list">
+        {studentServices.map((service) => {
+          const linkProps = service.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+
+          return (
+            <Link className="pgc-home-service-row" href={service.href} key={service.title} {...linkProps}>
+              <span>
+                <Icon name={service.icon} size={19} />
+              </span>
+              <strong>{service.title}</strong>
+              <ChevronRight size={17} aria-hidden="true" />
+            </Link>
+          );
+        })}
+      </div>
+      <Link className="pgc-home-service-cta" href={`${ROUTE_BASE}/admission`}>
+        মেধালিপি ও ভর্তিপ্রক্রিয়া
+      </Link>
+    </article>
+  );
+}
+
+function FacilitiesStrip() {
+  return (
+    <section className="pgc-home-facilities" aria-labelledby="pgc-home-facilities-title">
+      <div className="pgc-container pgc-home-card">
+        <DashboardHeader title="আমাদের সুবিধাসমূহ" id="pgc-home-facilities-title" />
+        <div className="pgc-home-facility-grid">
+          {visibleFacilities.map((facility) => (
+            <Link
+              className="pgc-home-facility"
+              href={facility.href || `${ROUTE_BASE}/academic`}
+              key={facility.title}
+            >
+              <Icon name={facility.icon} size={25} />
+              <strong>{facility.title}</strong>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewsPanel() {
+  const [featured, ...otherNews] = visibleNews;
+
+  return (
+    <article className="pgc-home-card pgc-home-news-panel">
+      <DashboardHeader title="সংবাদ ও আপডেট" href={`${ROUTE_BASE}/gallery`} action="সব সংবাদ" />
+      {featured ? (
+        <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
+          <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 760px) 100vw, 42vw" />
+          <span className="pgc-home-news-date">
+            <strong>{getNoticeDateParts(featured.date).day}</strong>
+            <small>{getNoticeDateParts(featured.date).monthYear}</small>
+          </span>
+          <span className="pgc-home-feature-news__text">
+            <strong>{featured.title}</strong>
+            <small>{featured.summary}</small>
+          </span>
+        </Link>
+      ) : null}
+      <div className="pgc-home-news-list">
+        {otherNews.map((event) => (
+          <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
+            <Image src={event.image} alt={event.title} width={120} height={82} sizes="120px" />
+            <span>
+              <time>{event.date}</time>
+              <strong>{event.title}</strong>
+            </span>
+            <ArrowRight size={15} aria-hidden="true" />
+          </Link>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function GalleryPanel() {
+  const [featured, ...otherItems] = visibleGallery;
+
+  return (
+    <article className="pgc-home-card pgc-home-gallery-panel">
+      <DashboardHeader title="গ্যালারি" href={`${ROUTE_BASE}/gallery`} action="সব গ্যালারি" />
+      {featured ? <GalleryTile item={featured} featured /> : null}
+      <div className="pgc-home-gallery-thumbs">
+        {otherItems.map((item) => (
+          <GalleryTile item={item} key={item.image} />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function GalleryTile({ item, featured = false }) {
+  return (
+    <Link className={featured ? "pgc-home-gallery-tile is-featured" : "pgc-home-gallery-tile"} href={`${ROUTE_BASE}/gallery`}>
+      <Image src={item.image} alt={item.alt} width={featured ? 680 : 240} height={featured ? 320 : 150} sizes={featured ? "(max-width: 760px) 100vw, 48vw" : "(max-width: 760px) 33vw, 12vw"} />
+      <span>
+        <strong>{item.caption}</strong>
+        <ArrowRight size={14} aria-hidden="true" />
+      </span>
+    </Link>
+  );
+}
+
+function DashboardHeader({ title, href, action, id }) {
+  const titleNode = (
+    <h2 id={id}>
+      <span aria-hidden="true" />
+      {title}
+    </h2>
+  );
+
+  return (
+    <div className="pgc-home-card__header">
+      {titleNode}
+      {href && action ? (
+        <Link href={href}>
+          {action}
+          <ArrowRight size={15} aria-hidden="true" />
+        </Link>
+      ) : null}
+    </div>
+  );
+}
+
+export function FooterMapPanel() {
+  return (
+    <div className="pgc-footer-map">
+      <h2>আমাদের অবস্থান</h2>
+      <iframe
+        title="Government Pioneer Women's College, Khulna map"
+        src={institution.contact.mapEmbedUrl}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
+      <a href={institution.contact.mapUrl} target="_blank" rel="noopener noreferrer">
+        Google Maps এ দেখুন
+        <ExternalLink size={13} aria-hidden="true" />
+      </a>
+    </div>
+  );
+}
+
+export function FooterContactList() {
+  return (
+    <div className="pgc-footer-contact-list">
+      <span>
+        <MapPin size={15} aria-hidden="true" /> {institution.contact.address}
+      </span>
+      <span>
+        <Phone size={15} aria-hidden="true" /> {institution.contact.phone}
+      </span>
+      <span>
+        <Mail size={15} aria-hidden="true" /> {institution.contact.email}
+      </span>
+      <span>
+        <CalendarDays size={15} aria-hidden="true" /> রবি - বৃহস্পতিবার: সকাল ৯:০০ - বিকাল ৪:০০
+      </span>
+    </div>
+  );
+}
+
+function getNoticeDateParts(dateText) {
+  const parts = dateText.split(" ");
+  return {
+    day: parts[0] || "",
+    monthYear: parts.slice(1).join(" "),
+  };
+}
