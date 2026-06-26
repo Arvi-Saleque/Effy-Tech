@@ -1081,63 +1081,30 @@
   z-index: 4;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(4, 38, 25, 0.56);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+  justify-content: center;
   transform: translateX(-50%);
-}
-
-.pgc-hero-progress {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.76rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-
-.pgc-hero-progress__track {
-  width: 120px;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.pgc-hero-progress__fill {
-  display: block;
-  height: 100%;
-  width: 100%;
-  border-radius: inherit;
-  background: var(--accent-gold);
-  transform-origin: left;
-  animation: pgc-hero-progress 6s linear forwards;
-}
-
-.pgc-hero-status.is-paused .pgc-hero-progress__fill {
-  animation-play-state: paused;
 }
 
 .pgc-hero-dots {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .pgc-hero-dots button {
-  width: 7px;
-  height: 7px;
-  border: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.46);
   border-radius: 999px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
   cursor: pointer;
-  transition: width 220ms ease, background 220ms ease, transform 220ms ease;
+  transition:
+    width 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease;
 }
 
 .pgc-hero-dots button:hover,
@@ -1146,17 +1113,9 @@
 }
 
 .pgc-hero-dots button.is-active {
-  width: 28px;
+  width: 30px;
+  border-color: rgba(242, 195, 74, 0.9);
   background: #f2c34a;
-}
-
-@keyframes pgc-hero-progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
 }
 
 /* Quick services overlap */
@@ -2219,8 +2178,7 @@
   .pgc-hero__title-line,
   .pgc-hero__title-text,
   .pgc-hero__title-highlight::after,
-  .pgc-hero-principal,
-  .pgc-hero-progress__fill {
+  .pgc-hero-principal {
     animation: none !important;
     transform: none;
     transition: none !important;
@@ -2477,22 +2435,10 @@
 
   .pgc-hero-status {
     bottom: 30px;
-    gap: 10px;
-    padding: 9px 12px;
-    background: rgba(4, 38, 25, 0.68);
-  }
-
-  .pgc-hero-progress {
-    gap: 9px;
-    font-size: 0.72rem;
-  }
-
-  .pgc-hero-progress__track {
-    width: 74px;
   }
 
   .pgc-hero-dots {
-    display: none;
+    display: flex;
   }
 
   .pgc-service-grid,

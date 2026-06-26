@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Building2, GraduationCap, Quote } from "lucide-react";
 import { heroSlides, institution, principal } from "../data/college-data";
 
-const AUTOPLAY_DELAY = 6000;
+const AUTOPLAY_DELAY = 10000;
 const SWIPE_THRESHOLD = 42;
 const TRANSITION_LOCK_MS = 850;
 
@@ -312,13 +312,6 @@ export default function HeroSlider() {
         <span className="pgc-sr-only">
           স্লাইড {activeIndex + 1}, মোট {heroSlides.length}
         </span>
-        <div className="pgc-hero-progress" aria-hidden="true">
-          <span>{formatSlideNumber(activeIndex + 1)}</span>
-          <span className="pgc-hero-progress__track">
-            <span className="pgc-hero-progress__fill" key={activeIndex} />
-          </span>
-          <span>{formatSlideNumber(heroSlides.length)}</span>
-        </div>
         <div className="pgc-hero-dots" aria-label="স্লাইড নির্বাচন">
           {heroSlides.map((slide, index) => (
             <button
@@ -360,8 +353,4 @@ function previousIndex(index) {
 
 function nextIndex(index) {
   return normalizeIndex(index + 1);
-}
-
-function formatSlideNumber(number) {
-  return String(number).padStart(2, "0");
 }
