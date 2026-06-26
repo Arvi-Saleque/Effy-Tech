@@ -13,7 +13,6 @@ const TRANSITION_LOCK_MS = 850;
 export default function HeroSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState("next");
-  const [isPaused, setIsPaused] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isTabHidden, setIsTabHidden] = useState(false);
   const [failedImageIds, setFailedImageIds] = useState(() => new Set());
@@ -23,7 +22,6 @@ export default function HeroSlider() {
   const transitionTimerRef = useRef(null);
   const activeSlide = heroSlides[activeIndex];
   const principalExcerpt = getPrincipalExcerpt(principal.message);
-  const isProgressPaused = isPaused || isReducedMotion || isTabHidden;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -41,7 +39,7 @@ export default function HeroSlider() {
   }, [setIsTabHidden]);
 
   useEffect(() => {
-    if (isPaused || isReducedMotion || isTabHidden) {
+    if (isReducedMotion || isTabHidden) {
       return undefined;
     }
 
@@ -67,7 +65,7 @@ export default function HeroSlider() {
     }, AUTOPLAY_DELAY);
 
     return () => window.clearTimeout(timer);
-  }, [activeIndex, isPaused, isReducedMotion, isTabHidden, isTransitioning]);
+  }, [activeIndex, isReducedMotion, isTabHidden, isTransitioning]);
 
   useEffect(() => {
     return () => {
@@ -131,18 +129,6 @@ export default function HeroSlider() {
     }
   };
 
-  const handleBlur = (event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsPaused(false);
-    }
-  };
-
-  const handleMouseLeave = (event) => {
-    if (!event.currentTarget.contains(document.activeElement)) {
-      setIsPaused(false);
-    }
-  };
-
   const handleTouchStart = (event) => {
     touchStartXRef.current = event.touches[0]?.clientX ?? null;
   };
@@ -172,10 +158,6 @@ export default function HeroSlider() {
       aria-label="প্রধান পরিচিতি স্লাইডার"
       aria-roledescription="carousel"
       tabIndex={0}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={handleMouseLeave}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={handleBlur}
       onKeyDown={handleKeyDown}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -308,7 +290,7 @@ export default function HeroSlider() {
         </aside>
       </div>
 
-      <div className={`pgc-hero-status ${isProgressPaused ? "is-paused" : ""}`}>
+      <div className="pgc-hero-status">
         <span className="pgc-sr-only">
           স্লাইড {activeIndex + 1}, মোট {heroSlides.length}
         </span>
