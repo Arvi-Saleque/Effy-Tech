@@ -47,6 +47,63 @@ export const principal = {
     "নারীশিক্ষা আত্মমর্যাদা, আত্মবিশ্বাস ও দায়িত্বশীল নাগরিকত্বের ভিত্তি। সরকারি পাইওনিয়ার মহিলা কলেজে আমরা মানসম্মত শিক্ষা, নৈতিকতা ও মানবিক মূল্যবোধের সমন্বয়ে শিক্ষার্থীদের জ্ঞানচর্চা ও ব্যক্তিত্ব বিকাশে সহায়তা করি। শিক্ষার্থীরা যেন আত্মবিশ্বাসী, সচেতন ও সমাজের কল্যাণে নিবেদিত নাগরিক হিসেবে গড়ে ওঠে, সেটিই আমাদের অঙ্গীকার।",
 };
 
+export const heroSlides = [
+  {
+    id: "heritage",
+    eyebrow: "প্রতিষ্ঠিত ১৯৬৯",
+    titleLineOne: "নারীশিক্ষা, জ্ঞান ও",
+    titleHighlight: "আত্মমর্যাদার অঙ্গীকার",
+    description:
+      "সরকারি পাইওনিয়ার মহিলা কলেজ দীর্ঘদিন ধরে মানসম্মত শিক্ষা, নৈতিকতা ও আত্মবিশ্বাসের বিকাশে কাজ করে আসছে।",
+    image: `${ASSET_PATH}/official-campus-02.jpeg`,
+    imageAlt: "সরকারি পাইওনিয়ার মহিলা কলেজের সাংস্কৃতিক আলোচনা সভা",
+    primaryAction: {
+      label: "কলেজ সম্পর্কে জানুন",
+      href: `${ROUTE_BASE}/about`,
+    },
+    secondaryAction: {
+      label: "ভর্তি তথ্য",
+      href: `${ROUTE_BASE}/admission`,
+    },
+  },
+  {
+    id: "academics",
+    eyebrow: "উচ্চমাধ্যমিক, ডিগ্রি ও অনার্স",
+    titleLineOne: "জ্ঞান ও দক্ষতার মাধ্যমে",
+    titleHighlight: "উজ্জ্বল ভবিষ্যতের প্রস্তুতি",
+    description:
+      "অভিজ্ঞ শিক্ষকমণ্ডলী ও বিভাগভিত্তিক একাডেমিক কার্যক্রমের মাধ্যমে শিক্ষার্থীদের উচ্চশিক্ষার জন্য প্রস্তুত করা হয়।",
+    image: `${ASSET_PATH}/official-campus-04.jpeg`,
+    imageAlt: "কলেজ ক্যাম্পাসে বৃক্ষরোপণ কর্মসূচি",
+    primaryAction: {
+      label: "একাডেমিক কার্যক্রম",
+      href: `${ROUTE_BASE}/academic`,
+    },
+    secondaryAction: {
+      label: "বিভাগসমূহ",
+      href: `${ROUTE_BASE}/departments`,
+    },
+  },
+  {
+    id: "student-life",
+    eyebrow: "শিক্ষা, সংস্কৃতি ও মূল্যবোধ",
+    titleLineOne: "আত্মবিশ্বাসী ও দায়িত্বশীল",
+    titleHighlight: "নারী নেতৃত্বের বিকাশ",
+    description:
+      "শিক্ষা, সংস্কৃতি ও সহশিক্ষা কার্যক্রমের সমন্বয়ে শিক্ষার্থীদের সুপ্ত প্রতিভা এবং নেতৃত্বের গুণাবলি বিকাশ করা হয়।",
+    image: `${ASSET_PATH}/official-campus-02.jpeg`,
+    imageAlt: "কলেজের শিক্ষার্থী অংশগ্রহণমূলক সাংস্কৃতিক আয়োজন",
+    primaryAction: {
+      label: "কলেজ কার্যক্রম",
+      href: `${ROUTE_BASE}/gallery`,
+    },
+    secondaryAction: {
+      label: "সর্বশেষ নোটিশ",
+      href: `${ROUTE_BASE}/notices`,
+    },
+  },
+];
+
 export const navItems = [
   { label: "হোম", href: ROUTE_BASE },
   {
@@ -434,7 +491,7 @@ export const galleryItems = [
     album: "শিক্ষার্থী কার্যক্রম",
   },
   {
-    image: `${ASSET_PATH}/official-campus-04.jpeg`,
+    image: `${ASSET_PATH}/official-campus-green-campus.jpeg`,
     alt: "ক্যাম্পাসে সবুজায়ন ও শিক্ষার্থী কার্যক্রম",
     caption: "সবুজ ক্যাম্পাস উদ্যোগ",
     album: "ক্যাম্পাস",
