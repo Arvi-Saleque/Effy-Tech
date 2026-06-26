@@ -653,7 +653,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(420px, 440px);
   align-items: center;
   gap: 52px;
-  padding: 88px 0 118px;
+  padding: 88px 0 168px;
 }
 
 .pgc-hero__content {
@@ -684,7 +684,7 @@
   max-width: 760px;
   margin: 18px 0 0;
   color: #ffffff;
-  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-size: clamp(2.4rem, 3.45vw, 4rem);
   line-height: 1.16;
   font-weight: 900;
 }
@@ -993,7 +993,8 @@
 /* Hero navigation */
 .pgc-hero-control {
   position: absolute;
-  top: 50%;
+  top: auto;
+  bottom: 86px;
   z-index: 4;
   width: 58px;
   min-width: 58px;
@@ -1010,7 +1011,7 @@
   backdrop-filter: blur(10px);
   color: #ffffff;
   cursor: pointer;
-  transform: translateY(-50%);
+  transform: none;
   transition:
     width 320ms ease,
     background-color 250ms ease,
@@ -1023,15 +1024,17 @@
   width: 128px;
   border-color: rgba(212, 160, 23, 0.8);
   background: rgba(11, 93, 59, 0.94);
-  transform: translateY(calc(-50% - 2px));
+  transform: translateY(-2px);
 }
 
 .pgc-hero-control--previous {
-  left: max(-22px, calc((100vw - var(--container)) / 2 - 90px));
+  left: auto;
+  right: calc(50% + 158px);
 }
 
 .pgc-hero-control--next {
-  right: max(-22px, calc((100vw - var(--container)) / 2 - 90px));
+  left: calc(50% + 158px);
+  right: auto;
 }
 
 .pgc-hero-control__icon {
@@ -1083,7 +1086,7 @@
 .pgc-hero-status {
   position: absolute;
   left: 50%;
-  bottom: 34px;
+  bottom: 94px;
   z-index: 4;
   display: inline-flex;
   align-items: center;
@@ -2250,13 +2253,6 @@
     min-height: 74px;
   }
 
-  .pgc-hero-control--previous {
-    left: -48px;
-  }
-
-  .pgc-hero-control--next {
-    right: -48px;
-  }
 }
 
 /* Hero responsive */
@@ -2480,9 +2476,11 @@
 
   .pgc-hero-control--previous {
     left: 18px;
+    right: auto;
   }
 
   .pgc-hero-control--next {
+    left: auto;
     right: 18px;
   }
 
