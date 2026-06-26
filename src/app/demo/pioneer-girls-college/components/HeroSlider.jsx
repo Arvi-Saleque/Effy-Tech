@@ -8,16 +8,22 @@ import { heroSlides, institution, principal } from "../data/college-data";
 
 const AUTOPLAY_DELAY = 6000;
 const SWIPE_THRESHOLD = 42;
+const TRANSITION_LOCK_MS = 850;
 
 export default function HeroSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState("next");
   const [isPaused, setIsPaused] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isTabHidden, setIsTabHidden] = useState(false);
   const [failedImageIds, setFailedImageIds] = useState(() => new Set());
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionKey, setTransitionKey] = useState(0);
   const touchStartXRef = useRef(null);
+  const transitionTimerRef = useRef(null);
   const activeSlide = heroSlides[activeIndex];
   const principalExcerpt = getPrincipalExcerpt(principal.message);
+  const isProgressPaused = isPaused || isReducedMotion || isTabHidden;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -40,15 +46,67 @@ export default function HeroSlider() {
     }
 
     const timer = window.setTimeout(() => {
+      if (isTransitioning && !isReducedMotion) {
+        return;
+      }
+
+      setDirection("next");
       setActiveIndex((index) => nextIndex(index));
+      setTransitionKey((key) => key + 1);
+
+      if (transitionTimerRef.current) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+
+      if (!isReducedMotion) {
+        setIsTransitioning(true);
+        transitionTimerRef.current = window.setTimeout(() => {
+          setIsTransitioning(false);
+        }, TRANSITION_LOCK_MS);
+      }
     }, AUTOPLAY_DELAY);
 
     return () => window.clearTimeout(timer);
-  }, [activeIndex, isPaused, isReducedMotion, isTabHidden, setActiveIndex]);
+  }, [activeIndex, isPaused, isReducedMotion, isTabHidden, isTransitioning]);
 
-  const goToSlide = (index) => setActiveIndex(normalizeIndex(index));
-  const goToPrevious = () => setActiveIndex((index) => previousIndex(index));
-  const goToNext = () => setActiveIndex((index) => nextIndex(index));
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
+  const changeSlide = (targetIndex, nextDirection) => {
+    const normalizedIndex = normalizeIndex(targetIndex);
+
+    if (normalizedIndex === activeIndex || (isTransitioning && !isReducedMotion)) {
+      return;
+    }
+
+    setDirection(nextDirection);
+    setActiveIndex(normalizedIndex);
+    setTransitionKey((key) => key + 1);
+
+    if (transitionTimerRef.current) {
+      window.clearTimeout(transitionTimerRef.current);
+    }
+
+    if (!isReducedMotion) {
+      setIsTransitioning(true);
+      transitionTimerRef.current = window.setTimeout(() => {
+        setIsTransitioning(false);
+      }, TRANSITION_LOCK_MS);
+    }
+  };
+
+  const goToSlide = (index) => {
+    const normalizedIndex = normalizeIndex(index);
+    const nextDirection = normalizedIndex > activeIndex ? "next" : "previous";
+    changeSlide(normalizedIndex, nextDirection);
+  };
+  const goToPrevious = () => changeSlide(previousIndex(activeIndex), "previous");
+  const goToNext = () => changeSlide(nextIndex(activeIndex), "next");
   const markImageFailed = (slideId) => {
     setFailedImageIds((current) => {
       if (current.has(slideId)) {
@@ -110,7 +168,7 @@ export default function HeroSlider() {
 
   return (
     <section
-      className="pgc-hero"
+      className={`pgc-hero is-${direction}`}
       aria-label="প্রধান পরিচিতি স্লাইডার"
       aria-roledescription="carousel"
       tabIndex={0}
@@ -130,8 +188,10 @@ export default function HeroSlider() {
             <div
               className={[
                 "pgc-hero__slide-media",
+                `pgc-hero__slide-media--${index + 1}`,
                 slide.fallback ? `pgc-hero__slide-media--${slide.fallback}` : "",
                 index === activeIndex ? "is-active" : "",
+                direction === "next" ? "is-next" : "is-previous",
                 imageFailed ? "has-fallback" : "",
               ]
                 .filter(Boolean)
@@ -154,24 +214,33 @@ export default function HeroSlider() {
             </div>
           );
         })}
+        {transitionKey > 0 && isTransitioning && !isReducedMotion ? (
+          <div className={`pgc-hero__transition-curtain is-${direction}`} key={transitionKey} aria-hidden="true" />
+        ) : null}
         <div className="pgc-hero__overlay" />
       </div>
 
       <button
-        className="pgc-hero-nav pgc-hero-nav--prev"
+        className="pgc-hero-control pgc-hero-control--previous"
         type="button"
         aria-label="পূর্ববর্তী স্লাইড"
         onClick={goToPrevious}
       >
-        <ArrowLeft size={20} aria-hidden="true" />
+        <span className="pgc-hero-control__icon" aria-hidden="true">
+          <ArrowLeft size={20} />
+        </span>
+        <span className="pgc-hero-control__label">আগের</span>
       </button>
       <button
-        className="pgc-hero-nav pgc-hero-nav--next"
+        className="pgc-hero-control pgc-hero-control--next"
         type="button"
         aria-label="পরবর্তী স্লাইড"
         onClick={goToNext}
       >
-        <ArrowRight size={20} aria-hidden="true" />
+        <span className="pgc-hero-control__label">পরের</span>
+        <span className="pgc-hero-control__icon" aria-hidden="true">
+          <ArrowRight size={20} />
+        </span>
       </button>
 
       <div className="pgc-container pgc-hero__inner">
@@ -182,23 +251,29 @@ export default function HeroSlider() {
           aria-roledescription="slide"
           aria-label={`${activeIndex + 1} / ${heroSlides.length}`}
         >
-          <span className="pgc-hero__eyebrow">{activeSlide.eyebrow}</span>
+          <span className="pgc-hero__content-item pgc-hero__content-item--eyebrow pgc-hero__eyebrow">
+            {activeSlide.eyebrow}
+          </span>
           <h1>
-            <span>{activeSlide.titleLineOne}</span>
-            <span>{activeSlide.titleHighlight}</span>
+            <span className="pgc-hero__title-line">
+              <span className="pgc-hero__title-text">{activeSlide.titleLineOne}</span>
+            </span>
+            <span className="pgc-hero__title-line pgc-hero__title-highlight">
+              <span className="pgc-hero__title-text">{activeSlide.titleHighlight}</span>
+            </span>
           </h1>
-          <p>{activeSlide.description}</p>
-          <div className="pgc-hero__fact-row" aria-label="প্রাতিষ্ঠানিক তথ্য">
-            প্রতিষ্ঠিত {institution.established} <span aria-hidden="true">•</span> সরকারিকরণ{" "}
-            {institution.governmentized} <span aria-hidden="true">•</span> EIIN {institution.eiin}
-          </div>
-          <div className="pgc-hero__actions">
+          <p className="pgc-hero__content-item pgc-hero__content-item--description">{activeSlide.description}</p>
+          <div className="pgc-hero__content-item pgc-hero__content-item--actions pgc-hero__actions">
             <Link className="pgc-button pgc-button--gold" href={activeSlide.primaryAction.href}>
               <Building2 size={18} aria-hidden="true" /> {activeSlide.primaryAction.label}
             </Link>
             <Link className="pgc-button pgc-button--light" href={activeSlide.secondaryAction.href}>
               <GraduationCap size={18} aria-hidden="true" /> {activeSlide.secondaryAction.label}
             </Link>
+          </div>
+          <div className="pgc-hero__content-item pgc-hero__content-item--meta pgc-hero__fact-row" aria-label="প্রাতিষ্ঠানিক তথ্য">
+            প্রতিষ্ঠিত {institution.established} <span aria-hidden="true">•</span> সরকারিকরণ{" "}
+            {institution.governmentized} <span aria-hidden="true">•</span> EIIN {institution.eiin}
           </div>
         </div>
 
@@ -233,17 +308,29 @@ export default function HeroSlider() {
         </aside>
       </div>
 
-      <div className="pgc-hero-dots" aria-label="স্লাইড নির্বাচন">
-        {heroSlides.map((slide, index) => (
-          <button
-            className={index === activeIndex ? "is-active" : undefined}
-            type="button"
-            key={slide.id}
-            aria-label={`${index + 1} নম্বর স্লাইড দেখুন`}
-            aria-current={index === activeIndex ? "true" : undefined}
-            onClick={() => goToSlide(index)}
-          />
-        ))}
+      <div className={`pgc-hero-status ${isProgressPaused ? "is-paused" : ""}`}>
+        <span className="pgc-sr-only">
+          স্লাইড {activeIndex + 1}, মোট {heroSlides.length}
+        </span>
+        <div className="pgc-hero-progress" aria-hidden="true">
+          <span>{formatSlideNumber(activeIndex + 1)}</span>
+          <span className="pgc-hero-progress__track">
+            <span className="pgc-hero-progress__fill" key={activeIndex} />
+          </span>
+          <span>{formatSlideNumber(heroSlides.length)}</span>
+        </div>
+        <div className="pgc-hero-dots" aria-label="স্লাইড নির্বাচন">
+          {heroSlides.map((slide, index) => (
+            <button
+              className={index === activeIndex ? "is-active" : undefined}
+              type="button"
+              key={slide.id}
+              aria-label={`${index + 1} নম্বর স্লাইড দেখুন`}
+              aria-current={index === activeIndex ? "true" : undefined}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </div>
       </div>
       <span className="pgc-sr-only">
         স্লাইড {activeIndex + 1} / {heroSlides.length}: {activeSlide.titleLineOne}{" "}
@@ -273,4 +360,8 @@ function previousIndex(index) {
 
 function nextIndex(index) {
   return normalizeIndex(index + 1);
+}
+
+function formatSlideNumber(number) {
+  return String(number).padStart(2, "0");
 }
