@@ -111,8 +111,9 @@ function ImportantLinksCard() {
           </a>
         ))}
       </div>
-      <a className="pgc-home-service-cta" href="https://www.pioneergirlscollege.edu.bd/" target="_blank" rel="noopener noreferrer">
+      <a className="pgc-home-card__footer" href="https://www.pioneergirlscollege.edu.bd/" target="_blank" rel="noopener noreferrer">
         সকল গুরুত্বপূর্ণ লিঙ্ক
+        <ArrowRight size={16} aria-hidden="true" />
       </a>
     </article>
   );
