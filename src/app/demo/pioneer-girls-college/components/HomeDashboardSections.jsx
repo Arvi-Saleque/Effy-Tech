@@ -44,7 +44,7 @@ export default function HomeDashboardSections() {
 function NoticeSummaryCard() {
   return (
     <article className="pgc-home-card pgc-home-notices">
-      <DashboardHeader title="নোটিশ বোর্ড" href={`${ROUTE_BASE}/notices`} action="সব নোটিশ" />
+      <DashboardHeader title="নোটিশ বোর্ড" />
       <div className="pgc-home-notice-list">
         {visibleNotices.map((notice) => {
           const date = getNoticeDateParts(notice.publishedAt);

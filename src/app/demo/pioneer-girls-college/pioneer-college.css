@@ -1485,11 +1485,15 @@
 }
 
 .pgc-home-card__footer {
+  display: flex;
   justify-content: center;
-  min-height: 40px;
-  margin-top: 14px;
+  min-height: 58px;
+  margin: 16px -22px -22px;
   border-radius: var(--radius);
-  background: var(--primary-soft);
+  border-top: 1px solid var(--border);
+  background: linear-gradient(180deg, #f7fbf8 0%, #eef8f1 100%);
+  color: var(--primary-dark);
+  font-size: 0.92rem;
 }
 
 .pgc-home-fact-grid {
@@ -3097,6 +3101,12 @@
 
   .pgc-home-card__header h2 {
     font-size: 1rem;
+  }
+
+  .pgc-home-card__footer {
+    margin-right: -18px;
+    margin-bottom: -18px;
+    margin-left: -18px;
   }
 
   .pgc-home-fact-grid,
