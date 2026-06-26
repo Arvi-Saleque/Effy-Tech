@@ -202,24 +202,33 @@ export default function HeroSlider() {
           </div>
         </div>
 
-        <aside className="pgc-hero-principal" aria-label="অধ্যক্ষের বাণী">
-          <Quote className="pgc-hero-principal__quote" size={36} aria-hidden="true" />
-          <span className="pgc-hero-principal__eyebrow">অধ্যক্ষের বাণী</span>
+        <aside className="pgc-hero-principal" aria-labelledby="pgc-principal-card-title">
+          <Quote className="pgc-hero-principal__quote" size={44} aria-hidden="true" />
+          <h2 className="pgc-hero-principal__eyebrow" id="pgc-principal-card-title">
+            অধ্যক্ষের বাণী
+          </h2>
+          <span className="pgc-hero-principal__divider" aria-hidden="true" />
           <p>{principalExcerpt}</p>
           <div className="pgc-hero-principal__person">
-            <Image
-              src={principal.image}
-              alt={`${principal.name}, ${principal.designation}`}
-              width={92}
-              height={92}
-              sizes="92px"
-            />
-            <div>
-              <strong>{principal.name}</strong>
-              <span>{principal.designation}</span>
-              <small>{principal.subject}</small>
-              <small>{institution.nameBn}</small>
-            </div>
+            <figure className="pgc-hero-principal__portrait">
+              <Image
+                className="pgc-principal-card__portrait-image"
+                src={principal.image}
+                alt={`${principal.name}, ${principal.designation}`}
+                fill
+                sizes="(max-width: 760px) 92px, 118px"
+              />
+            </figure>
+            <dl className="pgc-hero-principal__details">
+              <dt className="pgc-sr-only">নাম</dt>
+              <dd className="pgc-hero-principal__name">{principal.name}</dd>
+              <dt className="pgc-sr-only">পদবি</dt>
+              <dd className="pgc-hero-principal__designation">{principal.designation}</dd>
+              <dt className="pgc-sr-only">বিষয়</dt>
+              <dd>{principal.subject}</dd>
+              <dt className="pgc-sr-only">প্রতিষ্ঠান</dt>
+              <dd>{institution.nameBn}</dd>
+            </dl>
           </div>
         </aside>
       </div>
