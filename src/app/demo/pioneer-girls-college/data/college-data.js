@@ -1,5 +1,6 @@
 export const ROUTE_BASE = "/demo/pioneer-girls-college";
 export const ASSET_PATH = "/demos/pioneer-girls-college";
+export const PNC_ASSET_PATH = "/images/PNC";
 export const OFFICIAL_SITE = "https://www.pioneergirlscollege.edu.bd";
 
 export const studentPayLinks = {
@@ -51,54 +52,52 @@ export const heroSlides = [
   {
     id: "heritage",
     eyebrow: "প্রতিষ্ঠিত ১৯৬৯",
-    titleLineOne: "নারীশিক্ষা, জ্ঞান ও",
-    titleHighlight: "আত্মমর্যাদার অঙ্গীকার",
+    titleLineOne: "নারীশিক্ষার গৌরবময় ঐতিহ্য,",
+    titleHighlight: "জ্ঞান ও আত্মমর্যাদার অঙ্গীকার",
     description:
-      "সরকারি পাইওনিয়ার মহিলা কলেজ দীর্ঘদিন ধরে মানসম্মত শিক্ষা, নৈতিকতা ও আত্মবিশ্বাসের বিকাশে কাজ করে আসছে।",
-    image: null,
-    preferredImage: `${ASSET_PATH}/hero-campus-main.jpg`,
-    fallback: "institutional",
+      "১৯৬৯ সাল থেকে সরকারি পাইওনিয়ার মহিলা কলেজ নারীশিক্ষার প্রসার, মানসম্মত উচ্চশিক্ষা এবং নৈতিক মূল্যবোধসম্পন্ন প্রজন্ম গড়ে তুলতে গুরুত্বপূর্ণ ভূমিকা পালন করে আসছে।",
+    image: `${PNC_ASSET_PATH}/hero1.jpeg`,
     primaryAction: {
       label: "কলেজ সম্পর্কে জানুন",
       href: `${ROUTE_BASE}/about`,
     },
     secondaryAction: {
-      label: "ভর্তি তথ্য",
-      href: `${ROUTE_BASE}/admission`,
+      label: "আমাদের ইতিহাস",
+      href: `${ROUTE_BASE}/history`,
     },
   },
   {
     id: "academics",
     eyebrow: "উচ্চমাধ্যমিক, ডিগ্রি ও অনার্স",
-    titleLineOne: "জ্ঞান ও দক্ষতার মাধ্যমে",
-    titleHighlight: "উজ্জ্বল ভবিষ্যতের প্রস্তুতি",
+    titleLineOne: "মানসম্মত শিক্ষায়",
+    titleHighlight: "সম্ভাবনার নতুন দিগন্ত",
     description:
-      "আলোচনা সভা, পাঠ-সহায়ক আয়োজন ও বিভাগভিত্তিক একাডেমিক কার্যক্রমের মাধ্যমে শিক্ষার্থীদের উচ্চশিক্ষার জন্য প্রস্তুত করা হয়।",
-    image: `${ASSET_PATH}/official-campus-02.jpeg`,
+      "অভিজ্ঞ শিক্ষকমণ্ডলী, বিভাগভিত্তিক পাঠদান এবং পরিকল্পিত একাডেমিক কার্যক্রমের মাধ্যমে শিক্ষার্থীদের উচ্চশিক্ষা, কর্মজীবন ও ভবিষ্যৎ নেতৃত্বের জন্য প্রস্তুত করা হয়।",
+    image: `${PNC_ASSET_PATH}/hero2.jpeg`,
     primaryAction: {
       label: "একাডেমিক কার্যক্রম",
       href: `${ROUTE_BASE}/academic`,
     },
     secondaryAction: {
-      label: "বিভাগসমূহ",
+      label: "বিভাগসমূহ দেখুন",
       href: `${ROUTE_BASE}/departments`,
     },
   },
   {
     id: "student-life",
-    eyebrow: "শিক্ষা, সংস্কৃতি ও মূল্যবোধ",
-    titleLineOne: "আত্মবিশ্বাসী ও দায়িত্বশীল",
-    titleHighlight: "নারী নেতৃত্বের বিকাশ",
+    eyebrow: "শিক্ষা, সংস্কৃতি ও নেতৃত্ব",
+    titleLineOne: "প্রতিভা, আত্মবিশ্বাস ও",
+    titleHighlight: "দায়িত্বশীল নেতৃত্বের বিকাশ",
     description:
-      "বৃক্ষরোপণ, পরিবেশ সচেতনতা ও সহশিক্ষা কার্যক্রমের সমন্বয়ে শিক্ষার্থীদের দায়িত্বশীল নেতৃত্বের গুণাবলি বিকাশ করা হয়।",
-    image: `${ASSET_PATH}/official-campus-04.jpeg`,
+      "পাঠ্যক্রমের পাশাপাশি সাংস্কৃতিক কার্যক্রম, জাতীয় দিবস, পরিবেশ সচেতনতা এবং সহশিক্ষা কার্যক্রমের মাধ্যমে শিক্ষার্থীদের সৃজনশীলতা, মানবিকতা ও নেতৃত্বের গুণাবলি বিকশিত করা হয়।",
+    image: `${PNC_ASSET_PATH}/hero3.jpeg`,
     primaryAction: {
-      label: "কলেজ কার্যক্রম",
+      label: "কলেজ কার্যক্রম দেখুন",
       href: `${ROUTE_BASE}/gallery`,
     },
     secondaryAction: {
-      label: "সর্বশেষ নোটিশ",
-      href: `${ROUTE_BASE}/notices`,
+      label: "ছবির গ্যালারি",
+      href: `${ROUTE_BASE}/gallery`,
     },
   },
 ];
