@@ -491,12 +491,15 @@ export const galleryItems = [
 ];
 
 export const importantLinks = [
-  { label: "শিক্ষা মন্ত্রণালয়", href: "https://moedu.gov.bd/" },
+  { label: "শিক্ষা মন্ত্রণালয়", href: "https://moedu.gov.bd/" },
+  { label: "মাধ্যমিক ও উচ্চমাধ্যমিক শিক্ষা বোর্ড, ঢাকা", href: "https://dhakaeducationboard.gov.bd/" },
   { label: "মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর", href: "https://www.dshe.gov.bd/" },
-  { label: "যশোর শিক্ষা বোর্ড", href: "https://www.jessoreboard.gov.bd/" },
-  { label: "জাতীয় বিশ্ববিদ্যালয়", href: "https://www.nu.ac.bd/" },
-  { label: "অনলাইন ভর্তি", href: studentPayLinks.onlineAdmission, external: true },
-  { label: "শিক্ষার্থী পেমেন্ট", href: studentPayLinks.login, external: true },
+  { label: "জাতীয় বিশ্ববিদ্যালয়", href: "https://www.nu.ac.bd/" },
+  { label: "মাধ্যমিক ও উচ্চ শিক্ষা বিভাগ", href: "https://shed.gov.bd/" },
+  { label: "বাংলাদেশ কারিগরি শিক্ষা বোর্ড", href: "https://bteb.gov.bd/" },
+  { label: "প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট", href: "https://www.pmeat.gov.bd/" },
+  { label: "প্রধানমন্ত্রীর কার্যালয়", href: "https://pmo.gov.bd/" },
+  { label: "মন্ত্রিপরিষদ বিভাগ", href: "https://cabinet.gov.bd/" },
 ];
 
 export const admissionSteps = [

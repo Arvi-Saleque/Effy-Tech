@@ -1405,6 +1405,7 @@
 
 .pgc-home-notices,
 .pgc-home-institution,
+.pgc-home-important-links,
 .pgc-home-services,
 .pgc-home-news-panel,
 .pgc-home-gallery-panel {
@@ -1583,6 +1584,44 @@
   background: var(--primary-dark);
   color: #ffffff;
   font-weight: 900;
+}
+
+.pgc-home-important-links h2 {
+  margin: 0 0 14px;
+  border-radius: 0;
+  padding: 14px 16px;
+  background: #3f6a52;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.35;
+  font-weight: 900;
+}
+
+.pgc-home-important-list {
+  display: grid;
+  gap: 0;
+}
+
+.pgc-home-important-row {
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(63, 106, 82, 0.42);
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+.pgc-home-important-row svg {
+  color: #4b8a42;
+}
+
+.pgc-home-important-row:hover,
+.pgc-home-important-row:focus-visible {
+  color: var(--primary-dark);
 }
 
 .pgc-home-facilities {
@@ -3087,6 +3126,7 @@
 
   .pgc-home-notices,
   .pgc-home-institution,
+  .pgc-home-important-links,
   .pgc-home-services,
   .pgc-home-news-panel,
   .pgc-home-gallery-panel,

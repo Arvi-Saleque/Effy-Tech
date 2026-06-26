@@ -1,19 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
 import {
   academicPrograms,
   facilities,
   galleryItems,
+  importantLinks,
   institutionalFacts,
   newsEvents,
   notices,
-  quickServices,
   ROUTE_BASE,
 } from "../data/college-data";
 import Icon from "./Icon";
 
-const studentServices = quickServices.slice(3, 8);
+const visibleImportantLinks = importantLinks.slice(0, 9);
 const visibleNotices = notices.slice(0, 5);
 const visibleFacts = institutionalFacts.slice(0, 6);
 const visibleFacilities = facilities.slice(0, 8);
@@ -27,7 +27,7 @@ export default function HomeDashboardSections() {
         <div className="pgc-container pgc-home-overview__grid">
           <NoticeSummaryCard />
           <InstitutionSummaryCard />
-          <StudentServicesCard />
+          <ImportantLinksCard />
         </div>
       </section>
       <FacilitiesStrip />
@@ -96,28 +96,18 @@ function InstitutionSummaryCard() {
   );
 }
 
-function StudentServicesCard() {
+function ImportantLinksCard() {
   return (
-    <article className="pgc-home-card pgc-home-services">
-      <DashboardHeader title="শিক্ষার্থী সেবা" />
-      <div className="pgc-home-service-list">
-        {studentServices.map((service) => {
-          const linkProps = service.external ? { target: "_blank", rel: "noopener noreferrer" } : {};
-
-          return (
-            <Link className="pgc-home-service-row" href={service.href} key={service.title} {...linkProps}>
-              <span>
-                <Icon name={service.icon} size={19} />
-              </span>
-              <strong>{service.title}</strong>
-              <ChevronRight size={17} aria-hidden="true" />
-            </Link>
-          );
-        })}
+    <article className="pgc-home-card pgc-home-important-links">
+      <h2>গুরুত্বপূর্ণ লিঙ্ক</h2>
+      <div className="pgc-home-important-list">
+        {visibleImportantLinks.map((link) => (
+          <a className="pgc-home-important-row" href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>
+            <CheckCircle2 size={17} aria-hidden="true" />
+            <span>{link.label}</span>
+          </a>
+        ))}
       </div>
-      <Link className="pgc-home-service-cta" href={`${ROUTE_BASE}/admission`}>
-        মেধালিপি ও ভর্তিপ্রক্রিয়া
-      </Link>
     </article>
   );
 }
