@@ -14,6 +14,7 @@ export default function HeroSlider() {
   const [isPaused, setIsPaused] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isTabHidden, setIsTabHidden] = useState(false);
+  const [failedImageIds, setFailedImageIds] = useState(() => new Set());
   const touchStartXRef = useRef(null);
   const activeSlide = heroSlides[activeIndex];
   const principalExcerpt = getPrincipalExcerpt(principal.message);
@@ -48,6 +49,17 @@ export default function HeroSlider() {
   const goToSlide = (index) => setActiveIndex(normalizeIndex(index));
   const goToPrevious = () => setActiveIndex((index) => previousIndex(index));
   const goToNext = () => setActiveIndex((index) => nextIndex(index));
+  const markImageFailed = (slideId) => {
+    setFailedImageIds((current) => {
+      if (current.has(slideId)) {
+        return current;
+      }
+
+      const next = new Set(current);
+      next.add(slideId);
+      return next;
+    });
+  };
 
   const handleKeyDown = (event) => {
     if (event.key === "ArrowLeft") {
@@ -111,15 +123,37 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
     >
       <div className="pgc-hero__media" aria-hidden="true">
-        <Image
-          className="pgc-hero__image"
-          key={activeSlide.id}
-          src={activeSlide.image}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-        />
+        {heroSlides.map((slide, index) => {
+          const imageFailed = failedImageIds.has(slide.id);
+
+          return (
+            <div
+              className={[
+                "pgc-hero__slide-media",
+                slide.fallback ? `pgc-hero__slide-media--${slide.fallback}` : "",
+                index === activeIndex ? "is-active" : "",
+                imageFailed ? "has-fallback" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              key={slide.id}
+            >
+              <div className="pgc-hero__fallback" />
+              {slide.image && !imageFailed ? (
+                <Image
+                  className="pgc-hero__image"
+                  src={slide.image}
+                  alt=""
+                  fill
+                  priority={index === 0}
+                  loading={index === 0 ? undefined : "lazy"}
+                  sizes="100vw"
+                  onError={() => markImageFailed(slide.id)}
+                />
+              ) : null}
+            </div>
+          );
+        })}
         <div className="pgc-hero__overlay" />
       </div>
 
@@ -143,6 +177,7 @@ export default function HeroSlider() {
       <div className="pgc-container pgc-hero__inner">
         <div
           className="pgc-hero__content"
+          key={activeSlide.id}
           role="group"
           aria-roledescription="slide"
           aria-label={`${activeIndex + 1} / ${heroSlides.length}`}

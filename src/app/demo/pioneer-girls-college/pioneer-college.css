@@ -550,11 +550,56 @@
   z-index: -2;
 }
 
+.pgc-hero__slide-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 650ms ease,
+    transform 6s ease;
+  pointer-events: none;
+}
+
+.pgc-hero__slide-media.is-active {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.pgc-hero__fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 78% 42%, rgba(242, 195, 74, 0.18), transparent 28%),
+    linear-gradient(135deg, #04341f 0%, #0a5d39 46%, #062a1b 100%);
+}
+
+.pgc-hero__slide-media--institutional .pgc-hero__fallback::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  right: 7%;
+  width: min(34vw, 430px);
+  aspect-ratio: 1;
+  background: url("/demos/pioneer-girls-college/college-logo.png") center / contain no-repeat;
+  opacity: 0.1;
+  filter: grayscale(1);
+}
+
+.pgc-hero__slide-media--institutional .pgc-hero__fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 0 43%, rgba(255, 255, 255, 0.055) 43% 44%, transparent 44% 100%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 34px);
+  opacity: 0.7;
+}
+
 .pgc-hero__image {
   object-fit: cover;
   object-position: center;
-  transform: scale(1.02);
-  animation: pgc-hero-image-breathe 12s ease-in-out infinite alternate;
 }
 
 .pgc-hero__overlay {
@@ -585,6 +630,7 @@
 .pgc-hero__content {
   max-width: 720px;
   color: #ffffff;
+  animation: pgc-hero-content-in 500ms ease both;
 }
 
 .pgc-hero__eyebrow {
@@ -643,12 +689,18 @@
   color: var(--primary-dark);
 }
 
-@keyframes pgc-hero-image-breathe {
+.pgc-hero__slide-media.has-fallback .pgc-hero__image {
+  display: none;
+}
+
+@keyframes pgc-hero-content-in {
   from {
-    transform: scale(1.02);
+    opacity: 0;
+    transform: translateY(12px);
   }
   to {
-    transform: scale(1.08);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1852,9 +1904,11 @@
     transform: none;
   }
 
-  .pgc-hero__image {
+  .pgc-hero__slide-media,
+  .pgc-hero__content {
     animation: none !important;
     transform: none;
+    transition: none !important;
   }
 }
 
@@ -1990,7 +2044,7 @@
   }
 
   .pgc-hero {
-    min-height: 720px;
+    min-height: auto;
   }
 
   .pgc-hero__overlay {
@@ -2000,10 +2054,10 @@
   }
 
   .pgc-hero__inner {
-    min-height: 720px;
+    min-height: 0;
     grid-template-columns: 1fr;
     gap: 24px;
-    padding: 48px 0 86px;
+    padding: 48px 0 126px;
   }
 
   .pgc-hero h1 {
@@ -2040,7 +2094,7 @@
 
   .pgc-hero-nav {
     top: auto;
-    bottom: 18px;
+    bottom: 42px;
     width: 44px;
     height: 44px;
     transform: none;
@@ -2059,7 +2113,7 @@
   }
 
   .pgc-hero-dots {
-    bottom: 32px;
+    bottom: 58px;
   }
 
   .pgc-service-grid,
@@ -2087,7 +2141,7 @@
   }
 
   .pgc-quick-services {
-    margin-top: -28px;
+    margin-top: -18px;
     margin-bottom: 18px;
   }
 
