@@ -73,7 +73,7 @@ export default function Footer() {
           </a>
           <div className="pgc-footer__social" aria-label="সামাজিক যোগাযোগ">
             {socialLinks.map(({ label, href, icon: IconComponent }) => (
-              <a href={href} aria-label={label} key={label}>
+              <a className="pgc-footer__social-link" href={href} aria-label={label} key={label}>
                 <IconComponent aria-hidden="true" />
               </a>
             ))}

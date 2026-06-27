@@ -45,26 +45,28 @@ function NoticeSummaryCard() {
   return (
     <article className="pgc-home-card pgc-home-notices">
       <DashboardHeader title="নোটিশ বোর্ড" />
-      <div className="pgc-home-notice-list">
-        {visibleNotices.map((notice) => {
-          const date = getNoticeDateParts(notice.publishedAt);
+      <div className="pgc-home-dashboard-card__body">
+        <div className="pgc-home-notice-list">
+          {visibleNotices.map((notice) => {
+            const date = getNoticeDateParts(notice.publishedAt);
 
-          return (
-            <Link className="pgc-home-notice-row" href={`${ROUTE_BASE}/notices#${notice.id}`} key={notice.id}>
-              <span className="pgc-home-notice-date">
-                <strong>{date.day}</strong>
-                <small>{date.monthYear}</small>
-              </span>
-              <span className="pgc-home-notice-text">
-                <span>
-                  {notice.title}
-                  {notice.urgent ? <b>নতুন</b> : null}
+            return (
+              <Link className="pgc-home-notice-row" href={`${ROUTE_BASE}/notices#${notice.id}`} key={notice.id}>
+                <span className="pgc-home-notice-date">
+                  <strong>{date.day}</strong>
+                  <small>{date.monthYear}</small>
                 </span>
-              </span>
-              <ChevronRight size={16} aria-hidden="true" />
-            </Link>
-          );
-        })}
+                <span className="pgc-home-notice-text">
+                  <span>
+                    {notice.title}
+                    {notice.urgent ? <b>নতুন</b> : null}
+                  </span>
+                </span>
+                <ChevronRight size={16} aria-hidden="true" />
+              </Link>
+            );
+          })}
+        </div>
       </div>
       <Link className="pgc-home-card__footer" href={`${ROUTE_BASE}/notices`}>
         সব নোটিশ দেখুন
@@ -78,19 +80,21 @@ function InstitutionSummaryCard() {
   return (
     <article className="pgc-home-card pgc-home-institution">
       <DashboardHeader title="একাডেমিক সংক্ষিপ্ত" />
-      <div className="pgc-home-fact-grid">
-        {visibleFacts.map((fact) => (
-          <div className="pgc-home-fact" key={fact.label}>
-            <span>{fact.label}</span>
-            <strong>{fact.value}</strong>
-          </div>
-        ))}
-      </div>
-      <h3>প্রোগ্রামসমূহ</h3>
-      <div className="pgc-home-program-pills">
-        {academicPrograms.flatMap((program) => program.points).slice(0, 6).map((point) => (
-          <span key={point}>{point}</span>
-        ))}
+      <div className="pgc-home-dashboard-card__body">
+        <div className="pgc-home-fact-grid">
+          {visibleFacts.map((fact) => (
+            <div className="pgc-home-fact" key={fact.label}>
+              <span>{fact.label}</span>
+              <strong>{fact.value}</strong>
+            </div>
+          ))}
+        </div>
+        <h3>প্রোগ্রামসমূহ</h3>
+        <div className="pgc-home-program-pills">
+          {academicPrograms.flatMap((program) => program.points).slice(0, 6).map((point) => (
+            <span key={point}>{point}</span>
+          ))}
+        </div>
       </div>
     </article>
   );
@@ -100,16 +104,18 @@ function ImportantLinksCard() {
   return (
     <article className="pgc-home-card pgc-home-services">
       <DashboardHeader title="গুরুত্বপূর্ণ লিঙ্ক" />
-      <div className="pgc-home-service-list">
-        {visibleImportantLinks.map((link) => (
-          <a className="pgc-home-service-row" href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>
-            <span>
-              <Icon name="ExternalLink" size={19} />
-            </span>
-            <strong>{link.label}</strong>
-            <ChevronRight size={17} aria-hidden="true" />
-          </a>
-        ))}
+      <div className="pgc-home-dashboard-card__body">
+        <div className="pgc-home-service-list">
+          {visibleImportantLinks.map((link) => (
+            <a className="pgc-home-service-row" href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>
+              <span>
+                <Icon name="ExternalLink" size={19} />
+              </span>
+              <strong>{link.label}</strong>
+              <ChevronRight size={17} aria-hidden="true" />
+            </a>
+          ))}
+        </div>
       </div>
       <a className="pgc-home-card__footer" href="https://www.pioneergirlscollege.edu.bd/" target="_blank" rel="noopener noreferrer">
         সকল গুরুত্বপূর্ণ লিঙ্ক
@@ -147,34 +153,38 @@ function NewsPanel() {
   return (
     <article className="pgc-home-card pgc-home-news-panel">
       <DashboardHeader title="সংবাদ ও আপডেট" href={`${ROUTE_BASE}/gallery`} action="সব সংবাদ" />
-      <div className={`pgc-home-news-content pgc-home-news-content--items-${visibleNews.length}`}>
-        {featured ? (
-          <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
-            <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 760px) 100vw, 28vw" />
-            <span className="pgc-home-news-date">
-              <strong>{getNoticeDateParts(featured.date).day}</strong>
-              <small>{getNoticeDateParts(featured.date).monthYear}</small>
-            </span>
-            <span className="pgc-home-feature-news__text">
-              <strong>{featured.title}</strong>
-              <small>{featured.summary}</small>
-            </span>
-          </Link>
-        ) : null}
-        {otherNews.length ? (
-          <div className="pgc-home-news-list">
-            {otherNews.map((event) => (
-              <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
-                <Image src={event.image} alt={event.title} width={76} height={58} sizes="76px" />
-                <span>
-                  <time>{event.date}</time>
-                  <strong>{event.title}</strong>
-                </span>
-                <ArrowRight size={16} aria-hidden="true" />
-              </Link>
-            ))}
-          </div>
-        ) : null}
+      <div className="pgc-home-news-panel__body">
+        <div className={`pgc-home-news-content${otherNews.length ? "" : " is-feature-only"}`}>
+          {featured ? (
+            <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
+              <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 680px) 100vw, (max-width: 1100px) 48vw, 28vw" />
+              <span className="pgc-home-news-date">
+                <strong>{getNoticeDateParts(featured.date).day}</strong>
+                <small>{getNoticeDateParts(featured.date).monthYear}</small>
+              </span>
+              <span className="pgc-home-feature-news__text">
+                <strong>{featured.title}</strong>
+                <small>{featured.summary}</small>
+              </span>
+            </Link>
+          ) : null}
+          {otherNews.length ? (
+            <div className="pgc-home-news-list">
+              {otherNews.map((event) => (
+                <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
+                  <span className="pgc-home-news-row__media">
+                    <Image src={event.image} alt={event.title} width={84} height={66} sizes="84px" />
+                  </span>
+                  <span className="pgc-home-news-row__content">
+                    <time className="pgc-home-news-row__meta">{event.date}</time>
+                    <strong className="pgc-home-news-row__title">{event.title}</strong>
+                  </span>
+                  <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
     </article>
   );
