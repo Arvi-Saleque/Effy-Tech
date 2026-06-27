@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Building2, GraduationCap, Quote } from "lucide-react";
-import { heroSlides, institution, principal } from "../data/college-data";
+import { heroSlides, institution, PNC_ASSET_PATH, principal } from "../data/college-data";
 
 const AUTOPLAY_DELAY = 10000;
 const SWIPE_THRESHOLD = 42;
 const TRANSITION_LOCK_MS = 850;
+const HERO_PRINCIPAL_IMAGE = `${PNC_ASSET_PATH}/principle.png`;
 
 export default function HeroSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -270,7 +271,7 @@ export default function HeroSlider() {
             <figure className="pgc-hero-principal__portrait">
               <Image
                 className="pgc-principal-card__portrait-image"
-                src={principal.image}
+                src={HERO_PRINCIPAL_IMAGE}
                 alt={`${principal.name}, ${principal.designation}`}
                 fill
                 sizes="(max-width: 760px) 92px, 118px"
