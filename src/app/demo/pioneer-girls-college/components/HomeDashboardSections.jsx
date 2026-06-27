@@ -17,8 +17,8 @@ const visibleImportantLinks = importantLinks.slice(0, 6);
 const visibleNotices = notices.slice(0, 5);
 const visibleFacts = institutionalFacts.slice(0, 6);
 const visibleFacilities = facilities.slice(0, 8);
-const visibleNews = [...newsEvents, ...newsEvents].slice(0, 4);
-const visibleGallery = [...galleryItems, ...galleryItems].slice(0, 4);
+const visibleNews = newsEvents.slice(0, 4);
+const visibleGallery = galleryItems.slice(0, 4);
 
 export default function HomeDashboardSections() {
   return (
@@ -147,7 +147,7 @@ function NewsPanel() {
   return (
     <article className="pgc-home-card pgc-home-news-panel">
       <DashboardHeader title="সংবাদ ও আপডেট" href={`${ROUTE_BASE}/gallery`} action="সব সংবাদ" />
-      <div className="pgc-home-news-content">
+      <div className={`pgc-home-news-content pgc-home-news-content--items-${visibleNews.length}`}>
         {featured ? (
           <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
             <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 760px) 100vw, 28vw" />
@@ -161,31 +161,38 @@ function NewsPanel() {
             </span>
           </Link>
         ) : null}
-        <div className="pgc-home-news-list">
-          {otherNews.map((event, index) => (
-            <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={`${event.title}-${index}`}>
-              <Image src={event.image} alt={event.title} width={132} height={92} sizes="132px" />
-              <span>
-                <time>{event.date}</time>
-                <strong>{event.title}</strong>
-              </span>
-              <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          ))}
-        </div>
+        {otherNews.length ? (
+          <div className="pgc-home-news-list">
+            {otherNews.map((event) => (
+              <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
+                <Image src={event.image} alt={event.title} width={76} height={58} sizes="76px" />
+                <span>
+                  <time>{event.date}</time>
+                  <strong>{event.title}</strong>
+                </span>
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            ))}
+          </div>
+        ) : null}
       </div>
     </article>
   );
 }
 
 function GalleryPanel() {
-  const [featured, ...otherItems] = visibleGallery;
+  const featuredNews = visibleNews[0];
+  const orderedGallery = [
+    ...visibleGallery.filter((item) => item.image !== featuredNews?.image),
+    ...visibleGallery.filter((item) => item.image === featuredNews?.image),
+  ];
+  const [featured, ...otherItems] = orderedGallery;
 
   return (
     <article className="pgc-home-card pgc-home-gallery-panel">
       <DashboardHeader title="গ্যালারি" href={`${ROUTE_BASE}/gallery`} action="সব গ্যালারি" />
       {featured ? <GalleryTile item={featured} featured /> : null}
-      <div className="pgc-home-gallery-thumbs">
+      <div className={`pgc-home-gallery-thumbs is-count-${otherItems.length}`}>
         {otherItems.map((item) => (
           <GalleryTile item={item} key={item.image} />
         ))}
