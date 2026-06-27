@@ -32,9 +32,13 @@ export default function HomeDashboardSections() {
       </section>
       <FacilitiesStrip />
       <section className="pgc-home-media" aria-label="সংবাদ ও গ্যালারি">
-        <div className="pgc-container pgc-home-media__grid">
-          <NewsPanel />
-          <GalleryPanel />
+        <div className="pgc-container">
+          <div className="pgc-home-media-shell">
+            <div className="pgc-home-media__grid">
+              <NewsPanel />
+              <GalleryPanel />
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -158,6 +162,7 @@ function NewsPanel() {
           {featured ? (
             <Link className="pgc-home-feature-news" href={`${ROUTE_BASE}/gallery`}>
               <Image src={featured.image} alt={featured.title} width={620} height={410} sizes="(max-width: 680px) 100vw, (max-width: 1100px) 48vw, 28vw" />
+              {featured.category ? <span className="pgc-home-feature-news__category">{featured.category}</span> : null}
               <span className="pgc-home-news-date">
                 <strong>{getNoticeDateParts(featured.date).day}</strong>
                 <small>{getNoticeDateParts(featured.date).monthYear}</small>
@@ -169,7 +174,7 @@ function NewsPanel() {
             </Link>
           ) : null}
           {otherNews.length ? (
-            <div className="pgc-home-news-list">
+            <div className={`pgc-home-news-list is-count-${otherNews.length}`}>
               {otherNews.map((event) => (
                 <Link className="pgc-home-news-row" href={`${ROUTE_BASE}/gallery`} key={event.title}>
                   <span className="pgc-home-news-row__media">
