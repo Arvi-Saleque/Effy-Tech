@@ -68,6 +68,11 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) to view the site.
 
+## Security
+
+- Deployment and secret-handling guidance: [`SECURITY_DEPLOYMENT.md`](./SECURITY_DEPLOYMENT.md)
+- Environment variable placeholders: [`.env.example`](./.env.example)
+
 ## Color Palette
 
 | Token             | Hex       | Usage                |

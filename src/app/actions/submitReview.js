@@ -65,6 +65,7 @@ export async function getApprovedReviews() {
 
 /* ── Submit a new review ───────────────────────────────────── */
 export async function submitReview(_prevState, formData) {
+  // TODO(security): Add server-side rate limiting / bot protection (Upstash limiter or CAPTCHA).
   const name = formData.get("name")?.toString().trim();
   const rating = parseInt(formData.get("rating"), 10);
   const message = formData.get("message")?.toString().trim();
