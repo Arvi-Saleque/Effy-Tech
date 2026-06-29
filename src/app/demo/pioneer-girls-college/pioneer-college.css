@@ -90,6 +90,229 @@
   padding: var(--section-space) 0;
 }
 
+.pgc-coming-soon {
+  position: relative;
+  min-height: calc(100svh - var(--header-height, 120px));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 64px 20px 80px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(11, 125, 53, 0.09), transparent 32%),
+    radial-gradient(circle at 88% 82%, rgba(212, 160, 23, 0.09), transparent 30%),
+    linear-gradient(145deg, #fffdf4, #f4faf6);
+}
+
+.pgc-coming-soon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(11, 93, 59, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 93, 59, 0.035) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.55), transparent 72%);
+}
+
+.pgc-coming-soon__card {
+  position: relative;
+  width: min(100%, 780px);
+  overflow: hidden;
+  border: 1px solid rgba(11, 93, 59, 0.14);
+  border-radius: 28px;
+  padding: 52px 56px 46px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(248, 252, 249, 0.96)
+    );
+  box-shadow: 0 28px 75px rgba(6, 59, 39, 0.13);
+  text-align: center;
+  animation: pgc-coming-soon-card-in 600ms ease-out both;
+}
+
+.pgc-coming-soon__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  border-radius: 0 0 999px 999px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #d4a017,
+      #0b7d35,
+      transparent
+    );
+  animation: pgc-coming-soon-accent-in 650ms ease-out 120ms both;
+  transform-origin: center;
+}
+
+.pgc-coming-soon__logo {
+  position: relative;
+  z-index: 1;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(11, 93, 59, 0.14);
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(7, 70, 43, 0.1);
+}
+
+.pgc-coming-soon__logo img {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.pgc-coming-soon__watermark {
+  position: absolute;
+  right: -70px;
+  bottom: -80px;
+  width: 300px;
+  height: 300px;
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+.pgc-coming-soon__status-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #e8f3ec;
+  color: #0b7d35;
+}
+
+.pgc-coming-soon__eyebrow {
+  margin: 0 0 12px;
+  color: #0b7d35;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.pgc-coming-soon__title {
+  margin: 0;
+  color: #0b5d3b;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 850;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.pgc-coming-soon__title span {
+  display: block;
+  color: #d4a017;
+}
+
+.pgc-coming-soon__description {
+  max-width: 620px;
+  margin: 22px auto 0;
+  color: #3f5148;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.pgc-coming-soon__note {
+  margin: 12px 0 0;
+  color: #66756d;
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.pgc-coming-soon__actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pgc-coming-soon__home-link {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #0b7d35;
+  border-radius: 12px;
+  padding: 12px 22px;
+  background: #0b7d35;
+  color: #ffffff;
+  font-size: 0.94rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(11, 125, 53, 0.2);
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.pgc-coming-soon__home-link svg {
+  transition: transform 180ms ease;
+}
+
+.pgc-coming-soon__home-link:hover {
+  background: #0b5d3b;
+  box-shadow: 0 14px 28px rgba(11, 93, 59, 0.24);
+  transform: translateY(-2px);
+}
+
+.pgc-coming-soon__home-link:hover svg {
+  transform: translateX(3px);
+}
+
+.pgc-coming-soon__meta {
+  margin-top: 32px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  border-top: 1px solid rgba(11, 93, 59, 0.1);
+  color: #66756d;
+  font-size: 0.75rem;
+}
+
+.pgc-coming-soon__meta span + span::before {
+  content: "•";
+  margin-right: 18px;
+  color: #d4a017;
+}
+
+@keyframes pgc-coming-soon-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pgc-coming-soon-accent-in {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .pgc-section--soft {
   background: var(--primary-light);
 }
@@ -3165,6 +3388,14 @@
   .pgc-hero__transition-curtain {
     display: none;
   }
+
+  .pgc-coming-soon *,
+  .pgc-coming-soon *::before,
+  .pgc-coming-soon *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media (max-width: 1180px) {
@@ -3717,6 +3948,61 @@
 }
 
 @media (max-width: 640px) {
+  .pgc-coming-soon {
+    min-height: auto;
+    padding: 42px 14px 70px;
+  }
+
+  .pgc-coming-soon::before {
+    background-size: 38px 38px;
+  }
+
+  .pgc-coming-soon__card {
+    border-radius: 20px;
+    padding: 36px 20px 32px;
+  }
+
+  .pgc-coming-soon__logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 20px;
+  }
+
+  .pgc-coming-soon__logo img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .pgc-coming-soon__watermark {
+    right: -110px;
+    bottom: -100px;
+    width: 260px;
+    height: 260px;
+  }
+
+  .pgc-coming-soon__title {
+    font-size: clamp(1.8rem, 9vw, 2.5rem);
+  }
+
+  .pgc-coming-soon__description {
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  .pgc-coming-soon__home-link {
+    width: 100%;
+  }
+
+  .pgc-coming-soon__meta {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pgc-coming-soon__meta span + span::before {
+    content: none;
+  }
+
   .pgc-home-news-content {
     grid-template-columns: 1fr;
     gap: 12px;
