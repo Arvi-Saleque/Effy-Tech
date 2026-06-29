@@ -1,14 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { navItems } from "../data/college-data";
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const panelRef = useRef(null);
   const triggerRef = useRef(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -73,21 +79,10 @@ export default function MobileNav() {
     }
   }, [open]);
 
-  return (
-    <div className="pgc-mobile-nav">
-      <button
-        className="pgc-menu-button"
-        type="button"
-        ref={triggerRef}
-        aria-label={open ? "মেনু বন্ধ করুন" : "মেনু খুলুন"}
-        aria-expanded={open}
-        aria-controls="pgc-mobile-menu"
-        onClick={() => setOpen((value) => !value)}
-      >
-        {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-      </button>
-      {open ? (
-        <>
+  const menuLayer =
+    open && mounted
+      ? createPortal(
+          <>
           <button
             className="pgc-menu-overlay"
             type="button"
@@ -131,8 +126,25 @@ export default function MobileNav() {
               )}
             </div>
           </aside>
-        </>
-      ) : null}
+          </>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <div className="pgc-mobile-nav">
+      <button
+        className="pgc-menu-button"
+        type="button"
+        ref={triggerRef}
+        aria-label={open ? "মেনু বন্ধ করুন" : "মেনু খুলুন"}
+        aria-expanded={open}
+        aria-controls="pgc-mobile-menu"
+        onClick={() => setOpen((value) => !value)}
+      >
+        {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+      </button>
+      {menuLayer}
     </div>
   );
 }
