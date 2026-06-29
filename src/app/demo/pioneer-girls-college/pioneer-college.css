@@ -495,6 +495,10 @@
   min-width: 260px;
 }
 
+.pgc-brand__text {
+  min-width: 0;
+}
+
 .pgc-brand__logo {
   width: 56px;
   height: 56px;
@@ -630,6 +634,7 @@
 .pgc-header__actions {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 10px;
 }
 
@@ -679,6 +684,7 @@
   z-index: 90;
   width: min(390px, 92vw);
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--background);
   box-shadow: -24px 0 48px rgba(4, 30, 18, 0.22);
 }
@@ -3575,6 +3581,7 @@
   .pgc-brand {
     min-width: 0;
     max-width: calc(100vw - 110px);
+    flex: 1 1 auto;
   }
 
   .pgc-brand__logo {
@@ -3588,14 +3595,41 @@
 
   .pgc-brand__text strong {
     font-size: 0.9rem;
+    line-height: 1.16;
   }
 
   .pgc-brand__text span {
     font-size: 0.7rem;
+    line-height: 1.3;
   }
 
   .pgc-demo-chip {
     display: none;
+  }
+
+  .pgc-header__inner {
+    min-height: 84px;
+    gap: 10px;
+    padding-block: 8px;
+  }
+
+  .pgc-header__actions {
+    margin-left: auto;
+  }
+
+  .pgc-menu-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 18px;
+  }
+
+  .pgc-mobile-panel {
+    width: min(360px, 100vw);
+    max-width: 100vw;
+  }
+
+  .pgc-mobile-panel__links {
+    padding-bottom: calc(var(--pgc-ticker-height) + 18px);
   }
 
   .pgc-section-header {
@@ -4050,6 +4084,51 @@
 
   .pgc-home-gallery-thumbs.is-count-1 {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .pgc-header__inner {
+    min-height: 78px;
+    gap: 8px;
+  }
+
+  .pgc-brand {
+    gap: 8px;
+    max-width: calc(100vw - 76px);
+  }
+
+  .pgc-brand__logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .pgc-brand__logo img {
+    width: 34px;
+  }
+
+  .pgc-brand__text strong {
+    font-size: 0.82rem;
+  }
+
+  .pgc-brand__text span {
+    font-size: 0.62rem;
+  }
+
+  .pgc-menu-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+  }
+
+  .pgc-mobile-panel__head {
+    min-height: 64px;
+    padding: 10px 14px;
+  }
+
+  .pgc-mobile-panel__links {
+    gap: 7px;
+    padding: 12px 10px calc(var(--pgc-ticker-height) + 16px);
   }
 }
 
