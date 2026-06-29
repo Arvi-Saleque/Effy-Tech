@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { Building2, CreditCard, GraduationCap, LogIn } from "lucide-react";
-import { institution, studentPayLinks } from "../data/college-data";
+import { institution, ROUTE_BASE } from "../data/college-data";
 
 export default function TopBar() {
   return (
@@ -12,20 +13,15 @@ export default function TopBar() {
           <span>{institution.affiliationBn}</span>
         </div>
         <div className="pgc-topbar__actions">
-          <a href={studentPayLinks.login} target="_blank" rel="noopener noreferrer">
+          <Link href={`${ROUTE_BASE}/student-login`}>
             <LogIn size={14} aria-hidden="true" /> শিক্ষার্থী লগইন
-          </a>
-          <a href={studentPayLinks.applyFees} target="_blank" rel="noopener noreferrer">
+          </Link>
+          <Link href={`${ROUTE_BASE}/admission-fee`}>
             <CreditCard size={14} aria-hidden="true" /> প্রাথমিক আবেদন ফি
-          </a>
-          <a
-            className="pgc-topbar__primary"
-            href={studentPayLinks.onlineAdmission}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </Link>
+          <Link className="pgc-topbar__primary" href={`${ROUTE_BASE}/admission`}>
             <GraduationCap size={14} aria-hidden="true" /> অনলাইন ভর্তি
-          </a>
+          </Link>
           <span className="pgc-topbar__board">
             <Building2 size={14} aria-hidden="true" /> সরকারি কলেজ
           </span>

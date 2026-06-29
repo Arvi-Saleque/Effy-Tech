@@ -2,6 +2,6 @@ import ComingSoonPage, { comingSoonMetadata } from "../components/ComingSoonPage
 
 export const metadata = comingSoonMetadata;
 
-export default function HistoryPage() {
+export default function CollegeSubRouteComingSoon() {
   return <ComingSoonPage />;
 }
