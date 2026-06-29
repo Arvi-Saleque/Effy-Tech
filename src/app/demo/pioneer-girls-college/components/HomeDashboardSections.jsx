@@ -121,10 +121,10 @@ function ImportantLinksCard() {
           ))}
         </div>
       </div>
-      <a className="pgc-home-card__footer" href="https://www.pioneergirlscollege.edu.bd/" target="_blank" rel="noopener noreferrer">
+      <Link className="pgc-home-card__footer" href={`${ROUTE_BASE}/important-links`}>
         সকল গুরুত্বপূর্ণ লিঙ্ক
         <ArrowRight size={16} aria-hidden="true" />
-      </a>
+      </Link>
     </article>
   );
 }
