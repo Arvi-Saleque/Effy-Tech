@@ -657,6 +657,40 @@
   display: none;
 }
 
+.pgc-mobile-layer {
+  --pgc-ticker-height: 42px;
+  --primary-dark: #0b5d3b;
+  --background: #fffdf4;
+  --surface: #ffffff;
+  --text-primary: #1b2b22;
+  --text-muted: #66756d;
+  --border: rgba(11, 93, 59, 0.12);
+  --focus: 0 0 0 3px rgba(212, 160, 23, 0.36);
+  --radius-sm: 10px;
+  --radius: 14px;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  color: var(--text-primary);
+  font-family: "Noto Sans Bengali", "Hind Siliguri", "SolaimanLipi", Arial, sans-serif;
+}
+
+.pgc-mobile-layer *,
+.pgc-mobile-layer *::before,
+.pgc-mobile-layer *::after {
+  box-sizing: border-box;
+}
+
+.pgc-mobile-layer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pgc-mobile-layer button {
+  font: inherit;
+}
+
 .pgc-menu-button,
 .pgc-mobile-panel__head button {
   width: 44px;
@@ -674,6 +708,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
+  pointer-events: auto;
   border: 0;
   background: rgba(6, 40, 25, 0.45);
 }
@@ -686,6 +721,7 @@
   max-height: 100dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
+  pointer-events: auto;
   background: #fbfdf8;
   box-shadow: -24px 0 48px rgba(4, 30, 18, 0.22);
 }

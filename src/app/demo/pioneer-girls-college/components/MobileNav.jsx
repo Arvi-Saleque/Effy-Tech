@@ -82,51 +82,51 @@ export default function MobileNav() {
   const menuLayer =
     open && mounted
       ? createPortal(
-          <>
-          <button
-            className="pgc-menu-overlay"
-            type="button"
-            aria-label="মেনুর বাইরে ক্লিক করে বন্ধ করুন"
-            onClick={() => setOpen(false)}
-          />
-          <aside
-            className="pgc-mobile-panel"
-            id="pgc-mobile-menu"
-            ref={panelRef}
-            aria-label="মোবাইল মেনু"
-          >
-            <div className="pgc-mobile-panel__head">
-              <span>মেনু</span>
-              <button type="button" onClick={() => setOpen(false)} aria-label="মেনু বন্ধ করুন">
-                <X aria-hidden="true" />
-              </button>
-            </div>
-            <div className="pgc-mobile-panel__links">
-              {navItems.map((item) =>
-                item.children ? (
-                  <details key={item.label} className="pgc-mobile-group">
-                    <summary>
-                      {item.label}
-                      <ChevronDown size={16} aria-hidden="true" />
-                    </summary>
-                    <Link href={item.href} onClick={() => setOpen(false)}>
-                      {item.label} দেখুন
-                    </Link>
-                    {item.children.map((child) => (
-                      <Link href={child.href} key={child.href} onClick={() => setOpen(false)}>
-                        {child.label}
+          <div className="pgc-mobile-layer">
+            <button
+              className="pgc-menu-overlay"
+              type="button"
+              aria-label="মেনুর বাইরে ক্লিক করে বন্ধ করুন"
+              onClick={() => setOpen(false)}
+            />
+            <aside
+              className="pgc-mobile-panel"
+              id="pgc-mobile-menu"
+              ref={panelRef}
+              aria-label="মোবাইল মেনু"
+            >
+              <div className="pgc-mobile-panel__head">
+                <span>মেনু</span>
+                <button type="button" onClick={() => setOpen(false)} aria-label="মেনু বন্ধ করুন">
+                  <X aria-hidden="true" />
+                </button>
+              </div>
+              <div className="pgc-mobile-panel__links">
+                {navItems.map((item) =>
+                  item.children ? (
+                    <details key={item.label} className="pgc-mobile-group">
+                      <summary>
+                        {item.label}
+                        <ChevronDown size={16} aria-hidden="true" />
+                      </summary>
+                      <Link href={item.href} onClick={() => setOpen(false)}>
+                        {item.label} দেখুন
                       </Link>
-                    ))}
-                  </details>
-                ) : (
-                  <Link href={item.href} key={item.href} onClick={() => setOpen(false)}>
-                    {item.label}
-                  </Link>
-                ),
-              )}
-            </div>
-          </aside>
-          </>,
+                      {item.children.map((child) => (
+                        <Link href={child.href} key={child.href} onClick={() => setOpen(false)}>
+                          {child.label}
+                        </Link>
+                      ))}
+                    </details>
+                  ) : (
+                    <Link href={item.href} key={item.href} onClick={() => setOpen(false)}>
+                      {item.label}
+                    </Link>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>,
           document.body,
         )
       : null;
