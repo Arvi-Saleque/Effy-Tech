@@ -17,6 +17,7 @@ import { useRef, useState, useCallback, useEffect, useActionState } from "react"
 import Link from "next/link";
 import { submitReview } from "@/app/actions/submitReview";
 import { trackCTAClick, trackReviewSubmit } from "@/lib/analytics";
+import IAMDemoPhone from "@/components/showcase/iam/IAMDemoPhone";
 import {
   HiArrowLeft,
   HiExternalLink,
@@ -1358,23 +1359,28 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
 
         {/* Main hero content — vertically centered */}
         <div className="relative z-10 flex-1 flex items-center">
-          <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 py-12 sm:py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-10 items-center">
+          <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 py-8 sm:py-16">
+            <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-9 lg:gap-12 items-center">
               {/* Left — Text */}
-              <motion.div initial="hidden" animate="visible" variants={stagger}>
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={stagger}
+                className="text-center lg:text-left"
+              >
                 {/* App logo */}
-                <motion.div variants={fadeUp} className="mb-5">
+                <motion.div variants={fadeUp} className="mb-4 flex justify-center lg:justify-start">
                   <img
                     src={logoImage}
                     alt={`${name} logo`}
-                    className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl object-cover border border-primary/20 bg-neutral-900 shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
+                    className="h-14 w-14 sm:h-20 sm:w-20 rounded-2xl object-cover border border-primary/20 bg-neutral-900 shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
                     loading="eager"
                   />
                 </motion.div>
 
                 {/* Category badge */}
-                <motion.div variants={fadeUp}>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
+                <motion.div variants={fadeUp} className="flex justify-center lg:justify-start">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
                     {category} App{versionLabel ? ` • ${versionLabel}` : ""}
                   </span>
@@ -1383,7 +1389,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* Title */}
                 <motion.h1
                   variants={fadeUp}
-                  className="mt-7 text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05]"
+                  className="mt-5 sm:mt-7 text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05]"
                 >
                   <span className="bg-gradient-to-b from-neutral-50 to-neutral-300 bg-clip-text text-transparent">
                     {name}
@@ -1392,7 +1398,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
 
                 <motion.p
                   variants={fadeUp}
-                  className="mt-3 text-sm sm:text-base font-semibold tracking-wide text-neutral-500"
+                  className="mt-2 sm:mt-3 text-xs sm:text-base font-semibold tracking-wide text-neutral-500"
                 >
                   {nameBn}
                 </motion.p>
@@ -1400,7 +1406,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* Bangla tagline */}
                 <motion.p
                   variants={fadeUp}
-                  className="mt-5 text-xl sm:text-2xl text-primary-light/90 font-medium"
+                  className="mt-4 sm:mt-5 text-lg sm:text-2xl text-primary-light/90 font-medium"
                 >
                   {tagline}
                 </motion.p>
@@ -1408,7 +1414,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* English subtitle */}
                 <motion.p
                   variants={fadeUp}
-                  className="mt-2 text-neutral-500 text-lg"
+                  className="mt-2 hidden sm:block text-neutral-500 text-lg"
                 >
                   {taglineEn}
                 </motion.p>
@@ -1416,7 +1422,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* Description */}
                 <motion.p
                   variants={fadeUp}
-                  className="mt-7 text-neutral-400 leading-relaxed max-w-lg text-[15px]"
+                  className="mt-7 hidden lg:block text-neutral-400 leading-relaxed max-w-lg text-[15px]"
                 >
                   {description}
                 </motion.p>
@@ -1424,7 +1430,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* Tech stack pills */}
                 <motion.div
                   variants={fadeUp}
-                  className="mt-6 flex flex-wrap gap-2"
+                  className="mt-6 hidden lg:flex flex-wrap gap-2"
                 >
                   {techStack.map((tech) => (
                     <span
@@ -1439,14 +1445,14 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 {/* CTA buttons */}
                 <motion.div
                   variants={fadeUp}
-                  className="mt-9 flex flex-wrap gap-4"
+                  className="mt-6 sm:mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4"
                 >
                   <a
                     href={playStoreUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackCTAClick("Download - Hero", "IAM")}
-                    className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
                   >
                     <FaGooglePlay className="h-5 w-5" />
                     <span>
@@ -1457,44 +1463,30 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                     </span>
                   </a>
                   <a
-                    href="#screenshots"
-                    className="inline-flex items-center gap-2 rounded-xl border border-neutral-600 px-7 py-4 text-sm font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100 hover:border-neutral-500"
+                    href="#iam-demo"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-neutral-600 px-7 py-4 text-sm font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100 hover:border-neutral-500"
                   >
-                    View Screenshots
+                    Try App Demo
                   </a>
                 </motion.div>
               </motion.div>
 
-              {/* Right — Single phone, full hero height */}
+              {/* Right — Interactive app demo and screen tour */}
               <motion.div
-                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                initial={{ opacity: 0, y: 42, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
-                  duration: 1,
-                  delay: 0.35,
+                  duration: 0.9,
+                  delay: 0.25,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
-                className="flex justify-center lg:justify-end h-[70vh] sm:h-[75vh] lg:h-[80vh]"
+                className="flex justify-center lg:justify-end"
               >
-                <div className="relative h-full w-auto">
-                  {/* Ambient glow */}
-                  <div className="absolute -inset-10 rounded-[3rem] bg-gradient-to-b from-primary/10 via-primary/4 to-transparent blur-[60px] pointer-events-none" />
-
-                  {/* Current Version 2.0 promotional artwork */}
-                  <div className="relative h-full overflow-hidden rounded-[2.25rem] border border-neutral-700/40 bg-neutral-950 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
-                    <img
-                      src={heroImage}
-                      alt={`${name} Home Dashboard`}
-                      className="h-full w-auto object-contain block"
-                      loading="eager"
-                    />
-                    <div className="absolute inset-0 rounded-[2.25rem] ring-1 ring-inset ring-neutral-100/5 pointer-events-none" />
-                  </div>
-
-                  {/* Side glow accents */}
-                  <div className="absolute top-1/4 -left-6 h-32 w-1 bg-gradient-to-b from-transparent via-primary/20 to-transparent blur-sm pointer-events-none" />
-                  <div className="absolute bottom-1/4 -right-6 h-32 w-1 bg-gradient-to-b from-transparent via-accent/15 to-transparent blur-sm pointer-events-none" />
-                </div>
+                <IAMDemoPhone
+                  appName={name}
+                  screenshots={screenshots}
+                  initialScreenshot={heroImage}
+                />
               </motion.div>
             </div>
           </div>
