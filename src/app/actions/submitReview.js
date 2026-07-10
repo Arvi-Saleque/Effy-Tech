@@ -11,6 +11,7 @@
 import { Redis } from "@upstash/redis";
 
 const REVIEWS_KEY = "reviews-amal";
+const PUBLIC_REVIEW_VERSION = "2.0";
 
 /* ── Redis client (lazy — only created when env vars exist) ── */
 let redis = null;
@@ -60,7 +61,9 @@ export async function getReviews() {
 /* ── Read only APPROVED reviews (for public display) ───────── */
 export async function getApprovedReviews() {
   const all = await getReviews();
-  return all.filter((r) => r.approved === true);
+  return all.filter(
+    (r) => r.approved === true && r.version === PUBLIC_REVIEW_VERSION,
+  );
 }
 
 /* ── Submit a new review ───────────────────────────────────── */
@@ -87,6 +90,7 @@ export async function submitReview(_prevState, formData) {
     message,
     date: new Date().toISOString(),
     avatar: name.charAt(0).toUpperCase(),
+    version: PUBLIC_REVIEW_VERSION,
     approved: false,
   };
 
