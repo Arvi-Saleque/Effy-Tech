@@ -16,7 +16,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback, useEffect, useActionState } from "react";
 import Link from "next/link";
 import { submitReview } from "@/app/actions/submitReview";
-import { trackCTAClick, trackExternalLink, trackReviewSubmit } from "@/lib/analytics";
+import { trackCTAClick, trackReviewSubmit } from "@/lib/analytics";
 import {
   HiArrowLeft,
   HiExternalLink,
@@ -62,6 +62,10 @@ const iconMap = {
   check: FaCheckCircle,
   book: FaBookOpen,
   layers: FaLayerGroup,
+  praying: FaPrayingHands,
+  quran: FaQuran,
+  heart: FaHandHoldingHeart,
+  widgets: FaLayerGroup,
 };
 
 /* ── Animation variants ───────────────────────────────────── */
@@ -153,108 +157,9 @@ function PhoneMockup({ src, alt, className = "" }) {
   );
 }
 
-/* ── Deep-dive feature data ───────────────────────────────── */
-const deepDiveCategories = [
-  {
-    id: "salah",
-    icon: FaMosque,
-    titleBn: "নামাজ ট্রাকিং",
-    titleEn: "Salah Tracking",
-    color: "from-teal-500/20 to-teal-600/5",
-    accent: "teal",
-    points: [
-      "প্রতিদিনের নামাজ ট্রাক রাখা যাবে।",
-      "জামাতে / আউয়াল ওয়াক্তে নাকি দেরী করে সেটা দেখা যাবে।",
-      "শেষ ৭ দিন / ৩০ দিনে কয় ওয়াক্ত নামাজ জামাতে পড়ছেন দেখা যাবে।",
-      "শেষ ৩০ দিনে কোন কোন নামাজ কাজা হইছে সেগুলা বিস্তারিত দেখা যাবে এবং আপডেট করা যাবে।",
-    ],
-  },
-  {
-    id: "amal",
-    icon: FaCheckCircle,
-    titleBn: "প্রতিদিনের আমল ট্রাকিং",
-    titleEn: "Daily Amal Tracking",
-    color: "from-emerald-500/20 to-emerald-600/5",
-    accent: "emerald",
-    points: [
-      "প্রতিদিনের আমল সেকশনে বেসিক ১৮ টা আমল আছে — এইগুলা চেঞ্জ বা এডিট করা যাবে না।",
-      "ইউজার প্রয়োজন হলে কাস্টম যে কোনো আমল নিজের ইচ্ছা মত যুক্ত করে নিতে পারবে।",
-      "একবার যুক্ত করলেই হবে — পরবর্তীতে যুক্ত করা লাগবে না যদি না ডিলেট করে।",
-      "আমল পেজের উপর ইনফো আইকন থেকে সকাল-সন্ধ্যার সকল দোয়া পাওয়া যাবে।",
-      "দোয়া সেকশনে শায়খ আহমাদুল্লাহ এর সকাল-সন্ধ্যার দোয়া যুক্ত করা হয়েছে।",
-    ],
-  },
-  {
-    id: "zikir",
-    icon: FaPrayingHands,
-    titleBn: "যিকির ট্রাকিং",
-    titleEn: "Zikir Tracking",
-    color: "from-amber-500/20 to-amber-600/5",
-    accent: "amber",
-    points: [
-      "বেসিক যিকির হিসেবে ৬ তাসবিহ যুক্ত করা আছে।",
-      "১০০ বার করে আলহামদুলিল্লাহ, সুবহানাল্লাহ, আল্লাহু আকবার, লা ইলাহা ইল্লাল্লাহ, আসতাগফিরুল্লাহ, দুরূদ শরীফ।",
-      "ইউজার প্রয়োজন হলে কাস্টম যে কোনো যিকির নিজের ইচ্ছা মত টার্গেট সেট করে যুক্ত করে নিতে পারবে।",
-    ],
-  },
-  {
-    id: "study",
-    icon: FaQuran,
-    titleBn: "পড়াশোনা ট্রাকিং",
-    titleEn: "Study Tracking",
-    color: "from-sky-500/20 to-sky-600/5",
-    accent: "sky",
-    points: [
-      "কুরআন, হাদীস ও তাফসীর — এই ৩ টি বিষয় রাখা হয়েছে।",
-      "কোন বিষয়ে ইউজার কত সময় রেগুলার পড়তে চায় সেটা নিজের মত করে সেট করে নিতে পারবে।",
-    ],
-  },
-  {
-    id: "gunah",
-    icon: FaShieldAlt,
-    titleBn: "গুনাহ ট্রাকিং",
-    titleEn: "Sin & Kaffara Tracking",
-    color: "from-rose-500/20 to-rose-600/5",
-    accent: "rose",
-    points: [
-      "গুনাহ ট্রাকিং এ ডিফল্ট ৪ টা গুনাহ আছে — ইউজার ইচ্ছা মত গুনাহ অ্যাড করতে পারবে।",
-      "কোন কোন গুনাহের কাফফারা বাকি সেটা দেখতে পারবে।",
-      "কাফফারার জন্য ৪ টি বিষয় রাখা হয়েছে — যিকির, দান, কুরআন, নামাজ।",
-    ],
-  },
-  {
-    id: "stats",
-    icon: FaFire,
-    titleBn: "স্ট্যাট",
-    titleEn: "Statistics & Progress",
-    color: "from-orange-500/20 to-orange-600/5",
-    accent: "orange",
-    points: [
-      "প্রতিদিনের প্রোগ্রেস ন্যুনতম ৬০% হলে স্ট্রিক কাউন্ট হবে।",
-      "সাপ্তাহিক চার্টে শেষ ৭ দিনের সামারি দেখা যাবে — মোট আমল, মোট যিকির ইত্যাদি।",
-      "মাসিক চার্টে শেষ ৩০ দিনের সামারি দেখা যাবে — মোট আমল, মোট যিকির ইত্যাদি।",
-      "মাসিক চার্টের ক্যালেন্ডারে কোনো দিনে ক্লিক করলে বিস্তারিত দেখা যাবে — ঐ দিনের আমল/টার্গেট, কি করা হয়েছে, গুনাহ ও কাফফারা সব।",
-    ],
-  },
-  {
-    id: "reminder",
-    icon: FaBell,
-    titleBn: "রিমাইন্ডার সিস্টেম",
-    titleEn: "Smart Reminders",
-    color: "from-violet-500/20 to-violet-600/5",
-    accent: "violet",
-    points: [
-      "প্রতি ওয়াক্তে নামাজের রিমাইন্ডার দিবে।",
-      "সকাল ও সন্ধ্যার যিকিরে রিমাইন্ডার দিবে।",
-      "দৈনিক আমলের রিমাইন্ডার দিবে।",
-      "ইউজার চাইলে নিজের মত কাস্টম রিমাইন্ডার অ্যাড করে নিতে পারবে।",
-    ],
-  },
-];
-
 /* ── Feature Deep Dive — Interactive accordion ────────────── */
-function FeatureDeepDive() {
-  const [openId, setOpenId] = useState("salah");
+function FeatureDeepDive({ categories }) {
+  const [openId, setOpenId] = useState("home");
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -287,7 +192,7 @@ function FeatureDeepDive() {
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1]">
             <span className="bg-gradient-to-b from-neutral-100 to-neutral-400 bg-clip-text text-transparent">
-              বিস্তারিত ফিচার সমূহ
+              বিস্তারিত ফিচারসমূহ
             </span>
           </h2>
           <p className="mt-5 text-neutral-500 leading-relaxed text-lg max-w-xl mx-auto">
@@ -297,8 +202,8 @@ function FeatureDeepDive() {
 
         {/* Accordion */}
         <div className="max-w-4xl mx-auto flex flex-col gap-3">
-          {deepDiveCategories.map((cat, i) => {
-            const Icon = cat.icon;
+          {categories.map((cat, i) => {
+            const Icon = iconMap[cat.icon] || FaLayerGroup;
             const isOpen = openId === cat.id;
 
             return (
@@ -515,17 +420,17 @@ function ScreenshotCarousel({ screenshots }) {
             {extended.map((ss, i) => (
               <div
                 key={`${i}`}
-                className="flex-shrink-0 w-1/2 md:w-1/3 lg:w-1/4 relative overflow-hidden group cursor-pointer"
-                style={{ aspectRatio: "4 / 3" }}
+                className="flex-shrink-0 w-1/2 md:w-1/3 lg:w-1/4 relative overflow-hidden group cursor-pointer px-2 sm:px-3"
+                style={{ aspectRatio: "9 / 16" }}
                 onClick={() => setLightbox(ss)}
               >
                 <img
                   src={ss.src}
                   alt={ss.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-2 sm:inset-3 w-[calc(100%_-_1rem)] sm:w-[calc(100%_-_1.5rem)] h-[calc(100%_-_1rem)] sm:h-[calc(100%_-_1.5rem)] rounded-2xl object-contain bg-neutral-950/40 transition-transform duration-500 group-hover:scale-[1.02] shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-neutral-black/0 group-hover:bg-neutral-black/15 transition-all duration-300" />
+                <div className="absolute inset-2 sm:inset-3 rounded-2xl bg-neutral-black/0 group-hover:bg-neutral-black/10 transition-all duration-300" />
               </div>
             ))}
           </div>
@@ -637,7 +542,7 @@ const showcaseNavLinks = [
   { label: "Features", href: "#features" },
   { label: "Details", href: "#deep-dive" },
   { label: "Screenshots", href: "#screenshots" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Feedback", href: "#reviews" },
   { label: "Download", href: "#download" },
 ];
 
@@ -664,7 +569,7 @@ const mobileLinkVariants = {
 };
 
 /* ── Custom Navbar for Amal Tracker page ──────────────────── */
-function ShowcaseNavbar({ appName, playStoreUrl }) {
+function ShowcaseNavbar({ appName, logoImage, playStoreUrl }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -703,9 +608,16 @@ function ShowcaseNavbar({ appName, playStoreUrl }) {
             >
               <HiArrowLeft className="h-4 w-4" />
             </Link>
-            <span className="text-sm font-bold text-neutral-200 tracking-tight hidden sm:block transition-all duration-300">
-              {appName}
-            </span>
+            <div className="hidden sm:flex items-center gap-2.5">
+              <img
+                src={logoImage}
+                alt={`${appName} logo`}
+                className="h-8 w-8 rounded-lg object-cover shadow-sm"
+              />
+              <span className="text-sm font-bold text-neutral-200 tracking-tight transition-all duration-300">
+                {appName}
+              </span>
+            </div>
           </div>
 
           {/* ── Center: Nav Links (desktop) ──────────────── */}
@@ -732,6 +644,7 @@ function ShowcaseNavbar({ appName, playStoreUrl }) {
               href={playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackCTAClick("Download - Navbar", "IAM")}
               className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-primary/90 px-4 py-2 text-xs font-semibold text-neutral-100 hover:bg-primary hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] transition-all duration-300"
             >
               <FaGooglePlay className="h-3.5 w-3.5" />
@@ -785,9 +698,16 @@ function ShowcaseNavbar({ appName, playStoreUrl }) {
                 >
                   <HiArrowLeft className="h-4 w-4" />
                 </Link>
-                <span className="text-base font-bold text-neutral-100">
-                  {appName}
-                </span>
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src={logoImage}
+                    alt={`${appName} logo`}
+                    className="h-9 w-9 rounded-xl object-cover shadow-sm"
+                  />
+                  <span className="text-base font-bold text-neutral-100">
+                    {appName}
+                  </span>
+                </div>
               </div>
               <button
                 onClick={() => setMobileOpen(false)}
@@ -839,6 +759,7 @@ function ShowcaseNavbar({ appName, playStoreUrl }) {
                   href={playStoreUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackCTAClick("Download - Mobile Menu", "IAM")}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary-light px-8 py-3 text-base font-semibold text-text-inverse shadow-[0_0_25px_rgba(45,212,191,0.25)] transition-all hover:scale-105"
                 >
                   <FaGooglePlay className="h-4 w-4" />
@@ -874,13 +795,14 @@ function ShowcaseFooter({ appName, playStoreUrl }) {
           <div className="sm:col-span-2 lg:col-span-1">
             <h3 className="text-lg font-bold text-neutral-100">{appName}</h3>
             <p className="mt-2 text-sm text-neutral-500 leading-relaxed max-w-xs">
-              Your daily companion for Islamic spiritual growth — track Salah,
-              Amal, Zikir &amp; more.
+              A complete daily companion for Salah, Sunnah, Kaza, Amal,
+              Dhikr, routines, reminders and meaningful progress.
             </p>
             <a
               href={playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackCTAClick("Download - Showcase Footer", "IAM")}
               className="inline-flex items-center gap-2 mt-4 rounded-lg bg-primary/15 border border-primary/20 px-4 py-2 text-xs font-semibold text-primary-light hover:bg-primary/25 transition-colors"
             >
               <FaGooglePlay className="h-3.5 w-3.5" />
@@ -951,15 +873,15 @@ function ShowcaseFooter({ appName, playStoreUrl }) {
               </li>
               <li className="flex items-center gap-2">
                 <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                No Account Required
+                Account Optional
               </li>
               <li className="flex items-center gap-2">
                 <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                Offline Support
+                Offline-first
               </li>
               <li className="flex items-center gap-2">
                 <HiCheckCircle className="h-4 w-4 text-primary-light/60 flex-shrink-0" />
-                Flutter &amp; Firebase
+                Flutter, Drift &amp; Supabase
               </li>
             </ul>
           </div>
@@ -1285,16 +1207,16 @@ function ReviewSection({ initialReviews }) {
           transition={{ duration: 0.6 }}
         >
           <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-primary-light mb-4">
-            Reviews
+            Beta Feedback
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100">
-            What Users{" "}
+            Help Shape{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-primary">
-              Say
+              Version 2.0
             </span>
           </h2>
           <p className="mt-3 text-neutral-400 max-w-lg mx-auto">
-            Real experiences from people using Amal Tracker daily
+            Share your experience, report gaps and help improve Islamic Amal Tracker during beta
           </p>
         </motion.div>
 
@@ -1349,7 +1271,7 @@ function ReviewSection({ initialReviews }) {
             {reviews.length === 0 ? (
               <div className="rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-12 text-center backdrop-blur-sm">
                 <p className="text-neutral-500">
-                  No reviews yet. Be the first to share your experience!
+                  No approved Version 2.0 feedback yet. Be the first to share your experience!
                 </p>
               </div>
             ) : (
@@ -1380,6 +1302,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
   const {
     name,
     nameBn,
+    versionLabel,
     tagline,
     taglineEn,
     description,
@@ -1387,7 +1310,10 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
     playStoreUrl,
     category,
     techStack,
+    logoImage,
+    heroImage,
     features,
+    deepDiveCategories,
     screenshots,
     howItWorks,
     highlights,
@@ -1402,7 +1328,11 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
   return (
     <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
       {/* Custom Navbar for this page */}
-      <ShowcaseNavbar appName={name} playStoreUrl={playStoreUrl} />
+      <ShowcaseNavbar
+        appName={name}
+        logoImage={logoImage}
+        playStoreUrl={playStoreUrl}
+      />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 1 — HERO (Full viewport)
@@ -1432,11 +1362,21 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-10 items-center">
               {/* Left — Text */}
               <motion.div initial="hidden" animate="visible" variants={stagger}>
+                {/* App logo */}
+                <motion.div variants={fadeUp} className="mb-5">
+                  <img
+                    src={logoImage}
+                    alt={`${name} logo`}
+                    className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl object-cover border border-primary/20 bg-neutral-900 shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
+                    loading="eager"
+                  />
+                </motion.div>
+
                 {/* Category badge */}
                 <motion.div variants={fadeUp}>
                   <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
-                    {category} App
+                    {category} App{versionLabel ? ` • ${versionLabel}` : ""}
                   </span>
                 </motion.div>
 
@@ -1449,6 +1389,13 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                     {name}
                   </span>
                 </motion.h1>
+
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-3 text-sm sm:text-base font-semibold tracking-wide text-neutral-500"
+                >
+                  {nameBn}
+                </motion.p>
 
                 {/* Bangla tagline */}
                 <motion.p
@@ -1533,23 +1480,15 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                   {/* Ambient glow */}
                   <div className="absolute -inset-10 rounded-[3rem] bg-gradient-to-b from-primary/10 via-primary/4 to-transparent blur-[60px] pointer-events-none" />
 
-                  {/* Phone frame */}
-                  <div className="relative h-full rounded-[2.5rem] sm:rounded-[3rem] border-[4px] border-neutral-700/40 bg-neutral-950 p-1.5 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
-                    {/* Dynamic island */}
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 h-5 w-24 rounded-full bg-neutral-950" />
-
-                    {/* Screen */}
-                    <div className="relative h-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-neutral-900">
-                      <img
-                        src="/images/amal/hero.jpeg"
-                        alt="Amal Tracker Home Screen"
-                        className="h-full w-auto object-cover object-top block"
-                        loading="eager"
-                      />
-                    </div>
-
-                    {/* Home indicator */}
-                    <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 h-1 w-14 rounded-full bg-neutral-600/30" />
+                  {/* Current Version 2.0 promotional artwork */}
+                  <div className="relative h-full overflow-hidden rounded-[2.25rem] border border-neutral-700/40 bg-neutral-950 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
+                    <img
+                      src={heroImage}
+                      alt={`${name} Home Dashboard`}
+                      className="h-full w-auto object-contain block"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 rounded-[2.25rem] ring-1 ring-inset ring-neutral-100/5 pointer-events-none" />
                   </div>
 
                   {/* Side glow accents */}
@@ -1663,8 +1602,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
               variants={fadeUp}
               className="mt-5 text-neutral-500 leading-relaxed text-lg max-w-xl mx-auto"
             >
-              Everything you need to stay consistent with your daily Islamic
-              practices — all in one beautiful app.
+              Prayer, Amal, Dhikr, routines, reminders, insights and accountability — organized in one focused app.
             </motion.p>
           </div>
 
@@ -1771,7 +1709,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 3.5 — DETAILED FEATURE DEEP DIVE
          ───────────────────────────────────────────────────── */}
-      <FeatureDeepDive />
+      <FeatureDeepDive categories={deepDiveCategories} />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 4 — SCREENSHOTS (Full-width carousel)
@@ -1788,7 +1726,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
           <SectionHeading
             overline="How It Works"
             title="কীভাবে ব্যবহার করবেন"
-            subtitle="Get started in just four simple steps — no account required."
+            subtitle="Start offline in minutes; sign in only when you want secure backup and sync."
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -1872,10 +1810,10 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
         <div className="relative z-10 max-w-3xl mx-auto px-6 sm:px-10 text-center">
           <motion.div variants={fadeUp}>
             <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight">
-              আজই ডাউনলোড করুন
+              আজই Islamic Amal Tracker ব্যবহার শুরু করুন
             </h2>
             <p className="mt-2 text-lg text-neutral-400">
-              Download now and start your spiritual journey
+              Track consistently, understand your gaps and improve one day at a time.
             </p>
           </motion.div>
 
@@ -1912,7 +1850,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
             variants={fadeUp}
             className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-neutral-500"
           >
-            {["Free to Use", "No Account Required", "Offline Support"].map(
+            {["Free to Use", "Works Offline", "Optional Cloud Sync", "Bangla & English"].map(
               (item) => (
                 <span key={item} className="flex items-center gap-1.5">
                   <HiCheckCircle className="h-4 w-4 text-primary-light" />
