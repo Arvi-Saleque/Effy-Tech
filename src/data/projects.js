@@ -15,7 +15,7 @@ const projects = [
     description:
       "Amal Tracker is a productivity-based Islamic habit tracking mobile application that helps users monitor daily Salah, Azkar, and spiritual activities with structured reporting and reminders.",
     category: "Android",
-    tags: ["Flutter", "Dart", "Firebase"],
+    tags: ["Flutter", "Drift", "Supabase"],
     thumbnail: "/images/amal.jpg",
     images: [],
     clientName: null,

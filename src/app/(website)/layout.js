@@ -1,5 +1,4 @@
 import Navbar from "@/components/layout/Navbar";
-import Preloader from "@/components/ui/Preloader";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
@@ -13,7 +12,6 @@ export default function WebsiteLayout({ children }) {
     <>
       <GoogleTagManagerScript />
       <GoogleTagManagerNoscript />
-      <Preloader />
       <Navbar />
       {children}
       <WhatsAppButton />

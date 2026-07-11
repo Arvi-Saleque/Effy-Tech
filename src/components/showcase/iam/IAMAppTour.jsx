@@ -154,14 +154,14 @@ export default function IAMAppTour({ appName }) {
   return (
     <div id="iam-tour" className="mx-auto w-full max-w-[500px]">
       <div className="mb-5 flex items-stretch gap-2.5 px-0.5">
-        <label className="relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/80 shadow-[0_12px_34px_rgba(0,0,0,0.24)] backdrop-blur">
-          <span className="pointer-events-none absolute left-4 top-2 text-[8px] font-bold uppercase tracking-[0.2em] text-primary-light/70">
+        <label className="relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/10 bg-[#f6f3e9]/95 shadow-[0_14px_36px_rgba(32,38,31,0.13)] backdrop-blur">
+          <span className="pointer-events-none absolute left-4 top-2 text-[8px] font-bold uppercase tracking-[0.2em] text-[#727867]">
             Explore App Screens
           </span>
           <select
             value={current}
             onChange={(event) => goTo(Number(event.target.value))}
-            className="h-[54px] w-full appearance-none bg-transparent pb-1 pl-4 pr-11 pt-5 text-[12px] font-bold text-neutral-100 outline-none"
+            className="h-[54px] w-full appearance-none bg-transparent pb-1 pl-4 pr-11 pt-5 text-[12px] font-bold text-[#22271f] outline-none"
             aria-label="Choose an app screen"
           >
             {tourSlides.map((item, index) => (
@@ -170,27 +170,27 @@ export default function IAMAppTour({ appName }) {
               </option>
             ))}
           </select>
-          <HiChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary-light" />
+          <HiChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#727867]" />
         </label>
 
-        <div className="flex h-[54px] shrink-0 flex-col items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 px-3.5 text-primary-light">
+        <div className="flex h-[54px] shrink-0 flex-col items-center justify-center rounded-2xl border border-[#aa9158]/45 bg-[#e8e3d7] px-3.5 text-[#343b31]">
           <span className="text-[13px] font-black leading-none">
             {String(current + 1).padStart(2, "0")}
           </span>
-          <span className="mt-1 text-[8px] font-bold tracking-[0.14em] text-primary-light/60">
+          <span className="mt-1 text-[8px] font-bold tracking-[0.14em] text-[#727867]">
             OF {total}
           </span>
         </div>
       </div>
 
       <div className="relative isolate flex justify-center">
-        <div className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[70px]" />
+        <div className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#aa9158]/18 blur-[70px]" />
         <div className="pointer-events-none absolute inset-x-[16%] bottom-[2%] -z-10 h-16 rounded-full bg-black/65 blur-2xl" />
 
         <button
           type="button"
           onClick={goPrev}
-          className="absolute left-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:left-1"
+          className="absolute left-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-[#aa9158]/60 hover:text-[#d8c9a4] active:scale-95 sm:left-1"
           aria-label="Previous app screen"
         >
           <HiChevronLeft className="h-5 w-5" />
@@ -205,8 +205,8 @@ export default function IAMAppTour({ appName }) {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="relative rounded-[2.4rem] border-[7px] border-[#202631] bg-[#080b10] p-[5px] shadow-[0_30px_90px_rgba(0,0,0,0.58)] ring-1 ring-white/10">
-            <div className="absolute left-1/2 top-[9px] z-20 h-[19px] w-[82px] -translate-x-1/2 rounded-full bg-[#080b10] shadow-[0_1px_0_rgba(255,255,255,0.04)]" />
+          <div className="relative rounded-[2.4rem] border-[7px] border-[#252a23] bg-[#171b17] p-[5px] shadow-[0_30px_90px_rgba(0,0,0,0.58)] ring-1 ring-white/10">
+            <div className="absolute left-1/2 top-[9px] z-20 h-[19px] w-[82px] -translate-x-1/2 rounded-full bg-[#171b17] shadow-[0_1px_0_rgba(255,255,255,0.04)]" />
 
             <div
               ref={previewRef}
@@ -241,7 +241,7 @@ export default function IAMAppTour({ appName }) {
         <button
           type="button"
           onClick={goNext}
-          className="absolute right-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:right-1"
+          className="absolute right-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-[#aa9158]/60 hover:text-[#d8c9a4] active:scale-95 sm:right-1"
           aria-label="Next app screen"
         >
           <HiChevronRight className="h-5 w-5" />
@@ -251,7 +251,7 @@ export default function IAMAppTour({ appName }) {
       <div className="mx-auto mt-3 flex w-[min(78vw,330px)] items-center gap-3">
         <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/[0.07]">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-primary-light"
+            className="h-full rounded-full bg-gradient-to-r from-[#727867] to-[#aa9158]"
             animate={{ width: `${((current + 1) / total) * 100}%` }}
             transition={{ duration: 0.28, ease: "easeOut" }}
           />

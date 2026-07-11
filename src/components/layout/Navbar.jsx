@@ -1,161 +1,134 @@
-/* ============================================================
-   Navbar — Main navigation bar
-   - Nav links always visible (white on hero, dark after scroll)
-   - Before scroll: fully transparent background
-   - After scroll (~80px): dark semi-transparent blur, shadow
-   - Search: command palette overlay (click search icon)
-   - Mobile: full-screen overlay with stagger-animated links
-   - Fixed top-0 z-50
-   ============================================================ */
-
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import siteConfig from "@/theme/siteConfig";
-import { Logo } from "@/components/ui";
-import CommandPalette from "./CommandPalette";
-import MobileMenu from "./MobileMenu";
-import { HiOutlineSearch } from "react-icons/hi";
+import { ArrowRight, Mail, Menu, Search, X } from "lucide-react";
+import Logo from "@/components/ui/Logo";
+import CommandPalette from "@/components/layout/CommandPalette";
 import projects from "@/data/projects";
+import siteConfig from "@/theme/siteConfig";
 
-const SCROLL_THRESHOLD = 80;
-
-/* Pages that use their own custom navbar */
-const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA"];
+const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA", "/projects/BUEK"];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname) || pathname?.startsWith("/admin");
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname) || pathname?.startsWith("/admin");
 
-  /* Scroll listener */
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > SCROLL_THRESHOLD);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ⌘K keyboard shortcut */
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen((prev) => !prev);
+    setOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setOpen(false);
+        setSearchOpen(true);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  /* Lock body scroll when overlays are open */
   useEffect(() => {
-    if (mobileMenuOpen || searchOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen, searchOpen]);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
-  const toggleMobileMenu = useCallback(() => {
-    setMobileMenuOpen((prev) => !prev);
-  }, []);
-
-  /* Hide global navbar on pages with their own navbar */
   if (hideGlobal) return null;
+
+  const openSearch = () => {
+    setOpen(false);
+    setSearchOpen(true);
+  };
 
   return (
     <>
-      <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
-          scrolled
-            ? "bg-neutral-900/80 backdrop-blur-md shadow-lg border-b border-primary-darkest/30"
-            : "bg-neutral-900/20 backdrop-blur-sm"
-        }`}
-      >
-        <div className="mx-auto flex h-16 md:h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* ── Left: Logo ───────────────────────────────────── */}
-          <Logo size="md" light className="transition-all duration-300" />
+      <header className={`effy-navbar ${scrolled ? "is-scrolled" : ""} ${open ? "menu-open" : ""}`}>
+        <div className="home-shell navbar-inner">
+          <Logo size="md" />
 
-          {/* ── Center: Nav Links (desktop — always visible) ── */}
-          <nav className="hidden md:flex items-center gap-1">
-            {siteConfig.navLinks.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 group ${
-                  scrolled
-                    ? "text-neutral-300 hover:text-primary-light"
-                    : "text-text-inverse/80 hover:text-text-inverse"
-                }`}
-              >
-                {label}
-                {/* Gold underline on hover */}
-                <span className="absolute bottom-0.5 left-4 right-4 h-0.5 bg-primary-light scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </a>
+          <nav className="desktop-nav" aria-label="Primary navigation">
+            {siteConfig.navLinks.map((item) => (
+              <a key={item.label} href={item.href}>{item.label}</a>
             ))}
           </nav>
 
-          {/* ── Right: Search + Hamburger ─────────────────────── */}
-          <div className="flex items-center gap-3">
-            {/* Search icon → opens command palette */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer ${
-                scrolled
-                  ? "text-neutral-400 hover:text-primary-light hover:bg-neutral-white/10"
-                  : "text-text-inverse/80 hover:text-text-inverse hover:bg-neutral-white/10"
-              }`}
-              aria-label="Search"
-            >
-              <HiOutlineSearch className="h-5 w-5" />
-            </button>
+          <button className="nav-search" onClick={openSearch} aria-label="Search the website">
+            <Search size={17} />
+            <span>Search</span>
+            <kbd>⌘K</kbd>
+          </button>
 
-            {/* Hamburger / Close toggle (mobile only) */}
-            <button
-              onClick={toggleMobileMenu}
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 cursor-pointer md:hidden ${
-                scrolled
-                  ? "text-text-inverse hover:bg-neutral-white/10"
-                  : "text-text-inverse hover:bg-neutral-white/10"
-              }`}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              <div className="relative h-5 w-5">
-                <span
-                  className={`absolute left-0 top-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
-                />
-                <span
-                  className={`absolute left-0 top-[9px] h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
-                />
-                <span
-                  className={`absolute left-0 bottom-0.5 h-0.5 w-5 rounded-full transition-all duration-300 ${"bg-text-inverse"} ${mobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
-                />
-              </div>
-            </button>
-          </div>
+          <a href="/#contact" className="nav-cta">Start a Project <ArrowRight size={16}/></a>
+
+          <button
+            className="mobile-trigger"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <X size={23}/> : <Menu size={23}/>} 
+          </button>
         </div>
-      </motion.header>
 
-      {/* ── Overlays ─────────────────────────────────────────── */}
+        {open && (
+          <div className="mobile-menu-layer">
+            <button className="mobile-menu-backdrop" onClick={() => setOpen(false)} aria-label="Close menu" />
+            <div className="mobile-nav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+              <div className="mobile-nav-intro">
+                <span className="eyebrow">Navigate Effy Tech</span>
+                <p>Explore our capabilities, selected work, and the way we build connected digital systems.</p>
+              </div>
+
+              <button className="mobile-search-card" onClick={openSearch}>
+                <span className="mobile-search-icon"><Search size={20}/></span>
+                <span>
+                  <strong>Search Effy Tech</strong>
+                  <small>Projects, services and pages</small>
+                </span>
+                <kbd>⌘K</kbd>
+              </button>
+
+              <nav className="mobile-nav-links" aria-label="Mobile primary navigation">
+                {siteConfig.navLinks.map((item, index) => (
+                  <a key={item.label} href={item.href} onClick={() => setOpen(false)}>
+                    <span className="mobile-nav-index">0{index + 1}</span>
+                    <span>{item.label}</span>
+                    <ArrowRight size={18}/>
+                  </a>
+                ))}
+              </nav>
+
+              <div className="mobile-nav-footer">
+                <a className="mobile-primary-cta" href="/#contact" onClick={() => setOpen(false)}>
+                  Start a Project <ArrowRight size={18}/>
+                </a>
+                <a className="mobile-email-link" href={`mailto:${siteConfig.contact.email}`}>
+                  <Mail size={17}/> {siteConfig.contact.email}
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
       <CommandPalette
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
         projects={projects}
         pages={siteConfig.navLinks}
-      />
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
       />
     </>
   );
