@@ -17,7 +17,7 @@ import { useRef, useState, useCallback, useEffect, useActionState } from "react"
 import Link from "next/link";
 import { submitReview } from "@/app/actions/submitReview";
 import { trackCTAClick, trackReviewSubmit } from "@/lib/analytics";
-import IAMDemoPhone from "@/components/showcase/iam/IAMDemoPhone";
+import IAMAppTour from "@/components/showcase/iam/IAMAppTour";
 import {
   HiArrowLeft,
   HiExternalLink,
@@ -1312,7 +1312,6 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
     category,
     techStack,
     logoImage,
-    heroImage,
     features,
     deepDiveCategories,
     screenshots,
@@ -1336,14 +1335,13 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
       />
 
       {/* ─────────────────────────────────────────────────────
-          SECTION 1 — HERO (Full viewport)
+          SECTION 1 — MOBILE-FIRST CONVERSION HERO
          ───────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col overflow-hidden pt-16 md:pt-[72px]">
+      <section className="relative overflow-hidden pt-16 md:pt-[72px]">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 left-1/4 h-[700px] w-[700px] rounded-full bg-primary/8 blur-[160px]" />
-          <div className="absolute bottom-1/4 right-1/4 h-[600px] w-[600px] rounded-full bg-accent/6 blur-[140px]" />
-          <div className="absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-primary/4 blur-[100px]" />
+          <div className="absolute top-1/4 left-1/4 h-[620px] w-[620px] rounded-full bg-primary/8 blur-[150px]" />
+          <div className="absolute bottom-0 right-0 h-[520px] w-[520px] rounded-full bg-accent/6 blur-[135px]" />
           <div
             className="absolute inset-0 opacity-[0.025]"
             style={{
@@ -1352,44 +1350,67 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
               backgroundSize: "40px 40px",
             }}
           />
-          {/* Horizontal accent lines */}
-          <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/[0.04] to-transparent" />
-          <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/[0.03] to-transparent" />
         </div>
 
-        {/* Main hero content — vertically centered */}
-        <div className="relative z-10 flex-1 flex items-center">
-          <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 py-8 sm:py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-9 lg:gap-12 items-center">
-              {/* Left — Text */}
+        {/* Mobile: CTA first, then app tour, then promo video — all in first viewport */}
+        <div className="relative z-10 lg:hidden">
+          <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-md flex-col px-3 pb-3 pt-3 sm:px-5">
+            <motion.a
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              href={playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCTAClick("Download - Hero", "IAM")}
+              className="inline-flex min-h-14 w-full shrink-0 items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_34px_rgba(15,118,110,0.28)] transition active:scale-[0.985]"
+            >
+              <FaGooglePlay className="h-5 w-5" />
+              <span className="text-left">
+                <span className="block text-[9px] font-normal leading-none opacity-80">
+                  GET IT ON
+                </span>
+                <span className="block text-base leading-tight">Google Play</span>
+              </span>
+            </motion.a>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.08 }}
+              className="mt-3"
+            >
+              <IAMAppTour appName={name} />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Desktop: concise brand copy + complete tour and video */}
+        <div className="relative z-10 hidden min-h-[calc(100vh-72px)] lg:flex lg:items-center">
+          <div className="mx-auto w-full max-w-7xl px-10 py-10">
+            <div className="grid grid-cols-[0.82fr_1.18fr] items-center gap-14">
               <motion.div
                 initial="hidden"
                 animate="visible"
                 variants={stagger}
-                className="text-center lg:text-left"
+                className="max-w-xl"
               >
-                {/* App logo */}
-                <motion.div variants={fadeUp} className="mb-4 flex justify-center lg:justify-start">
+                <motion.div variants={fadeUp} className="flex items-center gap-4">
                   <img
                     src={logoImage}
                     alt={`${name} logo`}
-                    className="h-14 w-14 sm:h-20 sm:w-20 rounded-2xl object-cover border border-primary/20 bg-neutral-900 shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
+                    className="h-20 w-20 rounded-2xl border border-primary/20 bg-neutral-900 object-cover shadow-[0_18px_45px_rgba(0,0,0,0.35)]"
                     loading="eager"
                   />
-                </motion.div>
-
-                {/* Category badge */}
-                <motion.div variants={fadeUp} className="flex justify-center lg:justify-start">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-primary-light backdrop-blur-sm">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-light">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary-light animate-pulse" />
                     {category} App{versionLabel ? ` • ${versionLabel}` : ""}
                   </span>
                 </motion.div>
 
-                {/* Title */}
                 <motion.h1
                   variants={fadeUp}
-                  className="mt-5 sm:mt-7 text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05]"
+                  className="mt-7 text-6xl font-bold leading-[1.04]"
                 >
                   <span className="bg-gradient-to-b from-neutral-50 to-neutral-300 bg-clip-text text-transparent">
                     {name}
@@ -1398,120 +1419,52 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
 
                 <motion.p
                   variants={fadeUp}
-                  className="mt-2 sm:mt-3 text-xs sm:text-base font-semibold tracking-wide text-neutral-500"
-                >
-                  {nameBn}
-                </motion.p>
-
-                {/* Bangla tagline */}
-                <motion.p
-                  variants={fadeUp}
-                  className="mt-4 sm:mt-5 text-lg sm:text-2xl text-primary-light/90 font-medium"
+                  className="mt-3 text-xl font-medium text-primary-light/90"
                 >
                   {tagline}
                 </motion.p>
 
-                {/* English subtitle */}
                 <motion.p
                   variants={fadeUp}
-                  className="mt-2 hidden sm:block text-neutral-500 text-lg"
-                >
-                  {taglineEn}
-                </motion.p>
-
-                {/* Description */}
-                <motion.p
-                  variants={fadeUp}
-                  className="mt-7 hidden lg:block text-neutral-400 leading-relaxed max-w-lg text-[15px]"
+                  className="mt-4 max-w-lg text-base leading-relaxed text-neutral-400"
                 >
                   {description}
                 </motion.p>
 
-                {/* Tech stack pills */}
-                <motion.div
+                <motion.a
                   variants={fadeUp}
-                  className="mt-6 hidden lg:flex flex-wrap gap-2"
+                  href={playStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackCTAClick("Download - Hero", "IAM")}
+                  className="mt-8 inline-flex items-center justify-center gap-3 rounded-2xl bg-primary px-8 py-4 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(15,118,110,0.3)] transition hover:bg-primary-dark hover:shadow-[0_0_42px_rgba(15,118,110,0.36)] active:scale-[0.985]"
                 >
-                  {techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-md border border-neutral-700/50 bg-neutral-800/40 px-3 py-1 font-mono text-xs text-neutral-400"
-                    >
-                      {tech}
+                  <FaGooglePlay className="h-5 w-5" />
+                  <span className="text-left">
+                    <span className="block text-[10px] font-normal leading-none opacity-80">
+                      GET IT ON
                     </span>
-                  ))}
-                </motion.div>
-
-                {/* CTA buttons */}
-                <motion.div
-                  variants={fadeUp}
-                  className="mt-6 sm:mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4"
-                >
-                  <a
-                    href={playStoreUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackCTAClick("Download - Hero", "IAM")}
-                    className="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
-                  >
-                    <FaGooglePlay className="h-5 w-5" />
-                    <span>
-                      <span className="block text-[10px] font-normal opacity-80 leading-none">
-                        GET IT ON
-                      </span>
-                      <span className="block leading-tight">Google Play</span>
-                    </span>
-                  </a>
-                  <a
-                    href="#iam-demo"
-                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-neutral-600 px-7 py-4 text-sm font-medium text-neutral-300 transition-all hover:bg-neutral-800 hover:text-neutral-100 hover:border-neutral-500"
-                  >
-                    Try App Demo
-                  </a>
-                </motion.div>
+                    <span className="block text-base leading-tight">Google Play</span>
+                  </span>
+                </motion.a>
               </motion.div>
 
-              {/* Right — Interactive app demo and screen tour */}
               <motion.div
-                initial={{ opacity: 0, y: 42, scale: 0.97 }}
+                initial={{ opacity: 0, y: 34, scale: 0.985 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
-                  duration: 0.9,
-                  delay: 0.25,
+                  duration: 0.85,
+                  delay: 0.18,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
-                className="flex justify-center lg:justify-end"
+                className="mx-auto w-full max-w-[520px]"
               >
-                <IAMDemoPhone
-                  appName={name}
-                  screenshots={screenshots}
-                  initialScreenshot={heroImage}
-                />
+                <IAMAppTour appName={name} />
               </motion.div>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator at bottom */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="relative z-10 pb-8 flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2 text-neutral-600"
-          >
-            <span className="text-[10px] uppercase tracking-[0.25em]">
-              Scroll
-            </span>
-            <div className="h-8 w-[1px] bg-gradient-to-b from-neutral-600 to-transparent" />
-          </motion.div>
-        </motion.div>
-
-        {/* Bottom border */}
         <div className="h-px bg-gradient-to-r from-transparent via-neutral-700/40 to-transparent" />
       </section>
 
