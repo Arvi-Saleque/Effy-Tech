@@ -153,13 +153,15 @@ export default function IAMAppTour({ appName }) {
 
   return (
     <div id="iam-tour" className="mx-auto w-full max-w-[470px]">
-      <div className="mb-3 flex items-center gap-2.5 px-0.5">
-        <label className="relative min-w-0 flex-1">
-          <span className="sr-only">Choose an app screen</span>
+      <div className="mb-3 flex items-stretch gap-2.5 px-0.5">
+        <label className="relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/80 shadow-[0_12px_34px_rgba(0,0,0,0.24)] backdrop-blur">
+          <span className="pointer-events-none absolute left-4 top-2 text-[8px] font-bold uppercase tracking-[0.2em] text-primary-light/70">
+            Explore App Screens
+          </span>
           <select
             value={current}
             onChange={(event) => goTo(Number(event.target.value))}
-            className="h-11 w-full appearance-none rounded-xl border border-white/10 bg-neutral-900/85 pl-3.5 pr-10 text-[12px] font-semibold text-neutral-100 shadow-[0_12px_32px_rgba(0,0,0,0.22)] outline-none backdrop-blur transition focus:border-primary/60 focus:ring-2 focus:ring-primary/15"
+            className="h-[54px] w-full appearance-none bg-transparent pb-1 pl-4 pr-11 pt-5 text-[12px] font-bold text-neutral-100 outline-none"
             aria-label="Choose an app screen"
           >
             {tourSlides.map((item, index) => (
@@ -171,8 +173,13 @@ export default function IAMAppTour({ appName }) {
           <HiChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary-light" />
         </label>
 
-        <div className="flex h-11 shrink-0 items-center rounded-xl border border-primary/20 bg-primary/10 px-3 text-[10px] font-bold tracking-[0.14em] text-primary-light">
-          {String(current + 1).padStart(2, "0")} / {total}
+        <div className="flex h-[54px] shrink-0 flex-col items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 px-3.5 text-primary-light">
+          <span className="text-[13px] font-black leading-none">
+            {String(current + 1).padStart(2, "0")}
+          </span>
+          <span className="mt-1 text-[8px] font-bold tracking-[0.14em] text-primary-light/60">
+            OF {total}
+          </span>
         </div>
       </div>
 
@@ -208,7 +215,7 @@ export default function IAMAppTour({ appName }) {
               onWheel={() => cancelScrollAnimation(animationRef)}
               className="iam-long-tour-scroll relative overflow-y-auto overscroll-contain rounded-[1.82rem] bg-[#f7f4ec] touch-pan-y"
               style={{
-                height: "clamp(500px, calc(100svh - 168px), 760px)",
+                height: "var(--iam-tour-height)",
               }}
               aria-label={`${appName} ${slide.label} preview`}
               tabIndex={0}
@@ -255,6 +262,10 @@ export default function IAMAppTour({ appName }) {
       </div>
 
       <style>{`
+        #iam-tour {
+          --iam-tour-height: clamp(390px, calc(100svh - 410px), 570px);
+        }
+
         .iam-long-tour-scroll {
           scrollbar-width: none;
           -ms-overflow-style: none;
@@ -262,6 +273,18 @@ export default function IAMAppTour({ appName }) {
 
         .iam-long-tour-scroll::-webkit-scrollbar {
           display: none;
+        }
+
+        @media (min-width: 640px) {
+          #iam-tour {
+            --iam-tour-height: clamp(470px, calc(100svh - 370px), 650px);
+          }
+        }
+
+        @media (min-width: 1024px) {
+          #iam-tour {
+            --iam-tour-height: clamp(560px, calc(100vh - 170px), 760px);
+          }
         }
       `}</style>
     </div>
