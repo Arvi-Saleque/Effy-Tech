@@ -152,8 +152,8 @@ export default function IAMAppTour({ appName }) {
   };
 
   return (
-    <div id="iam-tour" className="mx-auto w-full max-w-[470px]">
-      <div className="mb-3 flex items-stretch gap-2.5 px-0.5">
+    <div id="iam-tour" className="mx-auto w-full max-w-[500px]">
+      <div className="mb-5 flex items-stretch gap-2.5 px-0.5">
         <label className="relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/80 shadow-[0_12px_34px_rgba(0,0,0,0.24)] backdrop-blur">
           <span className="pointer-events-none absolute left-4 top-2 text-[8px] font-bold uppercase tracking-[0.2em] text-primary-light/70">
             Explore App Screens
@@ -201,7 +201,7 @@ export default function IAMAppTour({ appName }) {
           initial={{ opacity: 0, x: 16, scale: 0.992 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative w-[min(88vw,380px)]"
+          className="relative w-[min(92vw,410px)]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -215,7 +215,7 @@ export default function IAMAppTour({ appName }) {
               onWheel={() => cancelScrollAnimation(animationRef)}
               className="iam-long-tour-scroll relative overflow-y-auto overscroll-contain rounded-[1.82rem] bg-[#f7f4ec] touch-pan-y"
               style={{
-                height: "var(--iam-tour-height)",
+                aspectRatio: "9 / 19.5",
               }}
               aria-label={`${appName} ${slide.label} preview`}
               tabIndex={0}
@@ -263,7 +263,7 @@ export default function IAMAppTour({ appName }) {
 
       <style>{`
         #iam-tour {
-          --iam-tour-height: clamp(390px, calc(100svh - 410px), 570px);
+          scroll-margin-top: 88px;
         }
 
         .iam-long-tour-scroll {
@@ -273,18 +273,6 @@ export default function IAMAppTour({ appName }) {
 
         .iam-long-tour-scroll::-webkit-scrollbar {
           display: none;
-        }
-
-        @media (min-width: 640px) {
-          #iam-tour {
-            --iam-tour-height: clamp(470px, calc(100svh - 370px), 650px);
-          }
-        }
-
-        @media (min-width: 1024px) {
-          #iam-tour {
-            --iam-tour-height: clamp(560px, calc(100vh - 170px), 760px);
-          }
         }
       `}</style>
     </div>

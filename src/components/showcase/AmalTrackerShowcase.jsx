@@ -1456,24 +1456,31 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
           />
         </div>
 
-        {/* Mobile: conversion copy first, App Tour immediately after */}
+        {/* Mobile: a spacious conversion hero, then a dedicated full-size App Tour */}
         <div className="relative z-10 lg:hidden">
-          <div className="mx-auto min-h-[calc(100svh-4rem)] max-w-md px-4 pb-6 pt-4 sm:px-5">
+          <div className="mx-auto max-w-md px-4 sm:px-5">
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.48 }}
-              className="text-center"
+              transition={{ duration: 0.52 }}
+              className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center py-10 text-center"
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-primary-light/80">
+              <img
+                src={logoImage}
+                alt={`${name} logo`}
+                className="h-20 w-20 rounded-[1.4rem] border border-primary/20 bg-neutral-900 object-cover shadow-[0_22px_60px_rgba(0,0,0,0.42)]"
+                loading="eager"
+              />
+
+              <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.26em] text-primary-light/80">
                 Your Daily Worship Companion
               </p>
 
-              <h1 className="mt-2.5 text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-neutral-50">
+              <h1 className="mt-3 text-[38px] font-black leading-[1.04] tracking-[-0.045em] text-neutral-50">
                 Islamic Amal Tracker
               </h1>
 
-              <p className="mx-auto mt-3 max-w-[350px] text-[14px] font-medium leading-6 text-neutral-300">
+              <p className="mx-auto mt-5 max-w-[360px] text-[15px] font-medium leading-7 text-neutral-300">
                 নামাজ, কাযা, যিকির, দৈনিক আমল ও ইসলামিক রুটিন—সবকিছু গুছিয়ে রাখুন এক অ্যাপে।
               </p>
 
@@ -1482,25 +1489,52 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackCTAClick("Download - Hero", "IAM")}
-                className="mt-4 inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-3.5 text-sm font-bold text-white shadow-[0_16px_42px_rgba(15,118,110,0.34)] transition active:scale-[0.985]"
+                className="mt-7 inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-4 text-[15px] font-bold text-white shadow-[0_18px_48px_rgba(15,118,110,0.36)] transition active:scale-[0.985]"
               >
-                <FaGooglePlay className="h-5 w-5" />
+                <FaGooglePlay className="h-6 w-6" />
                 <span>Google Play থেকে ইনস্টল করুন</span>
               </a>
 
-              <div className="mt-2.5 flex items-center justify-center gap-2 text-[10px] font-medium text-neutral-500">
-                <span>Free to Download</span>
-                <span className="h-1 w-1 rounded-full bg-primary-light/60" />
-                <span>Beta Version</span>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold text-neutral-400">
+                <span className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5">
+                  Free to Download
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5">
+                  Beta Version
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5">
+                  Privacy Focused
+                </span>
               </div>
+
+              <a
+                href="#iam-tour"
+                className="mt-10 inline-flex flex-col items-center gap-2 text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-500"
+              >
+                Explore the App
+                <span className="text-base leading-none text-primary-light/70">↓</span>
+              </a>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.58, delay: 0.12 }}
-              className="mt-5"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.62 }}
+              className="border-t border-white/[0.07] pb-12 pt-10"
             >
+              <div className="mb-6 text-center">
+                <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-primary-light/70">
+                  App Preview
+                </p>
+                <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-neutral-50">
+                  Explore Every Screen
+                </h2>
+                <p className="mx-auto mt-2 max-w-[330px] text-[12px] leading-5 text-neutral-500">
+                  একটি screen বেছে নিন, তারপর phone-এর ভেতরে scroll করে সম্পূর্ণ page দেখুন।
+                </p>
+              </div>
+
               <IAMAppTour appName={name} />
             </motion.div>
           </div>
