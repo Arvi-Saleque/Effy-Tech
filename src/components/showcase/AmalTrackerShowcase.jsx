@@ -602,20 +602,21 @@ function ShowcaseNavbar({ appName, logoImage, playStoreUrl }) {
       >
         <div className="mx-auto flex h-16 md:h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* ── Left: Back + App name ────────────────────── */}
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Link
               href="/#projects"
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-700/30 bg-neutral-800/40 text-neutral-400 hover:text-primary-light hover:border-primary/30 transition-all"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-neutral-700/35 bg-neutral-800/45 text-neutral-400 transition-all hover:border-primary/35 hover:text-primary-light"
+              aria-label="Back to projects"
             >
               <HiArrowLeft className="h-4 w-4" />
             </Link>
-            <div className="hidden sm:flex items-center gap-2.5">
+            <div className="flex min-w-0 items-center gap-2">
               <img
                 src={logoImage}
                 alt={`${appName} logo`}
-                className="h-8 w-8 rounded-lg object-cover shadow-sm"
+                className="h-8 w-8 shrink-0 rounded-lg border border-white/10 object-cover shadow-sm"
               />
-              <span className="text-sm font-bold text-neutral-200 tracking-tight transition-all duration-300">
+              <span className="max-w-[92px] truncate text-[11px] font-bold leading-tight text-neutral-200 sm:max-w-none sm:text-sm">
                 {appName}
               </span>
             </div>
@@ -646,10 +647,11 @@ function ShowcaseNavbar({ appName, logoImage, playStoreUrl }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackCTAClick("Download - Navbar", "IAM")}
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-primary/90 px-4 py-2 text-xs font-semibold text-neutral-100 hover:bg-primary hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] transition-all duration-300"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-primary px-3 text-[11px] font-bold text-white shadow-[0_8px_24px_rgba(15,118,110,0.3)] transition-all duration-300 hover:bg-primary-dark hover:shadow-[0_0_24px_rgba(45,212,191,0.22)] active:scale-[0.98] sm:h-10 sm:gap-2 sm:px-4 sm:text-xs"
             >
               <FaGooglePlay className="h-3.5 w-3.5" />
-              Download
+              <span className="sm:hidden">Install</span>
+              <span className="hidden sm:inline">Get it on Google Play</span>
             </a>
 
             {/* Hamburger toggle (mobile) */}
@@ -1352,40 +1354,20 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
           />
         </div>
 
-        {/* Mobile: CTA first, then app tour, then promo video — all in first viewport */}
+        {/* Mobile: full-height App Tour; install CTA lives in the navbar */}
         <div className="relative z-10 lg:hidden">
-          <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-md flex-col px-3 pb-3 pt-3 sm:px-5">
-            <motion.a
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-              href={playStoreUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackCTAClick("Download - Hero", "IAM")}
-              className="inline-flex min-h-14 w-full shrink-0 items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_34px_rgba(15,118,110,0.28)] transition active:scale-[0.985]"
-            >
-              <FaGooglePlay className="h-5 w-5" />
-              <span className="text-left">
-                <span className="block text-[9px] font-normal leading-none opacity-80">
-                  GET IT ON
-                </span>
-                <span className="block text-base leading-tight">Google Play</span>
-              </span>
-            </motion.a>
-
+          <div className="mx-auto min-h-[calc(100svh-4rem)] max-w-md px-3 pb-5 pt-3 sm:px-5">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.08 }}
-              className="mt-3"
+              transition={{ duration: 0.55, delay: 0.06 }}
             >
               <IAMAppTour appName={name} />
             </motion.div>
           </div>
         </div>
 
-        {/* Desktop: concise brand copy + complete tour and video */}
+        {/* Desktop: concise brand copy + full-height App Tour */}
         <div className="relative z-10 hidden min-h-[calc(100vh-72px)] lg:flex lg:items-center">
           <div className="mx-auto w-full max-w-7xl px-10 py-10">
             <div className="grid grid-cols-[0.82fr_1.18fr] items-center gap-14">
@@ -1457,7 +1439,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
                   delay: 0.18,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
-                className="mx-auto w-full max-w-[520px]"
+                className="mx-auto w-full max-w-[620px]"
               >
                 <IAMAppTour appName={name} />
               </motion.div>
