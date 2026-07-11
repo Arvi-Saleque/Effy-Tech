@@ -4,10 +4,8 @@
 
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
 import amalTracker from "@/data/amalTracker";
-import { getApprovedReviews } from "@/app/actions/submitReview";
 import Footer from "@/components/layout/Footer";
 
-export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Islamic Amal Tracker (Beta) — Prayer, Amal & Dhikr App | Effy Tech",
@@ -68,9 +66,7 @@ const softwareApplicationJsonLd = {
   },
 };
 
-export default async function AmalTrackerPage() {
-  const initialReviews = await getApprovedReviews();
-
+export default function AmalTrackerPage() {
   return (
     <>
       <script
@@ -79,7 +75,7 @@ export default async function AmalTrackerPage() {
           __html: JSON.stringify(softwareApplicationJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <AmalTrackerShowcase data={amalTracker} initialReviews={initialReviews} />
+      <AmalTrackerShowcase data={amalTracker} />
       <Footer />
     </>
   );
