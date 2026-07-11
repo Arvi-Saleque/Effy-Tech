@@ -66,3 +66,12 @@ temp/
 *.pem
 need.md
 project.md
+
+# Reports and Zip archives
+*.zip
+EFFY_*_REPORT.md
+EFFY_*_HOTFIX_REPORT.md
+LANDING_PAGES_*_REPORT.md
+PHASE_*_REPORT.md
+component_mid.txt
+gpt/
