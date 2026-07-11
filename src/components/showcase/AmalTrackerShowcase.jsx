@@ -616,7 +616,10 @@ function ShowcaseNavbar({ appName, logoImage, playStoreUrl }) {
                 alt={`${appName} logo`}
                 className="h-8 w-8 shrink-0 rounded-lg border border-white/10 object-cover shadow-sm"
               />
-              <span className="max-w-[92px] truncate text-[11px] font-bold leading-tight text-neutral-200 sm:max-w-none sm:text-sm">
+              <span className="text-[12px] font-black tracking-[0.14em] text-neutral-100 sm:hidden">
+                IAM
+              </span>
+              <span className="hidden text-sm font-bold text-neutral-200 sm:inline">
                 {appName}
               </span>
             </div>
@@ -1298,6 +1301,102 @@ function ReviewSection({ initialReviews }) {
   );
 }
 
+function useHideFixedWhatsAppInHero(heroRef) {
+  useEffect(() => {
+    const originals = new Map();
+    const selector = [
+      'a[href*="wa.me"]',
+      'a[href*="api.whatsapp.com"]',
+      'a[href*="whatsapp.com"]',
+      '[aria-label*="whatsapp" i]',
+      '[title*="whatsapp" i]',
+    ].join(",");
+
+    const findFixedContainer = (node) => {
+      let element = node;
+
+      for (let depth = 0; element && depth < 5; depth += 1) {
+        if (window.getComputedStyle(element).position === "fixed") {
+          return element;
+        }
+        element = element.parentElement;
+      }
+
+      return null;
+    };
+
+    const restore = (element) => {
+      const original = originals.get(element);
+      if (!original) return;
+
+      element.style.opacity = original.opacity;
+      element.style.pointerEvents = original.pointerEvents;
+      element.style.transform = original.transform;
+      element.style.visibility = original.visibility;
+      originals.delete(element);
+    };
+
+    const update = () => {
+      const hero = heroRef.current;
+      const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+      const rect = hero?.getBoundingClientRect();
+      const heroVisible =
+        Boolean(rect) &&
+        rect.bottom > 72 &&
+        rect.top < window.innerHeight * 0.82;
+
+      const fixedLaunchers = new Set(
+        Array.from(document.querySelectorAll(selector))
+          .map(findFixedContainer)
+          .filter(Boolean),
+      );
+
+      fixedLaunchers.forEach((element) => {
+        if (isMobile && heroVisible) {
+          if (!originals.has(element)) {
+            originals.set(element, {
+              opacity: element.style.opacity,
+              pointerEvents: element.style.pointerEvents,
+              transform: element.style.transform,
+              visibility: element.style.visibility,
+            });
+          }
+
+          element.style.setProperty("opacity", "0", "important");
+          element.style.setProperty("pointer-events", "none", "important");
+          element.style.setProperty("transform", "scale(0.82)", "important");
+          element.style.setProperty("visibility", "hidden", "important");
+        } else {
+          restore(element);
+        }
+      });
+
+      Array.from(originals.keys()).forEach((element) => {
+        if (!fixedLaunchers.has(element) || !isMobile || !heroVisible) {
+          restore(element);
+        }
+      });
+    };
+
+    update();
+
+    const delayedUpdate = window.setTimeout(update, 500);
+    const observer = new MutationObserver(update);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+
+    return () => {
+      window.clearTimeout(delayedUpdate);
+      observer.disconnect();
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      Array.from(originals.keys()).forEach(restore);
+    };
+  }, [heroRef]);
+}
+
 /* ================================================================
    MAIN COMPONENT
    ================================================================ */
@@ -1321,6 +1420,9 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
     highlights,
   } = data;
 
+  const heroRef = useRef(null);
+  useHideFixedWhatsAppInHero(heroRef);
+
   /* Scroll to top & restore body scroll on client-side navigation */
   useEffect(() => {
     document.body.style.overflow = "";
@@ -1339,7 +1441,7 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
       {/* ─────────────────────────────────────────────────────
           SECTION 1 — MOBILE-FIRST CONVERSION HERO
          ───────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-16 md:pt-[72px]">
+      <section ref={heroRef} className="relative overflow-hidden pt-16 md:pt-[72px]">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/4 h-[620px] w-[620px] rounded-full bg-primary/8 blur-[150px]" />
@@ -1354,13 +1456,50 @@ export default function AmalTrackerShowcase({ data, initialReviews = [] }) {
           />
         </div>
 
-        {/* Mobile: full-height App Tour; install CTA lives in the navbar */}
+        {/* Mobile: conversion copy first, App Tour immediately after */}
         <div className="relative z-10 lg:hidden">
-          <div className="mx-auto min-h-[calc(100svh-4rem)] max-w-md px-3 pb-5 pt-3 sm:px-5">
+          <div className="mx-auto min-h-[calc(100svh-4rem)] max-w-md px-4 pb-6 pt-4 sm:px-5">
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.06 }}
+              transition={{ duration: 0.48 }}
+              className="text-center"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-primary-light/80">
+                Your Daily Worship Companion
+              </p>
+
+              <h1 className="mt-2.5 text-[30px] font-black leading-[1.08] tracking-[-0.035em] text-neutral-50">
+                Islamic Amal Tracker
+              </h1>
+
+              <p className="mx-auto mt-3 max-w-[350px] text-[14px] font-medium leading-6 text-neutral-300">
+                নামাজ, কাযা, যিকির, দৈনিক আমল ও ইসলামিক রুটিন—সবকিছু গুছিয়ে রাখুন এক অ্যাপে।
+              </p>
+
+              <a
+                href={playStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackCTAClick("Download - Hero", "IAM")}
+                className="mt-4 inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-primary px-6 py-3.5 text-sm font-bold text-white shadow-[0_16px_42px_rgba(15,118,110,0.34)] transition active:scale-[0.985]"
+              >
+                <FaGooglePlay className="h-5 w-5" />
+                <span>Google Play থেকে ইনস্টল করুন</span>
+              </a>
+
+              <div className="mt-2.5 flex items-center justify-center gap-2 text-[10px] font-medium text-neutral-500">
+                <span>Free to Download</span>
+                <span className="h-1 w-1 rounded-full bg-primary-light/60" />
+                <span>Beta Version</span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.58, delay: 0.12 }}
+              className="mt-5"
             >
               <IAMAppTour appName={name} />
             </motion.div>
