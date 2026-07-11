@@ -3,12 +3,9 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  HiChevronDown,
   HiChevronLeft,
   HiChevronRight,
-  HiPause,
-  HiPlay,
-  HiSpeakerWave,
-  HiSpeakerXMark,
 } from "react-icons/hi2";
 
 const tourSlides = [
@@ -70,7 +67,7 @@ function animateScroll(element, target, duration, animationRef) {
   animationRef.current = requestAnimationFrame(tick);
 }
 
-function PhoneTour({ appName }) {
+export default function IAMAppTour({ appName }) {
   const [current, setCurrent] = useState(0);
   const previewRef = useRef(null);
   const animationRef = useRef(null);
@@ -96,6 +93,18 @@ function PhoneTour({ appName }) {
   const goNext = useCallback(() => goTo(current + 1), [current, goTo]);
 
   useEffect(() => {
+    const adjacent = [
+      tourSlides[(current + 1) % total],
+      tourSlides[(current - 1 + total) % total],
+    ];
+
+    adjacent.forEach((item) => {
+      const image = new Image();
+      image.src = item.src;
+    });
+  }, [current, total]);
+
+  useEffect(() => {
     return () => cancelScrollAnimation(animationRef);
   }, []);
 
@@ -106,7 +115,7 @@ function PhoneTour({ appName }) {
     const maxScroll = Math.max(0, element.scrollHeight - element.clientHeight);
     if (maxScroll <= 1) return;
 
-    const duration = Math.min(12000, Math.max(2600, maxScroll * 2.5));
+    const duration = Math.min(16000, Math.max(3200, maxScroll * 2.4));
     animateScroll(element, maxScroll, duration, animationRef);
   };
 
@@ -114,7 +123,7 @@ function PhoneTour({ appName }) {
     const element = previewRef.current;
     if (!element || window.matchMedia("(hover: none)").matches) return;
 
-    const duration = Math.min(1800, Math.max(700, element.scrollTop * 0.45));
+    const duration = Math.min(2200, Math.max(800, element.scrollTop * 0.42));
     animateScroll(element, 0, duration, animationRef);
   };
 
@@ -143,27 +152,38 @@ function PhoneTour({ appName }) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[430px]">
-      <div className="mb-2.5 flex items-end justify-between gap-4 px-1">
-        <div className="min-w-0">
-          <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-primary-light/70">
-            App Tour
-          </p>
-          <h2 className="mt-0.5 truncate text-[15px] font-bold text-neutral-100">
-            {slide.label}
-          </h2>
-        </div>
+    <div id="iam-tour" className="mx-auto w-full max-w-[470px]">
+      <div className="mb-3 flex items-center gap-2.5 px-0.5">
+        <label className="relative min-w-0 flex-1">
+          <span className="sr-only">Choose an app screen</span>
+          <select
+            value={current}
+            onChange={(event) => goTo(Number(event.target.value))}
+            className="h-11 w-full appearance-none rounded-xl border border-white/10 bg-neutral-900/85 pl-3.5 pr-10 text-[12px] font-semibold text-neutral-100 shadow-[0_12px_32px_rgba(0,0,0,0.22)] outline-none backdrop-blur transition focus:border-primary/60 focus:ring-2 focus:ring-primary/15"
+            aria-label="Choose an app screen"
+          >
+            {tourSlides.map((item, index) => (
+              <option key={item.id} value={index}>
+                {String(index + 1).padStart(2, "0")} — {item.label}
+              </option>
+            ))}
+          </select>
+          <HiChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary-light" />
+        </label>
 
-        <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary-light">
+        <div className="flex h-11 shrink-0 items-center rounded-xl border border-primary/20 bg-primary/10 px-3 text-[10px] font-bold tracking-[0.14em] text-primary-light">
           {String(current + 1).padStart(2, "0")} / {total}
-        </span>
+        </div>
       </div>
 
-      <div className="relative mx-auto flex w-full items-center justify-center">
+      <div className="relative isolate flex justify-center">
+        <div className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[70px]" />
+        <div className="pointer-events-none absolute inset-x-[16%] bottom-[2%] -z-10 h-16 rounded-full bg-black/65 blur-2xl" />
+
         <button
           type="button"
           onClick={goPrev}
-          className="absolute left-0 z-20 grid h-10 w-10 place-items-center rounded-full border border-neutral-600/50 bg-neutral-950/85 text-neutral-200 shadow-[0_10px_28px_rgba(0,0,0,0.42)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:left-2"
+          className="absolute left-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:left-1"
           aria-label="Previous app screen"
         >
           <HiChevronLeft className="h-5 w-5" />
@@ -171,23 +191,25 @@ function PhoneTour({ appName }) {
 
         <motion.div
           key={slide.id}
-          initial={{ opacity: 0, x: 14, scale: 0.99 }}
+          initial={{ opacity: 0, x: 16, scale: 0.992 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative w-[min(74vw,292px)] sm:w-[304px]"
+          transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative w-[min(88vw,380px)]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="relative rounded-[2.25rem] border-[6px] border-[#202632] bg-[#070a10] p-[5px] shadow-[0_28px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10">
-            <div className="absolute left-1/2 top-[9px] z-20 h-[18px] w-[78px] -translate-x-1/2 rounded-full bg-[#070a10]" />
+          <div className="relative rounded-[2.4rem] border-[7px] border-[#202631] bg-[#080b10] p-[5px] shadow-[0_30px_90px_rgba(0,0,0,0.58)] ring-1 ring-white/10">
+            <div className="absolute left-1/2 top-[9px] z-20 h-[19px] w-[82px] -translate-x-1/2 rounded-full bg-[#080b10] shadow-[0_1px_0_rgba(255,255,255,0.04)]" />
 
             <div
               ref={previewRef}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               onWheel={() => cancelScrollAnimation(animationRef)}
-              className="iam-long-tour-scroll relative overflow-y-auto overscroll-contain rounded-[1.75rem] bg-[#f7f4ec] touch-pan-y"
-              style={{ height: "clamp(330px, 45svh, 438px)" }}
+              className="iam-long-tour-scroll relative overflow-y-auto overscroll-contain rounded-[1.82rem] bg-[#f7f4ec] touch-pan-y"
+              style={{
+                height: "clamp(500px, calc(100svh - 168px), 760px)",
+              }}
               aria-label={`${appName} ${slide.label} preview`}
               tabIndex={0}
               onKeyDown={(event) => {
@@ -204,40 +226,33 @@ function PhoneTour({ appName }) {
               />
             </div>
 
-            <div className="pointer-events-none absolute inset-x-4 bottom-2.5 z-10 h-12 rounded-b-[1.45rem] bg-gradient-to-t from-black/55 to-transparent" />
-            <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 h-1 w-16 -translate-x-1/2 rounded-full bg-white/65" />
+            <div className="pointer-events-none absolute inset-x-4 bottom-2.5 z-10 h-12 rounded-b-[1.55rem] bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 h-1 w-16 -translate-x-1/2 rounded-full bg-white/70" />
           </div>
         </motion.div>
 
         <button
           type="button"
           onClick={goNext}
-          className="absolute right-0 z-20 grid h-10 w-10 place-items-center rounded-full border border-neutral-600/50 bg-neutral-950/85 text-neutral-200 shadow-[0_10px_28px_rgba(0,0,0,0.42)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:right-2"
+          className="absolute right-0 top-1/2 z-20 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-neutral-950/88 text-neutral-100 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur transition hover:border-primary/50 hover:text-primary-light active:scale-95 sm:right-1"
           aria-label="Next app screen"
         >
           <HiChevronRight className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="mt-2.5 flex items-center justify-center gap-1">
-        {tourSlides.map((item, index) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => goTo(index)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              index === current
-                ? "w-5 bg-primary-light"
-                : "w-1.5 bg-neutral-700 hover:bg-neutral-500"
-            }`}
-            aria-label={`View ${item.label}`}
+      <div className="mx-auto mt-3 flex w-[min(78vw,330px)] items-center gap-3">
+        <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/[0.07]">
+          <motion.div
+            className="h-full rounded-full bg-gradient-to-r from-primary to-primary-light"
+            animate={{ width: `${((current + 1) / total) * 100}%` }}
+            transition={{ duration: 0.28, ease: "easeOut" }}
           />
-        ))}
+        </div>
+        <span className="shrink-0 text-[9px] font-medium text-neutral-500">
+          Swipe · Scroll
+        </span>
       </div>
-
-      <p className="mt-1.5 text-center text-[9px] font-medium text-neutral-500">
-        Hover to explore · Swipe between screens · Scroll inside on mobile
-      </p>
 
       <style>{`
         .iam-long-tour-scroll {
@@ -249,101 +264,6 @@ function PhoneTour({ appName }) {
           display: none;
         }
       `}</style>
-    </div>
-  );
-}
-
-function PromoVideo({ videoSrc = "/videos/amal/promo-web.mp4" }) {
-  const videoRef = useRef(null);
-  const [playing, setPlaying] = useState(true);
-  const [muted, setMuted] = useState(true);
-
-  const togglePlay = async () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (video.paused) {
-      try {
-        await video.play();
-        setPlaying(true);
-      } catch {
-        setPlaying(false);
-      }
-      return;
-    }
-
-    video.pause();
-    setPlaying(false);
-  };
-
-  const toggleMute = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = !video.muted;
-    setMuted(video.muted);
-  };
-
-  return (
-    <div className="mx-auto w-full max-w-[430px] overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-950 shadow-[0_18px_55px_rgba(0,0,0,0.38)]">
-      <div className="relative h-[clamp(125px,18svh,168px)] overflow-hidden bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.14),transparent_68%)]">
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          className="h-full w-full object-contain"
-          aria-label="Islamic Amal Tracker promotional video"
-        />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
-
-        <div className="absolute inset-x-3 bottom-2.5 flex items-center justify-between gap-3">
-          <span className="rounded-full border border-white/10 bg-black/55 px-3 py-1.5 text-[9px] font-semibold text-white/85 backdrop-blur">
-            30-sec product preview
-          </span>
-
-          <div className="flex gap-1.5">
-            <button
-              type="button"
-              onClick={togglePlay}
-              className="grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur transition hover:bg-black/80"
-              aria-label={playing ? "Pause video" : "Play video"}
-            >
-              {playing ? <HiPause className="h-4 w-4" /> : <HiPlay className="h-4 w-4" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={toggleMute}
-              className="grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur transition hover:bg-black/80"
-              aria-label={muted ? "Unmute video" : "Mute video"}
-            >
-              {muted ? (
-                <HiSpeakerXMark className="h-4 w-4" />
-              ) : (
-                <HiSpeakerWave className="h-4 w-4" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function IAMAppTour({ appName }) {
-  return (
-    <div id="iam-tour" className="w-full">
-      <PhoneTour appName={appName} />
-      <div className="mt-2.5">
-        <PromoVideo />
-      </div>
     </div>
   );
 }
