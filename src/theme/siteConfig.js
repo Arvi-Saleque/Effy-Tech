@@ -10,16 +10,14 @@ const siteConfig = {
   tagline: "Smart Solutions. Simple Execution.",
   description:
     "We craft modern, scalable, and beautiful digital products that drive growth and innovation.",
-  url: "https://effytech.com",
+  url: "https://www.effytechbd.com",
 
   /* ── Navigation Links ────────────────────────────────────── */
   navLinks: [
-    { label: "Home", href: "/#hero" },
-    { label: "About", href: "/#about" },
     { label: "Services", href: "/#services" },
-    { label: "Projects", href: "/#projects" },
-    { label: "Team", href: "/#team" },
-    { label: "Contact", href: "/#contact" },
+    { label: "Work", href: "/#work" },
+    { label: "Process", href: "/#process" },
+    { label: "About", href: "/#about" },
   ],
 
   /* ── Social Media ────────────────────────────────────────── */
