@@ -1978,3 +1978,324 @@ h1, h2, h3, h4 { font-family: var(--font-sans), Inter, system-ui, sans-serif; }
     flex-basis: 24px;
   }
 }
+
+/* ============================================================
+   Effy Tech Homepage Phase 23 — production polish and desktop hero fix
+   ============================================================ */
+/* Desktop hero: reserve independent space for the statement and the system visual. */
+.effy-home .system-hero {
+  min-height: 810px;
+  padding-top: 104px;
+}
+.effy-home .hero-grid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(470px, .85fr);
+  gap: clamp(42px, 4vw, 70px);
+  min-height: 650px;
+}
+.effy-home .hero-copy {
+  z-index: 8;
+  max-width: 770px;
+  padding-top: 0;
+}
+.effy-home .hero-copy h1 {
+  max-width: 770px;
+  font-size: clamp(3.8rem, 4.15vw, 5rem);
+  line-height: .95;
+  letter-spacing: -.06em;
+}
+.effy-home .hero-copy h1 span {
+  white-space: nowrap;
+}
+.effy-home .hero-copy > p {
+  max-width: 640px;
+}
+.effy-home .hero-system {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+.effy-home .system-visual {
+  transform: translateX(34px) scale(.88);
+  transform-origin: center right;
+}
+.effy-home .metric-grid strong {
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+.effy-home .ai-score {
+  align-items: center;
+}
+.effy-home .ai-score strong {
+  font-size: 22px;
+}
+.effy-home .ai-score span {
+  width: 82px;
+}
+
+/* Reduce page length without removing any important business information. */
+.effy-home .client-trust-section { padding: 82px 0; }
+.effy-home .client-logo-card { min-height: 238px; }
+.effy-home .capability-section { padding: 104px 0 112px; }
+.effy-home .capability-system { min-height: 710px; margin-top: 62px; }
+.effy-home .capability-node { min-height: 266px; padding: 30px; }
+.effy-home .work-section { padding: 104px 0 112px; }
+.effy-home .iam-case { min-height: 610px; margin-top: 54px; }
+.effy-home .case-copy { padding: 56px 46px; }
+.effy-home .project-feature,
+.effy-home .project-screen { min-height: 430px; }
+.effy-home .outcomes-section { padding: 86px 0 94px; }
+.effy-home .outcomes-section .section-intro {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .48fr);
+  column-gap: 58px;
+}
+.effy-home .outcome-grid { margin-top: 48px; }
+.effy-home .outcome-grid article { min-height: 220px; padding: 28px; }
+.effy-home .outcome-grid h3 { margin-top: 38px; }
+.effy-home .process-section { padding: 92px 0 100px; }
+.effy-home .process-journey { margin-top: 52px; }
+.effy-home .process-step { min-height: 275px; }
+.effy-home .standards-section { padding: 96px 0; }
+.effy-home .standards-layout { gap: 70px; }
+.effy-home .standards-grid article { min-height: 280px; padding: 28px; }
+.effy-home .technology-section { padding: 86px 0 94px; }
+.effy-home .technology-grid { margin-top: 50px; }
+.effy-home .technology-grid article { min-height: 205px; padding: 28px; }
+.effy-home .technology-grid h3 { margin-top: 34px; }
+.effy-home .about-industries-section { padding: 96px 0; }
+.effy-home .about-industries-layout { gap: 66px; }
+.effy-home .about-company-points { margin-top: 34px; }
+.effy-home .about-company-points > div { min-height: 126px; }
+.effy-home .industries-grid article { min-height: 146px; padding: 23px; }
+.effy-home .team-section { padding: 96px 0 104px; }
+.effy-home .founder-grid { margin-top: 52px; }
+.effy-home .founder-card { min-height: 330px; }
+.effy-home .founder-image img {
+  transform-origin: center;
+  filter: saturate(.82) contrast(.96);
+}
+.effy-home .faq-section { padding: 96px 0; }
+.effy-home .faq-list summary { min-height: 90px; }
+.effy-home .contact-section { padding: 104px 0 112px; }
+
+/* Keep the section labels visible at normal desktop reading distance. */
+.effy-home .section-intro > span,
+.effy-home .client-trust-copy > span,
+.effy-home .standards-heading > span,
+.effy-home .faq-heading > span,
+.effy-home .about-company > span,
+.effy-home .industries-heading > span,
+.effy-home .contact-copy > span,
+.effy-home .contact-form-heading > span,
+.effy-home .founder-statement > span {
+  font-size: 13px !important;
+  letter-spacing: .12em;
+}
+.effy-home .faq-heading > span,
+.effy-home .contact-copy > span {
+  font-size: 14px !important;
+}
+
+@media (min-width: 1501px) {
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.16fr) minmax(490px, .84fr);
+    gap: 72px;
+  }
+  .effy-home .system-visual {
+    transform: translateX(40px) scale(.92);
+  }
+}
+
+/* Standard laptops and 1366px desktops: prevent any cross-column collision. */
+@media (min-width: 1181px) and (max-width: 1500px) {
+  .effy-home .home-shell { width: min(1320px, calc(100% - 72px)); }
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(450px, .82fr);
+    gap: 42px;
+  }
+  .effy-home .hero-copy h1 {
+    font-size: clamp(3.45rem, 4.15vw, 4.15rem);
+  }
+  .effy-home .system-visual {
+    transform: translateX(36px) scale(.79);
+  }
+}
+
+/* Compact laptops use a deliberate stacked hero instead of squeezing two columns. */
+@media (max-width: 1180px) {
+  .effy-home .system-hero { min-height: auto; }
+  .effy-home .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-top: 64px;
+    padding-bottom: 30px;
+  }
+  .effy-home .hero-copy {
+    max-width: 780px;
+  }
+  .effy-home .hero-copy h1 {
+    max-width: 780px;
+    font-size: clamp(3.55rem, 7vw, 5.1rem);
+  }
+  .effy-home .hero-system {
+    width: min(720px, 100%);
+    margin: 0 auto;
+  }
+  .effy-home .system-visual {
+    transform: scale(.88);
+    transform-origin: top center;
+    margin-bottom: -58px;
+  }
+  .effy-home .outcomes-section .section-intro {
+    grid-template-columns: 1fr;
+  }
+  .effy-home .outcomes-section .section-intro p {
+    margin-top: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .effy-home .hero-grid { padding-top: 78px; }
+  .effy-home .hero-copy h1 span { white-space: normal; }
+  .effy-home .system-visual {
+    transform: scale(.7);
+    margin-inline: -17%;
+    margin-bottom: -152px;
+  }
+  .effy-home .client-trust-section,
+  .effy-home .capability-section,
+  .effy-home .work-section,
+  .effy-home .outcomes-section,
+  .effy-home .process-section,
+  .effy-home .standards-section,
+  .effy-home .technology-section,
+  .effy-home .about-industries-section,
+  .effy-home .team-section,
+  .effy-home .faq-section,
+  .effy-home .contact-section {
+    padding-top: 78px;
+    padding-bottom: 82px;
+  }
+  .effy-home .section-intro > span,
+  .effy-home .client-trust-copy > span,
+  .effy-home .standards-heading > span,
+  .effy-home .faq-heading > span,
+  .effy-home .about-company > span,
+  .effy-home .industries-heading > span,
+  .effy-home .contact-copy > span,
+  .effy-home .contact-form-heading > span,
+  .effy-home .founder-statement > span {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .effy-home .system-visual {
+    transform: scale(.6);
+    margin-inline: -29%;
+    margin-bottom: -194px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  .effy-home *,
+  .effy-home *::before,
+  .effy-home *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Footer and floating contact controls follow the same restrained visual system. */
+.new-footer .footer-grid a,
+.new-footer .footer-grid p { color: #aab1a6; }
+.new-footer .footer-bottom { color: #8d958a; }
+.footer-socials svg { width: 14px; height: 14px; }
+.whatsapp-fab {
+  right: 1.35rem;
+  bottom: 1.35rem;
+  width: 3rem;
+  height: 3rem;
+  background-color: #1f8f4f;
+  box-shadow: 0 10px 28px rgba(20, 54, 35, .24), 0 2px 8px rgba(0,0,0,.16);
+}
+.whatsapp-fab:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 14px 34px rgba(20, 54, 35, .3), 0 4px 12px rgba(0,0,0,.18);
+}
+.whatsapp-ping { background-color: #25d366; opacity: .2; }
+
+/* ============================================================
+   Effy Tech Homepage Phase 23 — desktop hero collision guard
+   ============================================================ */
+/* Keep the editorial two-line hero only where the layout can actually hold it. */
+@media (min-width: 1280px) {
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(500px, .82fr);
+    gap: 20px;
+  }
+
+  .effy-home .hero-copy {
+    max-width: 740px;
+  }
+
+  .effy-home .hero-copy h1 {
+    max-width: 740px;
+    font-size: clamp(3.55rem, 4.55vw, 4.1rem);
+    line-height: .96;
+    letter-spacing: -.06em;
+  }
+
+  .effy-home .hero-copy h1 span {
+    white-space: nowrap;
+  }
+
+  .effy-home .system-visual {
+    transform: translateX(20px) scale(.88);
+    transform-origin: center right;
+  }
+}
+
+/* Medium desktop/tablet: stack instead of allowing the headline to collide. */
+@media (min-width: 761px) and (max-width: 1279px) {
+  .effy-home .system-hero {
+    min-height: auto;
+  }
+
+  .effy-home .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    min-height: auto;
+    padding-top: 72px;
+    padding-bottom: 42px;
+  }
+
+  .effy-home .hero-copy {
+    max-width: 760px;
+  }
+
+  .effy-home .hero-copy h1 {
+    max-width: 760px;
+    font-size: clamp(3.45rem, 6.3vw, 4.35rem);
+    line-height: .97;
+    letter-spacing: -.06em;
+  }
+
+  .effy-home .hero-copy h1 span {
+    white-space: normal;
+  }
+
+  .effy-home .hero-system {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .effy-home .system-visual {
+    transform: scale(.9);
+    transform-origin: top center;
+    margin-bottom: -52px;
+  }
+}
