@@ -144,6 +144,8 @@ const amalTracker = {
       titleBn: "Home Dashboard",
       titleEn: "Focused Daily Overview",
       color: "from-teal-500/20 to-teal-600/5",
+      imageSrc: "/images/amal/today_dashboard_prayer_times.jpeg",
+      imageLabel: "Today Dashboard and Prayer Times",
       points: [
         "আজকের নামাজ, আমল, যিকির, রিডিং ও Routine-এর অবস্থা একসঙ্গে দেখা যায়।",
         "অসম্পূর্ণ কাজ ও গুরুত্বপূর্ণ Reminder দ্রুত চিহ্নিত করা যায়।",
@@ -156,6 +158,8 @@ const amalTracker = {
       titleBn: "নামাজ ও সুন্নত Tracking",
       titleEn: "Detailed Prayer Status",
       color: "from-emerald-500/20 to-emerald-600/5",
+      imageSrc: "/images/amal/prayer_dhuhr_details.jpeg",
+      imageLabel: "Detailed Prayer Tracking",
       points: [
         "ফজর, যোহর, আসর, মাগরিব ও এশার নামাজ প্রতিদিন সংরক্ষণ করা যায়।",
         "জামাতে, একাকী, সময়মতো, দেরিতে, missed ও কাযা অবস্থা আলাদাভাবে রাখা যায়।",
@@ -168,6 +172,8 @@ const amalTracker = {
       titleBn: "কাযা নামাজ Manager",
       titleEn: "Backlog and Completion Progress",
       color: "from-rose-500/20 to-rose-600/5",
+      imageSrc: "/images/amal/prayer_lifetime_kaza.jpeg",
+      imageLabel: "Lifetime Kaza Manager",
       points: [
         "প্রতিটি ওয়াক্তের মোট কাযা ও অবশিষ্ট হিসাব সংরক্ষণ করা যায়।",
         "আদায় করা কাযা আলাদাভাবে Log করে progress দেখা যায়।",
@@ -180,6 +186,8 @@ const amalTracker = {
       titleBn: "দৈনিক আমল Tracker",
       titleEn: "Flexible Custom Deeds",
       color: "from-lime-500/20 to-lime-600/5",
+      imageSrc: "/images/amal/amal_dashboard.jpeg",
+      imageLabel: "Daily Amal Dashboard",
       points: [
         "প্রয়োজন অনুযায়ী নিজের আমল যোগ, সম্পাদনা, সক্রিয় বা নিষ্ক্রিয় করা যায়।",
         "সংখ্যা, সময় বা completion ভিত্তিক লক্ষ্য নির্ধারণ করা যায়।",
@@ -192,6 +200,8 @@ const amalTracker = {
       titleBn: "যিকির Tracker",
       titleEn: "Counter, Targets and Logs",
       color: "from-amber-500/20 to-amber-600/5",
+      imageSrc: "/images/amal/dhikr_dashboard.jpeg",
+      imageLabel: "Dhikr Dashboard",
       points: [
         "Preset যিকির থেকে দ্রুত শুরু করা যায় এবং Custom যিকির যোগ করা যায়।",
         "প্রতিটি যিকিরের আলাদা Target ও Counter ব্যবহার করা যায়।",
@@ -204,6 +214,8 @@ const amalTracker = {
       titleBn: "Reading Tracker",
       titleEn: "Quran, Hadith and Books",
       color: "from-sky-500/20 to-sky-600/5",
+      imageSrc: "/images/amal/more_reading_list.jpeg",
+      imageLabel: "Reading Tracker",
       points: [
         "কুরআন, হাদিস, তাফসির, ইসলামিক বই বা Custom reading item যোগ করা যায়।",
         "সময়, পরিমাণ অথবা completion অনুযায়ী দৈনিক Reading Log রাখা যায়।",
@@ -216,6 +228,8 @@ const amalTracker = {
       titleBn: "Smart Routine System",
       titleEn: "Structured Daily Planning",
       color: "from-cyan-500/20 to-cyan-600/5",
+      imageSrc: "/images/amal/more_routine_after_fajr.jpeg",
+      imageLabel: "Smart Routine System",
       points: [
         "নামাজ, আমল, যিকির, Reading ও Custom কাজ একটি Routine-এ সাজানো যায়।",
         "সময়ভিত্তিক পরিকল্পনা এবং completion tracking একসঙ্গে পাওয়া যায়।",
@@ -228,6 +242,8 @@ const amalTracker = {
       titleBn: "Smart Reminder ও Strong Alarm",
       titleEn: "Flexible Reminder Intensity",
       color: "from-violet-500/20 to-violet-600/5",
+      imageSrc: "/images/amal/more_reminder_hub.jpeg",
+      imageLabel: "Smart Reminder Hub",
       points: [
         "নামাজ, সকাল-সন্ধ্যার যিকির, রাতের আমল এবং Custom কাজের Reminder তৈরি করা যায়।",
         "প্রয়োজন অনুযায়ী সাধারণ Reminder অথবা Strong Alarm নির্বাচন করা যায়।",

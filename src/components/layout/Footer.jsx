@@ -13,11 +13,11 @@ export default function Footer() {
         </div>
         <div>
           <h3>Navigate</h3>
-          <a href="/#services">Services</a><a href="/#work">Work</a><a href="/#process">Process</a><a href="/#team">Team</a>
+          <a href="/#services">Services</a><a href="/#work">Projects</a><a href="/#process">Process</a><a href="/#technology">Technology</a>
         </div>
         <div>
           <h3>Company</h3>
-          <a href="/allservices">All Services</a><a href="/projects">Projects</a><a href="/#about">About</a><a href="/#contact">Contact</a>
+          <a href="/#about">About</a><a href="/#team">Team</a><a href="/#faq">FAQ</a><a href="/#contact">Contact</a>
         </div>
         <div>
           <h3>Connect</h3>

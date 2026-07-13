@@ -164,7 +164,9 @@ function FeatureDeepDive({ categories, screenshots }) {
   const activeIndex = Math.max(0, categories.findIndex((category) => category.id === activeId));
   const active = categories[activeIndex] ?? categories[0];
   const ActiveIcon = active ? iconMap[active.icon] || FaLayerGroup : FaLayerGroup;
-  const visual = screenshots[activeIndex % screenshots.length];
+  const visual = active.imageSrc
+    ? { src: active.imageSrc, label: active.imageLabel }
+    : screenshots[activeIndex % screenshots.length];
   const featuredTabs = categories.slice(0, 8);
 
   return (
@@ -1091,7 +1093,7 @@ export default function AmalTrackerShowcase({ data }) {
             variants={stagger}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
           >
-            {features.slice(0, 6).map((f, i) => {
+            {features.map((f, i) => {
               const Icon = iconMap[f.icon] || FaCheckCircle;
               const isHero = i === 0;
 
@@ -1182,11 +1184,6 @@ export default function AmalTrackerShowcase({ data }) {
                 </motion.div>
               );
             })}
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="mt-6 rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-5 sm:p-6">
-            <div className="mb-4 flex items-center justify-between gap-4"><div><p className="text-sm font-black text-neutral-100">আরও প্রয়োজনীয় tools</p><p className="mt-1 text-xs text-neutral-500">App-এর secondary capabilities—একই focused experience-এর অংশ।</p></div><span className="text-[10px] font-bold uppercase tracking-[0.17em] text-primary-light/55">{features.length - 6} more</span></div>
-            <div className="flex flex-wrap gap-2">{features.slice(6).map((feature) => { const Icon = iconMap[feature.icon] || FaCheckCircle; return <span key={feature.titleEn} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-neutral-300"><Icon className="h-3.5 w-3.5 text-primary-light/70" />{feature.titleBn}</span>; })}</div>
           </motion.div>
         </div>
       </Section>

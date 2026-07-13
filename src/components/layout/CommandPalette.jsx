@@ -1,229 +1,185 @@
-/* ============================================================
-   CommandPalette — Search overlay with live results
-   Searches projects (title, description, tags, category)
-   and page sections (nav links). Triggered from Navbar ⌘K.
-   ============================================================ */
-
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { HiOutlineSearch, HiX, HiArrowRight } from "react-icons/hi";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { HiArrowRight, HiOutlineSearch, HiX } from "react-icons/hi";
 
-/* ── Helpers ────────────────────────────────────────────────── */
-function matchScore(text, query) {
+const TYPE_LABELS = {
+  project: "PROJECT",
+  service: "SERVICE",
+  page: "PAGE",
+  team: "TEAM",
+  caseStudy: "CASE STUDY",
+};
+
+function normalize(value = "") {
+  return value.toString().toLowerCase().trim();
+}
+
+function scoreText(value, query, weight = 1) {
+  const text = normalize(value);
   if (!text || !query) return 0;
-  const lower = text.toLowerCase();
-  const q = query.toLowerCase();
-  if (lower === q) return 3;
-  if (lower.startsWith(q)) return 2;
-  if (lower.includes(q)) return 1;
+  if (text === query) return 5 * weight;
+  if (text.startsWith(query)) return 3 * weight;
+  if (text.includes(query)) return 1 * weight;
   return 0;
 }
 
-function searchItems(query, projects, pages) {
-  if (!query || query.trim().length < 2)
-    return { projectResults: [], pageResults: [] };
+function buildResults(query, projects, services, pages) {
+  const q = normalize(query);
+  if (q.length < 2) return [];
 
-  const q = query.trim().toLowerCase();
+  const projectItems = projects.map((project) => ({
+    id: `project-${project.id}`,
+    title: project.title,
+    description: project.description,
+    meta: [project.category, ...(project.tags || []).slice(0, 3)].filter(Boolean).join(" · "),
+    href: `/projects/${project.slug}`,
+    type: "project",
+    keywords: [project.slug, project.clientName, ...(project.tags || [])].filter(Boolean),
+    score:
+      scoreText(project.title, q, 5) +
+      scoreText(project.slug, q, 4) +
+      scoreText(project.category, q, 2) +
+      scoreText(project.description, q, 1) +
+      (project.tags || []).reduce((total, tag) => total + scoreText(tag, q, 2), 0),
+  }));
 
-  /* Search projects */
-  const projectResults = projects
-    .map((p) => {
-      const score =
-        matchScore(p.title, q) * 4 +
-        matchScore(p.category, q) * 2 +
-        matchScore(p.description, q) +
-        (p.tags || []).reduce((s, t) => s + matchScore(t, q) * 2, 0);
-      return { ...p, score, type: "project" };
-    })
-    .filter((p) => p.score > 0)
+  const serviceItems = services.map((service) => ({
+    id: `service-${service.id}`,
+    title: service.shortTitle || service.title,
+    description: service.description,
+    meta: "Effy Tech capability",
+    href: service.href || `/#services`,
+    type: "service",
+    keywords: [service.title, service.shortTitle, ...(service.examples || [])].filter(Boolean),
+    score:
+      scoreText(service.title, q, 5) +
+      scoreText(service.shortTitle, q, 4) +
+      scoreText(service.description, q, 2) +
+      (service.examples || []).reduce((total, item) => total + scoreText(item, q, 1), 0),
+  }));
+
+  const pageItems = pages.map((page) => ({
+    id: `page-${page.href}-${page.label}`,
+    title: page.label,
+    description: page.description || "Effy Tech website section",
+    meta: page.meta || "Website section",
+    href: page.href,
+    type: page.type || "page",
+    keywords: page.keywords || [],
+    score:
+      scoreText(page.label, q, 5) +
+      scoreText(page.description, q, 2) +
+      (page.keywords || []).reduce((total, item) => total + scoreText(item, q, 2), 0),
+  }));
+
+  return [...projectItems, ...serviceItems, ...pageItems]
+    .map((item) => ({
+      ...item,
+      score: item.score + item.keywords.reduce((total, keyword) => total + scoreText(keyword, q, 1), 0),
+    }))
+    .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 5);
-
-  /* Search pages / sections */
-  const pageResults = pages
-    .map((p) => {
-      const score = matchScore(p.label, q) * 3;
-      return { ...p, score, type: "page" };
-    })
-    .filter((p) => p.score > 0);
-
-  return { projectResults, pageResults };
+    .slice(0, 10);
 }
 
-/* ── Component ──────────────────────────────────────────────── */
-export default function CommandPalette({
-  isOpen,
-  onClose,
-  projects = [],
-  pages = [],
-}) {
+export default function CommandPalette({ isOpen, onClose, projects = [], services = [], pages = [] }) {
   const inputRef = useRef(null);
   const [query, setQuery] = useState("");
 
-  /* Focus input when opened, clear query when closed */
   useEffect(() => {
-    if (isOpen) {
-      setQuery("");
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (!isOpen) return;
+    setQuery("");
+    const timer = setTimeout(() => inputRef.current?.focus(), 80);
+    return () => clearTimeout(timer);
   }, [isOpen]);
 
-  /* Escape to close */
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape" && isOpen) onClose();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && isOpen) onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  /* Live search results */
-  const { projectResults, pageResults } = useMemo(
-    () => searchItems(query, projects, pages),
-    [query, projects, pages],
+  const results = useMemo(
+    () => buildResults(query, projects, services, pages),
+    [query, projects, services, pages],
   );
-
-  const hasResults = projectResults.length > 0 || pageResults.length > 0;
-  const hasQuery = query.trim().length >= 2;
+  const hasQuery = normalize(query).length >= 2;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
-          <motion.div
-            className="fixed inset-0 z-50 bg-neutral-black/50 backdrop-blur-sm"
+          <motion.button
+            type="button"
+            aria-label="Close search"
+            className="fixed inset-0 z-[90] border-0 bg-[#151b15]/55 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
             onClick={onClose}
           />
-
-          {/* Palette */}
           <motion.div
-            className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[15vh] sm:pt-[20vh]"
-            initial={{ opacity: 0, y: -20 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Search Effy Tech"
+            className="fixed inset-0 z-[91] flex items-start justify-center px-4 pt-[12vh] sm:pt-[17vh]"
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -16 }}
           >
-            <div className="w-full max-w-xl rounded-2xl bg-neutral-900/90 border border-primary-darkest/30 shadow-xl backdrop-blur-md overflow-hidden">
-              {/* Mobile close bar — visible only on small screens */}
-              <div className="flex items-center justify-between px-5 pt-4 pb-2 sm:hidden">
-                <span className="text-sm font-medium text-neutral-400">
-                  Search
-                </span>
-                <button
-                  onClick={onClose}
-                  className="flex items-center gap-1.5 rounded-full border border-neutral-600 bg-neutral-800 px-3.5 py-2 text-sm font-medium text-neutral-300 active:bg-neutral-700 transition-colors cursor-pointer"
-                  aria-label="Close search"
-                >
-                  <HiX className="h-4 w-4" />
-                  Close
-                </button>
-              </div>
-
-              {/* Search Input */}
-              <div className="flex items-center gap-3 px-5 py-4">
-                <HiOutlineSearch className="h-5 w-5 text-primary-light shrink-0" />
+            <div className="w-full max-w-2xl overflow-hidden rounded-[24px] border border-[#20261f]/15 bg-[#fbfaf4] shadow-[0_32px_90px_rgba(19,25,19,.28)]">
+              <div className="flex items-center gap-3 px-5 py-4 sm:px-6 sm:py-5">
+                <HiOutlineSearch className="h-5 w-5 shrink-0 text-[#687062]" />
                 <input
                   ref={inputRef}
-                  type="text"
                   value={query}
-                  placeholder="Search projects, pages..."
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="flex-1 min-w-0 bg-transparent text-lg text-text-inverse placeholder:text-neutral-500 outline-none"
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search projects, services, pages..."
+                  className="min-w-0 flex-1 bg-transparent text-base font-medium text-[#20261f] outline-none placeholder:text-[#7b8275] sm:text-lg"
                 />
                 {query && (
-                  <button
-                    onClick={() => setQuery("")}
-                    className="shrink-0 text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer"
-                    aria-label="Clear search"
-                  >
+                  <button type="button" onClick={() => setQuery("")} className="text-[#7b8275] hover:text-[#20261f]" aria-label="Clear search">
                     <HiX className="h-4 w-4" />
                   </button>
                 )}
-                {/* Desktop close button */}
-                <button
-                  onClick={onClose}
-                  className="hidden sm:flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-neutral-500 hover:text-text-inverse hover:bg-neutral-white/10 transition-colors cursor-pointer"
-                  aria-label="Close search"
-                >
+                <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full border border-[#20261f]/10 text-[#687062] hover:bg-[#20261f] hover:text-[#f4f2e8]" aria-label="Close search">
                   <HiX className="h-5 w-5" />
                 </button>
               </div>
 
-              {/* Results area */}
-              <div className="border-t border-neutral-700/50 max-h-[40vh] overflow-y-auto">
+              <div className="max-h-[58vh] overflow-y-auto border-t border-[#20261f]/10 p-2 sm:p-3">
                 {!hasQuery && (
-                  <div className="px-5 py-6 text-center">
-                    <p className="text-sm text-neutral-500">
-                      Type to search across projects and pages
-                    </p>
+                  <div className="px-5 py-8 text-center">
+                    <p className="text-sm font-medium text-[#465043]">Search by project name, service, technology, or page.</p>
+                    <p className="mt-2 text-xs text-[#7b8275]">Try “mobile app”, “IAM”, “automation”, “process”, or “team”.</p>
                   </div>
                 )}
 
-                {hasQuery && !hasResults && (
-                  <div className="px-5 py-6 text-center">
-                    <p className="text-sm text-neutral-500">
-                      No results found for &ldquo;{query}&rdquo;
-                    </p>
+                {hasQuery && results.length === 0 && (
+                  <div className="px-5 py-8 text-center">
+                    <p className="text-sm font-medium text-[#465043]">No matching project, service, or page found.</p>
                   </div>
                 )}
 
-                {/* Page / section results */}
-                {pageResults.length > 0 && (
-                  <div className="px-2 py-2">
-                    <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-                      Pages
-                    </p>
-                    {pageResults.map((page) => (
-                      <a
-                        key={page.href}
-                        href={page.href}
-                        onClick={onClose}
-                        className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-neutral-300 transition-colors hover:bg-neutral-white/5 hover:text-primary-light"
-                      >
-                        {page.label}
-                        <HiArrowRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {/* Project results */}
-                {projectResults.length > 0 && (
-                  <div className="px-2 py-2">
-                    <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-                      Projects
-                    </p>
-                    {projectResults.map((project) => (
-                      <a
-                        key={project.id}
-                        href="#projects"
-                        onClick={onClose}
-                        className="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-neutral-white/5"
-                      >
-                        {/* Color dot for category */}
-                        <span className="h-2 w-2 shrink-0 rounded-full bg-primary-light" />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-neutral-200 group-hover:text-primary-light transition-colors">
-                            {project.title}
-                          </p>
-                          <p className="truncate text-xs text-neutral-500">
-                            {project.category}
-                            {project.tags?.length > 0 &&
-                              ` · ${project.tags.slice(0, 3).join(", ")}`}
-                          </p>
-                        </div>
-                        <HiArrowRight className="h-3.5 w-3.5 shrink-0 text-neutral-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </a>
-                    ))}
-                  </div>
-                )}
+                {results.map((item) => (
+                  <a key={item.id} href={item.href} onClick={onClose} className="group grid grid-cols-[1fr_auto] gap-4 rounded-2xl px-4 py-3.5 transition hover:bg-[#f0eee4] sm:px-5">
+                    <div className="min-w-0">
+                      <div className="mb-1.5 flex items-center gap-2">
+                        <span className="rounded-full border border-[#20261f]/12 bg-white/70 px-2 py-1 text-[9px] font-extrabold tracking-[.14em] text-[#687062]">
+                          {TYPE_LABELS[item.type] || "PAGE"}
+                        </span>
+                        <span className="truncate text-xs text-[#7b8275]">{item.meta}</span>
+                      </div>
+                      <p className="truncate text-sm font-extrabold text-[#20261f] sm:text-base">{item.title}</p>
+                      <p className="mt-1 line-clamp-1 text-xs leading-5 text-[#5d655a] sm:text-sm">{item.description}</p>
+                    </div>
+                    <HiArrowRight className="mt-6 h-4 w-4 text-[#7b8275] transition group-hover:translate-x-1 group-hover:text-[#20261f]" />
+                  </a>
+                ))}
               </div>
             </div>
           </motion.div>

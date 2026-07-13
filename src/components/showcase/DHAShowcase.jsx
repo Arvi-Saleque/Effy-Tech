@@ -621,7 +621,7 @@ function ShowcaseNavbar({ appName, liveUrl }) {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={`project-showcase-navbar fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
           scrolled
             ? "bg-neutral-900/80 backdrop-blur-md shadow-lg border-b border-primary-darkest/30"
             : "bg-neutral-900/20 backdrop-blur-sm"
@@ -721,7 +721,7 @@ function ShowcaseNavbar({ appName, liveUrl }) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="project-showcase-mobile-menu fixed inset-0 z-40 flex flex-col bg-surface-dark md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-surface-dark md:hidden"
             variants={mobileOverlayVariants}
             initial="closed"
             animate="open"
@@ -1014,14 +1014,14 @@ export default function DHAShowcase({ data }) {
   }, []);
 
   return (
-    <div className={`effy-project-page effy-project-page--${projectKey.toLowerCase()} min-h-screen overflow-x-hidden`}>
+    <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
       {/* Custom Navbar */}
       <ShowcaseNavbar appName={name} liveUrl={liveUrl} />
 
       {/* ─────────────────────────────────────────────────────
           SECTION 1 — HERO (Full viewport)
          ───────────────────────────────────────────────────── */}
-      <section className="project-showcase-hero relative min-h-screen flex flex-col overflow-hidden pt-16 md:pt-[72px]">
+      <section className="relative min-h-screen flex flex-col overflow-hidden pt-16 md:pt-[72px]">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-1/4 h-[700px] w-[700px] rounded-full bg-primary/8 blur-[160px]" />
@@ -1056,9 +1056,9 @@ export default function DHAShowcase({ data }) {
                 {/* Title */}
                 <motion.h1
                   variants={fadeUp}
-                  className="project-hero-title mt-7 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05]"
+                  className="mt-7 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05]"
                 >
-                  <span className="project-hero-gradient">
+                  <span className="bg-gradient-to-b from-neutral-50 to-neutral-300 bg-clip-text text-transparent">
                     {name}
                   </span>
                 </motion.h1>
@@ -1082,7 +1082,7 @@ export default function DHAShowcase({ data }) {
                 {/* Description */}
                 <motion.p
                   variants={fadeUp}
-                  className="project-hero-copy mt-7 leading-relaxed max-w-lg text-[15px]"
+                  className="mt-7 text-neutral-400 leading-relaxed max-w-lg text-[15px]"
                 >
                   {description}
                 </motion.p>
