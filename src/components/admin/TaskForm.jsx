@@ -74,12 +74,12 @@ export default function TaskForm({ projectId, projectMembers, initialData = null
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300 mb-2">Title *</label>
-          <input required type="text" name="title" value={formData.title} onChange={handleChange} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500" placeholder="Task title" />
+          <input required type="text" name="title" value={formData.title} onChange={handleChange} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:border-primary-light" placeholder="Task title" />
         </div>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-slate-300 mb-2">Description</label>
-          <textarea name="description" value={formData.description} onChange={handleChange} rows="4" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500" placeholder="Task details..."></textarea>
+          <textarea name="description" value={formData.description} onChange={handleChange} rows="4" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 focus:outline-none focus:border-primary-light" placeholder="Task details..."></textarea>
         </div>
 
         <div>
@@ -129,8 +129,8 @@ export default function TaskForm({ projectId, projectMembers, initialData = null
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {projectMembers.map(member => (
-                <label key={member.user_id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.assignees.includes(member.user_id) ? "bg-blue-900/20 border-blue-500/50" : "bg-slate-800/50 border-slate-700/50 hover:border-slate-600"}`}>
-                  <input type="checkbox" checked={formData.assignees.includes(member.user_id)} onChange={() => handleAssigneeToggle(member.user_id)} className="w-4 h-4 rounded border-slate-600 text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900 bg-slate-700" />
+                <label key={member.user_id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.assignees.includes(member.user_id) ? "bg-primary-dark/20 border-primary-light/50" : "bg-slate-800/50 border-slate-700/50 hover:border-slate-600"}`}>
+                  <input type="checkbox" checked={formData.assignees.includes(member.user_id)} onChange={() => handleAssigneeToggle(member.user_id)} className="w-4 h-4 rounded border-slate-600 text-primary-light focus:ring-primary-light focus:ring-offset-slate-900 bg-slate-700" />
                   <div>
                     <div className="text-sm font-medium text-slate-200">{member.admin_profiles.name}</div>
                     <div className="text-xs text-slate-400">{member.admin_profiles.email}</div>
@@ -145,7 +145,7 @@ export default function TaskForm({ projectId, projectMembers, initialData = null
 
       <div className="mt-8 flex justify-end gap-3">
         <button type="button" onClick={() => router.back()} className="px-4 py-2 text-sm text-slate-300 hover:text-white transition-colors">Cancel</button>
-        <button type="submit" disabled={loading || isTerminal} className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${isTerminal ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 text-white shadow shadow-blue-900/20'}`}>
+        <button type="submit" disabled={loading || isTerminal} className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${isTerminal ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-primary-dark hover:bg-primary text-white shadow shadow-primary-dark/20'}`}>
           {loading ? "Saving..." : isEdit ? "Update Task" : "Create Task"}
         </button>
       </div>

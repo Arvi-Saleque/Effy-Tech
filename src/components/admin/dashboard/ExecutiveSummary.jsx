@@ -17,9 +17,9 @@ export default function ExecutiveSummary({ stats }) {
       title: "Active Projects",
       value: stats.activeProjects,
       icon: <Briefcase className="h-5 w-5" />,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
-      border: "border-blue-500/20",
+      color: "text-primary-light",
+      bg: "bg-primary/10",
+      border: "border-primary-light/20",
       href: "/admin/projects?status=active"
     },
     {

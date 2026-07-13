@@ -345,7 +345,7 @@ export default function MyWorkClient({ initialData }) {
 
     const renderReportBadge = () => {
       if (!activeReport) return null;
-      if (reportStatus === "submitted") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0">Awaiting Review</span>;
+      if (reportStatus === "submitted") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-primary/10 border border-primary-light/20 text-primary-light shrink-0">Awaiting Review</span>;
       if (reportStatus === "revision_requested") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">Revision Requested</span>;
       if (reportStatus === "rejected") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-400 shrink-0">Report Rejected</span>;
       if (reportStatus === "approved") return <span className="text-[9px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">Report Approved</span>;
@@ -361,7 +361,7 @@ export default function MyWorkClient({ initialData }) {
             </h5>
             {isProjectTask ? (
               <p className={`text-xs leading-relaxed whitespace-pre-wrap ${isDone ? "text-neutral-500" : "text-neutral-450"}`}>
-                <span className="font-medium text-blue-400">{task.projects?.name}</span>
+                <span className="font-medium text-primary-light">{task.projects?.name}</span>
                 {task.projects?.clients?.name && ` • ${task.projects.clients.name}`}
               </p>
             ) : (
@@ -385,7 +385,7 @@ export default function MyWorkClient({ initialData }) {
             {renderReportBadge()}
             <span className={`text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border shrink-0 ${
               isDone ? "bg-neutral-850 border-neutral-800 text-neutral-450" :
-              (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "bg-blue-500/10 border-blue-500/20 text-blue-400" :
+              (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "bg-primary/10 border-primary-light/20 text-primary-light" :
               "bg-amber-500/10 border-amber-500/20 text-amber-400"
             }`}>
               {isDone ? "Done" : (!isProjectTask ? task.status === "in_progress" : task.mapped_status === "in_progress") ? "In Progress" : "To Do"}
@@ -554,7 +554,7 @@ export default function MyWorkClient({ initialData }) {
                           </button>
                           <button
                             onClick={handleFinishCurrentWorkForNow}
-                            className="py-2.5 px-4 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/25 hover:border-blue-500/40 text-blue-400 text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5"
+                            className="py-2.5 px-4 bg-primary/10 hover:bg-primary/20 border border-primary-light/25 hover:border-primary-light/40 text-primary-light text-xs font-bold rounded-lg transition-all duration-200 flex items-center gap-1.5"
                           >
                             <Play className="h-3.5 w-3.5 fill-blue-400/20" />
                             Finish For Now
@@ -602,7 +602,7 @@ export default function MyWorkClient({ initialData }) {
                 {!optimisticState && status === "active" && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-neutral-800/40 text-[11px] text-neutral-500 leading-relaxed">
                     <p>
-                      <strong className="text-blue-400/80">Finish For Now:</strong> Stops the timer but keeps this task In Progress.
+                      <strong className="text-primary-light/80">Finish For Now:</strong> Stops the timer but keeps this task In Progress.
                     </p>
                     <p>
                       <strong className="text-emerald-450/90">Complete Task:</strong> Stops the timer and moves this task to Done.
@@ -659,7 +659,7 @@ export default function MyWorkClient({ initialData }) {
           {/* Empty state instruction card when no task is active */}
           {!activeBlock && !isEnded && (
             <div className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-3">
-              <div className="flex items-center gap-2 text-teal-400">
+              <div className="flex items-center gap-2 text-primary-light">
                 <AlertCircle className="h-5 w-5 shrink-0" />
                 <h3 className="text-base font-bold text-neutral-100">No task is active</h3>
               </div>
@@ -730,8 +730,8 @@ export default function MyWorkClient({ initialData }) {
           {/* In Progress column */}
           <div className="bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 space-y-4 min-h-[350px]">
             <div className="flex items-center justify-between pb-2 border-b border-neutral-800/40">
-              <h4 className="text-sm font-bold text-blue-400">In Progress</h4>
-              <span className="px-2 py-0.5 text-xs font-semibold bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
+              <h4 className="text-sm font-bold text-primary-light">In Progress</h4>
+              <span className="px-2 py-0.5 text-xs font-semibold bg-primary/10 text-primary-light rounded-md border border-primary-light/20">
                 {allInProgress.length}
               </span>
             </div>

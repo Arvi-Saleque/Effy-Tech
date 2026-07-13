@@ -33,7 +33,7 @@ export default async function TasksPage({ params, searchParams }) {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <div className="mb-6">
-        <Link href={`/admin/projects/${projectId}`} className="text-sm text-blue-400 hover:underline mb-2 inline-block">
+        <Link href={`/admin/projects/${projectId}`} className="text-sm text-primary-light hover:underline mb-2 inline-block">
           &larr; Back to {project.name}
         </Link>
         <div className="flex justify-between items-center">
@@ -42,7 +42,7 @@ export default async function TasksPage({ params, searchParams }) {
             <p className="text-slate-400 text-sm mt-1">Manage tasks for {project.name}</p>
           </div>
           {project.status !== "archived" && project.status !== "cancelled" && (
-            <Link href={`/admin/projects/${projectId}/tasks/new`} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-sm transition-colors shadow shadow-blue-900/20">
+            <Link href={`/admin/projects/${projectId}/tasks/new`} className="px-4 py-2 bg-primary-dark hover:bg-primary text-white rounded-md text-sm transition-colors shadow shadow-primary-dark/20">
               + New Task
             </Link>
           )}
@@ -55,7 +55,7 @@ export default async function TasksPage({ params, searchParams }) {
         <div className="text-center py-20 bg-slate-900/50 rounded-xl border border-slate-800">
           <p className="text-slate-400 mb-4">No tasks match the current filters.</p>
           {project.status !== "archived" && project.status !== "cancelled" && (
-            <Link href={`/admin/projects/${projectId}/tasks/new`} className="text-blue-400 hover:underline text-sm">
+            <Link href={`/admin/projects/${projectId}/tasks/new`} className="text-primary-light hover:underline text-sm">
               Create the first task
             </Link>
           )}
@@ -82,7 +82,7 @@ export default async function TasksPage({ params, searchParams }) {
                     {tasks.map(task => (
                       <tr key={task.id} className="hover:bg-slate-800/30 transition-colors">
                         <td className="p-4">
-                          <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="font-medium text-blue-400 hover:underline block mb-1">
+                          <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="font-medium text-primary-light hover:underline block mb-1">
                             {task.title}
                           </Link>
                           <div className="text-xs text-slate-500">
@@ -96,7 +96,7 @@ export default async function TasksPage({ params, searchParams }) {
                           {task.due_date ? <DueStatusBadge dueDate={task.due_date} isDone={task.status === "done"} /> : <span className="text-slate-600 text-sm">-</span>}
                         </td>
                         <td className="p-4 text-right">
-                          <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="text-sm text-slate-400 hover:text-blue-400">View</Link>
+                          <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="text-sm text-slate-400 hover:text-primary-light">View</Link>
                         </td>
                       </tr>
                     ))}

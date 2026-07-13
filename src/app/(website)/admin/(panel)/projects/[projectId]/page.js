@@ -34,7 +34,7 @@ function formatDate(dateStr) {
 }
 
 function calculateScheduleHealth(startDate, dueDate, completedAt) {
-  if (completedAt) return { label: "Completed", color: "text-teal-500", days: null };
+  if (completedAt) return { label: "Completed", color: "text-primary-light", days: null };
   if (!dueDate) return { label: "No Due Date", color: "text-neutral-500", days: null };
 
   const today = new Date();
@@ -95,7 +95,7 @@ export default async function ProjectDetailsPage({ params }) {
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">{project.name}</h1>
             <div className="flex items-center gap-2 text-neutral-400 text-sm">
               <span>Client:</span>
-              <Link href={`/admin/clients/${project.client_id}`} className="text-blue-500 hover:text-blue-400 hover:underline">
+              <Link href={`/admin/clients/${project.client_id}`} className="text-primary-light hover:text-primary-light hover:underline">
                 {project.clients?.name || "Unknown"}
               </Link>
             </div>
@@ -115,7 +115,7 @@ export default async function ProjectDetailsPage({ params }) {
           {!isArchived && !isCompleted && project.status !== "cancelled" && (
              <Link 
                href={`/admin/projects/${project.id}/edit`}
-               className="inline-flex items-center gap-2 text-sm text-blue-500 hover:text-blue-400 font-medium"
+               className="inline-flex items-center gap-2 text-sm text-primary-light hover:text-primary-light font-medium"
              >
                <Edit className="w-4 h-4" /> Edit Details
              </Link>
@@ -214,7 +214,7 @@ export default async function ProjectDetailsPage({ params }) {
               <span className="text-white">{formatDate(project.updated_at)}</span>
             </div>
             {project.completed_at && (
-              <div className="flex justify-between text-teal-400">
+              <div className="flex justify-between text-primary-light">
                 <span>Completed</span>
                 <span>{formatDate(project.completed_at)}</span>
               </div>

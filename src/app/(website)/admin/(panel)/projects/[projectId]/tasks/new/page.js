@@ -23,7 +23,7 @@ export default async function NewTaskPage({ params }) {
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <div className="mb-6">
-        <Link href={`/admin/projects/${projectId}/tasks`} className="text-sm text-blue-400 hover:underline mb-2 inline-block">
+        <Link href={`/admin/projects/${projectId}/tasks`} className="text-sm text-primary-light hover:underline mb-2 inline-block">
           &larr; Back to Tasks
         </Link>
         <h1 className="text-2xl font-semibold text-slate-100">Create Task</h1>

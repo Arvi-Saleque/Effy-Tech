@@ -58,7 +58,7 @@ export default function TaskReportsTab({ data }) {
       case "blocked": return "text-rose-400 bg-rose-400/10";
       case "review": return "text-amber-400 bg-amber-400/10";
       case "in_progress": return "text-indigo-400 bg-indigo-400/10";
-      case "todo": return "text-blue-400 bg-blue-400/10";
+      case "todo": return "text-primary-light bg-primary-light/10";
       default: return "text-neutral-400 bg-neutral-400/10";
     }
   };

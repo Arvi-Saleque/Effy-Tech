@@ -51,7 +51,7 @@ export default function WorkHoursChart({ data }) {
           <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(16, 185, 129, 0.03)" }} />
           <Bar 
             dataKey="hours" 
-            fill="#10b981" 
+            fill="#279159" 
             radius={[4, 4, 0, 0]}
             maxBarSize={45}
           />

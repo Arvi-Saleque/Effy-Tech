@@ -12,9 +12,9 @@ export default function StatusBadge({ status }) {
     dotColor = "bg-emerald-400";
     animate = true;
   } else if (status === "workday_open") {
-    badgeStyles = "bg-teal-500/10 text-teal-400 border border-teal-500/20";
+    badgeStyles = "bg-primary/10 text-primary-light border border-primary-light/20";
     label = "Workday Open";
-    dotColor = "bg-teal-400";
+    dotColor = "bg-primary-light";
     animate = true;
   } else if (status === "break" || status === "on_break") {
     badgeStyles = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
@@ -22,9 +22,9 @@ export default function StatusBadge({ status }) {
     dotColor = "bg-amber-400";
     animate = true;
   } else if (status === "ended" || status === "workday_ended") {
-    badgeStyles = "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+    badgeStyles = "bg-primary/10 text-primary-light border border-primary-light/20";
     label = status === "workday_ended" ? "Workday Ended" : "Ended";
-    dotColor = "bg-blue-400";
+    dotColor = "bg-primary-light";
   }
 
   return (

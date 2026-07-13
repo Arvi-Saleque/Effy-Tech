@@ -72,8 +72,8 @@ export default async function ProjectsPage({ searchParams }) {
             <p className="text-sm text-neutral-400">Current</p>
             <p className="text-2xl font-semibold text-white mt-1">{counts.current}</p>
           </div>
-          <div className="bg-[#1C1C1E] border border-blue-500/20 p-4 rounded-xl">
-            <p className="text-sm text-blue-400">Planning</p>
+          <div className="bg-[#1C1C1E] border border-primary-light/20 p-4 rounded-xl">
+            <p className="text-sm text-primary-light">Planning</p>
             <p className="text-2xl font-semibold text-white mt-1">{counts.planning}</p>
           </div>
           <div className="bg-[#1C1C1E] border border-emerald-500/20 p-4 rounded-xl">
@@ -84,8 +84,8 @@ export default async function ProjectsPage({ searchParams }) {
             <p className="text-sm text-amber-400">On Hold</p>
             <p className="text-2xl font-semibold text-white mt-1">{counts.onHold}</p>
           </div>
-          <div className="bg-[#1C1C1E] border border-teal-500/20 p-4 rounded-xl">
-            <p className="text-sm text-teal-400">Completed</p>
+          <div className="bg-[#1C1C1E] border border-primary-light/20 p-4 rounded-xl">
+            <p className="text-sm text-primary-light">Completed</p>
             <p className="text-2xl font-semibold text-white mt-1">{counts.completed}</p>
           </div>
           <div className="bg-[#1C1C1E] border border-red-500/20 p-4 rounded-xl">
@@ -166,7 +166,7 @@ export default async function ProjectsPage({ searchParams }) {
                       View
                     </Link>
                     {project.status !== "completed" && project.status !== "cancelled" && project.status !== "archived" && (
-                      <Link href={`/admin/projects/${project.id}/edit`} className="text-sm text-blue-500 hover:text-blue-400 font-medium">
+                      <Link href={`/admin/projects/${project.id}/edit`} className="text-sm text-primary-light hover:text-primary-light font-medium">
                         Edit
                       </Link>
                     )}
@@ -246,7 +246,7 @@ export default async function ProjectsPage({ searchParams }) {
                           {project.status !== "completed" && project.status !== "cancelled" && project.status !== "archived" && (
                             <Link
                               href={`/admin/projects/${project.id}/edit`}
-                              className="text-sm text-blue-500 hover:text-blue-400 font-medium"
+                              className="text-sm text-primary-light hover:text-primary-light font-medium"
                             >
                               Edit
                             </Link>

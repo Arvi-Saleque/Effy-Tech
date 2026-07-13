@@ -23,7 +23,7 @@ export default async function EditProjectPage({ params }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <FolderKanban className="w-8 h-8 text-blue-500" />
+        <FolderKanban className="w-8 h-8 text-primary-light" />
         <div>
           <h1 className="text-2xl font-bold text-white">Edit Project</h1>
           <p className="text-neutral-400 text-sm mt-1">{project.name}</p>

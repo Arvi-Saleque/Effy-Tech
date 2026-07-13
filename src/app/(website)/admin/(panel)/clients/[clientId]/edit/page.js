@@ -41,7 +41,7 @@ export default async function EditClientPage({ params }) {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-neutral-100 flex items-center gap-2">
-            <Edit className="w-5 h-5 text-blue-400" />
+            <Edit className="w-5 h-5 text-primary-light" />
             Edit Client: {client.name}
           </h1>
           <p className="text-sm text-neutral-400 mt-1">

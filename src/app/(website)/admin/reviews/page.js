@@ -311,8 +311,8 @@ export default function AdminReviewsPage() {
               label: "Total",
               count: reviews.length,
               icon: HiStar,
-              color: "text-blue-400",
-              bg: "bg-blue-500/10 border-blue-500/20",
+              color: "text-primary-light",
+              bg: "bg-primary/10 border-primary-light/20",
             },
             {
               label: "Pending",

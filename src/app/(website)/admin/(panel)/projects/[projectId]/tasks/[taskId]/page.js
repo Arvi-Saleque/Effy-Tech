@@ -39,7 +39,7 @@ export default async function TaskDetailsPage({ params }) {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <div className="mb-6">
-        <Link href={`/admin/projects/${projectId}/tasks`} className="text-sm text-blue-400 hover:underline mb-2 inline-block">
+        <Link href={`/admin/projects/${projectId}/tasks`} className="text-sm text-primary-light hover:underline mb-2 inline-block">
           &larr; Back to Tasks
         </Link>
         <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">

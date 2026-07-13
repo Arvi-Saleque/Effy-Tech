@@ -167,7 +167,7 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
 
   const StatusBadge = ({ status }) => {
     const colors = {
-      submitted: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+      submitted: "bg-primary/10 border-primary-light/20 text-primary-light",
       approved: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
       revision_requested: "bg-amber-500/10 border-amber-500/20 text-amber-400",
       rejected: "bg-red-500/10 border-red-500/20 text-red-400"
@@ -261,7 +261,7 @@ export default function TaskWorkReportPanel({ task, profile, projectId }) {
                 {activeReport.work_link && (
                   <div>
                     <span className="text-xs text-slate-500 block mb-1">Work Link</span>
-                    <a href={activeReport.work_link} target="_blank" rel="noreferrer" className="text-sm text-blue-400 hover:underline flex items-center gap-1.5 break-all">
+                    <a href={activeReport.work_link} target="_blank" rel="noreferrer" className="text-sm text-primary-light hover:underline flex items-center gap-1.5 break-all">
                       <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                       {activeReport.work_link}
                     </a>
