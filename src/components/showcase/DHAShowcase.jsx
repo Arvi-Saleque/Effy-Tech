@@ -1014,7 +1014,7 @@ export default function DHAShowcase({ data }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden">
+    <div className={`min-h-screen bg-surface-dark text-text-inverse overflow-x-hidden effy-project-page--${projectKey.toLowerCase()}`}>
       {/* Custom Navbar */}
       <ShowcaseNavbar appName={name} liveUrl={liveUrl} />
 

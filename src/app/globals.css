@@ -2833,3 +2833,63 @@ h1, h2, h3, h4 { font-family: var(--font-sans), Inter, system-ui, sans-serif; }
   background-image: linear-gradient(to bottom right, rgba(170, 145, 88, 0.4), rgba(170, 145, 88, 0.1), rgba(114, 120, 103, 0.35)) !important;
 }
 
+/* Color overrides for DHA and BUEK showcase pages to match brand gold/graphite green and remove teal buttons/text */
+.effy-project-page--dha,
+.effy-project-page--buek {
+  --dha-accent: #aa9158; /* Gold */
+  --dha-accent-light: #d2bd86;
+  --dha-green: #22271f; /* Graphite green */
+  --dha-sage: #727867;
+}
+
+.effy-project-page--dha [class*="text-primary"],
+.effy-project-page--buek [class*="text-primary"] {
+  color: var(--dha-accent) !important;
+}
+
+.effy-project-page--dha [class*="bg-primary"],
+.effy-project-page--buek [class*="bg-primary"] {
+  background-color: var(--dha-accent) !important;
+}
+
+.effy-project-page--dha [class*="bg-primary-dark"],
+.effy-project-page--buek [class*="bg-primary-dark"],
+.effy-project-page--dha [class*="hover:bg-primary-dark"]:hover,
+.effy-project-page--buek [class*="hover:bg-primary-dark"]:hover,
+.effy-project-page--dha [class*="hover:bg-primary"]:hover,
+.effy-project-page--buek [class*="hover:bg-primary"]:hover {
+  background-color: #8f7947 !important; /* Slightly darker gold for hover states */
+}
+
+.effy-project-page--dha [class*="border-primary"],
+.effy-project-page--buek [class*="border-primary"] {
+  border-color: rgba(170, 145, 88, 0.28) !important;
+}
+
+.effy-project-page--dha [class*="from-primary"],
+.effy-project-page--buek [class*="from-primary"] {
+  --tw-gradient-from: var(--dha-accent) var(--tw-gradient-from-position) !important;
+}
+
+.effy-project-page--dha [class*="to-primary"],
+.effy-project-page--buek [class*="to-primary"] {
+  --tw-gradient-to: var(--dha-accent-light) var(--tw-gradient-to-position) !important;
+}
+
+/* Scoped button text to remain white/readable when bg is gold */
+.effy-project-page--dha [class*="bg-primary"] *,
+.effy-project-page--buek [class*="bg-primary"] *,
+.effy-project-page--dha a[class*="bg-primary"],
+.effy-project-page--buek a[class*="bg-primary"],
+.effy-project-page--dha button[class*="bg-primary"],
+.effy-project-page--buek button[class*="bg-primary"] {
+  color: #ffffff !important;
+}
+
+/* Feature card hover border overrides */
+.effy-project-page--dha [class*="group-hover:border-primary"],
+.effy-project-page--buek [class*="group-hover:border-primary"] {
+  border-color: rgba(170, 145, 88, 0.35) !important;
+}
+
+
