@@ -1,75 +1,51 @@
-/* ============================================================
-   Effy Tech — Color Palette
-   Single source of truth for ALL colors in the application.
-   Never hardcode hex/rgb values in components.
-   Import this in Tailwind config & reference via CSS variables.
-
-   Theme: Premium Corporate Tech — Deep Teal + Champagne accent
-   ============================================================ */
+/* Effy Tech — single brand color source: ivory, graphite, and logo gold. */
 
 const colors = {
-  /* ── Brand / Primary (Deep Teal) ─────────────────────────── */
   primary: {
-    lightest: "#faf6eb",
-    light: "#d2bd86",
-    DEFAULT: "#0F766E",
-    dark: "#0D6560",
-    darkest: "#134E4A",
+    lightest: "#F4EFE2",
+    light: "#D2BD86",
+    DEFAULT: "#7B663A",
+    dark: "#6E5D36",
+    darkest: "#514327",
   },
-
-  /* ── Accent (Champagne / Warm Silver — subtle premium) ───── */
   accent: {
-    lightest: "#F9F5F0",
-    light: "#D4C5B0",
-    DEFAULT: "#B8A88A",
-    dark: "#9C8D72",
-    darkest: "#7A6E58",
+    lightest: "#F3F1E7",
+    light: "#C7C9BF",
+    DEFAULT: "#AA9158",
+    dark: "#8F7947",
+    darkest: "#6E5D36",
   },
-
-  /* ── Neutrals (warm graphite green — premium corporate) ──── */
   neutral: {
     white: "#FFFFFF",
-    50: "#fafbf9",
-    100: "#f0f2ee",
-    200: "#e2e4e0",
-    300: "#c2c6be",
-    400: "#8c9388",
-    500: "#676e64",
-    600: "#4a5247",
-    700: "#343b31",
-    800: "#2c332b",
-    900: "#22271f",
-    black: "#171c15",
+    50: "#FBFAF4",
+    100: "#F4F2E8",
+    200: "#E8E5D9",
+    300: "#D7D2C5",
+    400: "#9CA493",
+    500: "#727867",
+    600: "#596157",
+    700: "#465043",
+    800: "#30382F",
+    900: "#20261F",
+    black: "#171D17",
   },
-
-  /* ── Semantic ────────────────────────────────────────────── */
-  success: "#10B981",
-  warning: "#F59E0B",
-  error: "#EF4444",
-  info: "#0EA5E9",
-
-  /* ── Surfaces & Backgrounds ──────────────────────────────── */
+  success: "#279159",
+  warning: "#B7791F",
+  error: "#DC4C4C",
+  info: "#66756D",
   bg: {
-    DEFAULT: "#faf8f2",
-    alt: "#f3f0e6",
-    dark: "#22271f",
-    overlay: "rgba(34, 39, 31, 0.6)",
+    DEFAULT: "#FBFAF4",
+    alt: "#F4F2E8",
+    dark: "#20261F",
+    overlay: "rgba(32, 38, 31, 0.62)",
   },
-
-  /* ── Text ────────────────────────────────────────────────── */
   text: {
-    DEFAULT: "#22271f",
-    secondary: "#5f665d",
-    tertiary: "#7a8175",
-    inverse: "#FFFFFF",
+    DEFAULT: "#20261F",
+    secondary: "#596157",
+    tertiary: "#727867",
+    inverse: "#F7F5EC",
   },
-
-  /* ── Borders ─────────────────────────────────────────────── */
-  border: {
-    DEFAULT: "#e2e4e0",
-    light: "#f0f2ee",
-    dark: "#c2c6be",
-  },
+  border: { DEFAULT: "#D7D2C5", light: "#E8E5D9", dark: "#9CA493" },
 };
 
 export default colors;
