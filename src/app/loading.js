@@ -121,7 +121,7 @@ function MorphingConstellation() {
         ctx.beginPath();
         ctx.moveTo(na.x, na.y);
         ctx.lineTo(nb.x, nb.y);
-        ctx.strokeStyle = `rgba(45, 212, 191, ${0.15 + morph * 0.25})`;
+        ctx.strokeStyle = `rgba(185,154,90, ${0.15 + morph * 0.25})`;
         ctx.lineWidth = 1;
         ctx.stroke();
       });
@@ -136,7 +136,7 @@ function MorphingConstellation() {
         const py = na.y + (nb.y - na.y) * pulsePos;
         ctx.beginPath();
         ctx.arc(px, py, 2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(45, 212, 191, ${0.4 + morph * 0.4})`;
+        ctx.fillStyle = `rgba(185,154,90, ${0.4 + morph * 0.4})`;
         ctx.fill();
       });
 
@@ -144,8 +144,8 @@ function MorphingConstellation() {
       nodes.forEach((n, i) => {
         // Glow
         const gradient = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 8);
-        gradient.addColorStop(0, `rgba(45, 212, 191, ${0.2 + morph * 0.3})`);
-        gradient.addColorStop(1, "rgba(45, 212, 191, 0)");
+        gradient.addColorStop(0, `rgba(185,154,90, ${0.2 + morph * 0.3})`);
+        gradient.addColorStop(1, "rgba(185,154,90, 0)");
         ctx.beginPath();
         ctx.arc(n.x, n.y, 8, 0, Math.PI * 2);
         ctx.fillStyle = gradient;
@@ -155,7 +155,7 @@ function MorphingConstellation() {
         const pulse = Math.sin(t * 0.003 + i * 0.5) * 0.5 + 0.5;
         ctx.beginPath();
         ctx.arc(n.x, n.y, 2 + pulse * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(45, 212, 191, ${0.6 + morph * 0.4})`;
+        ctx.fillStyle = `rgba(185,154,90, ${0.6 + morph * 0.4})`;
         ctx.fill();
       });
 
@@ -222,3 +222,4 @@ export default function Loading() {
     </div>
   );
 }
+

@@ -1049,7 +1049,7 @@ export default function AmalTrackerShowcase({ data }) {
             className="absolute inset-0 opacity-[0.025]"
             style={{
               backgroundImage:
-                "radial-gradient(rgba(45,212,191,0.4) 1px, transparent 1px)",
+                "radial-gradient(rgba(185,154,90,0.4) 1px, transparent 1px)",
               backgroundSize: "30px 30px",
             }}
           />
@@ -1297,3 +1297,4 @@ export default function AmalTrackerShowcase({ data }) {
     </div>
   );
 }
+

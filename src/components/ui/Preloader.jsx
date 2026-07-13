@@ -112,7 +112,7 @@ function ConstellationCanvas({ phase }) {
         ctx.beginPath();
         ctx.moveTo(na.x, na.y);
         ctx.lineTo(nb.x, nb.y);
-        ctx.strokeStyle = `rgba(45, 212, 191, ${0.04 + morph * 0.08})`;
+        ctx.strokeStyle = `rgba(185,154,90, ${0.04 + morph * 0.08})`;
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -120,7 +120,7 @@ function ConstellationCanvas({ phase }) {
         ctx.beginPath();
         ctx.moveTo(na.x, na.y);
         ctx.lineTo(nb.x, nb.y);
-        ctx.strokeStyle = `rgba(45, 212, 191, ${0.12 + morph * 0.35})`;
+        ctx.strokeStyle = `rgba(185,154,90, ${0.12 + morph * 0.35})`;
         ctx.lineWidth = 1;
         ctx.stroke();
       });
@@ -136,8 +136,8 @@ function ConstellationCanvas({ phase }) {
         const py = na.y + (nb.y - na.y) * pos;
 
         const grad = ctx.createRadialGradient(px, py, 0, px, py, 5);
-        grad.addColorStop(0, `rgba(45, 212, 191, ${0.6 * morph})`);
-        grad.addColorStop(1, "rgba(45, 212, 191, 0)");
+        grad.addColorStop(0, `rgba(185,154,90, ${0.6 * morph})`);
+        grad.addColorStop(1, "rgba(185,154,90, 0)");
         ctx.beginPath();
         ctx.arc(px, py, 5, 0, Math.PI * 2);
         ctx.fillStyle = grad;
@@ -148,8 +148,8 @@ function ConstellationCanvas({ phase }) {
       nodes.forEach((n, i) => {
         // Outer glow
         const glowGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 14);
-        glowGrad.addColorStop(0, `rgba(45, 212, 191, ${0.15 + morph * 0.2})`);
-        glowGrad.addColorStop(1, "rgba(45, 212, 191, 0)");
+        glowGrad.addColorStop(0, `rgba(185,154,90, ${0.15 + morph * 0.2})`);
+        glowGrad.addColorStop(1, "rgba(185,154,90, 0)");
         ctx.beginPath();
         ctx.arc(n.x, n.y, 14, 0, Math.PI * 2);
         ctx.fillStyle = glowGrad;
@@ -160,7 +160,7 @@ function ConstellationCanvas({ phase }) {
         const radius = 2.5 + pulse * 1.5 + morph * 1;
         ctx.beginPath();
         ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(45, 212, 191, ${0.5 + morph * 0.5})`;
+        ctx.fillStyle = `rgba(185,154,90, ${0.5 + morph * 0.5})`;
         ctx.fill();
 
         // Bright center
@@ -259,7 +259,7 @@ export default function Preloader() {
             className="absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(45,212,191,0.5) 1px, transparent 0)",
+                "radial-gradient(circle at 1px 1px, rgba(185,154,90,0.5) 1px, transparent 0)",
               backgroundSize: "48px 48px",
             }}
           />
@@ -320,9 +320,9 @@ export default function Preloader() {
                 className="h-1 w-6 sm:w-8 rounded-full bg-primary-light/30"
                 animate={{
                   backgroundColor: [
-                    "rgba(45,212,191,0.15)",
-                    "rgba(45,212,191,0.6)",
-                    "rgba(45,212,191,0.15)",
+                    "rgba(185,154,90,0.15)",
+                    "rgba(185,154,90,0.6)",
+                    "rgba(185,154,90,0.15)",
                   ],
                 }}
                 transition={{
@@ -345,3 +345,4 @@ export default function Preloader() {
     </AnimatePresence>
   );
 }
+

@@ -93,7 +93,7 @@ function FeatureCard({ feature }) {
   return (
     <div className="group rounded-[8px] border border-neutral-700/70 bg-neutral-950/25 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/45 hover:bg-neutral-900/45 sm:p-6">
       <div className="mb-4 flex items-center gap-4">
-        <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[8px] border border-primary-light/20 bg-primary-light/10 text-primary-light shadow-[0_0_28px_rgba(45,212,191,0.1)] transition-all duration-300 group-hover:border-primary-light/45 group-hover:bg-primary-light/15">
+        <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[8px] border border-primary-light/20 bg-primary-light/10 text-primary-light shadow-[0_0_28px_rgba(185,154,90,0.1)] transition-all duration-300 group-hover:border-primary-light/45 group-hover:bg-primary-light/15">
           <Icon className="h-7 w-7" />
         </span>
         <h4 className="font-heading text-lg font-bold leading-tight text-neutral-100">
@@ -116,13 +116,13 @@ function SidebarItem({ service, isActive, onClick }) {
       onClick={onClick}
       className={`group relative flex w-full items-center gap-4 overflow-hidden rounded-[8px] border px-5 py-5 text-left transition-all duration-300 ${
         isActive
-          ? "border-primary-light/70 bg-primary-light/10 text-neutral-100 shadow-[0_0_34px_rgba(45,212,191,0.15)]"
+          ? "border-primary-light/70 bg-primary-light/10 text-neutral-100 shadow-[0_0_34px_rgba(185,154,90,0.15)]"
           : "border-neutral-800/65 bg-neutral-950/15 text-neutral-400 hover:border-primary-light/25 hover:bg-neutral-900/35 hover:text-neutral-200"
       }`}
     >
       {isActive && (
         <>
-          <span className="absolute right-0 top-1/2 h-16 w-16 -translate-y-1/2 translate-x-12 rotate-45 bg-primary-light shadow-[0_0_32px_rgba(45,212,191,0.55)]" />
+          <span className="absolute right-0 top-1/2 h-16 w-16 -translate-y-1/2 translate-x-12 rotate-45 bg-primary-light shadow-[0_0_32px_rgba(185,154,90,0.55)]" />
           <span className="absolute right-0 top-1/2 h-8 w-px -translate-y-1/2 bg-primary-light" />
         </>
       )}
@@ -154,7 +154,7 @@ function ServiceIllustration() {
           className="h-full w-full"
           style={{
             backgroundImage:
-              "linear-gradient(120deg, rgba(45,212,191,0.16) 1px, transparent 1px), linear-gradient(35deg, rgba(14,165,233,0.13) 1px, transparent 1px)",
+              "linear-gradient(120deg, rgba(185,154,90,0.16) 1px, transparent 1px), linear-gradient(35deg, rgba(14,165,233,0.13) 1px, transparent 1px)",
             backgroundSize: "92px 92px",
             maskImage:
               "radial-gradient(circle at 62% 42%, black 0%, transparent 68%)",
@@ -163,7 +163,7 @@ function ServiceIllustration() {
       </div>
 
       <div className="absolute right-6 top-3 h-40 w-64 rotate-[-28deg] rounded-[8px] border border-info/50 bg-info/10 shadow-[0_0_42px_rgba(14,165,233,0.14)]" />
-      <div className="absolute right-20 top-14 h-36 w-64 rotate-[-28deg] rounded-[8px] border border-primary-light/55 bg-primary-light/10 shadow-[0_0_40px_rgba(45,212,191,0.16)]" />
+      <div className="absolute right-20 top-14 h-36 w-64 rotate-[-28deg] rounded-[8px] border border-primary-light/55 bg-primary-light/10 shadow-[0_0_40px_rgba(185,154,90,0.16)]" />
       <div className="absolute right-2 top-24 h-36 w-64 rotate-[-28deg] rounded-[8px] border border-info/55 bg-info/10 shadow-[0_0_42px_rgba(14,165,233,0.16)]" />
       <div className="absolute right-24 top-28 h-28 w-48 rotate-[-28deg] rounded-[8px] border border-primary-light/45 bg-neutral-950/45">
         <span className="absolute left-5 top-5 h-2 w-20 rounded-full bg-primary-light/45" />
@@ -192,7 +192,7 @@ function DetailPanel({ service }) {
       <div className="flex gap-10">
         <div className="max-w-3xl flex-1">
           <span className="inline-flex items-center gap-5 text-sm font-bold uppercase tracking-[0.28em] text-primary-light">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-light shadow-[0_0_16px_rgba(45,212,191,0.9)]" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-light shadow-[0_0_16px_rgba(185,154,90,0.9)]" />
             {service.category}
           </span>
 
@@ -217,7 +217,7 @@ function DetailPanel({ service }) {
       <div className="mt-8 flex flex-col gap-4 sm:flex-row">
         <Link
           href="/#contact"
-          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-[8px] border border-primary-light/60 bg-gradient-to-r from-primary to-primary-light/70 px-8 py-3 text-base font-bold text-neutral-white shadow-[0_0_34px_rgba(45,212,191,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_44px_rgba(45,212,191,0.25)] sm:min-w-80"
+          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-[8px] border border-primary-light/60 bg-gradient-to-r from-primary to-primary-light/70 px-8 py-3 text-base font-bold text-neutral-white shadow-[0_0_34px_rgba(185,154,90,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_44px_rgba(185,154,90,0.25)] sm:min-w-80"
         >
           Discuss this service
           <HiOutlineArrowRight className="h-5 w-5" />
@@ -357,3 +357,4 @@ export default function ServiceExplorer({ groupId }) {
     </div>
   );
 }
+

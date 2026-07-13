@@ -58,7 +58,7 @@ export default function ComingSoon() {
           className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(45,212,191,0.5) 1px, transparent 0)",
+              "radial-gradient(circle at 1px 1px, rgba(210,189,134,0.5) 1px, transparent 0)",
             backgroundSize: "40px 40px",
           }}
         />
@@ -72,7 +72,7 @@ export default function ComingSoon() {
           style={{
             width: 14,
             height: 14,
-            boxShadow: "0 0 40px 10px rgba(45,212,191,0.3)",
+            boxShadow: "0 0 40px 10px rgba(210,189,134,0.3)",
           }}
           animate={{
             scale: [1, 1.4, 1],
@@ -94,7 +94,7 @@ export default function ComingSoon() {
           duration={8}
           delay={0}
           dotCount={2}
-          color="#2dd4bf"
+          color="#d2bd86"
         />
         <OrbitRing
           radius={100}
@@ -108,7 +108,7 @@ export default function ComingSoon() {
           duration={20}
           delay={0.6}
           dotCount={4}
-          color="#2dd4bf"
+          color="#d2bd86"
         />
 
         {/* Spacer to give the orbits visual room */}
@@ -155,7 +155,7 @@ export default function ComingSoon() {
       >
         <Link
           href="/"
-          className="group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(45,212,191,0.2)]"
+          className="group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(210,189,134,0.2)]"
         >
           <HiArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Back to Home

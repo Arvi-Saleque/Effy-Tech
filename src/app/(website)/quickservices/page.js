@@ -84,7 +84,7 @@ export default function QuickServicesPage() {
           className="pointer-events-none absolute inset-0 opacity-[0.035]"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(45,212,191,0.8) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(185,154,90,0.8) 1px, transparent 1px)",
             backgroundSize: "30px 30px",
           }}
         />
@@ -198,3 +198,4 @@ export default function QuickServicesPage() {
     </>
   );
 }
+
