@@ -685,7 +685,7 @@ function ShowcaseNavbar({ appName, liveUrl }) {
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-primary/90 px-4 py-2 text-xs font-semibold text-neutral-100 hover:bg-primary hover:shadow-[0_0_20px_rgba(185,154,90,0.2)] transition-all duration-300"
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-primary-light px-4 py-2 text-xs font-bold text-neutral-900 hover:bg-primary-light/90 hover:shadow-[0_0_20px_rgba(185,154,90,0.25)] transition-all duration-300"
             >
               <FaGlobe className="h-3.5 w-3.5" />
               Live Site
@@ -1112,7 +1112,7 @@ export default function DHAShowcase({ data }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackCTAClick("Visit Site - Hero", projectKey)}
-                    className="inline-flex items-center gap-3 rounded-xl bg-primary px-7 py-4 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.35)] active:scale-[0.98]"
+                    className="inline-flex items-center gap-3 rounded-xl bg-primary-light px-7 py-4 text-sm font-bold text-neutral-900 transition-all hover:bg-primary-light/90 hover:shadow-[0_0_40px_rgba(185,154,90,0.35)] active:scale-[0.98]"
                   >
                     <FaGlobe className="h-5 w-5" />
                     <span>
@@ -1306,15 +1306,15 @@ export default function DHAShowcase({ data }) {
 
                   {/* Hover — gradient border reveal */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/40 via-primary/10 to-accent/30" />
-                    <div className="absolute inset-[1px] rounded-[15px] bg-[#0a0e14]" />
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-light/45 via-accent/20 to-accent/30" />
+                    <div className="absolute inset-[1px] rounded-[15px] bg-[#1e231b]" />
                   </div>
 
                   {/* Glass fill */}
-                  <div className="absolute inset-[1px] rounded-[15px] bg-neutral-900/50 backdrop-blur-2xl group-hover:bg-[#0d1117]/90 transition-colors duration-500" />
+                  <div className="absolute inset-[1px] rounded-[15px] bg-neutral-900/50 backdrop-blur-2xl group-hover:bg-[#1e231b]/95 transition-colors duration-500" />
 
                   {/* Top glow bloom */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-28 w-2/3 bg-primary/[0.06] blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 h-28 w-2/3 bg-primary-light/[0.06] blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                   {/* Shimmer sweep */}
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1200ms] ease-in-out bg-gradient-to-r from-transparent via-white/[0.03] to-transparent pointer-events-none" />
@@ -1329,9 +1329,9 @@ export default function DHAShowcase({ data }) {
                   >
                     {/* Icon */}
                     <div className="relative flex-shrink-0">
-                      <div className="absolute -inset-4 rounded-full bg-primary/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                      <div className="absolute -inset-4 rounded-full bg-primary-light/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                       <div
-                        className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/[0.03] border border-primary/10 group-hover:border-primary/25 group-hover:shadow-[0_0_30px_rgba(185,154,90,0.08)] transition-all duration-500 ${
+                        className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-primary-light/15 to-primary-light/[0.03] border border-primary-light/10 group-hover:border-primary-light/25 group-hover:shadow-[0_0_30px_rgba(185,154,90,0.08)] transition-all duration-500 ${
                           isHero ? "h-16 w-16" : "h-12 w-12"
                         }`}
                       >
@@ -1477,13 +1477,13 @@ export default function DHAShowcase({ data }) {
 
         <div className="relative z-10 max-w-3xl mx-auto px-6 sm:px-10 text-center">
           <motion.div variants={fadeUp}>
-            <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-5 py-2 text-xs font-medium uppercase tracking-[0.2em] text-primary-light mb-5">
+            <span className="inline-block rounded-full border border-primary-light/20 bg-primary-light/5 px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-primary-light mb-5">
               {ctaEyebrow}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-neutral-100 leading-tight">
               {ctaTitle}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-primary">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-accent">
                 {ctaTitleAccent}
               </span>
             </h2>
@@ -1499,7 +1499,7 @@ export default function DHAShowcase({ data }) {
             <Link
               href="/#contact"
               onClick={() => trackCTAClick("Contact - CTA", projectKey)}
-              className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(15,118,110,0.3)] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary-light px-8 py-4 text-base font-bold text-neutral-900 transition-all hover:bg-primary-light/90 hover:shadow-[0_0_40px_rgba(185,154,90,0.35)] active:scale-[0.98]"
             >
               <span>{ctaButtonLabel}</span>
             </Link>
