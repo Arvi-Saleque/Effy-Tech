@@ -174,7 +174,7 @@ export default async function ProjectPage({ params }) {
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full rounded-lg border border-primary/30 bg-primary/15 px-5 py-3 text-sm font-medium text-primary-light transition-all hover:bg-primary/25 hover:shadow-[0_0_20px_rgba(45,212,191,0.15)]"
+                    className="flex items-center justify-center gap-2 w-full rounded-lg border border-primary/30 bg-primary/15 px-5 py-3 text-sm font-medium text-primary-light transition-all hover:bg-primary/25 hover:shadow-[0_0_20px_rgba(170,145,88,0.15)]"
                   >
                     <HiExternalLink className="h-4 w-4" />
                     View Live
