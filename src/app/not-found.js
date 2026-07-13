@@ -71,7 +71,7 @@ function ParticleField() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(45, 212, 191, ${0.06 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(185,154,90, ${0.06 * (1 - dist / 120)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -134,7 +134,7 @@ export default function NotFound() {
         <motion.h1
           className="text-[10rem] sm:text-[14rem] md:text-[18rem] font-black leading-none tracking-tighter text-transparent"
           style={{
-            WebkitTextStroke: "2px rgba(45, 212, 191, 0.3)",
+            WebkitTextStroke: "2px rgba(185,154,90, 0.3)",
           }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -187,7 +187,7 @@ export default function NotFound() {
       >
         <Link
           href="/"
-          className="group relative inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(45,212,191,0.2)]"
+          className="group relative inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(185,154,90,0.2)]"
         >
           <svg
             className="h-4 w-4 transition-transform group-hover:-translate-x-1"
@@ -219,3 +219,4 @@ export default function NotFound() {
     </>
   );
 }
+

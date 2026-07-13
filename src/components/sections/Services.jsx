@@ -77,7 +77,7 @@ function ServiceCard({ service, index, prefersReduced }) {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       custom={index}
-      className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary-light/35 hover:bg-neutral-800/75 hover:shadow-[0_0_42px_rgba(45,212,191,0.09),0_0_28px_rgba(184,168,138,0.06)] sm:p-7"
+      className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary-light/35 hover:bg-neutral-800/75 hover:shadow-[0_0_42px_rgba(185,154,90,0.09),0_0_28px_rgba(184,168,138,0.06)] sm:p-7"
       {...hoverMotion}
     >
       <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary-light/5 blur-3xl transition-transform duration-700 group-hover:scale-125" />
@@ -125,7 +125,7 @@ export default function Services() {
           className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(45,212,191,0.7) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(185,154,90,0.7) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -223,3 +223,4 @@ export default function Services() {
     </section>
   );
 }
+

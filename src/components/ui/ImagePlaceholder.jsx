@@ -25,7 +25,7 @@ export default function ImagePlaceholder({
             className="absolute inset-0 opacity-[0.04]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(45,212,191,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(45,212,191,0.5) 1px, transparent 1px)",
+                "linear-gradient(rgba(185,154,90,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(185,154,90,0.5) 1px, transparent 1px)",
               backgroundSize: "40px 40px",
             }}
           />
@@ -40,3 +40,4 @@ export default function ImagePlaceholder({
     </div>
   );
 }
+

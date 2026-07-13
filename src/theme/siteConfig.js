@@ -15,9 +15,10 @@ const siteConfig = {
   /* ── Navigation Links ────────────────────────────────────── */
   navLinks: [
     { label: "Services", href: "/#services" },
-    { label: "Work", href: "/#work" },
+    { label: "Projects", href: "/#work" },
     { label: "Process", href: "/#process" },
     { label: "About", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
   ],
 
   /* ── Social Media ────────────────────────────────────────── */

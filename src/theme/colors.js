@@ -10,8 +10,8 @@
 const colors = {
   /* ── Brand / Primary (Deep Teal) ─────────────────────────── */
   primary: {
-    lightest: "#CCFBF1",
-    light: "#2DD4BF",
+    lightest: "#faf6eb",
+    light: "#d2bd86",
     DEFAULT: "#0F766E",
     dark: "#0D6560",
     darkest: "#134E4A",
@@ -26,20 +26,20 @@ const colors = {
     darkest: "#7A6E58",
   },
 
-  /* ── Neutrals (cool-toned, crisp corporate) ──────────────── */
+  /* ── Neutrals (warm graphite green — premium corporate) ──── */
   neutral: {
     white: "#FFFFFF",
-    50: "#F8FAFC",
-    100: "#F1F5F9",
-    200: "#E2E8F0",
-    300: "#CBD5E1",
-    400: "#94A3B8",
-    500: "#64748B",
-    600: "#475569",
-    700: "#334155",
-    800: "#1E293B",
-    900: "#0F172A",
-    black: "#020617",
+    50: "#fafbf9",
+    100: "#f0f2ee",
+    200: "#e2e4e0",
+    300: "#c2c6be",
+    400: "#8c9388",
+    500: "#676e64",
+    600: "#4a5247",
+    700: "#343b31",
+    800: "#2c332b",
+    900: "#22271f",
+    black: "#171c15",
   },
 
   /* ── Semantic ────────────────────────────────────────────── */
@@ -50,25 +50,25 @@ const colors = {
 
   /* ── Surfaces & Backgrounds ──────────────────────────────── */
   bg: {
-    DEFAULT: "#FAFAFA",
-    alt: "#F1F5F9",
-    dark: "#0F172A",
-    overlay: "rgba(15, 23, 42, 0.6)",
+    DEFAULT: "#faf8f2",
+    alt: "#f3f0e6",
+    dark: "#22271f",
+    overlay: "rgba(34, 39, 31, 0.6)",
   },
 
   /* ── Text ────────────────────────────────────────────────── */
   text: {
-    DEFAULT: "#0F172A",
-    secondary: "#475569",
-    tertiary: "#94A3B8",
+    DEFAULT: "#22271f",
+    secondary: "#5f665d",
+    tertiary: "#7a8175",
     inverse: "#FFFFFF",
   },
 
   /* ── Borders ─────────────────────────────────────────────── */
   border: {
-    DEFAULT: "#E2E8F0",
-    light: "#F1F5F9",
-    dark: "#CBD5E1",
+    DEFAULT: "#e2e4e0",
+    light: "#f0f2ee",
+    dark: "#c2c6be",
   },
 };
 

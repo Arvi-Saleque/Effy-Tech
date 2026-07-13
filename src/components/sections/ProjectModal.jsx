@@ -50,7 +50,7 @@ export default function ProjectModal({ project, onClose }) {
       <div className="fixed inset-0 z-[1001] flex items-center justify-center p-4 sm:p-6">
         <motion.div
           layoutId={`project-card-${id}`}
-          className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-neutral-700/40 bg-neutral-900/95 shadow-[0_0_60px_rgba(45,212,191,0.08)] backdrop-blur-xl"
+          className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-neutral-700/40 bg-neutral-900/95 shadow-[0_0_60px_rgba(185,154,90,0.08)] backdrop-blur-xl"
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {/* Close button */}
@@ -127,7 +127,7 @@ export default function ProjectModal({ project, onClose }) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/15 px-5 py-2.5 text-sm font-medium text-primary-light transition-all hover:bg-primary/25 hover:shadow-[0_0_20px_rgba(45,212,191,0.15)]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/15 px-5 py-2.5 text-sm font-medium text-primary-light transition-all hover:bg-primary/25 hover:shadow-[0_0_20px_rgba(185,154,90,0.15)]"
                 >
                   <HiExternalLink className="h-4 w-4" />
                   View Live
@@ -159,3 +159,4 @@ export default function ProjectModal({ project, onClose }) {
 
   return createPortal(modal, document.body);
 }
+

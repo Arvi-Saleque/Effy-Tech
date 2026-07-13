@@ -38,7 +38,7 @@ function FilterPill({ label, isActive, onClick }) {
       {isActive && (
         <motion.div
           layoutId="activeProjectFilter"
-          className="absolute inset-0 rounded-full border border-primary/40 bg-primary/10 shadow-[0_0_20px_rgba(45,212,191,0.15)]"
+          className="absolute inset-0 rounded-full border border-primary/40 bg-primary/10 shadow-[0_0_20px_rgba(185,154,90,0.15)]"
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
         />
       )}
@@ -93,7 +93,7 @@ export default function ProjectShowcase({ projects = [] }) {
         className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(45,212,191,0.8) 1px, transparent 1px)",
+            "radial-gradient(circle, rgba(185,154,90,0.8) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
         aria-hidden="true"
@@ -206,3 +206,4 @@ export default function ProjectShowcase({ projects = [] }) {
     </section>
   );
 }
+

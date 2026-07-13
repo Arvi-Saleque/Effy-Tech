@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import ContactForm from "@/components/sections/ContactForm";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -15,37 +16,52 @@ import {
   Layers3,
   Mail,
   Network,
+  Building2,
+  Gauge,
+  Headphones,
+  LockKeyhole,
+  FileText,
+  CheckCircle2,
+  Users,
+  ArrowUpRight,
   Rocket,
   Search,
   ShieldCheck,
   Smartphone,
   Sparkles,
   Workflow,
+  Cloud,
+  Server,
+  Boxes,
+  GraduationCap,
+  ShoppingBag,
+  HeartPulse,
+  Landmark,
 } from "lucide-react";
 
 const capabilities = [
   {
     number: "01",
-    title: "Web Platforms",
-    description: "Fast, scalable websites and web applications engineered around real business operations.",
+    title: "Web Application Development",
+    description: "Business websites, portals, dashboards, and web applications engineered around real operational workflows.",
     icon: Globe2,
   },
   {
     number: "02",
-    title: "Mobile Products",
-    description: "Purpose-built mobile experiences with reliable architecture and polished interaction.",
+    title: "Mobile App Development",
+    description: "Android, iOS, and cross-platform products with reliable architecture, offline capability, and polished interaction.",
     icon: Smartphone,
   },
   {
     number: "03",
-    title: "Business Automation",
-    description: "Connected workflows that remove repetitive work and make operations measurable.",
+    title: "Custom Software & Automation",
+    description: "Management systems, internal tools, and connected workflows that reduce repetitive work and centralize operations.",
     icon: Workflow,
   },
   {
     number: "04",
-    title: "AI Systems",
-    description: "Practical AI agents and intelligent features designed for useful, controlled outcomes.",
+    title: "Backend, Cloud & AI Systems",
+    description: "APIs, databases, authentication, cloud delivery, and practical AI features designed for controlled outcomes.",
     icon: Sparkles,
   },
 ];
@@ -62,6 +78,80 @@ const principles = [
   ["Scalable engineering", "Clean architecture, clear boundaries, and room for future growth.", Database],
   ["Clear communication", "Direct updates, visible progress, and no unnecessary ambiguity.", Network],
   ["Long-term reliability", "Security, maintainability, and post-launch support are built in.", ShieldCheck],
+];
+
+const clientProof = [
+  {
+    name: "Islamic Amal Tracker",
+    proofType: "Effy Tech product",
+    status: "Live Android product",
+    audience: "Consumer mobile",
+    tech: "Flutter · Drift · Supabase",
+    note: "An offline-first worship companion with tracking, reminders, insights, widgets, and optional cloud sync.",
+    image: "/images/amal/logo.png",
+    href: "/projects/IAM",
+  },
+  {
+    name: "Darul Hikmah Academy",
+    proofType: "Client platform",
+    status: "Production platform",
+    audience: "Education operations",
+    tech: "Next.js · Supabase",
+    note: "A bilingual academic platform with structured public content and dynamic administrative control.",
+    image: "/images/dha/img1.png",
+    href: "/projects/DHA",
+  },
+  {
+    name: "BUEK",
+    proofType: "Institutional platform",
+    status: "Production platform",
+    audience: "University publishing",
+    tech: "Next.js · Admin CMS",
+    note: "A university publishing system for notices, events, media, academic information, and administration.",
+    image: "/images/buek/img1.png",
+    href: "/projects/BUEK",
+  },
+];
+
+const outcomes = [
+  ["Faster operations", "Replace repeated manual work with structured digital workflows.", Gauge],
+  ["Centralized management", "Control content, tasks, and operational data from one dependable system.", Building2],
+  ["Better user experience", "Give users clear, responsive, and task-focused interfaces across devices.", Users],
+  ["Scalable digital growth", "Build on architecture that can evolve instead of being replaced after launch.", ArrowUpRight],
+];
+
+const standards = [
+  ["Secure and maintainable", "Permissions, validation, clean boundaries, and a codebase that remains understandable as the product grows.", LockKeyhole, "SECURITY · ARCHITECTURE"],
+  ["Responsive and performant", "Core workflows are designed for desktop, tablet, and mobile, with deliberate loading and asset behavior.", Gauge, "EXPERIENCE · PERFORMANCE"],
+  ["Tested and supportable", "Critical flows are reviewed before release, with practical documentation, handover, and post-launch support.", CheckCircle2, "QUALITY · HANDOVER"],
+];
+
+
+const technologyGroups = [
+  { label: "Frontend", items: ["Next.js", "React", "Tailwind CSS"], icon: Code2 },
+  { label: "Mobile", items: ["Flutter", "Android", "Cross-platform"], icon: Smartphone },
+  { label: "Backend", items: ["Node.js", "Laravel", "REST APIs"], icon: Server },
+  { label: "Data", items: ["PostgreSQL", "Supabase", "Firebase"], icon: Database },
+  { label: "Cloud", items: ["Vercel", "Cloudflare", "Secure deployment"], icon: Cloud },
+  { label: "Product", items: ["Figma", "Design systems", "QA & handover"], icon: Boxes },
+];
+
+const industries = [
+  ["Education", "Academic platforms, portals, materials, results, and administration.", GraduationCap],
+  ["Islamic Technology", "Purpose-built products for worship, learning, and community workflows.", Landmark],
+  ["Business Operations", "Internal tools, dashboards, reporting, and workflow automation.", Building2],
+  ["E-commerce", "Product discovery, ordering, management, and operational systems.", ShoppingBag],
+  ["Healthcare & Services", "Structured digital experiences for appointments, records, and service delivery.", HeartPulse],
+  ["Startups & Product Teams", "MVPs, scalable product foundations, and iterative feature delivery.", Rocket],
+];
+
+const faqs = [
+  ["What do you need to start a project?", "A clear description of the problem, current workflow, target users, and any deadline or operational constraint. We can help structure the scope from there."],
+  ["How are timeline and budget estimated?", "They are based on scope, integrations, design depth, delivery risk, and support requirements—not a generic package price."],
+  ["Can you improve an existing system?", "Yes. We can audit an existing codebase, stabilize critical flows, redesign selected parts, or plan a controlled rebuild."],
+  ["Who owns the source code and product?", "Ownership is defined before work starts. For client projects, handover and repository access are included according to the agreed scope."],
+  ["Do you provide maintenance after launch?", "Yes. Support can include monitoring, bug fixes, controlled improvements, deployment help, and ongoing product work."],
+  ["Can you work under an NDA?", "Yes. Confidential workflows, product details, and business information can be covered by an NDA before technical discovery."],
 ];
 
 const founders = [
@@ -176,7 +266,7 @@ export default function HomeExperience() {
         <div className="home-shell hero-grid">
           <motion.div className="hero-copy" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }}>
             <div className="eyebrow"><span /> CUSTOM SOFTWARE SYSTEMS</div>
-            <h1><span>We turn complex</span><span>workflows into simple</span><em>digital systems.</em></h1>
+            <h1><span>We turn complex workflows</span><span>into simple digital systems.</span></h1>
             <p>Custom platforms, mobile products, automation, and AI—designed as one connected solution around how your business actually works.</p>
             <div className="hero-actions">
               <a className="button button-dark" href="#contact">Start a Project <ArrowRight size={17} /></a>
@@ -194,6 +284,42 @@ export default function HomeExperience() {
         </div>
         <div className="home-shell audience-strip">
           <span>BUILT FOR</span><p>Businesses</p><i /><p>Startups</p><i /><p>Institutions</p><i /><p>Product Teams</p>
+        </div>
+      </section>
+
+      <section className="client-trust-section" aria-labelledby="client-trust-title">
+        <div className="home-shell client-trust-inner">
+          <motion.div className="client-trust-copy" {...fade}>
+            <span>00 — SELECTED PRODUCT &amp; PLATFORM PROOF</span>
+            <h2 id="client-trust-title">Software already built for real users and operational teams.</h2>
+            <p>A mix of Effy Tech-owned products and delivered client or institutional platforms—each designed and engineered for active use.</p>
+            <div className="client-trust-assurance" aria-label="Delivery principles">
+              <span><CheckCircle2 size={15} /> Clear product ownership</span>
+              <span><ShieldCheck size={15} /> Production-minded engineering</span>
+            </div>
+          </motion.div>
+
+          <div className="client-logo-wall" aria-label="Selected Effy Tech products and delivered platforms">
+            {clientProof.map((client, index) => (
+              <Link href={client.href} key={client.name} className="client-logo-card">
+                <div className="client-logo-media">
+                  <Image src={client.image} alt="" fill sizes="(max-width: 820px) 160px, 240px" />
+                  <span className="client-proof-index">0{index + 1}</span>
+                </div>
+                <div className="client-logo-content">
+                  <small>{client.proofType}</small>
+                  <strong>{client.name}</strong>
+                  <p>{client.note}</p>
+                  <dl className="client-proof-meta">
+                    <div><dt>Status</dt><dd>{client.status}</dd></div>
+                    <div><dt>Use case</dt><dd>{client.audience}</dd></div>
+                  </dl>
+                  <em>{client.tech}</em>
+                  <span className="client-project-link">View project <ArrowUpRight size={14} /></span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -256,19 +382,38 @@ export default function HomeExperience() {
           <div className="secondary-projects editorial-projects">
             <motion.article className="project-feature project-feature-dha" {...fade}>
               <div className="project-screen"><Image src="/images/dha/img1.png" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
-              <div className="project-copy"><span>EDUCATION PLATFORM · 02</span><h3>Darul Hikmah Academy</h3><p>A bilingual academic platform connecting public content, course discovery, materials, and dynamic administration.</p><ul><li>Dynamic content management</li><li>Academic information architecture</li><li>Responsive public experience</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
+              <div className="project-copy"><span>EDUCATION PLATFORM · 02</span><h3>Darul Hikmah Academy</h3><p><b>Problem:</b> Academic information and public content needed one structured, maintainable platform.</p><p><b>Solution:</b> A bilingual website with dynamic administration, course discovery, materials, and responsive public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Supabase</li><li>Outcome: Centralized content management</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
             <motion.article className="project-feature project-feature-buek" {...fade}>
               <div className="project-screen"><Image src="/images/buek/img1.png" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
-              <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 03</span><h3>BUEK</h3><p>A structured university platform for notices, events, media, academic content, and administrative publishing.</p><ul><li>Admin-controlled publishing</li><li>Institutional content system</li><li>Fast public access</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
+              <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 03</span><h3>BUEK</h3><p><b>Problem:</b> Notices, events, media, and academic information needed a reliable publishing workflow.</p><p><b>Solution:</b> A structured university platform with admin-controlled content and fast public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Admin CMS</li><li>Outcome: Organized institutional publishing</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
+          </div>
+        </div>
+      </section>
+
+      <section id="outcomes" className="outcomes-section">
+        <div className="home-shell">
+          <motion.div className="section-intro" {...fade}>
+            <span>03 — CLIENT OUTCOMES</span>
+            <h2>Built to create operational value, not just another interface.</h2>
+            <p>Every project is shaped around a concrete improvement in how the organization works, serves users, or grows.</p>
+          </motion.div>
+          <div className="outcome-grid">
+            {outcomes.map(([title, text, Icon], index) => (
+              <motion.article key={title} {...fade}>
+                <div><span>0{index + 1}</span><Icon size={24}/></div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </motion.article>
+            ))}
           </div>
         </div>
       </section>
 
       <section id="process" className="process-section">
         <div className="home-shell process-grid">
-          <motion.div className="section-intro" {...fade}><span>03 — PROCESS</span><h2>A clear path from complexity to launch.</h2></motion.div>
+          <motion.div className="section-intro" {...fade}><span>04 — PROCESS</span><h2>A clear path from complexity to launch.</h2></motion.div>
           <div className="process-journey">
             <div className="process-spine" aria-hidden="true" />
             {process.map(({ n, title, text, icon: Icon }, index) => <motion.article key={title} className="process-step" {...fade}>
@@ -283,18 +428,71 @@ export default function HomeExperience() {
         </div>
       </section>
 
-      <section id="about" className="principles-section">
-        <div className="home-shell principles-grid">
-          <motion.div className="principles-copy" {...fade}><span>04 — WHY EFFY TECH</span><h2>Built for outcomes.<br/>Backed by engineering discipline.</h2><p>We combine product thinking, technical depth, and direct communication to build systems that remain useful after launch.</p></motion.div>
-          <div className="principle-list">
-            {principles.map(([title, text, Icon], i) => <motion.article key={title} {...fade}><span>0{i+1}</span><Icon size={23}/><div><h3>{title}</h3><p>{text}</p></div></motion.article>)}
+      <section id="standards" className="standards-section">
+        <div className="home-shell standards-layout">
+          <motion.div className="standards-heading" {...fade}>
+            <span>05 — ENGINEERING STANDARDS & OUTCOMES</span>
+            <h2>Engineering discipline behind every practical outcome.</h2>
+            <p>We combine business-first planning, secure architecture, performance, testing, documentation, direct communication, and post-launch support in one delivery standard.</p>
+          </motion.div>
+          <div className="standards-grid">
+            {standards.map(([title, text, Icon, label], index) => (
+              <motion.article key={title} {...fade}>
+                <div className="standards-icon"><Icon size={24}/></div>
+                <span>0{index + 1}</span>
+                <small>{label}</small>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="technology" className="technology-section">
+        <div className="home-shell">
+          <motion.div className="section-intro" {...fade}>
+            <span>06 — TECHNOLOGY STACK</span>
+            <h2>Modern tools, selected for the system—not for the trend.</h2>
+            <p>We choose the stack around product requirements, operational constraints, maintainability, and the team that will own the system after delivery.</p>
+          </motion.div>
+          <div className="technology-grid">
+            {technologyGroups.map(({ label, items, icon: Icon }, index) => (
+              <motion.article key={label} {...fade}>
+                <div className="technology-card-top"><span>0{index + 1}</span><Icon size={23}/></div>
+                <h3>{label}</h3>
+                <div className="technology-tags">{items.map((item) => <span key={item}>{item}</span>)}</div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="about-industries-section">
+        <div className="home-shell about-industries-layout">
+          <motion.div className="about-company" {...fade}>
+            <span>07 — ABOUT EFFY TECH</span>
+            <h2>A software company focused on practical systems that stay useful.</h2>
+            <p>Effy Tech plans, designs, engineers, deploys, and supports digital products for businesses, institutions, and product teams. We stay close to the workflow, communicate directly, and build with long-term ownership in mind.</p>
+            <div className="about-company-points">
+              <div><strong>Direct ownership</strong><span>The people planning the work remain involved in delivery.</span></div>
+              <div><strong>End-to-end execution</strong><span>Product thinking, interface design, engineering, deployment, and support.</span></div>
+            </div>
+          </motion.div>
+          <div className="industries-panel">
+            <div className="industries-heading"><span>WHO WE WORK WITH</span><h3>Relevant experience across focused industries.</h3></div>
+            <div className="industries-grid">
+              {industries.map(([title, text, Icon]) => (
+                <motion.article key={title} {...fade}><Icon size={22}/><div><h4>{title}</h4><p>{text}</p></div></motion.article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       <section id="team" className="team-section">
         <div className="home-shell">
-          <motion.div className="section-intro" {...fade}><span>05 — THE TEAM</span><h2>Built by people who stay close to the work.</h2></motion.div>
+          <motion.div className="section-intro" {...fade}><span>08 — THE TEAM</span><h2>Built by people who stay close to the work.</h2></motion.div>
           <div className="founder-stage">
             <div className="founder-statement"><span>ENGINEERING-LED. PRODUCT-FOCUSED.</span><p>Small team, direct ownership, and no distance between the people making decisions and the people building the product.</p></div>
             <div className="founder-grid">
@@ -304,10 +502,41 @@ export default function HomeExperience() {
         </div>
       </section>
 
-      <section id="contact" className="contact-cta">
-        <div className="home-shell contact-cta-inner">
-          <motion.div {...fade}><span>START A CONVERSATION</span><h2>Have a complex workflow that needs a simpler system?</h2><p>Tell us what is slowing the business down. We will help define the right product and technical direction.</p></motion.div>
-          <motion.div className="contact-actions" {...fade}><a className="button button-ivory" href="mailto:effytechbd@gmail.com">Discuss Your Project <ArrowRight size={17}/></a><a href="mailto:effytechbd@gmail.com"><Mail size={17}/> effytechbd@gmail.com</a></motion.div>
+      <section id="faq" className="faq-section">
+        <div className="home-shell faq-layout">
+          <motion.div className="faq-heading" {...fade}>
+            <span>09 — FAQ</span>
+            <h2>Important questions before a software project starts.</h2>
+            <p>Clear expectations reduce delivery risk. These are the questions clients usually need answered first.</p>
+          </motion.div>
+          <div className="faq-list">
+            {faqs.map(([question, answer], index) => (
+              <motion.details key={question} {...fade}>
+                <summary><span>0{index + 1}</span>{question}<b>+</b></summary>
+                <p>{answer}</p>
+              </motion.details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="contact-section">
+        <div className="home-shell contact-layout">
+          <motion.div className="contact-copy" {...fade}>
+            <span>10 — START A PROJECT</span>
+            <h2>Have a workflow that needs a better system?</h2>
+            <p>Share the problem, the current process, and the result you need. We will help define the practical product and technical direction.</p>
+            <div className="contact-details">
+              <a href="mailto:effytechbd@gmail.com"><Mail size={19}/><div><small>BUSINESS EMAIL</small><strong>effytechbd@gmail.com</strong></div></a>
+              <a href="tel:+8801511190270"><Smartphone size={19}/><div><small>PHONE / WHATSAPP</small><strong>+880 1511-190270</strong></div></a>
+              <div><Building2 size={19}/><div><small>LOCATION</small><strong>Shyamoli, Dhaka, Bangladesh</strong></div></div>
+            </div>
+            <div className="contact-response"><CheckCircle2 size={17}/> Usually responds within one business day.</div>
+          </motion.div>
+          <motion.div className="contact-form-card" {...fade}>
+            <div className="contact-form-heading"><span>PROJECT BRIEF</span><h3>Tell us what you are planning.</h3></div>
+            <ContactForm />
+          </motion.div>
         </div>
       </section>
     </main>

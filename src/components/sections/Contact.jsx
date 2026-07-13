@@ -62,7 +62,7 @@ export default function Contact() {
           className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(45,212,191,0.4) 1px, transparent 0)",
+              "radial-gradient(circle at 1px 1px, rgba(185,154,90,0.4) 1px, transparent 0)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -169,3 +169,4 @@ export default function Contact() {
     </section>
   );
 }
+

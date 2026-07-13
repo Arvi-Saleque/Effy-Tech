@@ -11,9 +11,9 @@
 
 /* ── Custom Theme Tokens ───────────────────────────────────── */
 @theme {
-  /* Brand / Primary (Deep Teal) */
-  --color-primary-lightest: #ccfbf1;
-  --color-primary-light: #2dd4bf;
+  /* Brand / Primary (Deep Teal + Champagne Gold) */
+  --color-primary-lightest: #faf6eb;
+  --color-primary-light: #d2bd86;
   --color-primary: #0f766e;
   --color-primary-dark: #0d6560;
   --color-primary-darkest: #134e4a;
@@ -25,19 +25,19 @@
   --color-accent-dark: #9c8d72;
   --color-accent-darkest: #7a6e58;
 
-  /* Neutrals (cool slate — crisp corporate) */
+  /* Neutrals (warm graphite green — premium corporate) */
   --color-neutral-white: #ffffff;
-  --color-neutral-50: #f8fafc;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-300: #cbd5e1;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-500: #64748b;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1e293b;
-  --color-neutral-900: #0f172a;
-  --color-neutral-black: #020617;
+  --color-neutral-50: #fafbf9;
+  --color-neutral-100: #f0f2ee;
+  --color-neutral-200: #e2e4e0;
+  --color-neutral-300: #c2c6be;
+  --color-neutral-400: #8c9388;
+  --color-neutral-500: #676e64;
+  --color-neutral-600: #4a5247;
+  --color-neutral-700: #343b31;
+  --color-neutral-800: #2c332b;
+  --color-neutral-900: #22271f;
+  --color-neutral-black: #171c15;
 
   /* Semantic */
   --color-success: #10b981;
@@ -46,14 +46,14 @@
   --color-info: #0ea5e9;
 
   /* Surfaces */
-  --color-surface: #fafafa;
-  --color-surface-alt: #f1f5f9;
-  --color-surface-dark: #0f172a;
+  --color-surface: #faf8f2;
+  --color-surface-alt: #f3f0e6;
+  --color-surface-dark: #22271f;
 
   /* Text */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #94a3b8;
+  --color-text-primary: #22271f;
+  --color-text-secondary: #5f665d;
+  --color-text-tertiary: #7a8175;
   --color-text-inverse: #ffffff;
 
   /* Border */
@@ -221,7 +221,7 @@
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(185,154,90, 0.1);
   }
 
   /* Hide scrollbar utility */
@@ -258,7 +258,7 @@
       ),
       radial-gradient(
         ellipse 70% 40% at 50% 90%,
-        rgba(45, 212, 191, 0.08) 0%,
+        rgba(185,154,90, 0.08) 0%,
         transparent 60%
       ),
       var(--color-surface);
@@ -897,451 +897,1687 @@ h1, h2, h3, h4 { font-family: var(--font-sans), Inter, system-ui, sans-serif; }
 }
 
 /* ============================================================
-   Phase 07 — Shared Effy project landing-page system
-   Keeps each product identity while matching the main homepage.
+   Phase 17 — Homepage strategy, trust, search, and responsiveness
    ============================================================ */
-.effy-project-page {
-  --project-ivory: #f4f1e7;
-  --project-paper: #fbfaf5;
-  --project-graphite: #1f271f;
-  --project-graphite-2: #293129;
-  --project-sage: #758071;
-  --project-line: rgba(31, 39, 31, 0.14);
-  min-height: 100vh;
-  background: var(--project-ivory);
-  color: var(--project-graphite);
+.effy-home .section-intro h2,
+.effy-home .principles-copy h2,
+.effy-home .standards-heading h2,
+.effy-home .faq-heading h2,
+.effy-home .client-trust-copy h2 {
+  font-size: clamp(3rem, 5.6vw, 5.75rem);
+  line-height: .94;
+  letter-spacing: -.065em;
+  max-width: 980px;
+}
+.effy-home .section-intro > p,
+.effy-home .standards-heading > p,
+.effy-home .faq-heading > p {
+  max-width: 700px;
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--effy-ink-3);
 }
 
-.project-showcase-navbar {
-  color: var(--project-graphite);
+.client-trust-section { padding: 64px 0; border-top: 1px solid var(--effy-line); border-bottom: 1px solid var(--effy-line); background: #f7f5ec; }
+.client-trust-inner { display: grid; grid-template-columns: .85fr 1.15fr; gap: 70px; align-items: end; }
+.client-trust-copy > span,
+.standards-heading > span,
+.faq-heading > span { display: block; margin-bottom: 18px; color: #747d6f; font-size: 10px; font-weight: 850; letter-spacing: .18em; }
+.client-trust-copy h2 { font-size: clamp(2.2rem, 3.5vw, 3.7rem); }
+.client-logo-wall { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--effy-line); background: rgba(255,255,255,.42); }
+.client-logo-wall article { min-height: 130px; padding: 26px; display: flex; flex-direction: column; justify-content: end; border-right: 1px solid var(--effy-line); }
+.client-logo-wall article:last-child { border-right: 0; }
+.client-logo-wall small { margin-bottom: 12px; color: #777f72; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.client-logo-wall strong { font-size: 20px; line-height: 1.2; }
+
+.outcomes-section { padding: 130px 0; background: #f4f2e8; }
+.outcome-grid { margin-top: 58px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--effy-line); border-left: 1px solid var(--effy-line); }
+.outcome-grid article { min-height: 290px; padding: 30px; border-right: 1px solid var(--effy-line); border-bottom: 1px solid var(--effy-line); background: rgba(255,255,255,.34); }
+.outcome-grid article > div { display: flex; justify-content: space-between; align-items: center; color: #66705f; }
+.outcome-grid article > div span { font-size: 11px; font-weight: 850; letter-spacing: .12em; }
+.outcome-grid h3 { margin-top: 72px; font-size: 28px; letter-spacing: -.04em; }
+.outcome-grid p { margin-top: 14px; color: var(--effy-ink-3); font-size: 15px; line-height: 1.7; }
+
+.client-proof-section { padding: 130px 0; background: #f8f6ee; }
+.client-story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 54px; }
+.client-story-grid article { min-height: 330px; padding: 30px; border: 1px solid var(--effy-line); background: rgba(255,255,255,.56); display: flex; flex-direction: column; }
+.client-story-top { display: flex; justify-content: space-between; align-items: center; color: #747d6f; }
+.client-story-top span { font-size: 11px; font-weight: 900; }
+.client-story-top small { font-size: 9px; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+.client-story-grid h3 { margin-top: 70px; font-size: 30px; letter-spacing: -.045em; }
+.client-story-grid p { margin-top: 16px; color: var(--effy-ink-3); line-height: 1.7; }
+.client-story-grid a { margin-top: auto; padding-top: 30px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; }
+.testimonial-policy { margin-top: 18px; padding: 28px 30px; display: grid; grid-template-columns: .7fr 1.3fr; gap: 30px; align-items: center; background: var(--effy-ink); color: var(--effy-ivory); }
+.testimonial-policy > div { display: flex; align-items: center; gap: 13px; font-size: 11px; font-weight: 850; letter-spacing: .13em; }
+.testimonial-policy p { color: #c9cdbf; line-height: 1.7; }
+
+.standards-section { padding: 130px 0; background: var(--effy-ink); color: var(--effy-ivory); }
+.standards-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 76px; }
+.standards-heading > span { color: #aeb6a7; }
+.standards-heading p { color: #bbc2b4; }
+.standards-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid rgba(244,242,232,.15); border-left: 1px solid rgba(244,242,232,.15); }
+.standards-grid article { min-height: 245px; padding: 28px; border-right: 1px solid rgba(244,242,232,.15); border-bottom: 1px solid rgba(244,242,232,.15); position: relative; }
+.standards-grid article > span { position: absolute; top: 28px; right: 28px; color: #8e9788; font-size: 10px; font-weight: 900; }
+.standards-icon { width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid rgba(244,242,232,.14); background: rgba(244,242,232,.04); }
+.standards-grid h3 { margin-top: 44px; font-size: 23px; }
+.standards-grid p { margin-top: 12px; color: #b8c0b2; font-size: 14px; line-height: 1.7; }
+
+.faq-section { padding: 130px 0; background: #efede3; }
+.faq-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; align-items: start; }
+.faq-heading { position: sticky; top: 110px; }
+.faq-list { border-top: 1px solid var(--effy-line); }
+.faq-list details { border-bottom: 1px solid var(--effy-line); }
+.faq-list summary { list-style: none; cursor: pointer; min-height: 92px; display: grid; grid-template-columns: 42px 1fr auto; gap: 18px; align-items: center; font-size: 20px; font-weight: 750; letter-spacing: -.025em; }
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary span { color: #7b8376; font-size: 10px; font-weight: 900; }
+.faq-list summary b { font-size: 24px; font-weight: 400; transition: .2s; }
+.faq-list details[open] summary b { transform: rotate(45deg); }
+.faq-list details p { padding: 0 60px 28px; color: var(--effy-ink-3); font-size: 15px; line-height: 1.75; }
+
+@media (max-width: 1100px) {
+  .client-trust-inner, .standards-layout, .faq-layout { grid-template-columns: 1fr; gap: 44px; }
+  .faq-heading { position: static; }
+  .outcome-grid { grid-template-columns: repeat(2, 1fr); }
+  .client-story-grid { grid-template-columns: 1fr 1fr; }
+  .client-story-grid article:last-child { grid-column: 1 / -1; }
 }
 
-.project-showcase-navbar[class*="bg-neutral-900"] {
-  background: rgba(244, 241, 231, 0.93) !important;
-  border-bottom-color: var(--project-line) !important;
-  box-shadow: 0 12px 34px rgba(31, 39, 31, 0.08) !important;
+@media (max-width: 860px) {
+  .effy-home .section-intro h2,
+  .effy-home .principles-copy h2,
+  .effy-home .standards-heading h2,
+  .effy-home .faq-heading h2,
+  .effy-home .client-trust-copy h2 { font-size: clamp(2.4rem, 9vw, 4rem); line-height: .98; }
+  .client-logo-wall { grid-template-columns: 1fr; }
+  .client-logo-wall article { min-height: 100px; border-right: 0; border-bottom: 1px solid var(--effy-line); }
+  .client-logo-wall article:last-child { border-bottom: 0; }
+  .client-story-grid { grid-template-columns: 1fr; }
+  .client-story-grid article:last-child { grid-column: auto; }
+  .standards-grid { grid-template-columns: 1fr; }
+  .testimonial-policy { grid-template-columns: 1fr; }
 }
 
-.project-showcase-navbar:not([class*="bg-neutral-900"]) {
-  background: rgba(244, 241, 231, 0.78) !important;
-  border-bottom: 1px solid rgba(31, 39, 31, 0.08);
-  backdrop-filter: blur(18px);
-}
-
-.project-showcase-navbar a,
-.project-showcase-navbar button,
-.project-showcase-navbar span {
-  color: var(--project-graphite);
-}
-
-.project-showcase-navbar a[class*="bg-primary"] {
-  background: var(--project-graphite) !important;
-  color: #fff !important;
-  border-radius: 0 0 0 0;
-  clip-path: polygon(8% 0, 100% 0, 100% 78%, 90% 100%, 0 100%, 0 20%);
-  box-shadow: 0 12px 28px rgba(31, 39, 31, 0.2) !important;
-}
-
-.project-showcase-navbar a[class*="bg-primary"] span,
-.project-showcase-navbar a[class*="bg-primary"] svg {
-  color: #fff !important;
-}
-
-.project-showcase-hero {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.58), transparent 42%),
-    radial-gradient(circle at 78% 22%, rgba(117,128,113,.17), transparent 31%),
-    var(--project-ivory);
-  color: var(--project-graphite);
-}
-
-.project-showcase-hero::after {
-  content: "";
-  position: absolute;
-  right: -7rem;
-  top: 8rem;
-  width: 35rem;
-  height: 18rem;
-  opacity: .34;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(31,39,31,.12), rgba(117,128,113,.02));
-  clip-path: polygon(26% 0, 100% 0, 72% 100%, 0 100%);
-}
-
-.project-showcase-hero .project-hero-title,
-.project-showcase-hero .project-hero-gradient {
-  color: var(--project-graphite) !important;
-  -webkit-text-fill-color: var(--project-graphite) !important;
-  background: none !important;
-}
-
-.project-showcase-hero .project-hero-copy {
-  color: #596158 !important;
-}
-
-.project-showcase-hero [class*="text-neutral-5"],
-.project-showcase-hero [class*="text-neutral-4"],
-.project-showcase-hero [class*="text-neutral-3"] {
-  color: #596158;
-}
-
-.project-showcase-hero [class*="border-white"] {
-  border-color: rgba(31,39,31,.14) !important;
-}
-
-.project-showcase-hero [class*="bg-white/"] {
-  background: rgba(255,255,255,.6) !important;
-}
-
-.project-showcase-mobile-menu {
-  background: var(--project-graphite) !important;
-}
-
-.project-showcase-mobile-menu,
-.project-showcase-mobile-menu * {
-  color: #f7f4e9;
-}
-
-.effy-project-page--iam {
-  --project-accent: #b59038;
-}
-.effy-project-page--dha {
-  --project-accent: #8a754f;
-}
-.effy-project-page--buek {
-  --project-accent: #2c506d;
-}
-
-@media (max-width: 767px) {
-  .project-showcase-navbar > div {
-    min-height: 64px;
-  }
-  .project-showcase-hero::after {
-    right: -13rem;
-    top: 5rem;
-    opacity: .2;
-  }
+@media (max-width: 640px) {
+  .client-trust-section, .outcomes-section, .client-proof-section, .standards-section, .faq-section { padding: 86px 0; }
+  .outcome-grid { grid-template-columns: 1fr; }
+  .outcome-grid article { min-height: 220px; }
+  .outcome-grid h3 { margin-top: 46px; }
+  .client-story-grid article { min-height: 280px; }
+  .client-story-grid h3 { margin-top: 46px; }
+  .faq-list summary { min-height: 82px; grid-template-columns: 30px 1fr auto; font-size: 17px; }
+  .faq-list details p { padding: 0 48px 24px; }
+  .system-hero { min-height: auto; }
+  .hero-grid { min-height: auto; padding-bottom: 48px; }
+  .capability-system, .iam-case, .editorial-projects, .process-journey, .principles-grid, .founder-stage { max-width: 100%; }
 }
 
 /* ============================================================
-   Phase 08 — IAM-first restoration and conversion polish
-   The IAM landing page keeps Effy’s ivory/graphite shell while
-   restoring the product’s own premium green/gold identity.
+   Phase 18 — Homepage hierarchy, consolidation, and responsive polish
    ============================================================ */
-.effy-project-page--iam {
-  --iam-ink: #20261f;
-  --iam-ink-2: #293129;
-  --iam-ink-3: #30382f;
-  --iam-paper: #f4f2e8;
-  --iam-paper-2: #eceade;
-  --iam-gold: #b8a88a;
-  --iam-green: #71806b;
-  --iam-copy: #596158;
-  background: var(--iam-paper);
-  color: var(--iam-ink);
+.effy-home {
+  --home-title: clamp(3.15rem, 5vw, 5.65rem);
+  --home-title-tablet: clamp(2.8rem, 7vw, 4.6rem);
+  --home-body: clamp(1rem, 1.2vw, 1.12rem);
 }
-
-.effy-project-page--iam .project-showcase-hero--iam {
-  min-height: min(930px, calc(100vh - 64px));
-  background:
-    radial-gradient(circle at 73% 34%, rgba(184,168,138,.16), transparent 24%),
-    radial-gradient(circle at 82% 18%, rgba(113,128,107,.13), transparent 29%),
-    linear-gradient(135deg, rgba(255,255,255,.72), transparent 46%),
-    var(--iam-paper);
-}
-.effy-project-page--iam .project-showcase-hero--iam::after {
-  right: -4rem;
-  top: 7rem;
-  width: 44rem;
-  height: 25rem;
-  opacity: .2;
-  background: linear-gradient(135deg, rgba(23,32,25,.16), rgba(184,168,138,.05));
-}
-.effy-project-page--iam .project-showcase-hero--iam .project-hero-title {
-  color: var(--iam-ink) !important;
+.effy-home .section-intro,
+.effy-home .principles-copy,
+.effy-home .standards-heading,
+.effy-home .faq-heading { max-width: 900px; }
+.effy-home .section-intro h2,
+.effy-home .principles-copy h2,
+.effy-home .standards-heading h2,
+.effy-home .faq-heading h2,
+.effy-home .client-trust-copy h2 {
+  font-size: var(--home-title);
+  line-height: .94;
   letter-spacing: -.055em;
+  text-wrap: balance;
 }
-.effy-project-page--iam .project-showcase-hero--iam .project-hero-copy {
-  color: var(--iam-copy) !important;
-  font-size: 1.05rem;
-  line-height: 1.75;
-}
-.effy-project-page--iam .project-showcase-hero--iam a[class*="bg-primary"] {
-  background: linear-gradient(135deg, #71806b, #596158) !important;
-  box-shadow: 0 18px 45px rgba(113,128,107,.3) !important;
-}
-.effy-project-page--iam .iam-hero-proof span {
-  display: flex;
-  min-height: 38px;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 10px;
-  border: 1px solid rgba(23,32,25,.12);
-  background: rgba(255,255,255,.58);
-  color: #4e5a51;
-  font-size: 11px;
-  font-weight: 750;
-  text-align: center;
-  clip-path: polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+.effy-home .section-intro > p,
+.effy-home .principles-copy > p,
+.effy-home .standards-heading > p,
+.effy-home .faq-heading > p,
+.effy-home .client-trust-copy > p {
+  font-size: var(--home-body);
+  line-height: 1.7;
 }
 
-/* Highlights: clear dark proof cards, not washed-out grey blocks. */
-.effy-project-page--iam .iam-highlights {
-  padding-top: 2.25rem;
-  padding-bottom: 4.75rem;
-}
-.effy-project-page--iam .iam-highlights > div > div {
-  border-color: rgba(184,168,138,.18) !important;
-  background: linear-gradient(145deg, var(--iam-ink-2), var(--iam-ink)) !important;
-  box-shadow: 0 18px 40px rgba(23,32,25,.14);
-}
-.effy-project-page--iam .iam-highlights p[class*="text-neutral-100"] { color: #f6f4eb !important; }
-.effy-project-page--iam .iam-highlights p[class*="text-neutral-500"] { color: #c4c9be !important; }
+.client-trust-section { padding: 92px 0; }
+.client-trust-inner { grid-template-columns: minmax(0,.8fr) minmax(560px,1.2fr); gap: 72px; align-items: center; }
+.client-trust-copy h2 { font-size: clamp(3rem,4.2vw,5rem); }
+.client-logo-wall { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.client-logo-card { min-width:0; min-height:220px; padding:18px; border:1px solid var(--effy-line); background:#fbfaf4; color:var(--effy-ink); text-decoration:none; display:flex; flex-direction:column; justify-content:space-between; transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease; }
+.client-logo-card:hover { transform:translateY(-5px); border-color:#9ba18f; box-shadow:0 20px 40px rgba(32,38,31,.09); }
+.client-logo-media { position:relative; height:92px; overflow:hidden; background:#ece9dd; }
+.client-logo-media img { object-fit:cover; filter:saturate(.72) contrast(.92); }
+.client-logo-card:first-child .client-logo-media img { object-fit:contain; padding:18px; }
+.client-logo-card small { display:block; color:#798174; font-size:9px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.client-logo-card strong { display:block; margin-top:10px; font-size:19px; line-height:1.15; }
+.client-logo-card span { display:flex; align-items:center; gap:7px; margin-top:22px; font-size:12px; font-weight:800; }
 
-/* Major dark product sections. */
-.effy-project-page--iam .iam-features,
-.effy-project-page--iam .iam-screenshots {
-  background:
-    radial-gradient(circle at 15% 20%, rgba(113,128,107,.12), transparent 28%),
-    radial-gradient(circle at 85% 75%, rgba(184,168,138,.08), transparent 25%),
-    var(--iam-ink);
-  color: #f4f2e8;
-}
-.effy-project-page--iam .iam-features::before,
-.effy-project-page--iam .iam-screenshots::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: .14;
-  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-.effy-project-page--iam .iam-features h2,
-.effy-project-page--iam .iam-features h3,
-.effy-project-page--iam .iam-screenshots h2 { color: #f6f4eb !important; }
-.effy-project-page--iam .iam-features [class*="bg-neutral-900"] {
-  background-color: rgba(37,48,39,.84) !important;
-  border-color: rgba(184,168,138,.16) !important;
-}
-.effy-project-page--iam .iam-features p[class*="text-neutral-500"] { color: #bbc0b6 !important; }
-.effy-project-page--iam .iam-features p[class*="text-neutral-400"] { color: #d7dacf !important; }
+.outcomes-section { padding:112px 0 120px; }
+.outcomes-section .section-intro { display:grid; grid-template-columns:minmax(0,.9fr) minmax(320px,.55fr); column-gap:70px; align-items:end; max-width:none; }
+.outcomes-section .section-intro > span { grid-column:1/-1; }
+.outcomes-section .section-intro h2 { max-width:860px; }
+.outcomes-section .section-intro p { margin:0 0 10px; }
+.outcome-grid { margin-top:64px; gap:16px; border:0; }
+.outcome-grid article { min-height:300px; padding:32px; border:1px solid var(--effy-line); background:#faf8ef; position:relative; overflow:hidden; }
+.outcome-grid article::after { content:""; position:absolute; right:-42px; bottom:-46px; width:130px; height:90px; border:1px solid rgba(32,38,31,.12); transform:skewX(-35deg); }
+.outcome-grid h3 { margin-top:70px; font-size:clamp(1.45rem,2vw,2rem); }
+.outcome-grid p { font-size:15.5px; }
 
-/* Light editorial sections with readable dark typography. */
-.effy-project-page--iam .iam-deep-dive,
-.effy-project-page--iam .iam-how-it-works,
-.effy-project-page--iam .iam-testimonial,
-.effy-project-page--iam .iam-download {
-  background: var(--iam-paper);
-  color: var(--iam-ink);
-}
-.effy-project-page--iam .iam-deep-dive h2,
-.effy-project-page--iam .iam-deep-dive h3,
-.effy-project-page--iam .iam-how-it-works h2,
-.effy-project-page--iam .iam-how-it-works h3,
-.effy-project-page--iam .iam-testimonial h2,
-.effy-project-page--iam .iam-download h2 {
-  color: var(--iam-ink) !important;
-  -webkit-text-fill-color: var(--iam-ink) !important;
-}
-.effy-project-page--iam .iam-deep-dive p,
-.effy-project-page--iam .iam-how-it-works p,
-.effy-project-page--iam .iam-testimonial p,
-.effy-project-page--iam .iam-download p { color: var(--iam-copy) !important; }
-.effy-project-page--iam .iam-deep-dive [class*="bg-neutral-900"] {
-  background: rgba(255,255,255,.66) !important;
-  border: 1px solid rgba(23,32,25,.12) !important;
-  box-shadow: 0 14px 35px rgba(23,32,25,.07) !important;
-}
-.effy-project-page--iam .iam-deep-dive [class*="text-neutral-100"],
-.effy-project-page--iam .iam-deep-dive [class*="text-neutral-300"] { color: var(--iam-ink) !important; }
-.effy-project-page--iam .iam-deep-dive [class*="text-neutral-400"],
-.effy-project-page--iam .iam-deep-dive [class*="text-neutral-500"],
-.effy-project-page--iam .iam-deep-dive [class*="text-neutral-600"] { color: var(--iam-copy) !important; }
-.effy-project-page--iam .iam-how-it-works [class*="bg-neutral-900"],
-.effy-project-page--iam .iam-testimonial [class*="bg-neutral-900"] {
-  background: var(--iam-ink) !important;
-  border-color: rgba(184,168,138,.17) !important;
-}
-.effy-project-page--iam .iam-how-it-works [class*="bg-neutral-900"] h3,
-.effy-project-page--iam .iam-testimonial [class*="bg-neutral-900"] h3 { color: #f6f4eb !important; }
-.effy-project-page--iam .iam-how-it-works [class*="bg-neutral-900"] p,
-.effy-project-page--iam .iam-testimonial [class*="bg-neutral-900"] p { color: #c4c9be !important; }
+.process-section { padding:112px 0 120px; }
+.process-grid > .section-intro { max-width:900px; }
+.process-journey { margin-top:64px; }
+.process-step { min-height:300px; }
+.process-number { color:#afb1a4 !important; font-size:clamp(4.8rem,8vw,8.5rem) !important; font-weight:900; letter-spacing:-.075em; }
+.process-copy h3 { font-size:clamp(1.35rem,1.8vw,1.8rem) !important; }
+.process-copy p { color:#596157 !important; font-size:15px !important; line-height:1.7 !important; max-width:250px; }
+.process-spine { opacity:.85; }
+.process-artifact { min-height:74px; }
 
-/* Final conversion area: one unmistakable action. */
-.effy-project-page--iam .iam-download {
+.principles-section { padding:112px 0; }
+.principles-grid { grid-template-columns:minmax(360px,.82fr) minmax(0,1.18fr); gap:88px; }
+.principle-list article { min-height:118px; padding:25px 4px; grid-template-columns:42px 44px 1fr; }
+.principle-list h3 { font-size:21px; }
+.principle-list p { font-size:14.5px; line-height:1.65; }
+
+.client-proof-section { padding:112px 0 96px; }
+.client-story-grid { gap:18px; }
+.client-story-grid article { min-height:410px; padding:0 28px 28px; overflow:hidden; }
+.client-story-media { position:relative; height:150px; margin:0 -28px 26px; background:#e8e5d9; overflow:hidden; }
+.client-story-media img { object-fit:cover; filter:saturate(.72) contrast(.94); }
+.client-story-grid article:first-child .client-story-media img { object-fit:contain; padding:26px; }
+.client-story-grid h3 { font-size:27px; }
+.client-story-grid p { font-size:14.5px; line-height:1.68; }
+.testimonial-policy { margin-top:22px; min-height:92px; }
+
+.standards-section { padding:96px 0; }
+.standards-layout { grid-template-columns:minmax(320px,.72fr) minmax(0,1.28fr); gap:72px; align-items:center; }
+.standards-grid { grid-template-columns:repeat(3,1fr); border:0; gap:14px; }
+.standards-grid article { min-height:300px; padding:28px; border:1px solid rgba(244,242,232,.16); }
+.standards-grid article > small { display:block; margin-top:34px; color:#9ca597; font-size:9px; font-weight:900; letter-spacing:.14em; }
+.standards-grid h3 { margin-top:15px; font-size:24px; line-height:1.05; }
+.standards-grid p { font-size:14px; }
+
+.team-section { padding:112px 0 120px; }
+.founder-stage { margin-top:58px; }
+.founder-grid { gap:18px; }
+.founder-card { grid-template-columns:150px 1fr; min-height:330px; padding:28px; gap:28px; }
+.founder-image { width:150px; height:220px; }
+.founder-card h3 { font-size:24px; }
+.founder-card strong { font-size:11px; }
+.founder-card p { font-size:14px; line-height:1.65; }
+.founder-card a { margin-top:20px; }
+
+.faq-section { padding:112px 0; }
+.faq-layout { grid-template-columns:minmax(380px,.78fr) minmax(0,1.22fr); gap:86px; }
+.faq-heading h2 { max-width:650px; font-size:clamp(3.15rem,4.7vw,5.45rem); }
+.faq-list summary { min-height:98px; font-size:20px; }
+.faq-list details p { font-size:15.5px; }
+
+.contact-cta { padding:112px 0 118px; }
+.contact-cta-inner { min-height:350px; align-items:center; }
+.contact-cta h2 { max-width:780px; font-size:clamp(3.4rem,5.8vw,6.4rem); line-height:.92; }
+.contact-actions .button { min-height:58px; padding:0 26px; font-size:14px; }
+
+@media (max-width: 1120px) {
+  .client-trust-inner { grid-template-columns:1fr; }
+  .client-logo-wall { max-width:900px; }
+  .outcomes-section .section-intro { grid-template-columns:1fr; }
+  .outcomes-section .section-intro p { margin-top:24px; max-width:720px; }
+  .standards-layout { grid-template-columns:1fr; }
+  .standards-grid { grid-template-columns:repeat(3,1fr); }
+  .founder-card { grid-template-columns:1fr; }
+  .founder-image { width:100%; height:260px; }
+}
+
+@media (max-width: 820px) {
+  .effy-home { --home-title: var(--home-title-tablet); }
+  .client-logo-wall, .standards-grid { grid-template-columns:1fr; }
+  .client-logo-card { min-height:180px; display:grid; grid-template-columns:150px 1fr; gap:20px; }
+  .client-logo-media { height:100%; min-height:140px; }
+  .outcome-grid { grid-template-columns:repeat(2,1fr); }
+  .principles-grid, .faq-layout { grid-template-columns:1fr; gap:48px; }
+  .faq-heading { position:static; }
+  .founder-grid { grid-template-columns:1fr; }
+  .founder-card { grid-template-columns:160px 1fr; }
+  .founder-image { width:160px; height:220px; }
+}
+
+@media (max-width: 560px) {
+  .effy-home { --home-title: clamp(2.45rem,12vw,3.35rem); --home-body:1rem; }
+  .client-trust-section,.outcomes-section,.process-section,.principles-section,.client-proof-section,.standards-section,.team-section,.faq-section,.contact-cta { padding:76px 0; }
+  .client-logo-card { display:flex; min-height:210px; }
+  .client-logo-media { height:92px; }
+  .outcome-grid { grid-template-columns:1fr; }
+  .outcome-grid article { min-height:230px; }
+  .process-journey { display:block; }
+  .process-spine { left:23px; right:auto; top:20px; bottom:20px; width:1px; height:auto; }
+  .process-step { min-height:0; padding:0 0 44px 70px; display:block; }
+  .process-number { font-size:3.4rem !important; }
+  .process-artifact { margin:12px 0; }
+  .principle-list article { grid-template-columns:34px 38px 1fr; }
+  .client-story-grid { grid-template-columns:1fr; }
+  .standards-grid article { min-height:250px; }
+  .founder-card { grid-template-columns:1fr; }
+  .founder-image { width:100%; height:300px; }
+  .faq-list summary { grid-template-columns:28px 1fr auto; min-height:86px; font-size:17px; }
+  .faq-list details p { padding:0 40px 24px; }
+  .contact-cta-inner { min-height:0; }
+}
+
+/* ============================================================
+   Phase 19 — Complete software-company homepage architecture
+   About, technology, industries, compact contact form, and final consolidation
+   ============================================================ */
+.technology-section {
+  padding: 118px 0 126px;
+  background: #f5f2e8;
+  border-top: 1px solid var(--effy-line);
+}
+.technology-section .section-intro { max-width: 980px; }
+.technology-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 64px;
+}
+.technology-grid article {
+  min-height: 260px;
+  padding: 30px;
+  border: 1px solid #d7d2c5;
+  background: #fbfaf4;
   position: relative;
   overflow: hidden;
-  background:
-    linear-gradient(120deg, rgba(184,168,138,.12), transparent 38%),
-    var(--iam-paper-2);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
 }
-.effy-project-page--iam .iam-download [class*="bg-gradient"] {
-  border-color: rgba(23,32,25,.12) !important;
+.technology-grid article::after {
+  content: "";
+  position: absolute;
+  right: -48px;
+  bottom: -54px;
+  width: 150px;
+  height: 100px;
+  border: 1px solid rgba(32, 38, 31, .1);
+  transform: skewX(-34deg);
 }
+.technology-grid article:hover {
+  transform: translateY(-5px);
+  border-color: #9aa18f;
+  box-shadow: 0 22px 44px rgba(30, 36, 29, .08);
+}
+.technology-card-top { display:flex; justify-content:space-between; align-items:center; color:#5f675b; }
+.technology-card-top > span { font-size:10px; font-weight:900; letter-spacing:.16em; }
+.technology-card-top svg { padding:10px; width:44px; height:44px; border:1px solid #d7d2c5; background:#f0ede2; }
+.technology-grid h3 { margin-top:50px; font-size:clamp(1.55rem,2.2vw,2.15rem); line-height:1; letter-spacing:-.035em; }
+.technology-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+.technology-tags span { padding:8px 11px; border:1px solid #d7d2c5; background:#f7f4ea; color:#566052; font-size:11px; font-weight:750; }
 
-@media (min-width: 1024px) {
-  .effy-project-page--iam .project-showcase-hero--iam .max-w-\[620px\] { max-width: 700px; }
-  .effy-project-page--iam .project-showcase-hero--iam .grid-cols-\[0\.82fr_1\.18fr\] { grid-template-columns: .92fr 1.08fr; }
+.about-industries-section {
+  padding: 122px 0;
+  color: #eef0e3;
+  background: #202720;
+  position: relative;
+  overflow: hidden;
 }
+.about-industries-section::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.45;
+  background:linear-gradient(125deg,transparent 0 60%,rgba(219,207,164,.04) 60% 72%,transparent 72%);
+  pointer-events:none;
+}
+.about-industries-layout { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:86px; align-items:start; position:relative; z-index:1; }
+.about-company > span,
+.industries-heading > span,
+.contact-copy > span,
+.contact-form-heading > span { display:block; color:#b5a976; font-size:10px; font-weight:900; letter-spacing:.18em; margin-bottom:18px; }
+.about-company h2 { font-size:var(--home-title); line-height:.94; letter-spacing:-.055em; text-wrap:balance; }
+.about-company > p { max-width:680px; margin-top:28px; color:#b9c0b4; font-size:var(--home-body); line-height:1.75; }
+.about-company-points { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:44px; }
+.about-company-points > div { min-height:150px; padding:23px; border:1px solid rgba(238,240,227,.13); background:rgba(255,255,255,.025); }
+.about-company-points strong { display:block; font-size:17px; }
+.about-company-points span { display:block; margin-top:12px; color:#aeb6aa; font-size:13.5px; line-height:1.6; }
+.industries-panel { border:1px solid rgba(238,240,227,.14); background:rgba(255,255,255,.025); }
+.industries-heading { padding:30px; border-bottom:1px solid rgba(238,240,227,.12); }
+.industries-heading h3 { max-width:620px; font-size:clamp(2rem,3vw,3.1rem); line-height:1; letter-spacing:-.045em; }
+.industries-grid { display:grid; grid-template-columns:1fr 1fr; }
+.industries-grid article { min-height:165px; display:grid; grid-template-columns:40px 1fr; gap:17px; padding:26px; border-right:1px solid rgba(238,240,227,.1); border-bottom:1px solid rgba(238,240,227,.1); }
+.industries-grid article:nth-child(2n) { border-right:0; }
+.industries-grid article:nth-last-child(-n+2) { border-bottom:0; }
+.industries-grid svg { color:#c3b77e; }
+.industries-grid h4 { font-size:18px; }
+.industries-grid p { margin-top:8px; color:#aeb6aa; font-size:13px; line-height:1.55; }
 
-@media (max-width: 767px) {
-  .effy-project-page--iam .project-showcase-hero--iam {
-    min-height: auto;
-    background:
-      radial-gradient(circle at 50% 32%, rgba(184,168,138,.14), transparent 28%),
-      var(--iam-paper);
-  }
-  .effy-project-page--iam .project-showcase-hero--iam .project-hero-title { font-size: clamp(36px, 11vw, 48px) !important; }
-  .effy-project-page--iam .project-showcase-hero--iam .project-hero-copy { color: var(--iam-copy) !important; }
-  .effy-project-page--iam .project-showcase-hero--iam [class*="text-neutral-50"] { color: var(--iam-ink) !important; }
-  .effy-project-page--iam .project-showcase-hero--iam [class*="text-neutral-500"] { color: var(--iam-copy) !important; }
-  .effy-project-page--iam .project-showcase-hero--iam > div:nth-child(2) > div { max-width: 31rem; }
-  .effy-project-page--iam .iam-highlights { padding-left: 1rem; padding-right: 1rem; }
-  .effy-project-page--iam .iam-features,
-  .effy-project-page--iam .iam-deep-dive,
-  .effy-project-page--iam .iam-screenshots,
-  .effy-project-page--iam .iam-how-it-works,
-  .effy-project-page--iam .iam-download { padding-top: 4.75rem; padding-bottom: 4.75rem; }
+.contact-section {
+  padding: 118px 0 126px;
+  color:#eef0e3;
+  background:#1c231c;
+  position:relative;
+  overflow:hidden;
+}
+.contact-section::after {
+  content:"E";
+  position:absolute;
+  left:-4%;
+  bottom:-12%;
+  color:rgba(238,240,227,.025);
+  font-size:30rem;
+  font-weight:900;
+  line-height:.8;
+  pointer-events:none;
+}
+.contact-layout { display:grid; grid-template-columns:minmax(0,.8fr) minmax(520px,1.2fr); gap:86px; align-items:start; position:relative; z-index:1; }
+.contact-copy { padding-top:22px; }
+.contact-copy h2 { max-width:720px; font-size:clamp(3.2rem,5.6vw,6.2rem); line-height:.92; letter-spacing:-.06em; text-wrap:balance; }
+.contact-copy > p { max-width:650px; margin-top:28px; color:#b5bdb1; font-size:17px; line-height:1.75; }
+.contact-details { display:grid; gap:12px; margin-top:46px; }
+.contact-details > a,
+.contact-details > div { display:grid; grid-template-columns:40px 1fr; gap:14px; align-items:center; min-height:76px; padding:15px 18px; border:1px solid rgba(238,240,227,.13); color:#eef0e3; text-decoration:none; background:rgba(255,255,255,.025); }
+.contact-details svg { color:#c3b77e; }
+.contact-details small { display:block; color:#8f988b; font-size:9px; font-weight:900; letter-spacing:.14em; }
+.contact-details strong { display:block; margin-top:5px; font-size:14px; }
+.contact-response { display:flex; align-items:center; gap:9px; margin-top:22px; color:#aeb7aa; font-size:13px; }
+.contact-response svg { color:#c3b77e; }
+.contact-form-card { padding:38px; border:1px solid rgba(238,240,227,.15); background:#252d25; box-shadow:0 28px 80px rgba(0,0,0,.2); }
+.contact-form-heading { margin-bottom:28px; }
+.contact-form-heading h3 { font-size:clamp(2rem,3vw,3rem); line-height:1; letter-spacing:-.045em; }
+.contact-form-card form { display:grid; gap:18px; }
+.contact-form-card form > div { margin:0 !important; }
+.contact-form-card input,
+.contact-form-card textarea,
+.contact-form-card select { border-radius:0 !important; border-color:rgba(238,240,227,.18) !important; color:#eef0e3 !important; background:rgba(255,255,255,.025) !important; min-height:58px; }
+.contact-form-card textarea { min-height:150px; }
+.contact-form-card select option { background:#252d25; color:#eef0e3; }
+.contact-form-card label { color:#9fa89b !important; }
+.contact-form-card input:focus,
+.contact-form-card textarea:focus,
+.contact-form-card select:focus { border-color:#c3b77e !important; box-shadow:0 0 0 2px rgba(195,183,126,.1) !important; }
+.contact-form-card button[type="submit"] { min-height:58px; border-radius:0 !important; background:#edeadd !important; color:#202720 !important; font-weight:850; box-shadow:none !important; }
+.contact-form-card button[type="submit"]:hover { background:#d8cfaa !important; }
+.contact-form-card .text-error { color:#f0a49b !important; }
+
+/* Phase 19 consolidation: delivery proof is represented by trust + featured case studies. */
+.client-proof-section { display:none; }
+
+.new-footer .footer-grid { grid-template-columns:1.25fr .75fr .75fr 1fr; }
+.new-footer a { min-height:26px; }
+
+@media (max-width: 1120px) {
+  .technology-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .about-industries-layout,
+  .contact-layout { grid-template-columns:1fr; gap:58px; }
+  .contact-form-card { max-width:780px; }
+}
+@media (max-width: 820px) {
+  .technology-section,
+  .about-industries-section,
+  .contact-section { padding:92px 0; }
+  .industries-grid { grid-template-columns:1fr; }
+  .industries-grid article,
+  .industries-grid article:nth-child(2n),
+  .industries-grid article:nth-last-child(-n+2) { border-right:0; border-bottom:1px solid rgba(238,240,227,.1); }
+  .industries-grid article:last-child { border-bottom:0; }
+  .about-company-points { grid-template-columns:1fr; }
+  .contact-form-card { padding:30px; }
+}
+@media (max-width: 560px) {
+  .technology-section,
+  .about-industries-section,
+  .contact-section { padding:76px 0; }
+  .technology-grid { grid-template-columns:1fr; margin-top:44px; }
+  .technology-grid article { min-height:220px; padding:24px; }
+  .technology-grid h3 { margin-top:38px; }
+  .about-company h2 { font-size:clamp(2.45rem,12vw,3.35rem); }
+  .about-company-points > div { min-height:0; }
+  .industries-heading { padding:24px; }
+  .industries-grid article { min-height:0; padding:22px; }
+  .contact-copy h2 { font-size:clamp(2.7rem,13vw,4rem); }
+  .contact-copy > p { font-size:16px; }
+  .contact-form-card { padding:22px; margin-inline:-4px; }
+  .contact-form-card form .grid { grid-template-columns:1fr !important; }
+  .new-footer .footer-grid { grid-template-columns:1fr 1fr; }
 }
 
 /* ============================================================
-   Phase 09 — IAM landing page content refinement
-   Removes the review block, compacts the deep-dive experience,
-   and strengthens the product-principles / onboarding sections.
+   Effy Tech Homepage Phase 20 — credibility + readability polish
    ============================================================ */
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail {
-  background: var(--iam-ink) !important;
-  border: 1px solid rgba(184,168,138,.16) !important;
-}
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail h3 {
-  color: #f6f4eb !important;
-  -webkit-text-fill-color: #f6f4eb !important;
-}
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail p {
-  color: #e1e2d9 !important;
-}
-.effy-project-page--iam .iam-feature-tabs button {
-  clip-path: polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
-}
-.effy-project-page--iam .iam-how-it-works .iam-steps > div {
-  clip-path: polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
-}
-.effy-project-page--iam .iam-testimonial > div > div {
-  background: var(--iam-ink) !important;
-  border: 1px solid rgba(184,168,138,.16);
-}
-.effy-project-page--iam .iam-testimonial h2 {
-  color: #f6f4eb !important;
-  -webkit-text-fill-color: #f6f4eb !important;
-}
-.effy-project-page--iam .iam-testimonial p {
-  color: #d7dacf !important;
-}
-.effy-project-page--iam .iam-download {
-  border-top: 1px solid rgba(23,32,25,.08);
+.effy-home .hero-copy { max-width: 760px; }
+.effy-home .hero-copy h1 { max-width: 760px; font-size: clamp(3.65rem, 6.35vw, 6.85rem); line-height: .94; letter-spacing: -.065em; }
+.effy-home .hero-copy h1 span { display: block; }
+.effy-home .hero-copy > p { max-width: 670px; font-size: clamp(1.05rem, 1.25vw, 1.22rem); line-height: 1.72; }
+.effy-home .hero-proof span { font-size: 14px; }
+
+.effy-home .section-intro h2,
+.effy-home .standards-heading h2,
+.effy-home .about-company h2,
+.effy-home .faq-heading h2,
+.effy-home .contact-copy h2 { font-size: clamp(3rem, 4.7vw, 5.65rem); line-height: .98; }
+.effy-home .section-intro > p,
+.effy-home .standards-heading > p,
+.effy-home .about-company > p,
+.effy-home .faq-heading > p,
+.effy-home .contact-copy > p { font-size: 17px; line-height: 1.75; }
+
+.client-trust-inner { grid-template-columns: minmax(330px,.72fr) minmax(0,1.28fr); }
+.client-logo-card { min-height: 176px; }
+.client-logo-card > div:last-child { display:flex; flex-direction:column; align-items:flex-start; }
+.client-logo-card p { margin-top: 8px; color: var(--effy-ink-3); font-size: 13px; line-height: 1.45; }
+.client-logo-card em { margin-top: 8px; color: #6e766b; font-size: 11px; font-style: normal; font-weight: 750; letter-spacing: .04em; }
+.client-logo-card span { margin-top: auto; padding-top: 15px; }
+
+.capability-node h3 { font-size: clamp(1.35rem, 1.7vw, 1.75rem); }
+.capability-node p { font-size: 15px; line-height: 1.7; }
+.capability-node a { font-size: 13px; }
+
+.project-feature { grid-template-columns: 1fr 1fr; min-height: 410px; }
+.project-screen { min-height: 410px; }
+.project-feature > div:last-child { padding: 38px 34px; }
+.project-feature h3 { font-size: 30px; }
+.project-feature p { font-size: 15px; line-height: 1.67; }
+.project-feature p + p { margin-top: 10px; }
+.project-feature p b { color: var(--effy-ink); }
+.project-feature ul { margin-top: 18px; display:grid; gap:8px; list-style:none; }
+.project-feature li { color:#596157; font-size:13px; line-height:1.5; }
+.project-feature li::before { content:"—"; margin-right:8px; color:#8b927f; }
+
+.outcome-grid article { min-height: 275px; }
+.outcome-grid h3 { margin-top: 58px; }
+.outcome-grid p { font-size: 16px; }
+
+.process-copy h3 { font-size: clamp(1.55rem, 2vw, 2rem); }
+.process-copy p { max-width: 300px; font-size: 16px; line-height: 1.68; }
+.process-copy > span { font-size: 11px; }
+.process-number { font-size: clamp(3.6rem, 5vw, 6.2rem); }
+
+.standards-section { padding: 118px 0; }
+.standards-layout { gap: 80px; }
+.standards-heading { max-width: 640px; }
+.standards-grid article h3 { font-size: 24px; }
+.standards-grid article p { font-size: 15px; line-height: 1.72; }
+
+.technology-grid article { min-height: 235px; padding: 30px; }
+.technology-grid h3 { font-size: 23px; }
+.technology-tags span { font-size: 13px; padding: 9px 12px; }
+
+.about-industries-layout { gap: 70px; }
+.about-company > p { max-width: 690px; }
+.industries-grid article p { font-size: 14px; line-height: 1.58; }
+
+.founder-card { min-height: 330px; grid-template-columns: 130px 1fr; }
+.founder-image { width: 130px; height: 205px; }
+.founder-card h3 { font-size: 23px; }
+.founder-card strong { font-size: 12px; }
+.founder-card p { font-size: 14px; line-height: 1.65; }
+.founder-card a { font-size: 13px; }
+
+.faq-list summary { font-size: 17px; line-height: 1.45; padding: 25px 0; }
+.faq-list details p { font-size: 16px; line-height: 1.72; }
+
+.contact-details strong { font-size: 15px; }
+.contact-response { font-size: 14px; }
+.new-footer { font-size: 15px; }
+.new-footer a, .new-footer p { font-size: 14px; line-height: 1.65; }
+
+@media (max-width: 1100px) {
+  .effy-home .hero-copy h1 { font-size: clamp(3.4rem, 7vw, 5.8rem); }
+  .client-trust-inner { grid-template-columns: 1fr; gap: 44px; }
+  .project-feature { grid-template-columns: 1fr; }
+  .project-screen { min-height: 330px; }
+  .founder-card { grid-template-columns: 110px 1fr; }
+  .founder-image { width:110px; height:180px; }
 }
 
 @media (max-width: 767px) {
-  .effy-project-page--iam .iam-feature-tabs {
+  .effy-home .hero-copy h1 { font-size: clamp(2.85rem, 13vw, 4.35rem); line-height:.96; }
+  .effy-home .hero-copy > p { font-size: 16.5px; line-height:1.65; }
+  .effy-home .section-intro h2,
+  .effy-home .standards-heading h2,
+  .effy-home .about-company h2,
+  .effy-home .faq-heading h2,
+  .effy-home .contact-copy h2 { font-size: clamp(2.35rem, 10.5vw, 3.7rem); line-height:1; }
+  .effy-home .section-intro > p,
+  .effy-home .standards-heading > p,
+  .effy-home .about-company > p,
+  .effy-home .faq-heading > p,
+  .effy-home .contact-copy > p { font-size:16px; }
+  .client-logo-wall { grid-template-columns:1fr; }
+  .client-logo-card { min-height:158px; }
+  .capability-node p,.project-feature p,.outcome-grid p,.process-copy p { font-size:15px; }
+  .project-feature > div:last-child { padding:30px 24px; }
+  .project-screen { min-height:250px; }
+  .standards-layout { gap:42px; }
+  .technology-grid { grid-template-columns:1fr; }
+  .technology-grid article { min-height:190px; }
+  .founder-card { grid-template-columns:96px 1fr; min-height:285px; padding:22px; gap:18px; }
+  .founder-image { width:96px; height:160px; }
+  .faq-list summary { font-size:16px; }
+}
+
+/* ============================================================
+   Effy Tech Homepage Phase 21 — full typography and layout scale pass
+   ============================================================ */
+.effy-home {
+  --phase21-title: clamp(3.15rem, 4.65vw, 5.25rem);
+  --phase21-body: clamp(1.02rem, 1.12vw, 1.16rem);
+}
+
+.effy-home .home-shell {
+  width: min(1320px, calc(100% - 64px));
+}
+
+.effy-home .section-intro,
+.effy-home .standards-heading,
+.effy-home .faq-heading,
+.effy-home .about-company {
+  max-width: 980px;
+}
+
+.effy-home .section-intro h2,
+.effy-home .standards-heading h2,
+.effy-home .faq-heading h2,
+.effy-home .about-company h2,
+.effy-home .contact-copy h2,
+.effy-home .client-trust-copy h2 {
+  font-size: var(--phase21-title);
+  line-height: .97;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+
+.effy-home .section-intro > p,
+.effy-home .standards-heading > p,
+.effy-home .faq-heading > p,
+.effy-home .about-company > p,
+.effy-home .contact-copy > p {
+  font-size: var(--phase21-body);
+  line-height: 1.72;
+}
+
+/* Hero: preserve the intended two-line editorial statement on desktop. */
+.effy-home .system-hero {
+  min-height: 860px;
+}
+.effy-home .hero-grid {
+  grid-template-columns: minmax(0, 1.05fr) minmax(540px, .95fr);
+  gap: 28px;
+  min-height: 705px;
+}
+.effy-home .hero-copy {
+  max-width: 780px;
+}
+.effy-home .hero-copy h1 {
+  max-width: 780px;
+  font-size: clamp(4.15rem, 5.35vw, 6.35rem);
+  line-height: .94;
+  letter-spacing: -.067em;
+}
+.effy-home .hero-copy h1 span {
+  display: block;
+  white-space: nowrap;
+}
+.effy-home .hero-copy > p {
+  max-width: 690px;
+  font-size: 18px;
+}
+.effy-home .hero-proof {
+  gap: 15px 24px;
+}
+.effy-home .hero-proof span {
+  font-size: 14px;
+}
+.effy-home .system-visual {
+  transform: translateX(4px) scale(.96);
+  transform-origin: center;
+}
+
+/* Trust proof: stronger balance and readable production details. */
+.effy-home .client-trust-section {
+  padding: 104px 0;
+}
+.effy-home .client-trust-inner {
+  grid-template-columns: minmax(360px, .68fr) minmax(0, 1.32fr);
+  gap: 68px;
+  align-items: center;
+}
+.effy-home .client-trust-copy h2 {
+  max-width: 560px;
+  font-size: clamp(2.85rem, 3.7vw, 4.45rem);
+}
+.effy-home .client-logo-wall {
+  gap: 18px;
+  border: 0;
+  background: transparent;
+}
+.effy-home .client-logo-card {
+  min-height: 270px;
+  padding: 20px;
+}
+.effy-home .client-logo-media {
+  height: 112px;
+}
+.effy-home .client-logo-card strong {
+  font-size: 21px;
+}
+.effy-home .client-logo-card p {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.effy-home .client-logo-card em,
+.effy-home .client-logo-card span {
+  font-size: 12px;
+}
+
+/* Capabilities: larger cards and more explicit service communication. */
+.effy-home .capability-section {
+  padding: 126px 0 138px;
+}
+.effy-home .capability-system {
+  min-height: 800px;
+  margin-top: 78px;
+}
+.effy-home .capability-node {
+  min-height: 292px;
+  padding: 34px;
+}
+.effy-home .capability-node h3 {
+  font-size: clamp(1.55rem, 1.85vw, 2rem);
+  line-height: 1.05;
+}
+.effy-home .capability-node p {
+  max-width: 420px;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.effy-home .capability-node a {
+  font-size: 14px;
+}
+
+/* Featured work: make all case-study information visibly useful. */
+.effy-home .work-section {
+  padding: 126px 0 138px;
+}
+.effy-home .iam-case {
+  min-height: 650px;
+}
+.effy-home .case-copy {
+  padding: 64px 54px;
+}
+.effy-home .case-copy h3 {
+  font-size: clamp(2.45rem, 3.45vw, 4rem);
+  line-height: .98;
+}
+.effy-home .case-copy > p,
+.effy-home .case-copy li {
+  font-size: 16px;
+  line-height: 1.67;
+}
+.effy-home .secondary-projects {
+  gap: 22px;
+}
+.effy-home .project-feature {
+  min-height: 470px;
+}
+.effy-home .project-screen {
+  min-height: 470px;
+}
+.effy-home .project-feature > div:last-child {
+  padding: 42px 38px;
+}
+.effy-home .project-feature h3 {
+  font-size: 32px;
+}
+.effy-home .project-feature p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.effy-home .project-feature li,
+.effy-home .project-feature a {
+  font-size: 14px;
+}
+
+/* Operational value: eliminate miniature cards. */
+.effy-home .outcomes-section {
+  padding: 116px 0 124px;
+}
+.effy-home .outcome-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.effy-home .outcome-grid article {
+  min-height: 280px;
+  padding: 34px;
+}
+.effy-home .outcome-grid h3 {
+  margin-top: 62px;
+  font-size: clamp(1.75rem, 2.25vw, 2.35rem);
+}
+.effy-home .outcome-grid p {
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+/* Process: stronger contrast and client-readable steps. */
+.effy-home .process-section {
+  padding: 116px 0 124px;
+}
+.effy-home .process-journey {
+  gap: 30px;
+}
+.effy-home .process-step {
+  min-height: 330px;
+}
+.effy-home .process-number {
+  color: #92998f !important;
+  opacity: .72;
+}
+.effy-home .process-icon {
+  width: 54px;
+  height: 54px;
+  background: rgba(255,255,255,.45);
+}
+.effy-home .process-copy h3 {
+  font-size: clamp(1.75rem, 2vw, 2.15rem) !important;
+}
+.effy-home .process-copy p {
+  max-width: 320px;
+  color: #4d564c !important;
+  font-size: 16px !important;
+}
+
+/* Engineering standards: larger principles, fewer visual distractions. */
+.effy-home .standards-layout {
+  grid-template-columns: minmax(360px, .74fr) minmax(0, 1.26fr);
+  gap: 84px;
+}
+.effy-home .standards-grid {
+  gap: 18px;
+}
+.effy-home .standards-grid article {
+  min-height: 330px;
+  padding: 32px;
+}
+.effy-home .standards-grid h3 {
+  font-size: 26px;
+}
+.effy-home .standards-grid p {
+  font-size: 15.5px;
+  line-height: 1.72;
+}
+
+/* Technology: category names and production stack must be scannable. */
+.effy-home .technology-section {
+  padding: 116px 0 124px;
+}
+.effy-home .technology-grid {
+  gap: 18px;
+}
+.effy-home .technology-grid article {
+  min-height: 260px;
+  padding: 34px;
+}
+.effy-home .technology-grid h3 {
+  font-size: 26px;
+}
+.effy-home .technology-tags span {
+  font-size: 14px;
+  padding: 10px 13px;
+}
+
+/* About and industries: reduce density and improve scanability. */
+.effy-home .about-industries-section {
+  padding: 116px 0 124px;
+}
+.effy-home .about-industries-layout {
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 78px;
+}
+.effy-home .about-company-points strong {
+  font-size: 18px;
+}
+.effy-home .about-company-points span {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.effy-home .industries-heading h3 {
+  font-size: clamp(2rem, 2.8vw, 3rem);
+}
+.effy-home .industries-grid h4 {
+  font-size: 19px;
+}
+.effy-home .industries-grid p {
+  font-size: 14.5px;
+}
+
+/* Team: consistent portrait scale and readable responsibility. */
+.effy-home .team-section {
+  padding: 116px 0 124px;
+}
+.effy-home .founder-card {
+  min-height: 360px;
+  grid-template-columns: 160px 1fr;
+  padding: 30px;
+}
+.effy-home .founder-image {
+  width: 160px;
+  height: 235px;
+}
+.effy-home .founder-card h3 {
+  font-size: 25px;
+}
+.effy-home .founder-card p {
+  font-size: 15px;
+}
+
+/* FAQ and contact: increase readability and conversion weight. */
+.effy-home .faq-section {
+  padding: 116px 0;
+}
+.effy-home .faq-layout {
+  grid-template-columns: minmax(420px, .8fr) minmax(0, 1.2fr);
+  gap: 92px;
+}
+.effy-home .faq-list summary {
+  min-height: 104px;
+  font-size: 20px;
+}
+.effy-home .faq-list details p {
+  font-size: 16px;
+}
+.effy-home .contact-section {
+  padding: 122px 0 132px;
+}
+.effy-home .contact-layout {
+  grid-template-columns: minmax(0, .9fr) minmax(560px, 1.1fr);
+  gap: 92px;
+}
+.effy-home .contact-form-card {
+  padding: 42px;
+}
+.effy-home .contact-form-heading h3 {
+  font-size: clamp(2.2rem, 3vw, 3.25rem);
+}
+.effy-home .contact-details strong,
+.effy-home .contact-response,
+.effy-home .contact-form-card label,
+.effy-home .contact-form-card input,
+.effy-home .contact-form-card textarea,
+.effy-home .contact-form-card select {
+  font-size: 15px;
+}
+
+@media (max-width: 1240px) {
+  .effy-home .home-shell { width: min(1180px, calc(100% - 48px)); }
+  .effy-home .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(480px, .92fr); }
+  .effy-home .hero-copy h1 { font-size: clamp(3.75rem, 5.45vw, 5.8rem); }
+  .effy-home .hero-copy h1 span { white-space: normal; }
+  .effy-home .standards-layout,
+  .effy-home .contact-layout { grid-template-columns: 1fr; }
+  .effy-home .contact-form-card { max-width: 840px; }
+}
+
+@media (max-width: 980px) {
+  .effy-home .home-shell { width: min(100% - 36px, 920px); }
+  .effy-home .hero-grid { grid-template-columns: 1fr; gap: 12px; padding-top: 72px; }
+  .effy-home .hero-copy { max-width: 760px; }
+  .effy-home .hero-system { max-width: 720px; width: 100%; margin-inline: auto; }
+  .effy-home .system-visual { transform: scale(.9); transform-origin: top center; margin-bottom: -52px; }
+  .effy-home .client-trust-inner,
+  .effy-home .about-industries-layout,
+  .effy-home .faq-layout { grid-template-columns: 1fr; gap: 52px; }
+  .effy-home .client-logo-wall { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .effy-home .project-feature { grid-template-columns: 1fr; }
+  .effy-home .project-screen { min-height: 330px; }
+  .effy-home .standards-grid { grid-template-columns: 1fr; }
+  .effy-home .founder-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .effy-home {
+    --phase21-title: clamp(2.45rem, 10.5vw, 3.55rem);
+    --phase21-body: 1rem;
+  }
+  .effy-home .home-shell { width: min(100% - 28px, 680px); }
+  .effy-home .system-hero { min-height: auto; }
+  .effy-home .hero-grid { padding-top: 84px; padding-bottom: 34px; }
+  .effy-home .hero-copy h1 { font-size: clamp(3rem, 13vw, 4.35rem); line-height: .96; }
+  .effy-home .hero-copy > p { font-size: 16px; }
+  .effy-home .hero-actions { align-items: stretch; }
+  .effy-home .hero-actions .button { width: 100%; }
+  .effy-home .system-visual { transform: scale(.72); margin-inline: -16%; margin-bottom: -145px; }
+  .effy-home .client-logo-wall { grid-template-columns: 1fr; }
+  .effy-home .client-logo-card { min-height: 220px; }
+  .effy-home .outcome-grid,
+  .effy-home .technology-grid { grid-template-columns: 1fr; }
+  .effy-home .process-journey { display: block; }
+  .effy-home .process-step { min-height: 0; padding-bottom: 44px; }
+  .effy-home .founder-card { grid-template-columns: 110px 1fr; min-height: 300px; padding: 22px; }
+  .effy-home .founder-image { width: 110px; height: 180px; }
+  .effy-home .contact-form-card { padding: 24px; }
+}
+
+@media (max-width: 480px) {
+  .effy-home .home-shell { width: min(100% - 22px, 440px); }
+  .effy-home .hero-copy h1 { font-size: clamp(2.7rem, 13vw, 3.8rem); }
+  .effy-home .system-visual { transform: scale(.61); margin-inline: -28%; margin-bottom: -190px; }
+  .effy-home .iam-case { clip-path: none; }
+  .effy-home .case-copy { padding: 34px 24px; }
+  .effy-home .project-feature > div:last-child { padding: 28px 22px; }
+  .effy-home .outcome-grid article,
+  .effy-home .technology-grid article { min-height: 0; }
+  .effy-home .founder-card { grid-template-columns: 1fr; }
+  .effy-home .founder-image { width: 100%; height: 260px; }
+  .effy-home .faq-list summary { grid-template-columns: 28px 1fr auto; font-size: 17px; }
+  .effy-home .faq-list details p { padding-left: 46px; }
+}
+
+/* ============================================================
+   Effy Tech Homepage Phase 22 — section index / eyebrow visibility fix
+   ============================================================ */
+/* Major section markers must behave like real navigation labels, not micro-copy. */
+.effy-home .section-intro > span,
+.effy-home .client-trust-copy > span,
+.effy-home .standards-heading > span,
+.effy-home .faq-heading > span,
+.effy-home .about-company > span,
+.effy-home .industries-heading > span,
+.effy-home .contact-copy > span,
+.effy-home .contact-form-heading > span,
+.effy-home .founder-statement > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  margin-bottom: 22px;
+  font-size: 14px !important;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.effy-home .section-intro > span::before,
+.effy-home .client-trust-copy > span::before,
+.effy-home .standards-heading > span::before,
+.effy-home .faq-heading > span::before,
+.effy-home .about-company > span::before,
+.effy-home .industries-heading > span::before,
+.effy-home .contact-copy > span::before,
+.effy-home .contact-form-heading > span::before,
+.effy-home .founder-statement > span::before {
+  content: "";
+  width: 34px;
+  height: 2px;
+  flex: 0 0 34px;
+  background: currentColor;
+  opacity: .72;
+}
+
+/* Light surfaces */
+.effy-home .section-intro > span,
+.effy-home .client-trust-copy > span,
+.effy-home .faq-heading > span,
+.effy-home .contact-form-heading > span {
+  color: #596155 !important;
+}
+
+/* Dark surfaces */
+.effy-home .section-intro-inverse > span,
+.effy-home .standards-heading > span,
+.effy-home .about-company > span,
+.effy-home .industries-heading > span,
+.effy-home .contact-copy > span,
+.effy-home .founder-statement > span {
+  color: #c5b77d !important;
+}
+
+/* FAQ and final conversion section need extra prominence. */
+.effy-home .faq-heading > span,
+.effy-home .contact-copy > span {
+  font-size: 15px !important;
+  margin-bottom: 26px;
+}
+
+@media (max-width: 760px) {
+  .effy-home .section-intro > span,
+  .effy-home .client-trust-copy > span,
+  .effy-home .standards-heading > span,
+  .effy-home .faq-heading > span,
+  .effy-home .about-company > span,
+  .effy-home .industries-heading > span,
+  .effy-home .contact-copy > span,
+  .effy-home .contact-form-heading > span,
+  .effy-home .founder-statement > span {
+    gap: 9px;
+    margin-bottom: 16px;
+    font-size: 12px !important;
+    letter-spacing: .11em;
+  }
+
+  .effy-home .faq-heading > span,
+  .effy-home .contact-copy > span {
+    font-size: 13px !important;
+    margin-bottom: 18px;
+  }
+
+  .effy-home .section-intro > span::before,
+  .effy-home .client-trust-copy > span::before,
+  .effy-home .standards-heading > span::before,
+  .effy-home .faq-heading > span::before,
+  .effy-home .about-company > span::before,
+  .effy-home .industries-heading > span::before,
+  .effy-home .contact-copy > span::before,
+  .effy-home .contact-form-heading > span::before,
+  .effy-home .founder-statement > span::before {
+    width: 24px;
+    flex-basis: 24px;
+  }
+}
+
+/* ============================================================
+   Effy Tech Homepage Phase 23 — production polish and desktop hero fix
+   ============================================================ */
+/* Desktop hero: reserve independent space for the statement and the system visual. */
+.effy-home .system-hero {
+  min-height: 810px;
+  padding-top: 104px;
+}
+.effy-home .hero-grid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(470px, .85fr);
+  gap: clamp(42px, 4vw, 70px);
+  min-height: 650px;
+}
+.effy-home .hero-copy {
+  z-index: 8;
+  max-width: 770px;
+  padding-top: 0;
+}
+.effy-home .hero-copy h1 {
+  max-width: 770px;
+  font-size: clamp(3.8rem, 4.15vw, 5rem);
+  line-height: .95;
+  letter-spacing: -.06em;
+}
+.effy-home .hero-copy h1 span {
+  white-space: nowrap;
+}
+.effy-home .hero-copy > p {
+  max-width: 640px;
+}
+.effy-home .hero-system {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+.effy-home .system-visual {
+  transform: translateX(34px) scale(.88);
+  transform-origin: center right;
+}
+.effy-home .metric-grid strong {
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+.effy-home .ai-score {
+  align-items: center;
+}
+.effy-home .ai-score strong {
+  font-size: 22px;
+}
+.effy-home .ai-score span {
+  width: 82px;
+}
+
+/* Reduce page length without removing any important business information. */
+.effy-home .client-trust-section { padding: 82px 0; }
+.effy-home .client-logo-card { min-height: 238px; }
+.effy-home .capability-section { padding: 104px 0 112px; }
+.effy-home .capability-system { min-height: 710px; margin-top: 62px; }
+.effy-home .capability-node { min-height: 266px; padding: 30px; }
+.effy-home .work-section { padding: 104px 0 112px; }
+.effy-home .iam-case { min-height: 610px; margin-top: 54px; }
+.effy-home .case-copy { padding: 56px 46px; }
+.effy-home .project-feature,
+.effy-home .project-screen { min-height: 430px; }
+.effy-home .outcomes-section { padding: 86px 0 94px; }
+.effy-home .outcomes-section .section-intro {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .48fr);
+  column-gap: 58px;
+}
+.effy-home .outcome-grid { margin-top: 48px; }
+.effy-home .outcome-grid article { min-height: 220px; padding: 28px; }
+.effy-home .outcome-grid h3 { margin-top: 38px; }
+.effy-home .process-section { padding: 92px 0 100px; }
+.effy-home .process-journey { margin-top: 52px; }
+.effy-home .process-step { min-height: 275px; }
+.effy-home .standards-section { padding: 96px 0; }
+.effy-home .standards-layout { gap: 70px; }
+.effy-home .standards-grid article { min-height: 280px; padding: 28px; }
+.effy-home .technology-section { padding: 86px 0 94px; }
+.effy-home .technology-grid { margin-top: 50px; }
+.effy-home .technology-grid article { min-height: 205px; padding: 28px; }
+.effy-home .technology-grid h3 { margin-top: 34px; }
+.effy-home .about-industries-section { padding: 96px 0; }
+.effy-home .about-industries-layout { gap: 66px; }
+.effy-home .about-company-points { margin-top: 34px; }
+.effy-home .about-company-points > div { min-height: 126px; }
+.effy-home .industries-grid article { min-height: 146px; padding: 23px; }
+.effy-home .team-section { padding: 96px 0 104px; }
+.effy-home .founder-grid { margin-top: 52px; }
+.effy-home .founder-card { min-height: 330px; }
+.effy-home .founder-image img {
+  transform-origin: center;
+  filter: saturate(.82) contrast(.96);
+}
+.effy-home .faq-section { padding: 96px 0; }
+.effy-home .faq-list summary { min-height: 90px; }
+.effy-home .contact-section { padding: 104px 0 112px; }
+
+/* Keep the section labels visible at normal desktop reading distance. */
+.effy-home .section-intro > span,
+.effy-home .client-trust-copy > span,
+.effy-home .standards-heading > span,
+.effy-home .faq-heading > span,
+.effy-home .about-company > span,
+.effy-home .industries-heading > span,
+.effy-home .contact-copy > span,
+.effy-home .contact-form-heading > span,
+.effy-home .founder-statement > span {
+  font-size: 13px !important;
+  letter-spacing: .12em;
+}
+.effy-home .faq-heading > span,
+.effy-home .contact-copy > span {
+  font-size: 14px !important;
+}
+
+@media (min-width: 1501px) {
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.16fr) minmax(490px, .84fr);
+    gap: 72px;
+  }
+  .effy-home .system-visual {
+    transform: translateX(40px) scale(.92);
+  }
+}
+
+/* Standard laptops and 1366px desktops: prevent any cross-column collision. */
+@media (min-width: 1181px) and (max-width: 1500px) {
+  .effy-home .home-shell { width: min(1320px, calc(100% - 72px)); }
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(450px, .82fr);
+    gap: 42px;
+  }
+  .effy-home .hero-copy h1 {
+    font-size: clamp(3.45rem, 4.15vw, 4.15rem);
+  }
+  .effy-home .system-visual {
+    transform: translateX(36px) scale(.79);
+  }
+}
+
+/* Compact laptops use a deliberate stacked hero instead of squeezing two columns. */
+@media (max-width: 1180px) {
+  .effy-home .system-hero { min-height: auto; }
+  .effy-home .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding-top: 64px;
+    padding-bottom: 30px;
+  }
+  .effy-home .hero-copy {
+    max-width: 780px;
+  }
+  .effy-home .hero-copy h1 {
+    max-width: 780px;
+    font-size: clamp(3.55rem, 7vw, 5.1rem);
+  }
+  .effy-home .hero-system {
+    width: min(720px, 100%);
+    margin: 0 auto;
+  }
+  .effy-home .system-visual {
+    transform: scale(.88);
+    transform-origin: top center;
+    margin-bottom: -58px;
+  }
+  .effy-home .outcomes-section .section-intro {
+    grid-template-columns: 1fr;
+  }
+  .effy-home .outcomes-section .section-intro p {
+    margin-top: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .effy-home .hero-grid { padding-top: 78px; }
+  .effy-home .hero-copy h1 span { white-space: normal; }
+  .effy-home .system-visual {
+    transform: scale(.7);
+    margin-inline: -17%;
+    margin-bottom: -152px;
+  }
+  .effy-home .client-trust-section,
+  .effy-home .capability-section,
+  .effy-home .work-section,
+  .effy-home .outcomes-section,
+  .effy-home .process-section,
+  .effy-home .standards-section,
+  .effy-home .technology-section,
+  .effy-home .about-industries-section,
+  .effy-home .team-section,
+  .effy-home .faq-section,
+  .effy-home .contact-section {
+    padding-top: 78px;
+    padding-bottom: 82px;
+  }
+  .effy-home .section-intro > span,
+  .effy-home .client-trust-copy > span,
+  .effy-home .standards-heading > span,
+  .effy-home .faq-heading > span,
+  .effy-home .about-company > span,
+  .effy-home .industries-heading > span,
+  .effy-home .contact-copy > span,
+  .effy-home .contact-form-heading > span,
+  .effy-home .founder-statement > span {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .effy-home .system-visual {
+    transform: scale(.6);
+    margin-inline: -29%;
+    margin-bottom: -194px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  .effy-home *,
+  .effy-home *::before,
+  .effy-home *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Footer and floating contact controls follow the same restrained visual system. */
+.new-footer .footer-grid a,
+.new-footer .footer-grid p { color: #aab1a6; }
+.new-footer .footer-bottom { color: #8d958a; }
+.footer-socials svg { width: 14px; height: 14px; }
+.whatsapp-fab {
+  right: 1.35rem;
+  bottom: 1.35rem;
+  width: 3rem;
+  height: 3rem;
+  background-color: #1f8f4f;
+  box-shadow: 0 10px 28px rgba(20, 54, 35, .24), 0 2px 8px rgba(0,0,0,.16);
+}
+.whatsapp-fab:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 14px 34px rgba(20, 54, 35, .3), 0 4px 12px rgba(0,0,0,.18);
+}
+.whatsapp-ping { background-color: #25d366; opacity: .2; }
+
+/* ============================================================
+   Effy Tech Homepage Phase 23 — desktop hero collision guard
+   ============================================================ */
+/* Keep the editorial two-line hero only where the layout can actually hold it. */
+@media (min-width: 1280px) {
+  .effy-home .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(500px, .82fr);
+    gap: 20px;
+  }
+
+  .effy-home .hero-copy {
+    max-width: 740px;
+  }
+
+  .effy-home .hero-copy h1 {
+    max-width: 740px;
+    font-size: clamp(3.55rem, 4.55vw, 4.1rem);
+    line-height: .96;
+    letter-spacing: -.06em;
+  }
+
+  .effy-home .hero-copy h1 span {
+    white-space: nowrap;
+  }
+
+  .effy-home .system-visual {
+    transform: translateX(20px) scale(.88);
+    transform-origin: center right;
+  }
+}
+
+/* Medium desktop/tablet: stack instead of allowing the headline to collide. */
+@media (min-width: 761px) and (max-width: 1279px) {
+  .effy-home .system-hero {
+    min-height: auto;
+  }
+
+  .effy-home .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    min-height: auto;
+    padding-top: 72px;
+    padding-bottom: 42px;
+  }
+
+  .effy-home .hero-copy {
+    max-width: 760px;
+  }
+
+  .effy-home .hero-copy h1 {
+    max-width: 760px;
+    font-size: clamp(3.45rem, 6.3vw, 4.35rem);
+    line-height: .97;
+    letter-spacing: -.06em;
+  }
+
+  .effy-home .hero-copy h1 span {
+    white-space: normal;
+  }
+
+  .effy-home .hero-system {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .effy-home .system-visual {
+    transform: scale(.9);
+    transform-origin: top center;
+    margin-bottom: -52px;
+  }
+}
+
+/* ============================================================
+   Effy Tech Homepage Phase 25 — proof section credibility polish
+   ============================================================ */
+.effy-home .client-trust-section {
+  padding: 88px 0 94px;
+  background:
+    radial-gradient(circle at 86% 10%, rgba(106, 124, 96, .08), transparent 34%),
+    #f7f5ec;
+}
+
+.effy-home .client-trust-inner {
+  display: grid;
+  grid-template-columns: minmax(300px, .66fr) minmax(0, 1.34fr);
+  gap: clamp(42px, 5.5vw, 82px);
+  align-items: start;
+}
+
+.effy-home .client-trust-copy {
+  position: sticky;
+  top: 118px;
+}
+
+.effy-home .client-trust-copy h2 {
+  max-width: 570px;
+  margin: 0;
+  font-size: clamp(2.8rem, 4.25vw, 4.8rem);
+  line-height: .95;
+  letter-spacing: -.058em;
+}
+
+.effy-home .client-trust-copy > p {
+  max-width: 560px;
+  margin-top: 24px;
+  color: var(--effy-ink-3);
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.effy-home .client-trust-assurance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.effy-home .client-trust-assurance > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(32, 38, 31, .13);
+  background: rgba(255, 255, 255, .46);
+  color: #596257;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .025em;
+}
+
+.effy-home .client-logo-wall {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  border: 0;
+  background: transparent;
+}
+
+.effy-home .client-logo-card {
+  min-width: 0;
+  min-height: 430px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(32, 38, 31, .14);
+  background: rgba(251, 250, 244, .9);
+  color: var(--effy-ink);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+  transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease;
+}
+
+.effy-home .client-logo-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(66, 80, 62, .42);
+  box-shadow: 0 20px 42px rgba(32, 38, 31, .09);
+}
+
+.effy-home .client-logo-media {
+  position: relative;
+  height: 132px;
+  min-height: 132px;
+  overflow: hidden;
+  background: #e8e5d9;
+}
+
+.effy-home .client-logo-media img {
+  object-fit: cover;
+  filter: saturate(.78) contrast(.94);
+  transition: transform .35s ease, filter .35s ease;
+}
+
+.effy-home .client-logo-card:hover .client-logo-media img {
+  transform: scale(1.025);
+  filter: saturate(.92) contrast(.98);
+}
+
+.effy-home .client-logo-card:first-child .client-logo-media img {
+  object-fit: contain;
+  padding: 22px;
+}
+
+.effy-home .client-proof-index {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 30px;
+  border: 1px solid rgba(255,255,255,.58);
+  background: rgba(28, 34, 27, .78);
+  backdrop-filter: blur(8px);
+  color: #f5f3e9;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.effy-home .client-logo-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 22px 20px 20px;
+}
+
+.effy-home .client-logo-card small {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  margin: 0;
+  padding: 0 8px;
+  border: 1px solid rgba(32,38,31,.12);
+  color: #687064;
+  font-size: 8.5px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.effy-home .client-logo-card strong {
+  display: block;
+  margin-top: 15px;
+  font-size: clamp(1.12rem, 1.45vw, 1.38rem);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+.effy-home .client-logo-card p {
+  margin-top: 11px;
+  color: var(--effy-ink-3);
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.effy-home .client-proof-meta {
+  width: 100%;
+  margin: 18px 0 0;
+  border-top: 1px solid rgba(32,38,31,.11);
+}
+
+.effy-home .client-proof-meta > div {
+  display: grid;
+  grid-template-columns: 56px minmax(0,1fr);
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(32,38,31,.09);
+}
+
+.effy-home .client-proof-meta dt,
+.effy-home .client-proof-meta dd {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.effy-home .client-proof-meta dt {
+  color: #858c81;
+  font-weight: 800;
+}
+
+.effy-home .client-proof-meta dd {
+  color: #454d43;
+  font-weight: 750;
+}
+
+.effy-home .client-logo-card em {
+  margin-top: 13px;
+  color: #71796e;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: .035em;
+}
+
+.effy-home .client-logo-card .client-project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 18px;
+  color: var(--effy-ink);
+  font-size: 11.5px;
+  font-weight: 850;
+}
+
+@media (max-width: 1180px) {
+  .effy-home .client-trust-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .effy-home .client-trust-copy {
+    position: static;
+    max-width: 820px;
+  }
+
+  .effy-home .client-trust-copy h2,
+  .effy-home .client-trust-copy > p {
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 880px) {
+  .effy-home .client-logo-wall {
+    grid-template-columns: 1fr;
+  }
+
+  .effy-home .client-logo-card {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(150px, .42fr) minmax(0, .58fr);
+  }
+
+  .effy-home .client-logo-media {
+    height: 100%;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 620px) {
+  .effy-home .client-trust-section {
+    padding: 72px 0 78px;
+  }
+
+  .effy-home .client-trust-copy h2 {
+    font-size: clamp(2.45rem, 11.5vw, 3.45rem);
+  }
+
+  .effy-home .client-trust-assurance {
+    display: grid;
+  }
+
+  .effy-home .client-logo-card {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: .35rem;
-    scrollbar-width: none;
   }
-  .effy-project-page--iam .iam-feature-tabs::-webkit-scrollbar { display: none; }
-  .effy-project-page--iam .iam-feature-tabs > button {
-    min-width: 172px;
-    scroll-snap-align: start;
+
+  .effy-home .client-logo-media {
+    height: 122px;
+    min-height: 122px;
   }
-  .effy-project-page--iam .iam-feature-explorer .iam-feature-detail {
-    min-height: auto;
+
+  .effy-home .client-logo-content {
+    padding: 20px 18px 19px;
   }
 }
 
-
-/* ============================================================
-   Phase 14 — IAM palette alignment with Effy Tech
-   Color-only pass: removes cyan/neon accents and aligns IAM with
-   the homepage/logo palette (ivory, graphite olive, sage, brass).
-   ============================================================ */
-.effy-project-page--iam {
-  --iam-ivory: #f4f2e8;
-  --iam-surface: #eceade;
-  --iam-graphite: #20261f;
-  --iam-graphite-2: #293129;
-  --iam-olive: #596158;
-  --iam-sage: #71806b;
-  --iam-brass: #b8a88a;
-  --iam-brass-light: #d4c5b0;
-}
-
-.effy-project-page--iam #iam-tour select {
-  color-scheme: light;
-  color: var(--iam-graphite) !important;
-}
-.effy-project-page--iam #iam-tour select option {
-  background: #fbfaf4;
-  color: var(--iam-graphite);
-}
-.effy-project-page--iam #iam-tour label {
-  border-color: rgba(32,38,31,.12) !important;
-  background: rgba(247,244,233,.96) !important;
-}
-.effy-project-page--iam #iam-tour label + div {
-  border-color: rgba(184,168,138,.48) !important;
-  background: #eceade !important;
-  color: #30382f !important;
-}
-
-.effy-project-page--iam .iam-highlights > div > div h3,
-.effy-project-page--iam .iam-highlights > div > div p:first-of-type {
-  color: #f6f4eb !important;
-}
-.effy-project-page--iam .iam-highlights > div > div p:last-of-type {
-  color: #cbd0c4 !important;
-}
-
-.effy-project-page--iam .iam-features [class*="text-primary"],
-.effy-project-page--iam .iam-screenshots [class*="text-primary"],
-.effy-project-page--iam .iam-deep-dive [class*="text-primary"] {
-  color: var(--iam-brass-light) !important;
-}
-.effy-project-page--iam .iam-features [class*="bg-primary"],
-.effy-project-page--iam .iam-screenshots [class*="bg-primary"],
-.effy-project-page--iam .iam-deep-dive [class*="bg-primary"] {
-  background-color: rgba(113,128,107,.18) !important;
-}
-
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail,
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail * {
-  text-shadow: none !important;
-}
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail h3,
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail p {
-  opacity: 1 !important;
-}
-.effy-project-page--iam .iam-feature-explorer .iam-feature-detail p {
-  color: #e6e7df !important;
-}
-
-.effy-project-page--iam .iam-screenshots {
-  background:
-    radial-gradient(circle at 52% 42%, rgba(184,168,138,.10), transparent 34%),
-    linear-gradient(180deg, #20261f, #252d25) !important;
-}
-.effy-project-page--iam .iam-screenshots button:focus-visible,
-.effy-project-page--iam .iam-feature-tabs button:focus-visible {
-  outline: 2px solid var(--iam-brass);
-  outline-offset: 3px;
-}
-
-/* ============================================================
-   Phase 15 — IAM unified Effy brand palette
-   One coherent visual system for the full IAM landing page.
-   No cyan/neon. All contrast states are explicitly controlled.
-   ============================================================ */
 .effy-project-page--iam {
   --iam-paper: #f3f0e6;
   --iam-paper-2: #e8e3d7;
@@ -1578,3 +2814,82 @@ h1, h2, h3, h4 { font-family: var(--font-sans), Inter, system-ui, sans-serif; }
   .effy-project-page--iam .iam-hero-shape--two { top: 48%; }
   .effy-project-page--iam .iam-hero-shape--three { top: 76%; }
 }
+
+
+/* Card styling overrides for IAM features section to maintain graphite green/gold palette and prevent blue-black bleeding from Tailwind v4 */
+.effy-project-page--iam .iam-features .group > div:first-child {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.effy-project-page--iam .iam-features .group > div:nth-child(3) {
+  background-color: #222C25 !important;
+}
+.effy-project-page--iam .iam-features .group:hover > div:nth-child(3) {
+  background-color: #2c3930 !important;
+}
+.effy-project-page--iam .iam-features .group > div:nth-child(2) > div:last-child {
+  background-color: #222C25 !important;
+}
+.effy-project-page--iam .iam-features .group > div:nth-child(2) > div:first-child {
+  background-image: linear-gradient(to bottom right, rgba(170, 145, 88, 0.4), rgba(170, 145, 88, 0.1), rgba(114, 120, 103, 0.35)) !important;
+}
+
+/* Color overrides for DHA and BUEK showcase pages to match brand gold/graphite green and remove teal buttons/text */
+.effy-project-page--dha,
+.effy-project-page--buek {
+  --dha-accent: #aa9158; /* Gold */
+  --dha-accent-light: #d2bd86;
+  --dha-green: #22271f; /* Graphite green */
+  --dha-sage: #727867;
+}
+
+.effy-project-page--dha [class*="text-primary"],
+.effy-project-page--buek [class*="text-primary"] {
+  color: var(--dha-accent) !important;
+}
+
+.effy-project-page--dha [class*="bg-primary"],
+.effy-project-page--buek [class*="bg-primary"] {
+  background-color: var(--dha-accent) !important;
+}
+
+.effy-project-page--dha [class*="bg-primary-dark"],
+.effy-project-page--buek [class*="bg-primary-dark"],
+.effy-project-page--dha [class*="hover:bg-primary-dark"]:hover,
+.effy-project-page--buek [class*="hover:bg-primary-dark"]:hover,
+.effy-project-page--dha [class*="hover:bg-primary"]:hover,
+.effy-project-page--buek [class*="hover:bg-primary"]:hover {
+  background-color: #8f7947 !important; /* Slightly darker gold for hover states */
+}
+
+.effy-project-page--dha [class*="border-primary"],
+.effy-project-page--buek [class*="border-primary"] {
+  border-color: rgba(170, 145, 88, 0.28) !important;
+}
+
+.effy-project-page--dha [class*="from-primary"],
+.effy-project-page--buek [class*="from-primary"] {
+  --tw-gradient-from: var(--dha-accent) var(--tw-gradient-from-position) !important;
+}
+
+.effy-project-page--dha [class*="to-primary"],
+.effy-project-page--buek [class*="to-primary"] {
+  --tw-gradient-to: var(--dha-accent-light) var(--tw-gradient-to-position) !important;
+}
+
+/* Scoped button text to remain white/readable when bg is gold */
+.effy-project-page--dha [class*="bg-primary"] *,
+.effy-project-page--buek [class*="bg-primary"] *,
+.effy-project-page--dha a[class*="bg-primary"],
+.effy-project-page--buek a[class*="bg-primary"],
+.effy-project-page--dha button[class*="bg-primary"],
+.effy-project-page--buek button[class*="bg-primary"] {
+  color: #ffffff !important;
+}
+
+/* Feature card hover border overrides */
+.effy-project-page--dha [class*="group-hover:border-primary"],
+.effy-project-page--buek [class*="group-hover:border-primary"] {
+  border-color: rgba(170, 145, 88, 0.35) !important;
+}
+
+

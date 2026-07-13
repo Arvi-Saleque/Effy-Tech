@@ -195,7 +195,7 @@ export default function AllServicesPage() {
               className="absolute inset-0 opacity-[0.025]"
               style={{
                 backgroundImage:
-                  "radial-gradient(circle, rgba(45,212,191,0.9) 1px, transparent 1px)",
+                  "radial-gradient(circle, rgba(185,154,90,0.9) 1px, transparent 1px)",
                 backgroundSize: "32px 32px",
               }}
             />
@@ -293,3 +293,4 @@ export default function AllServicesPage() {
     </>
   );
 }
+

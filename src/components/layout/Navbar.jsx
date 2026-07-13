@@ -10,6 +10,20 @@ import siteConfig from "@/theme/siteConfig";
 
 const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA", "/projects/BUEK"];
 
+const searchPages = [
+  { label: "Homepage", href: "/", type: "page", description: "Effy Tech company homepage", keywords: ["home", "effy tech"] },
+  { label: "Services", href: "/#services", type: "page", description: "Web, mobile, automation, and AI capabilities", keywords: ["capabilities", "web", "mobile", "automation", "ai"] },
+  { label: "Featured Projects", href: "/#work", type: "caseStudy", description: "Selected Effy Tech product and platform case studies", keywords: ["projects", "portfolio", "work", "case studies"] },
+  { label: "Client Outcomes", href: "/#outcomes", type: "page", description: "Operational value created by Effy Tech systems", keywords: ["clients", "results", "outcomes"] },
+  { label: "Development Process", href: "/#process", type: "page", description: "How Effy Tech discovers, architects, builds, and launches products", keywords: ["workflow", "process", "delivery"] },
+  { label: "Engineering Standards", href: "/#standards", type: "page", description: "Security, responsiveness, performance, testing, and handover standards", keywords: ["quality", "security", "testing", "documentation"] },
+  { label: "Technology Stack", href: "/#technology", type: "page", description: "Frontend, mobile, backend, database, cloud, and product tools", keywords: ["next.js", "react", "flutter", "laravel", "supabase", "firebase", "postgresql", "vercel"] },
+  { label: "About Effy Tech", href: "/#about", type: "page", description: "Company approach, ownership model, and industries served", keywords: ["company", "industries", "education", "startups"] },
+  { label: "Team", href: "/#team", type: "team", description: "The founders responsible for strategy, engineering, and delivery", keywords: ["founders", "people"] },
+  { label: "Frequently Asked Questions", href: "/#faq", type: "page", description: "Project scope, budget, ownership, deployment, and support answers", keywords: ["faq", "budget", "timeline", "support"] },
+  { label: "Contact Effy Tech", href: "/#contact", type: "page", description: "Start a project or send Effy Tech a project brief", keywords: ["contact", "email", "phone", "whatsapp", "start project"] },
+];
+
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -128,7 +142,8 @@ export default function Navbar() {
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
         projects={projects}
-        pages={siteConfig.navLinks}
+        services={siteConfig.services}
+        pages={searchPages}
       />
     </>
   );

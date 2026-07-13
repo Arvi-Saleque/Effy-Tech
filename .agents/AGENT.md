@@ -1,44 +1,45 @@
 
-## Phase 07 — Project landing-page brand unification
-- Added BUEK to custom-navbar route exclusions, fixing the conflicting/double navbar.
-- Unified IAM, DHA, and BUEK landing-page shells with the new Effy warm-ivory/graphite brand system.
-- Preserved project-specific identities and all IAM CTA analytics placements.
-- Restyled project navbars, hero surfaces, mobile overlays, and shared page framing.
-
-## Phase 08 — IAM landing page restoration
-- Scoped work to `/projects/IAM` only.
-- Restored IAM green/gold identity while retaining the Effy homepage shell.
-- Preserved all existing tracked download CTAs and Play Store destination.
-- Added conversion/readability/responsive polish.
-
-## Phase 09 — IAM landing page refinement
-- Removed the public review/rating section and its navigation entry.
-- Removed IAM page runtime review fetching so the landing page no longer depends on review data.
-- Rebuilt the detailed feature area as a compact interactive feature explorer.
-- Reworked the onboarding/how-it-works section into four clearer product steps.
-- Replaced the generic description card with a stronger product-principles block.
-- Preserved all existing IAM Play Store CTA tracking placements and analytics event names.
-- Production build reached successful compilation and TypeScript validation; the environment stalled during Next.js page-data collection.
-
-## Phase 11 — IAM premium product storytelling
-- Refined IAM only; DHA/BUEK untouched.
-- Added outcome-led value cards, compact feature hierarchy, synchronized feature explorer screens, cinematic screenshots, product principles, and QR download CTA.
-- Existing GTM/Meta CTA event names and Play Store URL preserved.
+## Homepage Phase 17
+- Added client trust, client outcomes, product proof, engineering standards, and FAQ sections.
+- Increased section-title scale and added responsive section layouts.
+- Rebuilt command-palette taxonomy and wording with explicit PROJECT/SERVICE/PAGE/TEAM/CASE STUDY labels.
+- Project search results now open their actual project routes.
+- No fabricated testimonials were added.
 
 
-## Phase 13 — IAM visual consistency and interface showcase
-- Rebuilt feature explorer and app interface rail.
-- Fixed low-contrast IAM text and retained tracking/navigation behavior.
+## Phase 18 — Homepage hierarchy and responsive polish
+- Rebalanced client trust and proof sections.
+- Unified title scale and responsive layouts.
+- Consolidated engineering standards.
+- Preserved accurate search taxonomy and result wording.
 
-## Phase 14 — IAM palette alignment
-- Scoped work to `/projects/IAM` color styling only.
-- Removed cyan/neon accents from IAM showcase UI.
-- Aligned IAM with Effy Tech ivory, graphite olive, sage, and brass palette.
-- Improved dropdown, dark-panel, active-state, and slider contrast.
-- Preserved layout, Play Store URL, CTA tracking, and DHA/BUEK pages.
+## Phase 19 — Homepage completion
+- Added Technology Stack, About Effy Tech, Industries, and a complete contact form.
+- Consolidated repetitive proof content.
+- Updated navigation and search taxonomy with exact content-type wording.
+- Added Phase 19 report and delivery ZIP.
 
-## Phase 16 — IAM final visual polish
-- Removed hero haze and replaced it with quiet Effy geometry.
-- Reduced excessive shadows across IAM landing page surfaces.
-- Unified dark sections and improved copy contrast.
-- Preserved IAM conversion tracking and functionality.
+## Homepage Phase 20 — 2026-07-12
+- Rebalanced the hero headline and increased body readability.
+- Made capability wording explicit for software buyers.
+- Added verified project status, audience, technology, problem, solution, and outcome details.
+- Consolidated repetitive engineering/why messaging.
+- Improved responsive typography and section readability.
+- Preserved search taxonomy and avoided fabricated testimonials or metrics.
+
+## Homepage Phase 21
+- Applied a full typography and layout scaling pass.
+- Fixed desktop hero composition, section readability, trust/project card sizing, process contrast, technology visibility, contact form scale, and mobile/tablet responsive behavior.
+- Preserved search taxonomy, tracking, routes, and project-page behavior.
+
+## Homepage Phase 22 — section marker visibility hotfix
+- Increased all homepage section index/eyebrow labels from micro-copy size to readable navigation-label scale.
+- Added consistent line marker, uppercase rhythm, and correct light/dark contrast.
+- Gave `09 — FAQ` and `10 — START A PROJECT` additional prominence.
+- Added mobile-specific sizing so labels remain readable without dominating headings.
+
+## Homepage Phase 25 - Proof Section
+- Reframed the section from an unsupported generic trust claim to verifiable product and platform proof.
+- Distinguished Effy Tech-owned product work from client and institutional delivery.
+- Added concise project context, status, use case, stack, and direct project links.
+- Rebuilt desktop, tablet, and mobile card layouts without changing project routes.

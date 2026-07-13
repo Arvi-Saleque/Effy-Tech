@@ -46,7 +46,7 @@ export default function ProjectCard({ project, onSelect, index }) {
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
       onClick={() => { trackProjectClick(title, "card_click"); onSelect(project); }}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-900/60 backdrop-blur-sm transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(45,212,191,0.08)] hover:border-primary/30"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-900/60 backdrop-blur-sm transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(185,154,90,0.08)] hover:border-primary/30"
       style={{ originX: 0.5, originY: 0.5 }}
     >
       {/* ── Left edge accent stripe ───────────────────────────── */}
@@ -121,3 +121,4 @@ export default function ProjectCard({ project, onSelect, index }) {
     </motion.article>
   );
 }
+
