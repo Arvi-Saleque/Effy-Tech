@@ -17,7 +17,9 @@ export const metadata = {
 };
 
 const sortedProjects = [...projects].sort((a, b) => a.order - b.order);
-const categories = [...new Set(sortedProjects.map((project) => project.category))];
+const categories = [
+  ...new Set(sortedProjects.map((project) => project.category)),
+];
 
 function ProjectCard({ project, index }) {
   return (
@@ -112,7 +114,7 @@ function ProjectCard({ project, index }) {
 export default function ProjectsPage() {
   return (
     <>
-      <main className="min-h-screen bg-surface-dark pt-24 text-text-inverse">
+      <main className="effy-public-page min-h-screen bg-surface-dark pt-24 text-text-inverse">
         <section className="relative overflow-hidden border-b border-neutral-800/60 pb-14 pt-8 sm:pb-16">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute left-1/2 top-0 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-primary-light/7 blur-[150px]" />
@@ -168,7 +170,10 @@ export default function ProjectsPage() {
                 <div className="rounded-[8px] border border-neutral-700/55 bg-neutral-950/25 p-4">
                   <HiOutlineSparkles className="h-6 w-6 text-primary-light" />
                   <p className="mt-3 font-heading text-3xl font-black text-primary-light">
-                    {sortedProjects.filter((project) => project.featured).length}
+                    {
+                      sortedProjects.filter((project) => project.featured)
+                        .length
+                    }
                   </p>
                   <p className="text-sm text-neutral-400">Featured</p>
                 </div>
@@ -218,4 +223,3 @@ export default function ProjectsPage() {
     </>
   );
 }
-

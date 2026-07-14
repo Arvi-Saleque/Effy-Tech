@@ -22,7 +22,7 @@ export default function TaskCard({ task, projectId }) {
   const completedSubtasks = subtasks.filter(s => s.status === "done").length;
   
   return (
-    <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="block bg-slate-800/80 border border-slate-700/50 rounded-lg p-4 hover:border-blue-500/50 transition-colors">
+    <Link href={`/admin/projects/${projectId}/tasks/${task.id}`} className="block bg-slate-800/80 border border-slate-700/50 rounded-lg p-4 hover:border-primary-light/50 transition-colors">
       <div className="flex justify-between items-start mb-2 gap-2">
         <h4 className="font-medium text-slate-200 truncate">{task.title}</h4>
         <TaskPriorityBadge priority={task.priority} />

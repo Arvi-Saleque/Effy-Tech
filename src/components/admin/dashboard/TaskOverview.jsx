@@ -5,7 +5,7 @@ import { ClipboardList } from "lucide-react";
 export default function TaskOverview({ statusCounts }) {
   const statusItems = [
     { label: "Backlog", count: statusCounts.backlog, color: "bg-neutral-500" },
-    { label: "To Do", count: statusCounts.todo, color: "bg-blue-500" },
+    { label: "To Do", count: statusCounts.todo, color: "bg-primary" },
     { label: "In Progress", count: statusCounts.in_progress, color: "bg-indigo-500" },
     { label: "Blocked", count: statusCounts.blocked, color: "bg-rose-500" },
     { label: "Review", count: statusCounts.review, color: "bg-amber-500" },

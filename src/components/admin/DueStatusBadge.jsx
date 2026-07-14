@@ -17,7 +17,7 @@ export function getDueState(dueDate, isDone) {
   soon.setDate(soon.getDate() + 3);
   if (due > today && due <= soon) return { id: "due_soon", label: "Due Soon", color: "text-yellow-400 bg-yellow-900/40" };
   
-  return { id: "upcoming", label: "Upcoming", color: "text-blue-400 bg-blue-900/30" };
+  return { id: "upcoming", label: "Upcoming", color: "text-primary-light bg-primary-dark/25" };
 }
 
 export default function DueStatusBadge({ dueDate, isDone, className = "" }) {

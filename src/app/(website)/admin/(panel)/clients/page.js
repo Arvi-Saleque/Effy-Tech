@@ -145,7 +145,7 @@ export default async function ClientsPage({ searchParams }) {
                       <td className="px-6 py-4">
                         <div className="text-neutral-300">{client.contact_person || <span className="text-neutral-600 italic">--</span>}</div>
                         {client.phone && (
-                          <a href={`tel:${client.phone}`} className="text-xs text-blue-400/80 hover:text-blue-400 mt-0.5 flex items-center gap-1">
+                          <a href={`tel:${client.phone}`} className="text-xs text-primary-light/80 hover:text-primary-light mt-0.5 flex items-center gap-1">
                             <Phone className="w-3 h-3" /> {client.phone}
                           </a>
                         )}
@@ -171,7 +171,7 @@ export default async function ClientsPage({ searchParams }) {
                           </Link>
                           <Link
                             href={`/admin/clients/${client.id}/edit`}
-                            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+                            className="text-primary-light hover:text-primary-light text-sm font-medium transition-colors"
                           >
                             Edit
                           </Link>
@@ -209,8 +209,8 @@ export default async function ClientsPage({ searchParams }) {
 
                   {client.phone && (
                     <div className="text-sm text-neutral-300 flex items-center gap-1.5">
-                      <a href={`tel:${client.phone}`} className="flex items-center gap-1.5 text-blue-400/80">
-                        <Phone className="w-3.5 h-3.5 text-blue-500/80" />
+                      <a href={`tel:${client.phone}`} className="flex items-center gap-1.5 text-primary-light/80">
+                        <Phone className="w-3.5 h-3.5 text-primary-light/80" />
                         {client.phone}
                       </a>
                     </div>
@@ -231,7 +231,7 @@ export default async function ClientsPage({ searchParams }) {
                       </Link>
                       <Link
                         href={`/admin/clients/${client.id}/edit`}
-                        className="flex-1 py-1.5 text-center bg-neutral-800/50 hover:bg-neutral-800 text-blue-400 rounded-md text-sm font-medium transition-colors"
+                        className="flex-1 py-1.5 text-center bg-neutral-800/50 hover:bg-neutral-800 text-primary-light rounded-md text-sm font-medium transition-colors"
                       >
                         Edit
                       </Link>

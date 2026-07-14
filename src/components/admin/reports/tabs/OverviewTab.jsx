@@ -79,7 +79,7 @@ export default function OverviewTab({ data }) {
         <MetricCard title="Completed Legacy" value={metrics.completedLegacy} icon={CheckCircle} colorClass="text-emerald-600" />
         <MetricCard title="Overdue Tasks" value={metrics.overdueTasks} icon={AlertTriangle} colorClass="text-red-500" />
         <MetricCard title="Blocked Tasks" value={metrics.blockedTasks} icon={AlertTriangle} colorClass="text-rose-500" />
-        <MetricCard title="Active Projects" value={metrics.activeProjects} icon={Briefcase} colorClass="text-blue-400" />
+        <MetricCard title="Active Projects" value={metrics.activeProjects} icon={Briefcase} colorClass="text-primary-light" />
         <MetricCard title="Completed Projects" value={metrics.completedProjects} icon={Briefcase} colorClass="text-emerald-400" />
       </div>
 
@@ -100,7 +100,7 @@ export default function OverviewTab({ data }) {
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DistributionList title="Task Status" data={distributions.taskStatusDistribution} colorClass="bg-indigo-500" />
-        <DistributionList title="Project Status" data={distributions.projectStatusDistribution} colorClass="bg-blue-500" />
+        <DistributionList title="Project Status" data={distributions.projectStatusDistribution} colorClass="bg-primary" />
         <DistributionList title="Report Status" data={distributions.reportStatusDistribution} colorClass="bg-emerald-500" />
         <DistributionList title="Work Source" data={distributions.sourceDistribution} colorClass="bg-purple-500" />
       </div>

@@ -95,7 +95,7 @@ export default function WorkReportAnalysisTab({ data }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard title="Total Reports (Latest)" value={totalReports} icon={FileSpreadsheet} colorClass="text-indigo-400" />
         <MetricCard title="Avg Review Time" value={formatDuration(data.avgReviewSeconds)} icon={Clock} colorClass="text-emerald-400" />
-        <MetricCard title="Avg Calendar Days" value={`${avgCalDays} days`} icon={Clock} colorClass="text-blue-400" />
+        <MetricCard title="Avg Calendar Days" value={`${avgCalDays} days`} icon={Clock} colorClass="text-primary-light" />
         <MetricCard title="Oldest Pending" value={data.oldestPending ? `${data.oldestPending.reviewAge} days` : "None"} icon={AlertTriangle} colorClass="text-amber-400" />
       </div>
 

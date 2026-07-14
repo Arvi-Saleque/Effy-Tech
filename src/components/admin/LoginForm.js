@@ -70,7 +70,7 @@ export default function LoginForm() {
       {/* Background Mesh/Blur Effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/3 h-[500px] w-[500px] rounded-full bg-emerald-500/5 blur-[180px]" />
-        <div className="absolute bottom-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-teal-500/5 blur-[150px]" />
+        <div className="absolute bottom-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[150px]" />
       </div>
 
       <div className="relative w-full max-w-md animate-fade-in">

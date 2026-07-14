@@ -149,7 +149,7 @@ const buek = {
     {
       name: "TypeScript",
       desc: "Typed frontend and backend code for safer admin workflows and maintainable content models.",
-      color: "from-blue-500/20 to-blue-600/5",
+      color: "from-primary-light/20 to-primary-dark/5",
     },
     {
       name: "MongoDB",

@@ -2,7 +2,7 @@
    Loading — Morphing constellation that forms the Effy Tech
    logo (three slanted bars with a hooked middle) → dissolves.
    Unique: not a spinner, not a bar. A generative node graph
-   that pulses and morphs, with teal energy arcs.
+   that pulses and morphs, with gold energy arcs.
    ============================================================ */
 
 "use client";

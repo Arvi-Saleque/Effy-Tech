@@ -4,7 +4,7 @@ import React from "react";
 const statusConfig = {
   backlog: { bg: "bg-gray-800", text: "text-gray-300", label: "Backlog" },
   todo: { bg: "bg-slate-700", text: "text-slate-200", label: "To Do" },
-  in_progress: { bg: "bg-blue-900/40", text: "text-blue-400", label: "In Progress" },
+  in_progress: { bg: "bg-primary-dark/30", text: "text-primary-light", label: "In Progress" },
   blocked: { bg: "bg-red-900/40", text: "text-red-400", label: "Blocked" },
   review: { bg: "bg-purple-900/40", text: "text-purple-400", label: "Review" },
   done: { bg: "bg-emerald-900/40", text: "text-emerald-400", label: "Done" },

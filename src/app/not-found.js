@@ -1,6 +1,6 @@
 /* ============================================================
    404 — Page not found
-   Cinematic glitch + floating particles, dark teal theme.
+   Cinematic glitch + floating particles, graphite and gold theme.
    ============================================================ */
 
 "use client";
@@ -37,7 +37,7 @@ function ParticleField() {
         vy: -Math.random() * 0.6 - 0.2,
         size: Math.random() * 2.5 + 0.5,
         opacity: Math.random() * 0.5 + 0.1,
-        hue: 160 + Math.random() * 20, // teal range
+        hue: 38 + Math.random() * 10, // warm gold range
       });
     }
 

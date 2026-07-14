@@ -38,7 +38,7 @@ export default function TaskAssignees({ taskId, currentAssignees = [], projectMe
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm font-medium text-slate-300">Assignees</h3>
         {isEditable && !adding && availableMembers.length > 0 && (
-          <button onClick={() => setAdding(true)} className="text-xs text-blue-400 hover:text-blue-300">+ Add</button>
+          <button onClick={() => setAdding(true)} className="text-xs text-primary-light hover:text-primary-light">+ Add</button>
         )}
       </div>
 
@@ -71,7 +71,7 @@ export default function TaskAssignees({ taskId, currentAssignees = [], projectMe
                 <option key={m.user_id} value={m.user_id}>{m.admin_profiles?.name}</option>
               ))}
             </select>
-            <button onClick={handleAdd} disabled={!selectedUser || loading} className="px-3 py-1 bg-blue-600 text-white rounded text-sm disabled:opacity-50">Add</button>
+            <button onClick={handleAdd} disabled={!selectedUser || loading} className="px-3 py-1 bg-primary-dark text-white rounded text-sm disabled:opacity-50">Add</button>
             <button onClick={() => setAdding(false)} className="px-2 py-1 text-slate-400 hover:text-slate-200 text-sm">Cancel</button>
           </div>
         )}

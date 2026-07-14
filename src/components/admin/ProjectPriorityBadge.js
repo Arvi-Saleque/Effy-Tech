@@ -5,7 +5,7 @@ export default function ProjectPriorityBadge({ priority, className = "" }) {
   const config = {
     urgent: { label: "Urgent", colors: "text-red-500", Icon: AlertCircle },
     high: { label: "High", colors: "text-amber-500", Icon: ArrowUp },
-    normal: { label: "Normal", colors: "text-blue-500", Icon: ArrowRight },
+    normal: { label: "Normal", colors: "text-primary-light", Icon: ArrowRight },
     low: { label: "Low", colors: "text-neutral-400", Icon: ArrowDown },
   };
 

@@ -44,7 +44,11 @@ const salekProfile = {
       href: "https://www.facebook.com/arviman019",
       icon: FaFacebookF,
     },
-    { label: "GitHub", href: "https://github.com/Arvi-Saleque", icon: FaGithub },
+    {
+      label: "GitHub",
+      href: "https://github.com/Arvi-Saleque",
+      icon: FaGithub,
+    },
     {
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/salek-bin-hossain/",
@@ -52,7 +56,11 @@ const salekProfile = {
     },
     { label: "Codeforces", href: "/coming-soon", icon: HiOutlineCode },
     { label: "CodeChef", href: "/coming-soon", icon: HiOutlineCode },
-    { label: "Email", href: "mailto:alifsalek.as@gmail.com", icon: HiOutlineMail },
+    {
+      label: "Email",
+      href: "mailto:alifsalek.as@gmail.com",
+      icon: HiOutlineMail,
+    },
   ],
   stats: [
     { value: "1619", label: "Codeforces Peak" },
@@ -128,7 +136,7 @@ const salekProfile = {
         "Lead technical direction with emphasis on maintainable codebases and responsive UI.",
         "Manage product planning, UI direction, implementation, testing, and deployment.",
       ],
-    }
+    },
   ],
   includeCompanyProjects: true,
   extraProjects: [
@@ -139,7 +147,11 @@ const salekProfile = {
         "A premium company website for Effy Tech with services, portfolio, team, and contact flow.",
       stack: ["Next.js", "React", "Tailwind CSS"],
       role: "Founder & Developer",
-      features: ["Responsive landing page", "Project showcase", "Team profiles"],
+      features: [
+        "Responsive landing page",
+        "Project showcase",
+        "Team profiles",
+      ],
       liveUrl: "/",
       githubUrl: "/coming-soon",
     },
@@ -224,7 +236,8 @@ const salekProfile = {
   services: [
     {
       title: "Web Development",
-      description: "Modern websites, landing pages, dashboards, and web applications.",
+      description:
+        "Modern websites, landing pages, dashboards, and web applications.",
       icon: HiOutlineDesktopComputer,
     },
     {
@@ -234,12 +247,14 @@ const salekProfile = {
     },
     {
       title: "Backend & API Development",
-      description: "REST APIs, database integration, authentication, and backend logic.",
+      description:
+        "REST APIs, database integration, authentication, and backend logic.",
       icon: HiOutlineCode,
     },
     {
       title: "Software Problem Solving",
-      description: "Efficient solutions using algorithms and structured thinking.",
+      description:
+        "Efficient solutions using algorithms and structured thinking.",
       icon: HiOutlineSparkles,
     },
   ],
@@ -405,11 +420,7 @@ const adnanProfile = {
         "Google Generative AI",
       ],
       role: "Co-Developer",
-      features: [
-        "STEM simulations",
-        "AI tutoring",
-        "Multilingual TTS support",
-      ],
+      features: ["STEM simulations", "AI tutoring", "Multilingual TTS support"],
       liveUrl: "/coming-soon",
       githubUrl: "https://github.com/adnan-bin-wahid/SNBoseHack.git",
     },
@@ -584,7 +595,15 @@ const saifProfile = {
     },
     {
       title: "Tools",
-      items: ["Android Studio", "Git", "GitHub", "VS Code", "Postman", "Jira", "ClickUp"],
+      items: [
+        "Android Studio",
+        "Git",
+        "GitHub",
+        "VS Code",
+        "Postman",
+        "Jira",
+        "ClickUp",
+      ],
     },
     {
       title: "Core Skills",
@@ -800,7 +819,9 @@ function SectionHeader({ eyebrow, title, highlight, subtitle }) {
       </span>
       <h2 className="text-3xl font-bold tracking-tight text-text-inverse sm:text-4xl">
         {title}{" "}
-        {highlight && <span className="text-gradient-primary">{highlight}</span>}
+        {highlight && (
+          <span className="text-gradient-primary">{highlight}</span>
+        )}
       </h2>
       {subtitle && (
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-neutral-400 sm:text-lg">
@@ -814,7 +835,7 @@ function SectionHeader({ eyebrow, title, highlight, subtitle }) {
 function GlassCard({ children, className = "" }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary-light/35 hover:bg-neutral-800/75 hover:shadow-[0_0_38px_rgba(45,212,191,0.08),0_0_24px_rgba(184,168,138,0.06)] ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:border-primary-light/35 hover:bg-neutral-800/75 hover:shadow-[0_0_38px_rgba(170,145,88,0.08),0_0_24px_rgba(184,168,138,0.06)] ${className}`}
     >
       <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary-light/5 blur-3xl" />
       <div className="relative z-10">{children}</div>
@@ -829,8 +850,14 @@ function SocialButton({ social }) {
   return (
     <a
       href={social.href}
-      target={external && !social.href.startsWith("mailto:") ? "_blank" : undefined}
-      rel={external && !social.href.startsWith("mailto:") ? "noopener noreferrer" : undefined}
+      target={
+        external && !social.href.startsWith("mailto:") ? "_blank" : undefined
+      }
+      rel={
+        external && !social.href.startsWith("mailto:")
+          ? "noopener noreferrer"
+          : undefined
+      }
       className="inline-flex items-center gap-2 rounded-full border border-neutral-700/50 bg-neutral-900/40 px-4 py-2 text-sm font-semibold text-neutral-300 transition-all duration-300 hover:border-primary-light/40 hover:bg-primary-light/10 hover:text-primary-light"
     >
       <Icon className="h-4 w-4" />
@@ -844,14 +871,10 @@ function MiniFooter() {
     <footer className="relative z-10 border-t border-neutral-800/70 bg-neutral-950/30">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-neutral-500 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
         <p>
-          © {new Date().getFullYear()} Effy Tech. Built with care in
-          Bangladesh.
+          © {new Date().getFullYear()} Effy Tech. Built with care in Bangladesh.
         </p>
         <div className="flex flex-wrap gap-5">
-          <Link
-            href="/"
-            className="transition-colors hover:text-primary-light"
-          >
+          <Link href="/" className="transition-colors hover:text-primary-light">
             Home
           </Link>
           <Link
@@ -954,7 +977,9 @@ function ProjectCard({ project }) {
 }
 
 function DetailedProfilePage({ member, profile }) {
-  const linkedin = profile.socials.find((social) => social.label === "LinkedIn");
+  const linkedin = profile.socials.find(
+    (social) => social.label === "LinkedIn",
+  );
   const github = profile.socials.find((social) => social.label === "GitHub");
   const featuredProjects = [
     ...(profile.includeCompanyProjects
@@ -970,7 +995,9 @@ function DetailedProfilePage({ member, profile }) {
               : project.description,
           stack: project.tags,
           role:
-            project.slug === "IAM" ? "Founder & App Developer" : "Lead Developer",
+            project.slug === "IAM"
+              ? "Founder & App Developer"
+              : "Lead Developer",
           features:
             project.slug === "IAM"
               ? [
@@ -992,7 +1019,7 @@ function DetailedProfilePage({ member, profile }) {
   ].slice(0, 6);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-surface-dark text-text-inverse">
+    <main className="effy-public-page min-h-screen overflow-hidden bg-surface-dark text-text-inverse">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute left-1/4 top-1/4 h-[420px] w-[420px] rounded-full bg-primary/5 blur-[130px]" />
         <div className="absolute bottom-1/4 right-1/4 h-[340px] w-[340px] rounded-full bg-accent/6 blur-[120px]" />
@@ -1000,7 +1027,7 @@ function DetailedProfilePage({ member, profile }) {
           className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(45,212,191,0.7) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(170,145,88,0.7) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -1079,7 +1106,7 @@ function DetailedProfilePage({ member, profile }) {
 
           <div className="relative">
             <div className="absolute -inset-4 rounded-2xl bg-primary-light/10 blur-3xl" />
-            <div className="relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 shadow-[0_0_42px_rgba(45,212,191,0.08)]">
+            <div className="relative overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 shadow-[0_0_42px_rgba(170,145,88,0.08)]">
               <img
                 src={member.photo}
                 alt={member.name}
@@ -1129,7 +1156,11 @@ function DetailedProfilePage({ member, profile }) {
         </section>
 
         <section className="py-20">
-          <SectionHeader eyebrow="Experience" title="Work" highlight="Timeline" />
+          <SectionHeader
+            eyebrow="Experience"
+            title="Work"
+            highlight="Timeline"
+          />
           <div className="space-y-6">
             {profile.experience.map((item) => (
               <GlassCard key={`${item.role}-${item.company}`}>
@@ -1192,7 +1223,11 @@ function DetailedProfilePage({ member, profile }) {
         </section>
 
         <section className="py-20">
-          <SectionHeader eyebrow="Education" title="Academic" highlight="Path" />
+          <SectionHeader
+            eyebrow="Education"
+            title="Academic"
+            highlight="Path"
+          />
           <GlassCard>
             <h3 className="font-heading text-3xl font-bold text-neutral-100">
               {profile.education.degree}
@@ -1228,11 +1263,7 @@ function DetailedProfilePage({ member, profile }) {
         </section>
 
         <section className="py-20">
-          <SectionHeader
-            eyebrow="Services"
-            title="What I"
-            highlight="Can Do"
-          />
+          <SectionHeader eyebrow="Services" title="What I" highlight="Can Do" />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {profile.services.map(({ title, description, icon: Icon }) => (
               <GlassCard key={title} className="min-h-[220px]">
@@ -1255,8 +1286,8 @@ function DetailedProfilePage({ member, profile }) {
               My Resume
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-neutral-400">
-              Download my latest CV to view my experience, skills, projects,
-              and achievements in a structured format.
+              Download my latest CV to view my experience, skills, projects, and
+              achievements in a structured format.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
@@ -1330,7 +1361,7 @@ function DetailedProfilePage({ member, profile }) {
 
 function CompactMemberPage({ member }) {
   return (
-    <main className="min-h-screen overflow-hidden bg-surface-dark pt-28 text-text-inverse">
+    <main className="effy-public-page min-h-screen overflow-hidden bg-surface-dark pt-28 text-text-inverse">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute left-1/4 top-1/4 h-[420px] w-[420px] rounded-full bg-primary/5 blur-[130px]" />
         <div className="absolute bottom-1/4 right-1/4 h-[340px] w-[340px] rounded-full bg-accent/6 blur-[120px]" />
@@ -1338,7 +1369,7 @@ function CompactMemberPage({ member }) {
           className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(45,212,191,0.7) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(170,145,88,0.7) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -1353,7 +1384,7 @@ function CompactMemberPage({ member }) {
           Back to Team
         </Link>
 
-        <div className="grid overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 shadow-[0_0_42px_rgba(45,212,191,0.08)] backdrop-blur-sm lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid overflow-hidden rounded-2xl border border-neutral-700/40 bg-neutral-800/60 shadow-[0_0_42px_rgba(170,145,88,0.08)] backdrop-blur-sm lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative min-h-[420px] overflow-hidden">
             <img
               src={member.photo}

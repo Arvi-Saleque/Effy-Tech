@@ -86,7 +86,7 @@ export default function ProjectReportsTab({ data }) {
               <td className="py-4 font-mono text-xs">
                 <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
                   project.projectHealth === "On Track" ? "bg-emerald-950/50 text-emerald-400" :
-                  project.projectHealth === "Completed" ? "bg-blue-950/50 text-blue-400" :
+                  project.projectHealth === "Completed" ? "bg-primary-darkest/45 text-primary-light" :
                   project.projectHealth === "Blocked Risk" ? "bg-rose-950/50 text-rose-400" :
                   project.projectHealth === "Overdue" ? "bg-red-950/50 text-red-500" :
                   project.projectHealth === "Due Soon" ? "bg-amber-950/50 text-amber-400" :

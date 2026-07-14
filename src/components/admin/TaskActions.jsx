@@ -73,7 +73,7 @@ export default function TaskActions({ task, projectId }) {
         )}
 
         {task.status === "archived" && (
-          <button onClick={() => handleAction(restoreTask)} disabled={loading} className="w-full py-2 text-sm font-medium bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-700/50 rounded-lg transition-colors mt-2">
+          <button onClick={() => handleAction(restoreTask)} disabled={loading} className="w-full py-2 text-sm font-medium bg-primary-dark/20 hover:bg-primary-dark/30 text-primary-light border border-primary-light/35 rounded-lg transition-colors mt-2">
             Restore Task
           </button>
         )}

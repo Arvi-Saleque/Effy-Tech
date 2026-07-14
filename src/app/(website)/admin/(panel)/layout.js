@@ -30,11 +30,11 @@ export default async function PanelLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#020617] text-neutral-100 flex flex-col font-sans">
+    <div className="admin-shell min-h-screen bg-[#020617] text-neutral-100 flex flex-col font-sans">
       {/* Background Mesh/Blur Effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-0 left-1/4 h-[600px] w-[600px] rounded-full bg-emerald-500/3 blur-[200px]" />
-        <div className="absolute bottom-0 right-1/3 h-[500px] w-[500px] rounded-full bg-teal-500/3 blur-[180px]" />
+        <div className="absolute bottom-0 right-1/3 h-[500px] w-[500px] rounded-full bg-primary/3 blur-[180px]" />
       </div>
 
       {/* Header */}

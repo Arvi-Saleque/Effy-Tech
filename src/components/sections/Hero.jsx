@@ -110,7 +110,7 @@ export default function Hero() {
           unoptimized
         />
 
-        {/* Diagonal gradient overlay (dark ← teal tint) */}
+        {/* Diagonal gradient overlay (dark ← gold tint) */}
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-black/95 via-neutral-900/90 to-primary-darkest/80" />
 
         {/* Extra dim layer for text contrast */}
@@ -118,7 +118,7 @@ export default function Hero() {
       </motion.div>
 
       {/* ── Floating Geometric Shapes (parallax depth) ──────── */}
-      {/* Shape 1: large teal ring — top-right */}
+      {/* Shape 1: large gold ring — top-right */}
       <motion.div
         className="pointer-events-none absolute -top-20 right-[10%] z-[1] h-[200px] w-[200px] sm:h-[420px] sm:w-[420px] rounded-full border border-primary-light/10 opacity-40 md:opacity-60"
         style={disableParallax ? {} : { y: shapeY, rotate: shapeRotate }}
@@ -130,7 +130,7 @@ export default function Hero() {
         style={disableParallax ? {} : { y: shape2Y, rotate: shape2Rotate }}
       />
 
-      {/* Shape 3: tiny teal dot cluster — mid-left */}
+      {/* Shape 3: tiny gold dot cluster — mid-left */}
       <div className="pointer-events-none absolute left-[8%] top-[40%] z-[1] flex gap-3 opacity-20 md:opacity-40">
         <span className="block h-2 w-2 rounded-full bg-primary-light" />
         <span className="block h-3 w-3 rounded-full bg-primary-light/60" />

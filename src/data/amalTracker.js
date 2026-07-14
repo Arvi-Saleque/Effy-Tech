@@ -143,7 +143,7 @@ const amalTracker = {
       icon: "layers",
       titleBn: "Home Dashboard",
       titleEn: "Focused Daily Overview",
-      color: "from-teal-500/20 to-teal-600/5",
+      color: "from-primary-light/20 to-primary-dark/5",
       imageSrc: "/images/amal/today_dashboard_prayer_times.jpeg",
       imageLabel: "Today Dashboard and Prayer Times",
       points: [
@@ -227,7 +227,7 @@ const amalTracker = {
       icon: "calendar",
       titleBn: "Smart Routine System",
       titleEn: "Structured Daily Planning",
-      color: "from-cyan-500/20 to-cyan-600/5",
+      color: "from-accent-light/20 to-accent-dark/5",
       imageSrc: "/images/amal/more_routine_after_fajr.jpeg",
       imageLabel: "Smart Routine System",
       points: [
@@ -291,7 +291,7 @@ const amalTracker = {
       icon: "users",
       titleBn: "Trusted Circle",
       titleEn: "Accountability with Privacy",
-      color: "from-blue-500/20 to-blue-600/5",
+      color: "from-primary-light/20 to-primary-dark/5",
       points: [
         "একজন বিশ্বস্ত ব্যক্তির সঙ্গে নির্বাচিত progress share করা যায়।",
         "Owner আলাদা করে Stats page না খুললেও নতুন Snapshot share হতে পারে।",

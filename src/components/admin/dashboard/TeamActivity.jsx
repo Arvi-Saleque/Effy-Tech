@@ -75,8 +75,8 @@ export default function TeamActivity({ profiles, sessions, blocks }) {
                 dotColor = "bg-emerald-500 animate-pulse";
               } else if (session.status === "active" && !activeBlock) {
                 displayStatus = "Open";
-                statusColor = "bg-blue-500/10 text-blue-400 border-blue-500/20";
-                dotColor = "bg-blue-500";
+                statusColor = "bg-primary/10 text-primary-light border-primary-light/20";
+                dotColor = "bg-primary";
               }
 
               let currentWorkLabel = "Offline";

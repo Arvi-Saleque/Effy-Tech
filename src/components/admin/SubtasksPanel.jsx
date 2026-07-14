@@ -52,7 +52,7 @@ export default function SubtasksPanel({ taskId, subtasks = [], isTaskEditable = 
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-slate-200">Subtasks ({subtasks.length})</h3>
         {isTaskEditable && !adding && (
-          <button onClick={() => setAdding(true)} className="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg text-sm transition-colors border border-blue-700/50">
+          <button onClick={() => setAdding(true)} className="px-3 py-1.5 bg-primary-dark/20 hover:bg-primary-dark/30 text-primary-light rounded-lg text-sm transition-colors border border-primary-light/35">
             + Add Subtask
           </button>
         )}
@@ -80,7 +80,7 @@ export default function SubtasksPanel({ taskId, subtasks = [], isTaskEditable = 
           </div>
           <div className="flex justify-end gap-2">
             <button type="button" onClick={() => setAdding(false)} className="px-3 py-1.5 text-slate-400 hover:text-slate-200 text-sm">Cancel</button>
-            <button type="submit" disabled={loading} className="px-4 py-1.5 bg-blue-600 text-white rounded text-sm disabled:opacity-50">Create</button>
+            <button type="submit" disabled={loading} className="px-4 py-1.5 bg-primary-dark text-white rounded text-sm disabled:opacity-50">Create</button>
           </div>
         </form>
       )}

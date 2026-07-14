@@ -998,7 +998,7 @@ export default function DHAShowcase({ data }) {
       {
         name: "Cloudinary",
         desc: "Cloud-based media management - auto-optimized images, PDF-to-image transformation, CDN delivery.",
-        color: "from-blue-500/20 to-blue-600/5",
+        color: "from-primary-light/20 to-primary-dark/5",
       },
       {
         name: "MongoDB",

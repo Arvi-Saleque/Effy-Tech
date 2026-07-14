@@ -88,7 +88,7 @@ export default async function ClientDetailsPage({ params }) {
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/clients/${client.id}/edit`}
-            className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 font-medium rounded-lg transition-colors flex items-center gap-2 border border-blue-500/20"
+            className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary-light font-medium rounded-lg transition-colors flex items-center gap-2 border border-primary-light/20"
           >
             <Edit className="w-4 h-4" />
             Edit Client
@@ -131,7 +131,7 @@ export default async function ClientDetailsPage({ params }) {
                 <div>
                   <div className="text-neutral-500 mb-0.5">Phone Number</div>
                   {client.phone ? (
-                    <a href={`tel:${client.phone}`} className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                    <a href={`tel:${client.phone}`} className="text-primary-light hover:text-primary-light transition-colors font-medium">
                       {client.phone}
                     </a>
                   ) : (
@@ -202,9 +202,9 @@ export default async function ClientDetailsPage({ params }) {
                 <div className="text-emerald-400/70 text-xs mb-1">Active</div>
                 <div className="text-2xl font-bold text-emerald-300">{projectSummary.active}</div>
               </div>
-              <div className="bg-neutral-950/50 rounded-lg p-4 border border-blue-500/20">
-                <div className="text-blue-400/70 text-xs mb-1">Completed</div>
-                <div className="text-2xl font-bold text-blue-300">{projectSummary.completed}</div>
+              <div className="bg-neutral-950/50 rounded-lg p-4 border border-primary-light/20">
+                <div className="text-primary-light/70 text-xs mb-1">Completed</div>
+                <div className="text-2xl font-bold text-primary-light">{projectSummary.completed}</div>
               </div>
               <div className="bg-neutral-950/50 rounded-lg p-4 border border-neutral-800">
                 <div className="text-neutral-500 text-xs mb-1">Planning</div>
@@ -227,8 +227,8 @@ export default async function ClientDetailsPage({ params }) {
                         <span className="text-sm font-medium text-neutral-200 group-hover:text-emerald-400 transition-colors">{project.name}</span>
                         <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border ${
                           project.status === "active" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
-                          project.status === "completed" ? "bg-teal-500/10 text-teal-400 border-teal-500/20" :
-                          "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                          project.status === "completed" ? "bg-primary/10 text-primary-light border-primary-light/20" :
+                          "bg-primary/10 text-primary-light border-primary-light/20"
                         }`}>
                           {project.status.replace("_", " ")}
                         </span>

@@ -56,7 +56,7 @@ export default function ProjectActions({ project, compact = false }) {
               <button onClick={() => handleStatusTransition("active")} disabled={isPending} className="text-emerald-500 hover:text-emerald-400 text-sm font-medium">Activate</button>
            )}
            {status === "archived" && (
-              <button onClick={() => executeAction(restoreProject, [project.id])} disabled={isPending} className="text-blue-500 hover:text-blue-400 text-sm font-medium">Restore</button>
+              <button onClick={() => executeAction(restoreProject, [project.id])} disabled={isPending} className="text-primary-light hover:text-primary-light text-sm font-medium">Restore</button>
            )}
            {status !== "archived" && (
               <button onClick={() => setArchiveStep(1)} disabled={isPending} className="text-slate-500 hover:text-slate-400 text-sm font-medium">Archive</button>
@@ -76,7 +76,7 @@ export default function ProjectActions({ project, compact = false }) {
             <button onClick={() => handleStatusTransition("on_hold")} disabled={isPending} className="btn-action bg-amber-500/10 text-amber-500 hover:bg-amber-500/20">
               <Pause className="w-4 h-4" /> Hold
             </button>
-            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-teal-500/10 text-teal-500 hover:bg-teal-500/20">
+            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-primary/10 text-primary-light hover:bg-primary/20">
               <CheckCircle2 className="w-4 h-4" /> Complete
             </button>
           </>
@@ -86,7 +86,7 @@ export default function ProjectActions({ project, compact = false }) {
             <button onClick={() => handleStatusTransition("on_hold")} disabled={isPending} className="btn-action bg-amber-500/10 text-amber-500 hover:bg-amber-500/20">
               <Pause className="w-4 h-4" /> Hold
             </button>
-            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-teal-500/10 text-teal-500 hover:bg-teal-500/20">
+            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-primary/10 text-primary-light hover:bg-primary/20">
               <CheckCircle2 className="w-4 h-4" /> Complete
             </button>
           </>
@@ -96,7 +96,7 @@ export default function ProjectActions({ project, compact = false }) {
             <button onClick={() => handleStatusTransition("active")} disabled={isPending} className="btn-action bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20">
               <Play className="w-4 h-4" /> Activate
             </button>
-            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-teal-500/10 text-teal-500 hover:bg-teal-500/20">
+            <button onClick={() => setCompleteStep(1)} disabled={isPending} className="btn-action bg-primary/10 text-primary-light hover:bg-primary/20">
               <CheckCircle2 className="w-4 h-4" /> Complete
             </button>
           </>
@@ -115,7 +115,7 @@ export default function ProjectActions({ project, compact = false }) {
         )}
 
         {status === "archived" && (
-          <button onClick={() => executeAction(restoreProject, [project.id])} disabled={isPending} className="btn-action bg-blue-500/10 text-blue-500 hover:bg-blue-500/20">
+          <button onClick={() => executeAction(restoreProject, [project.id])} disabled={isPending} className="btn-action bg-primary/10 text-primary-light hover:bg-primary/20">
             <RefreshCw className="w-4 h-4" /> Restore
           </button>
         )}
@@ -188,16 +188,16 @@ export default function ProjectActions({ project, compact = false }) {
             {completeStep === 1 && (
               <>
                 <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-teal-500" /> Complete Project
+                  <CheckCircle2 className="w-5 h-5 text-primary-light" /> Complete Project
                 </h3>
                 <p className="text-neutral-400 mb-6">
                   Mark <strong>{project.name}</strong> as completed? This will set progress to 100%. 
-                  <br/><br/><span className="text-sm text-teal-500">Note: Automatic task-based completion verification will be added in a future update.</span>
+                  <br/><br/><span className="text-sm text-primary-light">Note: Automatic task-based completion verification will be added in a future update.</span>
                 </p>
                 {error && <p className="text-red-500 text-sm mb-4 bg-red-500/10 p-2 rounded">{error}</p>}
                 <div className="flex justify-end gap-3">
                   <button onClick={resetModals} disabled={isPending} className="px-4 py-2 text-neutral-400 hover:text-white transition-colors">Abort</button>
-                  <button onClick={() => executeAction(completeProject, [project.id])} disabled={isPending} className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg flex items-center">
+                  <button onClick={() => executeAction(completeProject, [project.id])} disabled={isPending} className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg flex items-center">
                     {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Complete Project"}
                   </button>
                 </div>

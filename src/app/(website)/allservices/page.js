@@ -183,11 +183,13 @@ function ServiceCard({ service }) {
 
 export default function AllServicesPage() {
   const services = siteConfig.services || [];
-  const servicesById = new Map(services.map((service) => [service.id, service]));
+  const servicesById = new Map(
+    services.map((service) => [service.id, service]),
+  );
 
   return (
     <>
-      <main className="min-h-screen bg-surface-dark pt-24 text-text-inverse">
+      <main className="effy-public-page min-h-screen bg-surface-dark pt-24 text-text-inverse">
         <section className="relative overflow-hidden border-b border-neutral-800/50 py-10 sm:py-16">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-primary/6 blur-[140px]" />
@@ -293,4 +295,3 @@ export default function AllServicesPage() {
     </>
   );
 }
-

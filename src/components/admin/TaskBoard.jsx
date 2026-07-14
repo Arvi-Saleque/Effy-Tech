@@ -5,7 +5,7 @@ import TaskCard from "./TaskCard";
 const BOARD_COLUMNS = [
   { id: "backlog", label: "Backlog", border: "border-gray-700" },
   { id: "todo", label: "To Do", border: "border-slate-700" },
-  { id: "in_progress", label: "In Progress", border: "border-blue-800" },
+  { id: "in_progress", label: "In Progress", border: "border-primary-dark/60" },
   { id: "blocked", label: "Blocked", border: "border-red-900" },
   { id: "review", label: "Review", border: "border-purple-800" },
   { id: "done", label: "Done", border: "border-emerald-800" },
