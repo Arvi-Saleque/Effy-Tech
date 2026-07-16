@@ -462,7 +462,7 @@ const siteConfig = {
       role: "Founder & CEO",
       initials: "SH",
       bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
-      photo: "/images/salek.png",
+      photo: "/images/profiles/salek.webp",
       photoPosition: "82% center",
       detailsUrl: "/salek",
       socials: [
@@ -483,7 +483,7 @@ const siteConfig = {
       role: "Co-Founder & Lead Software Engineer",
       initials: "AW",
       bio: "Builds full-stack systems, developer tools, and scalable product features across modern web and backend stacks.",
-      photo: "/images/adnan.png",
+      photo: "/images/profiles/adnan.webp",
       detailsUrl: "/adnan",
       socials: [
         { platform: "facebook", url: "https://www.facebook.com/adnan08072/" },
@@ -500,7 +500,7 @@ const siteConfig = {
       role: "Co-Founder & Head of Engineering",
       initials: "AS",
       bio: "Builds mobile, web, IoT, and product-focused software while guiding practical engineering execution.",
-      photo: "/images/saif.jpeg",
+      photo: "/images/profiles/saif.webp",
       detailsUrl: "/saif",
       socials: [
         {
@@ -524,7 +524,7 @@ const siteConfig = {
         title: "Company",
         links: [
           { label: "About", href: "/#about" },
-          { label: "Projects", href: "/#projects" },
+          { label: "Projects", href: "/projects" },
           { label: "Team", href: "/#team" },
           { label: "Contact", href: "/#contact" },
         ],
@@ -543,7 +543,7 @@ const siteConfig = {
         links: [
           { label: "Services Overview", href: "/quickservices" },
           { label: "All Services", href: "/allservices" },
-          { label: "Project Showcase", href: "/#projects" },
+          { label: "Project Showcase", href: "/projects" },
           { label: "Start a Project", href: "/#contact" },
         ],
       },

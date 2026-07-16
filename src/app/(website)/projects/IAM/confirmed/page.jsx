@@ -1,140 +1,206 @@
-'use client';
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FaArrowRight,
+  FaArrowUpRightFromSquare,
+  FaCircleCheck,
+  FaCircleExclamation,
+  FaCloudArrowUp,
+  FaMobileScreenButton,
+  FaShieldHalved,
+  FaWhatsapp,
+} from "react-icons/fa6";
+import styles from "./confirmed.module.css";
 
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { FaCircleCheck, FaCircleExclamation } from 'react-icons/fa6';
-import Button from '@/components/ui/Button';
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.amaltracker.app";
+const SUPPORT_URL =
+  "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20need%20help%20with%20Islamic%20Amal%20Tracker%20email%20verification.";
 
-export default function EmailConfirmedPage() {
-  const searchParams = useSearchParams();
-  const hasError = searchParams.has('error') || searchParams.has('error_code');
+function getParam(searchParams, key) {
+  const value = searchParams?.[key];
+  return Array.isArray(value) ? value[0] || "" : value || "";
+}
+
+function getVerificationState(searchParams) {
+  const errorCode =
+    getParam(searchParams, "error_code") || getParam(searchParams, "error");
+  const hasError = Boolean(
+    errorCode || getParam(searchParams, "error_description"),
+  );
+
+  if (!hasError) {
+    return {
+      tone: "success",
+      eyebrow: "ACCOUNT CONFIRMATION",
+      title: "Your email is verified.",
+      description:
+        "Your Islamic Amal Tracker account is ready. Return to the app and sign in using the email address you just verified.",
+      bangla: "অ্যাপে ফিরে গিয়ে একই ইমেইল ঠিকানা দিয়ে সাইন ইন করুন।",
+    };
+  }
+
+  const expired = ["otp_expired", "expired", "access_denied"].includes(
+    errorCode.toLowerCase(),
+  );
+
+  return {
+    tone: "error",
+    eyebrow: "VERIFICATION SUPPORT",
+    title: expired
+      ? "This verification link has expired."
+      : "The verification could not be completed.",
+    description: expired
+      ? "Return to Islamic Amal Tracker and request a new verification email. Only the latest verification link should be used."
+      : "The link may already have been used or could not be validated. Request a new email from the app, then try again.",
+    bangla:
+      "অ্যাপ থেকে নতুন verification email পাঠিয়ে সর্বশেষ লিংকটি ব্যবহার করুন।",
+  };
+}
+
+export default async function EmailConfirmedPage({ searchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const state = getVerificationState(resolvedSearchParams);
+  const isSuccess = state.tone === "success";
 
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-br from-primary-lightest via-neutral-50 to-accent-lightest">
-        <div className="w-full max-w-md">
-          {/* Card Container */}
-          <div className="bg-neutral-white rounded-2xl shadow-lg p-8 sm:p-10 border border-neutral-200">
-            {/* Logo / Brand */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-lightest mb-4">
-                <span className="text-lg font-bold text-primary">E</span>
+    <main className={styles.page}>
+      <div className={styles.ambientOne} aria-hidden="true" />
+      <div className={styles.ambientTwo} aria-hidden="true" />
+
+      <section className={styles.shell} aria-live="polite">
+        <Link href="/projects/IAM" className={styles.brandLink}>
+          <Image
+            src="/images/amal/logo.png"
+            alt="Islamic Amal Tracker logo"
+            width={48}
+            height={48}
+            className={styles.brandLogo}
+            priority
+          />
+          <span>
+            <strong>Islamic Amal Tracker</strong>
+            <small>Built by Effy Tech</small>
+          </span>
+        </Link>
+
+        <div className={styles.grid}>
+          <article className={styles.statusCard}>
+            <div
+              className={`${styles.statusIcon} ${
+                isSuccess ? styles.successIcon : styles.errorIcon
+              }`}
+              aria-hidden="true"
+            >
+              {isSuccess ? <FaCircleCheck /> : <FaCircleExclamation />}
+            </div>
+
+            <p className={styles.eyebrow}>{state.eyebrow}</p>
+            <h1>{state.title}</h1>
+            <p className={styles.description}>{state.description}</p>
+            <p className={styles.bangla}>{state.bangla}</p>
+
+            <div className={styles.actions}>
+              {isSuccess ? (
+                <>
+                  <a
+                    href={PLAY_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.primaryAction}
+                  >
+                    Open on Google Play
+                    <FaArrowUpRightFromSquare aria-hidden="true" />
+                  </a>
+                  <Link href="/projects/IAM" className={styles.secondaryAction}>
+                    View the app page
+                    <FaArrowRight aria-hidden="true" />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <a
+                    href={SUPPORT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.primaryAction}
+                  >
+                    Contact WhatsApp support
+                    <FaWhatsapp aria-hidden="true" />
+                  </a>
+                  <a
+                    href={PLAY_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.secondaryAction}
+                  >
+                    Open Google Play
+                    <FaArrowUpRightFromSquare aria-hidden="true" />
+                  </a>
+                </>
+              )}
+            </div>
+
+            <p className={styles.safetyNote}>
+              If you did not request this email, no action is required.
+            </p>
+          </article>
+
+          <aside className={styles.contextPanel}>
+            <p className={styles.panelKicker}>WHAT HAPPENS NEXT</p>
+            <h2>{isSuccess ? "Continue inside the app" : "Request a fresh link"}</h2>
+            <p>
+              {isSuccess
+                ? "Email verification is complete. Your prayer, Amal, Dhikr and routine tracking continue inside Islamic Amal Tracker."
+                : "Verification emails are generated from the app. Open the account screen, request a new email and use the newest link."}
+            </p>
+
+            <div className={styles.steps}>
+              <div className={styles.step}>
+                <span>
+                  <FaMobileScreenButton aria-hidden="true" />
+                </span>
+                <div>
+                  <strong>Return to the app</strong>
+                  <p>Use the same verified email address.</p>
+                </div>
               </div>
-              <p className="text-sm font-medium text-text-secondary">Effy Tech</p>
+              <div className={styles.step}>
+                <span>
+                  <FaShieldHalved aria-hidden="true" />
+                </span>
+                <div>
+                  <strong>Private by design</strong>
+                  <p>Your account and sync access remain protected.</p>
+                </div>
+              </div>
+              <div className={styles.step}>
+                <span>
+                  <FaCloudArrowUp aria-hidden="true" />
+                </span>
+                <div>
+                  <strong>Optional secure sync</strong>
+                  <p>Offline-first tracking remains available.</p>
+                </div>
+              </div>
             </div>
 
-            {/* Success State */}
-            {!hasError && (
-              <>
-                {/* Icon */}
-                <div className="flex justify-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-lightest">
-                    <FaCircleCheck className="w-8 h-8 text-primary" />
-                  </div>
-                </div>
-
-                {/* Heading */}
-                <h1 className="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-3">
-                  Email Verified Successfully
-                </h1>
-
-                {/* Project Title */}
-                <p className="text-sm font-semibold text-primary text-center mb-4 uppercase tracking-wide">
-                  Islamic Amal Tracker
-                </p>
-
-                {/* Supporting Text */}
-                <p className="text-text-secondary text-center mb-8 leading-relaxed">
-                  Your email has been confirmed. You can now return to the Islamic Amal Tracker app and sign in.
-                </p>
-
-                {/* CTA Button */}
-                <div className="mb-6">
-                  <Button
-                    href="/"
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                  >
-                    Back to EffyTech
-                  </Button>
-                </div>
-
-                {/* Secondary Link */}
-                <div className="text-center">
-                  <Link
-                    href="/projects/IAM"
-                    className="text-primary hover:text-primary-dark font-medium text-sm transition-colors"
-                  >
-                    Learn more about Islamic Amal Tracker
-                  </Link>
-                </div>
-              </>
-            )}
-
-            {/* Error State */}
-            {hasError && (
-              <>
-                {/* Icon */}
-                <div className="flex justify-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100">
-                    <FaCircleExclamation className="w-8 h-8 text-error" />
-                  </div>
-                </div>
-
-                {/* Heading */}
-                <h1 className="text-2xl sm:text-3xl font-bold text-text-primary text-center mb-3">
-                  Verification Link Issue
-                </h1>
-
-                {/* Project Title */}
-                <p className="text-sm font-semibold text-primary text-center mb-4 uppercase tracking-wide">
-                  Islamic Amal Tracker
-                </p>
-
-                {/* Supporting Text */}
-                <p className="text-text-secondary text-center mb-8 leading-relaxed">
-                  This verification link may be expired or already used. Please return to the app and request a new verification email.
-                </p>
-
-                {/* CTA Button */}
-                <div className="mb-6">
-                  <Button
-                    href="/"
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                  >
-                    Back to EffyTech
-                  </Button>
-                </div>
-
-                {/* Secondary Link */}
-                <div className="text-center">
-                  <Link
-                    href="/projects/IAM"
-                    className="text-primary hover:text-primary-dark font-medium text-sm transition-colors"
-                  >
-                    Return to Islamic Amal Tracker
-                  </Link>
-                </div>
-              </>
-            )}
-
-            {/* Footer Note */}
-            <div className="mt-8 pt-6 border-t border-neutral-200">
-              <p className="text-xs text-text-tertiary text-center">
-                If you didn't request this email, you can safely ignore it.
-              </p>
-            </div>
-          </div>
-
-          {/* Subtle Branding Footer */}
-          <p className="text-center text-xs text-text-tertiary mt-6">
-            &copy; 2026 Effy Tech. All rights reserved.
-          </p>
+            <a
+              href={SUPPORT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.supportLink}
+            >
+              Need help? Message Effy Tech support
+              <FaArrowUpRightFromSquare aria-hidden="true" />
+            </a>
+          </aside>
         </div>
-      </div>
-    </>
+
+        <p className={styles.footerText}>
+          © 2026 Effy Tech. Islamic Amal Tracker support utility.
+        </p>
+      </section>
+    </main>
   );
 }

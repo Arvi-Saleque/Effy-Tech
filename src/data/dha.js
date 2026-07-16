@@ -1,153 +1,268 @@
-/* ============================================================
-   Darul Hikmah Academy — Dedicated project showcase data
-   ─────────────────────────────────────────────────
-   All content for the /projects/DHA showcase page.
-   Edit this file to update any text, features, or screenshots.
-   ============================================================ */
-
 const dha = {
-  /* ── Basic Info ──────────────────────────────────────────── */
+  projectKey: "DHA",
+  locale: "bn",
   name: "Darul Hikmah Academy",
   nameBn: "দারুল হিকমাহ একাডেমি",
-  tagline: "ইসলামি শিক্ষা ও আধুনিক একাডেমিক ম্যানেজমেন্ট — এক প্ল্যাটফর্মে",
-  taglineEn: "Islamic Education Meets Modern Academic Management",
-  description:
-    "A complete bilingual (Bengali & English) academic management website built for Darul Hikmah Academy — featuring a full admin dashboard, dynamic academic system with assignments, exams, results, routines, smart PDF-to-image viewer, class-wise filtering, SEO optimization, and a fully responsive mobile-first design.",
-  descriptionBn:
-    "দারুল হিকমাহ একাডেমি'র জন্য তৈরি একটি পূর্ণাঙ্গ দ্বিভাষী (বাংলা ও ইংরেজি) একাডেমিক ম্যানেজমেন্ট ওয়েবসাইট — যেখানে আছে অ্যাডমিন ড্যাশবোর্ড, অ্যাসাইনমেন্ট, পরীক্ষা, রেজাল্ট, রুটিন, স্মার্ট PDF ভিউয়ার, ক্লাস-ভিত্তিক ফিল্টার এবং মোবাইল-ফ্রেন্ডলি ডিজাইন।",
-
+  shortName: "DHA",
+  category: "Academic Website & Operations Platform",
+  status: "Live",
   liveUrl: "https://www.dhakhl.com",
-  category: "Web",
-  techStack: ["Next.js", "Tailwind CSS", "Cloudinary", "MongoDB"],
-
-  /* ── Features ───────────────────────────────────────────── */
-  features: [
+  browserUrl: "dhakhl.com",
+  heroImage: "/images/dha/case-study/hero.webp",
+  heroImageAlt: "Darul Hikmah Academy live website homepage",
+  ogImage: "/images/dha/case-study/og-1200x630.jpg",
+  heroEyebrow: "Live client project",
+  heroTitle: "একটি ওয়েবসাইট—যেটি প্রতিষ্ঠানের",
+  heroAccent: "দৈনন্দিন একাডেমিক কাজও পরিচালনা করে।",
+  heroDescription:
+    "দারুল হিকমাহ একাডেমির জন্য Effy Tech একটি bilingual public website এবং custom academic operations platform তৈরি করেছে—যেখানে শিক্ষার্থী ও অভিভাবক প্রয়োজনীয় তথ্য পায়, আর কর্তৃপক্ষ একই system থেকে assignment, attendance, routine, শিক্ষক, news, gallery ও communication manage করতে পারে।",
+  heroPoints: [
+    "Bilingual public website",
+    "Academic operations dashboard",
+    "Assignment, attendance and routine workflows",
+    "Responsive parent and student experience",
+  ],
+  overview: {
+    overline: "Project context",
+    title: "Public website ও academic operations—একই platform-এ",
+    intro:
+      "একটি শিক্ষা প্রতিষ্ঠানের website শুধু পরিচিতি দেখানোর জন্য নয়। নিয়মিত assignment, অনুপস্থিতির তথ্য, class routine, শিক্ষক পরিচিতি, news, gallery এবং যোগাযোগের তথ্যও দ্রুত প্রকাশ করতে হয়। DHA-এর জন্য আমরা public communication এবং internal content operations-কে একটি connected system-এ এনেছি।",
+    challengeTitle: "সমস্যা",
+    challenge:
+      "ভিন্ন ধরনের academic information নিয়মিত update করা, অভিভাবক ও শিক্ষার্থীর কাছে class-relevant তথ্য সহজে পৌঁছানো এবং staff-এর জন্য ব্যবহারযোগ্য management workflow তৈরি করা প্রয়োজন ছিল।",
+    solutionTitle: "সমাধান",
+    solution:
+      "Effy Tech একটি custom bilingual platform তৈরি করেছে যেখানে public pages, academic modules, PDF-based information এবং administrative workflows একসঙ্গে কাজ করে।",
+  },
+  highlights: [
+    { value: "LIVE", label: "Production platform" },
+    { value: "BILINGUAL", label: "Bangla + English" },
+    { value: "PUBLIC + ADMIN", label: "Connected workflows" },
+    { value: "MOBILE READY", label: "Parent-friendly access" },
+  ],
+  deliverables: [
     {
-      icon: "admin",
-      titleBn: "শক্তিশালী অ্যাডমিন ড্যাশবোর্ড",
-      titleEn: "Powerful Admin Dashboard",
-      descBn:
-        "সম্পূর্ণ কাস্টম অ্যাডমিন প্যানেল — অ্যাসাইনমেন্ট, পরীক্ষা, রেজাল্ট, রুটিন, নিউজ, ইভেন্ট, গ্যালারি সবকিছু এক জায়গা থেকে ম্যানেজ করুন। কোনো কোডিং জ্ঞান লাগবে না।",
-      descEn:
-        "Manage everything — assignments, exams, results, routines, news, events, gallery — from one custom CMS panel. Zero coding required.",
-    },
-    {
-      icon: "language",
-      titleBn: "বাংলা ও ইংরেজি দ্বিভাষী সাপোর্ট",
-      titleEn: "Bilingual Bengali & English",
-      descBn:
-        "সম্পূর্ণ সাইট বাংলা ও ইংরেজিতে — অভিভাবক, শিক্ষার্থী ও শিক্ষক সবার জন্য সহজবোধ্য।",
-      descEn:
-        "Full site in Bengali and English — accessible for parents, students, and teachers alike.",
+      icon: "layout",
+      title: "Bilingual institutional website",
+      description:
+        "বাংলা ও English content structure, responsive navigation এবং প্রতিষ্ঠান, শিক্ষক, news, gallery ও contact-এর জন্য organized public pages।",
     },
     {
       icon: "academic",
-      titleBn: "ডায়নামিক একাডেমিক সিস্টেম",
-      titleEn: "Dynamic Academic System",
-      descBn:
-        "দৈনিক অ্যাসাইনমেন্ট, পরীক্ষার রুটিন, ক্লাস রুটিন, রেজাল্ট, সিলেবাস — সবকিছু রিয়েল-টাইমে আপডেট হয়।",
-      descEn:
-        "Daily homework, exam schedules, class routines, results, syllabus — all updated in real-time from admin.",
+      title: "Academic information workflows",
+      description:
+        "Assignment, student absence, class routine, syllabus এবং অন্যান্য class-relevant তথ্য প্রকাশ ও ব্যবস্থাপনার focused system।",
+    },
+    {
+      icon: "cms",
+      title: "Custom administration panel",
+      description:
+        "Staff-friendly dashboard থেকে teacher profiles, gallery, contact messages, news এবং academic content manage করার ব্যবস্থা।",
     },
     {
       icon: "pdf",
-      titleBn: "স্মার্ট PDF ভিউয়ার — ডাউনলোড ছাড়াই দেখুন",
-      titleEn: "Smart PDF Viewer — No Downloads",
-      descBn:
-        "সিলেবাস, রুটিন, ক্যালেন্ডার — সব PDF পেজ-বাই-পেজ ইমেজ স্লাইডার হিসেবে সরাসরি ব্রাউজারে দেখুন। Cloudinary-এর অটো PDF-to-Image রূপান্তর ব্যবহার করা হয়েছে।",
-      descEn:
-        "Syllabi, routines, calendars — all PDFs render as crisp page-by-page image slides right in the browser via Cloudinary's on-the-fly transformation.",
+      title: "Browser-based document experience",
+      description:
+        "Routine ও syllabus-এর মতো document browser থেকেই সহজে দেখার জন্য optimized PDF/image viewing workflow।",
+    },
+  ],
+  systems: [
+    {
+      label: "Parent & student experience",
+      title: "প্রয়োজনীয় academic information দ্রুত খুঁজে পাওয়া যায়",
+      description:
+        "Public experience এমনভাবে সাজানো হয়েছে যাতে শিক্ষার্থী ও অভিভাবক phone থেকেই assignment, attendance, routine, শিক্ষক, news, gallery এবং যোগাযোগের তথ্য সহজে দেখতে পারে।",
+      items: [
+        "Class-wise assignment information",
+        "Student absence records",
+        "Teacher directory and profiles",
+        "Class routine and document viewing",
+        "News, gallery and institutional updates",
+        "Contact form, address and map",
+      ],
+    },
+    {
+      label: "Administrative operations",
+      title: "প্রতিদিনের update-এর জন্য practical management tools",
+      description:
+        "প্রতিষ্ঠানের staff public website এবং academic information একই admin environment থেকে পরিচালনা করতে পারে—ফলে routine content update-এর জন্য source code পরিবর্তন করতে হয় না।",
+      items: [
+        "Assignment publishing and editing",
+        "Class routine management",
+        "Teacher and faculty management",
+        "News and gallery administration",
+        "Contact message review",
+        "Academic document management",
+      ],
+    },
+  ],
+  galleries: {
+    public: {
+      label: "Public experience",
+      description: "শিক্ষার্থী, অভিভাবক ও visitor-facing live website screens।",
+      images: [
+        {
+          src: "/images/dha/case-study/longimg1.webp",
+          thumb: "/images/dha/case-study/hero.webp",
+          label: "Academy Homepage",
+          detail: "Institutional introduction, navigation and key public information",
+        },
+        {
+          src: "/images/dha/case-study/img2.webp",
+          label: "All Assignments",
+          detail: "Class-relevant homework and assignment information",
+        },
+        {
+          src: "/images/dha/case-study/img3.webp",
+          label: "Student Absence",
+          detail: "Date-based absence records for students and guardians",
+        },
+        {
+          src: "/images/dha/case-study/longimg5.webp",
+          label: "Class Routine Viewer",
+          detail: "Browser-based routine viewing without a separate download flow",
+        },
+        {
+          src: "/images/dha/case-study/img4.webp",
+          label: "Teacher Directory",
+          detail: "Organized teacher profiles and contact information",
+        },
+        {
+          src: "/images/dha/case-study/img5.webp",
+          label: "News & Events",
+          detail: "Institutional updates, categories and event discovery",
+        },
+        {
+          src: "/images/dha/case-study/img6.webp",
+          label: "Photo Gallery",
+          detail: "Public albums for academic and institutional activities",
+        },
+        {
+          src: "/images/dha/case-study/longimg6.webp",
+          label: "Contact & Location",
+          detail: "Contact form, academy information and map-based location",
+        },
+      ],
+    },
+    admin: {
+      label: "Admin operations",
+      description: "Academic এবং public content পরিচালনার selected management screens।",
+      images: [
+        {
+          src: "/images/dha/case-study/img12.webp",
+          label: "Assignment Management",
+          detail: "Create and organize class-specific assignment information",
+        },
+        {
+          src: "/images/dha/case-study/img11.webp",
+          label: "Class Routine Management",
+          detail: "Manage routine records and class-specific schedule content",
+        },
+        {
+          src: "/images/dha/case-study/img9.webp",
+          label: "Teacher Management",
+          detail: "Maintain faculty profiles and institutional roles",
+        },
+        {
+          src: "/images/dha/case-study/img10.webp",
+          label: "Gallery Management",
+          detail: "Upload and organize public gallery images",
+        },
+        {
+          src: "/images/dha/case-study/img8.webp",
+          label: "Contact Messages",
+          detail: "Review and manage enquiries received from the website",
+        },
+        {
+          src: "/images/dha/case-study/longimg10.webp",
+          label: "Syllabus Management",
+          detail: "Academic document and syllabus publishing workflow",
+        },
+        {
+          src: "/images/dha/case-study/longimg9.webp",
+          label: "Exam Management",
+          detail: "Structured administrative workflow for exam-related records",
+        },
+      ],
+    },
+  },
+  capabilities: [
+    {
+      icon: "language",
+      title: "Bilingual content system",
+      description: "Bangla ও English content একই platform-এ structuredভাবে পরিচালনা করা যায়।",
     },
     {
       icon: "filter",
-      titleBn: "ক্লাস-ভিত্তিক স্মার্ট ফিল্টার",
-      titleEn: "Class-Wise Smart Filtering",
-      descBn:
-        "প্রতিটি একাডেমিক সেকশনে এক ট্যাপে ক্লাস ফিল্টার — অভিভাবক শুধু তার সন্তানের ক্লাসের তথ্য দেখবে।",
-      descEn:
-        "One-tap class filter across all sections. Parents see only their child's relevant data instantly.",
+      title: "Class-focused information",
+      description: "Academic content relevant class বা category অনুযায়ী organize করা হয়েছে।",
     },
     {
-      icon: "seo",
-      titleBn: "SEO অপ্টিমাইজড ও ফাস্ট লোডিং",
-      titleEn: "SEO Optimized & Fast Loading",
-      descBn:
-        "সার্চ ইঞ্জিনে ভালো র‍্যাংকিং-এর জন্য পূর্ণ SEO অপ্টিমাইজেশন। নেক্সট.জেএস-এর পাওয়ারে ব্লেজিং ফাস্ট পারফরম্যান্স।",
-      descEn:
-        "Full SEO optimization for search engine ranking. Blazing-fast performance powered by Next.js.",
+      icon: "pdf",
+      title: "Smart document delivery",
+      description: "Routine ও syllabus-এর মতো documents browser-friendly experience-এ উপস্থাপন করা হয়।",
     },
     {
-      icon: "responsive",
-      titleBn: "মোবাইল-ফার্স্ট রেসপন্সিভ ডিজাইন",
-      titleEn: "Mobile-First Responsive Design",
-      descBn:
-        "ফোন, ট্যাবলেট, ডেস্কটপ — সব ডিভাইসে পারফেক্ট দেখায়। অভিভাবকরা ফোন থেকে সহজেই ব্যবহার করতে পারবেন।",
-      descEn:
-        "Perfect on phones, tablets, and desktops. Parents can easily browse from their mobile.",
+      icon: "shield",
+      title: "Protected administration",
+      description: "Public website থেকে management workflows আলাদা এবং authorized access-এর মধ্যে থাকে।",
     },
     {
-      icon: "gallery",
-      titleBn: "ফটো গ্যালারি ও নিউজ-ইভেন্ট",
-      titleEn: "Photo Gallery & News Events",
-      descBn:
-        "Cloudinary-তে হোস্টেড ফটো গ্যালারি এবং ডায়নামিক নিউজ ও ইভেন্ট সেকশন — সবসময় আপডেটেড।",
-      descEn:
-        "Cloudinary-hosted photo gallery and dynamic news & events section — always up-to-date.",
+      icon: "mobile",
+      title: "Mobile-first public access",
+      description: "অভিভাবক ও শিক্ষার্থীর common phone-based usage মাথায় রেখে responsive layout তৈরি।",
     },
     {
-      icon: "admission",
-      titleBn: "অনলাইন অ্যাডমিশন সিস্টেম",
-      titleEn: "Online Admission System",
-      descBn:
-        "অনলাইনে ভর্তি আবেদন — অভিভাবকদের আর দীর্ঘ লাইনে দাঁড়াতে হবে না।",
-      descEn:
-        "Online admission applications — no more long queues for parents.",
+      icon: "workflow",
+      title: "Connected daily workflows",
+      description: "Academic updates, public communication এবং content management একই operational system-এ যুক্ত।",
     },
   ],
-
-  /* ── Screenshots ────────────────────────────────────────── */
-  screenshots: [
-    { src: "/images/dha/img2.png", label: "Homepage" },
-    { src: "/images/dha/img3.png", label: "Academic Portal" },
-    { src: "/images/dha/img4.png", label: "Assignments" },
-    { src: "/images/dha/img5.png", label: "Class Routine" },
-    { src: "/images/dha/img6.png", label: "Exam Schedule" },
-    { src: "/images/dha/img7.png", label: "Results" },
-    { src: "/images/dha/img8.png", label: "Syllabus Viewer" },
-    { src: "/images/dha/img9.png", label: "Gallery" },
-    { src: "/images/dha/img10.png", label: "News & Events" },
-    { src: "/images/dha/img11.png", label: "Teachers Panel" },
-    { src: "/images/dha/img12.png", label: "Admission" },
-    { src: "/images/dha/img13.png", label: "Contact" },
+  engineering: {
+    overline: "Effy Tech engineering",
+    title: "Education website-এর সঙ্গে practical operations software",
+    description:
+      "DHA project-এ শুধু public design নয়—academic content model, staff workflow, document delivery, responsive experience এবং maintainable admin system একসঙ্গে engineering করা হয়েছে।",
+    layers: [
+      {
+        title: "Public experience layer",
+        text: "Bilingual pages, class-relevant information, teacher directory, news, gallery and contact journeys.",
+      },
+      {
+        title: "Academic workflow layer",
+        text: "Assignments, absence records, routines, syllabus and structured educational information.",
+      },
+      {
+        title: "Administration layer",
+        text: "Focused tools for staff to manage recurring updates and communication.",
+      },
+      {
+        title: "Delivery layer",
+        text: "Responsive Next.js experience, cloud media, metadata and production deployment.",
+      },
+    ],
+    stack: ["Next.js", "React", "Tailwind CSS", "MongoDB", "Cloudinary"],
+  },
+  outcomes: [
+    "Academy-এর public identity এবং day-to-day academic information একই live platform-এ এসেছে।",
+    "Staff recurring content ও academic updates custom admin workflows থেকে manage করতে পারে।",
+    "অভিভাবক ও শিক্ষার্থী mobile device থেকেই relevant information সহজে access করতে পারে।",
+    "Platform ভবিষ্যতে নতুন academic module ও institutional workflow যুক্ত করার উপযোগী।",
   ],
-
-  /* ── Long Screenshots (full-page views) ─────────────────── */
-  longScreenshots: [
-    { src: "/images/dha/longimg1.png", label: "Homepage" },
-    { src: "/images/dha/longimg2.png", label: "About DHA" },
-    { src: "/images/dha/longimg3.png", label: "Academic Portal" },
-    { src: "/images/dha/longimg4.png", label: "Assignments" },
-    { src: "/images/dha/longimg5.png", label: "Exam Schedule" },
-    { src: "/images/dha/longimg6.png", label: "Results" },
-    { src: "/images/dha/longimg7.png", label: "Syllabus Viewer" },
-    { src: "/images/dha/longimg8.png", label: "Gallery" },
-    { src: "/images/dha/longimg9.png", label: "News & Events" },
-    { src: "/images/dha/longimg10.png", label: "Admin Dashboard" },
-  ],
-
-  /* ── Key Highlights (for the stat cards) ────────────────── */
-  highlights: [
-    { label: "Academic Modules", value: "10+", icon: "layers" },
-    { label: "Class Levels", value: "7+", icon: "academic" },
-    { label: "Admin Features", value: "Full CMS", icon: "admin" },
-    { label: "Performance", value: "100/100", icon: "seo" },
-  ],
-
-  /* ── Client Info ────────────────────────────────────────── */
   client: {
     name: "Darul Hikmah Academy",
     location: "Khulna, Bangladesh",
-    type: "Islamic Educational Institution",
+    type: "Educational Institution",
+  },
+  cta: {
+    overline: "আপনার প্রতিষ্ঠানেও এমন system প্রয়োজন?",
+    title: "শুধু website নয়—কাজের workflow-ও digital করুন।",
+    description:
+      "Effy Tech school, academy, madrasa, college এবং training institution-এর জন্য custom website ও management system তৈরি করে—planning, design, development এবং deploymentসহ।",
+    primaryLabel: "আপনার Project নিয়ে কথা বলুন",
+    whatsappUrl:
+      "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20Darul%20Hikmah%20Academy%20project%20and%20want%20to%20discuss%20a%20website%20or%20management%20system%20for%20my%20institution.",
+    secondaryLabel: "DHA Live দেখুন",
   },
 };
 

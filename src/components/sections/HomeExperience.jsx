@@ -98,7 +98,7 @@ const clientProof = [
     audience: "Education operations",
     tech: "Next.js · Supabase",
     note: "A bilingual academic platform with structured public content and dynamic administrative control.",
-    image: "/images/dha/img1.png",
+    image: "/images/dha/case-study/hero.webp",
     href: "/projects/DHA",
   },
   {
@@ -108,7 +108,7 @@ const clientProof = [
     audience: "University publishing",
     tech: "Next.js · Admin CMS",
     note: "A university publishing system for notices, events, media, academic information, and administration.",
-    image: "/images/buek/img1.png",
+    image: "/images/buek/case-study/hero.webp",
     href: "/projects/BUEK",
   },
 ];
@@ -157,21 +157,21 @@ const faqs = [
 const founders = [
   {
     name: "Salek Bin Hossain",
-    role: "Co-Founder · Engineering",
-    image: "/images/salek.jpg",
-    summary: "Product architecture, software engineering, and technical execution.",
+    role: "Founder & CEO",
+    image: "/images/profiles/salek.webp",
+    summary: "Product strategy, system architecture, backend engineering, and technical leadership.",
   },
   {
-    name: "Saif",
-    role: "Co-Founder · Product",
-    image: "/images/saif.jpeg",
-    summary: "Product strategy, experience design, and solution planning.",
+    name: "Abdullah Al Saif",
+    role: "Co-Founder & Head of Engineering",
+    image: "/images/profiles/saif.webp",
+    summary: "Engineering execution, responsive delivery, product implementation, and release coordination.",
   },
   {
-    name: "Adnan",
-    role: "Co-Founder · Operations",
-    image: "/images/adnan.png",
-    summary: "Operations, delivery coordination, and business growth.",
+    name: "Adnan Bin Wahid",
+    role: "Co-Founder & Lead Software Engineer",
+    image: "/images/profiles/adnan.webp",
+    summary: "Full-stack implementation, frontend systems, testing, and delivery quality.",
   },
 ];
 
@@ -381,11 +381,11 @@ export default function HomeExperience() {
 
           <div className="secondary-projects editorial-projects">
             <motion.article className="project-feature project-feature-dha" {...fade}>
-              <div className="project-screen"><Image src="/images/dha/img1.png" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
+              <div className="project-screen"><Image src="/images/dha/case-study/hero.webp" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
               <div className="project-copy"><span>EDUCATION PLATFORM · 02</span><h3>Darul Hikmah Academy</h3><p><b>Problem:</b> Academic information and public content needed one structured, maintainable platform.</p><p><b>Solution:</b> A bilingual website with dynamic administration, course discovery, materials, and responsive public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Supabase</li><li>Outcome: Centralized content management</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
             <motion.article className="project-feature project-feature-buek" {...fade}>
-              <div className="project-screen"><Image src="/images/buek/img1.png" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
+              <div className="project-screen"><Image src="/images/buek/case-study/hero.webp" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
               <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 03</span><h3>BUEK</h3><p><b>Problem:</b> Notices, events, media, and academic information needed a reliable publishing workflow.</p><p><b>Solution:</b> A structured university platform with admin-controlled content and fast public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Admin CMS</li><li>Outcome: Organized institutional publishing</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
           </div>

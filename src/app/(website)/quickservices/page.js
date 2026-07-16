@@ -1,201 +1,27 @@
 import Link from "next/link";
-import {
-  HiOutlineArrowLeft,
-  HiOutlineArrowRight,
-  HiOutlineCheckCircle,
-  HiOutlineChip,
-  HiOutlineCode,
-  HiOutlineCog,
-  HiOutlineCollection,
-  HiOutlineCube,
-  HiOutlineDeviceMobile,
-  HiOutlineGlobe,
-  HiOutlineLightBulb,
-  HiOutlinePencilAlt,
-  HiOutlinePresentationChartLine,
-  HiOutlineServer,
-  HiOutlineShoppingBag,
-  HiOutlineSparkles,
-  HiOutlineTemplate,
-} from "react-icons/hi";
-import siteConfig from "@/theme/siteConfig";
+import { ArrowLeft, ArrowRight, Bot, Building2, Check, ClipboardList, Gauge, Layers3, MonitorSmartphone, Smartphone, Workflow } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 
 export const metadata = {
-  title: "Services Overview | Effy Tech",
-  description:
-    "A simple overview of the websites, apps, automation, AI, e-commerce, dashboards, and software services Effy Tech provides.",
+  title: "Choose the Right Software Solution | Effy Tech",
+  description: "A practical Effy Tech service guide for organisations that need a website, mobile app, management platform, MVP, automation, or connected digital system.",
+  alternates: { canonical: "/quickservices" },
+  openGraph: { title: "Choose the Right Software Solution | Effy Tech", description: "Start with the outcome you need. Effy Tech will shape the right website, app, platform, or automation system.", url: "/quickservices", images: [{ url: "/images/services/og-1200x630.jpg", width: 1200, height: 630, alt: "Effy Tech software services" }] },
+  twitter: { card: "summary_large_image", title: "Choose the Right Software Solution | Effy Tech", description: "Start with the outcome you need. Effy Tech will shape the right website, app, platform, or automation system.", images: ["/images/services/og-1200x630.jpg"] },
 };
 
-const iconMap = {
-  website: HiOutlineTemplate,
-  mobile: HiOutlineDeviceMobile,
-  fullstack: HiOutlineCode,
-  automation: HiOutlineCog,
-  ai: HiOutlineSparkles,
-  ecommerce: HiOutlineShoppingBag,
-  design: HiOutlinePencilAlt,
-  dashboard: HiOutlinePresentationChartLine,
-  erp: HiOutlineCollection,
-  api: HiOutlineCube,
-  hosting: HiOutlineServer,
-  support: HiOutlineCog,
-  seo: HiOutlineGlobe,
-  branding: HiOutlineChip,
-  consulting: HiOutlineLightBulb,
-};
-
-function ServiceRow({ service, index }) {
-  const Icon = iconMap[service.icon] || HiOutlineTemplate;
-
-  return (
-    <article className="group rounded-2xl border border-neutral-700/40 bg-neutral-900/55 p-5 transition-all hover:border-primary-light/35 hover:bg-neutral-900/80 sm:p-6">
-      <div className="flex gap-4">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-primary-light/20 bg-primary-light/10 text-primary-light">
-          <Icon className="h-6 w-6" />
-        </div>
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs text-neutral-600">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h2 className="text-xl font-bold text-neutral-100">
-              {service.shortTitle || service.title}
-            </h2>
-          </div>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-400">
-            {service.description}
-          </p>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-export default function QuickServicesPage() {
-  const services = siteConfig.services || [];
-  const mainServices = services.filter((service) => service.featured);
-
-  return (
-    <>
-      <main className="effy-public-page min-h-screen bg-surface-dark pt-24 text-text-inverse">
-        <section className="relative overflow-hidden border-b border-neutral-800/50 pb-16 pt-8 sm:pb-20">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.035]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, rgba(185,154,90,0.8) 1px, transparent 1px)",
-              backgroundSize: "30px 30px",
-            }}
-          />
-          <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <Link
-              href="/#services"
-              className="inline-flex items-center gap-2 text-sm font-medium text-neutral-400 transition-colors hover:text-primary-light"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" />
-              Back to home
-            </Link>
-
-            <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-              <div>
-                <span className="inline-flex rounded-full border border-primary-light/20 bg-primary-light/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-light">
-                  Services Overview
-                </span>
-                <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-neutral-100 sm:text-5xl lg:text-6xl">
-                  What Effy Tech can build for you
-                </h1>
-                <p className="mt-5 max-w-2xl text-lg leading-relaxed text-neutral-400">
-                  Simple version: we design, build, launch, and support digital
-                  tools that help your business work better. You can come with a
-                  clear idea or just a problem you want to solve.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-accent/25 bg-accent/10 p-5">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent-light">
-                  Best for first-time clients
-                </p>
-                <ul className="mt-4 space-y-3 text-sm leading-relaxed text-neutral-300">
-                  {[
-                    "Tell us what you want to improve.",
-                    "We suggest the right website, app, or software solution.",
-                    "Then we design, develop, deploy, and maintain it.",
-                  ].map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <HiOutlineCheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary-light" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-light">
-                Main Services
-              </p>
-              <h2 className="mt-2 text-2xl font-bold text-neutral-100">
-                Most requested solutions
-              </h2>
-            </div>
-            <Link
-              href="/allservices"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-primary-light transition-colors hover:text-accent-light"
-            >
-              Read detailed service list
-              <HiOutlineArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {mainServices.map((service, index) => (
-              <ServiceRow key={service.title} service={service} index={index} />
-            ))}
-          </div>
-
-          <div className="mt-14 rounded-2xl border border-neutral-700/40 bg-neutral-900/50 p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-light">
-              We Also Provide
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {services
-                .filter((service) => !service.featured)
-                .map((service) => (
-                  <span
-                    key={service.title}
-                    className="rounded-full border border-neutral-700/50 bg-neutral-800/55 px-3 py-1.5 text-sm text-neutral-300"
-                  >
-                    {service.shortTitle || service.title}
-                  </span>
-                ))}
-            </div>
-          </div>
-
-          <div className="mt-14 flex flex-col items-center justify-between gap-5 rounded-2xl border border-primary-light/20 bg-primary-light/10 p-6 text-center sm:flex-row sm:text-left">
-            <div>
-              <h2 className="text-2xl font-bold text-neutral-100">
-                Not sure which service you need?
-              </h2>
-              <p className="mt-2 text-sm text-neutral-400">
-                Share your business goal. We will help choose the right
-                solution.
-              </p>
-            </div>
-            <Link
-              href="/#contact"
-              className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-neutral-100 transition-all hover:bg-primary-dark"
-            >
-              Talk To Us
-            </Link>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
-}
+const solutions = [
+  { icon: Building2, number: "01", title: "Institutional website and custom CMS", description: "For schools, universities, academies, organisations, and businesses that need a professional public website their own team can update.", signals: ["Your current website looks outdated or incomplete", "Staff need to publish notices, pages, files, news, or galleries", "You need one reliable public information source"], href: "/allservices#build", proof: "/projects/BUEK", proofLabel: "See the BUEK case study" },
+  { icon: ClipboardList, number: "02", title: "Management portal and operational software", description: "For teams still managing recurring work through spreadsheets, messages, paper records, or disconnected tools.", signals: ["Information is difficult to find or verify", "Staff repeat the same manual steps every day", "You need roles, dashboards, records, reports, or approvals"], href: "/allservices#build", proof: "/projects/DHA", proofLabel: "See the DHA case study" },
+  { icon: Smartphone, number: "03", title: "Mobile app and digital product", description: "For founders and organisations that need a focused Android or cross-platform product with real user workflows and scalable data.", signals: ["The product must work naturally on mobile", "Users need reminders, offline access, accounts, or sync", "You need launch support and ongoing product iteration"], href: "/allservices#build", proof: "/projects/IAM", proofLabel: "See the IAM case study" },
+  { icon: Layers3, number: "04", title: "MVP and custom web application", description: "For new product ideas that need structured scope, interface, backend, database, administration, and a clear route to launch.", signals: ["You have an idea but need help defining the first version", "A generic website builder cannot support the workflow", "The product needs to scale after initial validation"], href: "/allservices#build", proof: "/projects", proofLabel: "Review our live work" },
+  { icon: Workflow, number: "05", title: "Workflow automation and integrations", description: "For businesses that want to connect tools, remove repetitive steps, improve response time, and make operational data more reliable.", signals: ["Staff copy the same data between systems", "Leads, orders, reports, or updates are handled manually", "Existing software needs APIs, messaging, email, or payment integration"], href: "/allservices#automate", proof: "/#contact", proofLabel: "Map your workflow with us" },
+  { icon: Bot, number: "06", title: "AI-assisted internal tools", description: "For teams that need practical AI around documents, support, retrieval, data preparation, or repeatable decision workflows.", signals: ["People repeatedly search, summarise, classify, or rewrite information", "Support or internal knowledge is difficult to scale", "AI needs to work inside a controlled business process"], href: "/allservices#automate", proof: "/#contact", proofLabel: "Discuss a practical AI use case" },
+];
+const steps = [
+  { number: "01", title: "Explain the problem", text: "Share the current workflow, audience, pain points, constraints, and what success should look like." },
+  { number: "02", title: "Receive a system direction", text: "We translate the requirement into a clear product scope, architecture, delivery plan, and realistic priorities." },
+  { number: "03", title: "Design, build, and launch", text: "Effy Tech owns interface, engineering, data, deployment, verification, handover, and post-launch support." },
+];
+function SolutionCard({ solution }) { const Icon = solution.icon; return <article className="group flex h-full flex-col rounded-[8px] border border-border bg-neutral-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-lg sm:p-7"><div className="flex items-start justify-between gap-5"><span className="flex h-12 w-12 items-center justify-center rounded-[8px] border border-primary-light/35 bg-primary-lightest text-primary-dark"><Icon className="h-6 w-6" /></span><span className="font-mono text-xs font-bold tracking-[0.2em] text-text-tertiary">{solution.number}</span></div><h2 className="mt-6 font-heading text-2xl font-black leading-tight text-text-primary">{solution.title}</h2><p className="mt-4 leading-relaxed text-text-secondary">{solution.description}</p><div className="mt-6 border-t border-border pt-5"><p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">This fits when</p><ul className="mt-4 space-y-3">{solution.signals.map((signal) => <li key={signal} className="flex gap-3 text-sm leading-relaxed text-text-secondary"><Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" /><span>{signal}</span></li>)}</ul></div><div className="mt-auto flex flex-col gap-3 pt-7 sm:flex-row sm:items-center sm:justify-between"><Link href={solution.href} className="inline-flex items-center gap-2 text-sm font-black text-text-primary transition-colors hover:text-primary">Explore services<ArrowRight className="h-4 w-4" /></Link><Link href={solution.proof} className="text-sm font-semibold text-text-tertiary underline decoration-border underline-offset-4 transition-colors hover:text-primary">{solution.proofLabel}</Link></div></article>; }
+export default function QuickServicesPage() { return <><main className="effy-public-page min-h-screen bg-surface pt-24 text-text-primary"><section className="relative overflow-hidden border-b border-border pb-16 pt-10 sm:pb-20 lg:pb-24"><div className="pointer-events-none absolute inset-0"><div className="absolute -left-24 top-14 h-80 w-80 rounded-full border border-primary-light/25" /><div className="absolute -left-10 top-28 h-80 w-80 rounded-full border border-neutral-300/70" /><div className="absolute inset-0 opacity-[0.2]" style={{ backgroundImage: "linear-gradient(rgba(123,102,58,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(123,102,58,0.14) 1px, transparent 1px)", backgroundSize: "52px 52px", maskImage: "linear-gradient(to bottom, black, transparent 82%)" }} /></div><div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><Link href="/#services" className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary"><ArrowLeft className="h-4 w-4" />Back to homepage</Link><div className="mt-11 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16"><div><p className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-primary">Find the right direction</p><h1 className="mt-5 max-w-5xl font-heading text-4xl font-black leading-[1.02] tracking-[-0.04em] text-text-primary sm:text-6xl lg:text-7xl">Start with the outcome - not a technology label.</h1><p className="mt-6 max-w-3xl text-lg leading-relaxed text-text-secondary sm:text-xl">You do not need to know whether the answer is a website, app, portal, automation, or custom platform. Explain what needs to improve; we will define the right system.</p></div><div className="rounded-[8px] border border-neutral-700 bg-surface-dark p-6 text-text-inverse shadow-xl sm:p-8"><div className="flex items-center gap-3 text-primary-light"><Gauge className="h-6 w-6" /><p className="font-mono text-xs font-bold uppercase tracking-[0.2em]">A better first conversation</p></div><p className="mt-5 text-lg font-bold leading-relaxed text-neutral-100">Tell us what is slow, confusing, manual, unreliable, or hard to scale.</p><p className="mt-3 text-sm leading-relaxed text-neutral-400">We will help separate essential scope from optional features and propose a practical route to launch.</p><Link href="/#contact" className="mt-6 inline-flex items-center gap-2 text-sm font-black text-primary-light">Describe your project<ArrowRight className="h-4 w-4" /></Link></div></div></div></section><section className="bg-surface-alt py-16 sm:py-20 lg:py-24"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">{solutions.map((solution) => <SolutionCard key={solution.number} solution={solution} />)}</div></div></section><section className="bg-surface py-16 sm:py-20 lg:py-24"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16"><div><p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary">How engagement starts</p><h2 className="mt-4 font-heading text-3xl font-black leading-tight text-text-primary sm:text-5xl">A clear route from problem to production.</h2><p className="mt-5 leading-relaxed text-text-secondary">We reduce ambiguity early so design and engineering effort is spent on the parts that create actual operational value.</p><Link href="/allservices" className="mt-7 inline-flex items-center gap-2 text-sm font-black text-primary-dark">View the complete service system<ArrowRight className="h-4 w-4" /></Link></div><div className="border-t border-border">{steps.map((step) => <div key={step.number} className="grid gap-3 border-b border-border py-6 sm:grid-cols-[72px_1fr] sm:gap-5"><span className="font-mono text-xs font-bold tracking-[0.2em] text-primary">{step.number}</span><div><h3 className="font-heading text-xl font-black text-text-primary">{step.title}</h3><p className="mt-2 leading-relaxed text-text-secondary">{step.text}</p></div></div>)}</div></div></div></section><section className="bg-surface-dark py-16 text-text-inverse sm:py-20"><div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8"><div><p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary-light">Still not sure?</p><h2 className="mt-4 max-w-3xl font-heading text-3xl font-black leading-tight text-neutral-100 sm:text-5xl">Bring the problem. We will help define the product.</h2><p className="mt-4 max-w-2xl leading-relaxed text-neutral-400">A short project brief, current process, reference, or even a rough idea is enough to begin a useful conversation.</p></div><Link href="/#contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-primary-light px-7 py-3 text-sm font-black text-neutral-900 transition-transform hover:-translate-y-0.5">Start the Conversation<MonitorSmartphone className="h-4 w-4" /></Link></div></section></main><Footer /></>; }

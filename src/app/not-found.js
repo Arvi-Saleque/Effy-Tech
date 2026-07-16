@@ -205,7 +205,7 @@ export default function NotFound() {
           Go Home
         </Link>
         <Link
-          href="/#projects"
+          href="/projects"
           className="inline-flex items-center gap-2 rounded-xl border border-neutral-700 px-6 py-3 text-sm font-medium text-neutral-400 transition-all hover:border-neutral-600 hover:text-neutral-200 hover:bg-neutral-800/50"
         >
           View Projects

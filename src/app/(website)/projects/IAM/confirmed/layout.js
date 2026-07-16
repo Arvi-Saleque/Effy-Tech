@@ -1,7 +1,13 @@
 export const metadata = {
-  title: 'Email Verified | Islamic Amal Tracker',
-  description: 'Your Islamic Amal Tracker email has been verified. Return to the app and sign in.',
-  robots: 'noindex, nofollow',
+  title: "Email Confirmation | Islamic Amal Tracker",
+  description:
+    "Complete or troubleshoot Islamic Amal Tracker email verification and return to the app.",
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+  },
 };
 
 export default function ConfirmedLayout({ children }) {
