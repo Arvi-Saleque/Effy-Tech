@@ -6530,3 +6530,50 @@ h4 {
 .admin-shell button[class*="text-primary"] {
   text-decoration-color: rgba(210, 189, 134, 0.52);
 }
+
+/* ============================================================
+   IAM promotional case-study refinement
+   Conversion proof, client-facing engineering section and FAQ.
+   ============================================================ */
+.effy-project-page--iam .project-showcase-navbar .iam-navbar-install,
+.effy-project-page--iam .project-showcase-navbar .iam-navbar-install * {
+  color: #fbf8ef !important;
+}
+
+.effy-project-page--iam .iam-mobile-menu,
+.effy-project-page--iam .iam-mobile-menu * {
+  color: #fbf8ef;
+}
+
+.effy-project-page--iam .iam-engineering,
+.effy-project-page--iam .iam-faq {
+  background: var(--iam-paper) !important;
+}
+
+.effy-project-page--iam .iam-trust {
+  background: var(--iam-paper-2) !important;
+}
+
+.effy-project-page--iam .iam-engineering h2,
+.effy-project-page--iam .iam-engineering h3 {
+  color: #fbf8ef !important;
+  -webkit-text-fill-color: #fbf8ef !important;
+}
+
+.effy-project-page--iam .iam-engineering p {
+  color: #cfd4cb !important;
+}
+
+.effy-project-page--iam .iam-faq details[open] {
+  box-shadow: 0 12px 30px rgba(34, 39, 31, 0.055);
+}
+
+.effy-project-page--iam .iam-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .effy-project-page--iam .project-showcase-hero--iam {
+    min-height: auto !important;
+  }
+}
