@@ -1,66 +1,67 @@
-/* ============================================================
-   Projects — Static project data
-   ─────────────────────────────────────────────────
-   Shape mirrors the future MongoDB model:
-   { title, slug, description, category (enum), tags[],
-     thumbnail, images[], clientName, liveUrl, featured, order }
-   Replace with API/server-component fetch when MongoDB is set up.
-   ============================================================ */
-
+/* Effy Tech selected live project case studies. */
 const projects = [
   {
     id: "11",
     title: "Islamic Amal Tracker",
+    shortTitle: "Islamic Amal Tracker",
     slug: "IAM",
-    description:
-      "Amal Tracker is a productivity-based Islamic habit tracking mobile application that helps users monitor daily Salah, Azkar, and spiritual activities with structured reporting and reminders.",
-    category: "Android",
-    tags: ["Flutter", "Drift", "Supabase"],
-    thumbnail: "/images/amal.jpg",
-    images: [],
-    clientName: null,
-    liveUrl:
-      "https://play.google.com/store/apps/details?id=com.amaltracker.app&hl=en",
+    eyebrow: "Mobile Product",
+    status: "Live on Google Play",
+    description: "An offline-first Islamic habit and worship companion for prayer, daily Amal, Dhikr, reminders, routines, progress insights, Qur'anic Dua, and home-screen widgets.",
+    outcome: "A complete consumer product delivered from product planning and mobile engineering to cloud sync, release, analytics, and ongoing iteration.",
+    category: "Android App",
+    audience: "Individual users",
+    tags: ["Flutter", "Drift", "Supabase", "Offline-first"],
+    deliverables: ["Product architecture and mobile UI", "Local-first data and cloud synchronization", "Reminders, widgets, analytics, and Play Store release"],
+    thumbnail: "/images/amal/iam-og-1200x630.jpg",
+    caseStudyUrl: "/projects/IAM",
+    liveUrl: "https://play.google.com/store/apps/details?id=com.amaltracker.app",
+    liveLabel: "Google Play",
+    clientName: "Effy Tech Product",
     featured: true,
     order: 0,
   },
   {
     id: "12",
     title: "Darul Hikmah Academy",
+    shortTitle: "Darul Hikmah Academy",
     slug: "DHA",
-    description:
-      "A complete bilingual academic management website for Darul Hikmah Academy — featuring admin dashboard, dynamic academic system, smart PDF viewer, class-wise filtering, and mobile-first responsive design.",
-    category: "Web",
-    tags: ["Next.js", "Tailwind CSS", "Cloudinary", "MongoDB"],
-    thumbnail: "/images/dha/img1.png",
-    images: [],
-    clientName: "Darul Hikmah Academy",
+    eyebrow: "Academic Operations Platform",
+    status: "Live Client Project",
+    description: "A bilingual academic website and operations platform connecting public information, assignments, absence records, routines, results, teachers, documents, and staff-controlled administration.",
+    outcome: "The institution received one connected system for its public presence and recurring academic workflows instead of scattered pages and manual processes.",
+    category: "Web Platform",
+    audience: "Students, parents, and staff",
+    tags: ["Next.js", "Admin System", "Cloud Media", "Responsive"],
+    deliverables: ["Public academic website", "Student and parent information workflows", "Custom admin operations and content management"],
+    thumbnail: "/images/dha/case-study/og-1200x630.jpg",
+    caseStudyUrl: "/projects/DHA",
     liveUrl: "https://www.dhakhl.com",
+    liveLabel: "Visit Live Site",
+    clientName: "Darul Hikmah Academy",
     featured: true,
     order: 1,
   },
   {
     id: "13",
-    title: "Bangladesh University of Excellence Khulna (BUEK)",
+    title: "Bangladesh University of Excellence Khulna",
+    shortTitle: "BUEK",
     slug: "BUEK",
-    description:
-      "A full-featured university website with a protected admin panel, dynamic content management, media library, news, events, gallery, and 10+ public pages.",
-    category: "Web",
-    tags: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "MongoDB",
-      "Cloudinary",
-    ],
-    thumbnail: "/images/buek/img1.png",
-    images: [],
-    clientName: "Bangladesh University of Excellence Khulna",
+    eyebrow: "University Website & CMS",
+    status: "Live Client Project",
+    description: "A modern university website with a protected content-management system for academic information, news, events, galleries, media, contact content, and institutional pages.",
+    outcome: "BUEK gained a professional public website and an internal publishing workflow that lets its team manage recurring content without developer dependence.",
+    category: "Institutional Website",
+    audience: "Prospective students and university staff",
+    tags: ["Next.js", "Custom CMS", "MongoDB", "Cloudinary"],
+    deliverables: ["Multi-page institutional website", "Protected CMS and publishing workflows", "News, events, gallery, and media management"],
+    thumbnail: "/images/buek/case-study/og-1200x630.jpg",
+    caseStudyUrl: "/projects/BUEK",
     liveUrl: "https://buekbd.com",
+    liveLabel: "Visit Live Site",
+    clientName: "Bangladesh University of Excellence Khulna",
     featured: true,
     order: 2,
   },
 ];
-
 export default projects;

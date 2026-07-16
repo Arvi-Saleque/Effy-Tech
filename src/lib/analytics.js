@@ -30,10 +30,24 @@ export function trackEvent(eventName, params = {}) {
 /* ── Predefined events for common actions ─────────────────── */
 
 /** Track CTA button clicks (Download, Visit Site, Contact, etc.). */
-export function trackCTAClick(buttonName, page = "") {
+export function trackCTAClick(buttonName, context = {}) {
+  const defaultLocation =
+    typeof window !== "undefined" ? window.location.pathname : "";
+
+  const params =
+    typeof context === "string"
+      ? {
+          page_name: context,
+          page_location: defaultLocation,
+        }
+      : {
+          page_location: defaultLocation,
+          ...context,
+        };
+
   trackEvent("cta_click", {
     button_name: buttonName,
-    page_location: page || window.location.pathname,
+    ...params,
   });
 }
 
