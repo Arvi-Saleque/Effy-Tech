@@ -1,14 +1,13 @@
 /* ============================================================
-   /projects/IAM — Islamic Amal Tracker showcase page
+   /projects/IAM — Islamic Amal Tracker promotional case study
    ============================================================ */
 
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
 import amalTracker from "@/data/amalTracker";
 import Footer from "@/components/layout/Footer";
 
-
 export const metadata = {
-  title: "Islamic Amal Tracker (Beta) — Prayer, Amal & Dhikr App | Effy Tech",
+  title: "Islamic Amal Tracker — Prayer, Kaza, Dhikr & Amal App | Effy Tech",
   description: amalTracker.description,
   keywords: [
     "Islamic Amal Tracker",
@@ -16,30 +15,31 @@ export const metadata = {
     "Kaza prayer manager",
     "Dhikr counter",
     "Islamic routine app",
-    "Islamic reminder app",
+    "Quranic dua app",
+    "Islamic home widgets",
     "Bangla Islamic app",
   ],
   alternates: {
     canonical: "/projects/IAM",
   },
   openGraph: {
-    title: "Islamic Amal Tracker (Beta)",
+    title: "Islamic Amal Tracker — Remember More. Miss Less. Grow Daily.",
     description: amalTracker.description,
     type: "website",
     images: [
       {
-        url: amalTracker.heroImage,
-        width: 664,
-        height: 1184,
-        alt: "Islamic Amal Tracker Home Dashboard",
+        url: amalTracker.ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Islamic Amal Tracker app by Effy Tech",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Islamic Amal Tracker (Beta)",
+    title: "Islamic Amal Tracker",
     description: amalTracker.description,
-    images: [amalTracker.heroImage],
+    images: [amalTracker.ogImage],
   },
 };
 
@@ -47,13 +47,23 @@ const softwareApplicationJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Islamic Amal Tracker",
-  alternateName: "Islamic Amal Tracker (Beta)",
   applicationCategory: "LifestyleApplication",
   operatingSystem: "Android",
   description: amalTracker.description,
   url: "https://www.effytechbd.com/projects/IAM",
   downloadUrl: amalTracker.playStoreUrl,
-  softwareVersion: "2.0 Beta",
+  softwareVersion: "2.0",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.777",
+    bestRating: "5",
+    ratingCount: "35",
+  },
+  interactionStatistic: {
+    "@type": "InteractionCounter",
+    interactionType: "https://schema.org/DownloadAction",
+    userInteractionCount: 1500,
+  },
   offers: {
     "@type": "Offer",
     price: "0",
