@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Mail, Menu, Search, X } from "lucide-react";
 import Logo from "@/components/ui/Logo";
@@ -36,6 +37,7 @@ export default function Navbar() {
     onDismiss: () => setOpen(false),
   });
   const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname) || pathname?.startsWith("/admin");
+  const portalTarget = typeof document === "undefined" ? null : document.body;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -99,7 +101,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {open && (
+        {portalTarget && open && createPortal(
           <div className="mobile-menu-layer">
             <button
               className="mobile-menu-backdrop"
@@ -160,7 +162,8 @@ export default function Navbar() {
                 </a>
               </div>
             </div>
-          </div>
+          </div>,
+          portalTarget,
         )}
       </header>
 

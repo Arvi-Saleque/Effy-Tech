@@ -3034,16 +3034,17 @@ h4 {
   }
   .mobile-menu-layer {
     display: block;
-    position: absolute;
+    position: fixed;
     top: 68px;
     right: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: calc(100vh - 68px);
-    height: calc(100dvh - 68px);
+    height: auto;
     min-height: 0;
     overflow: hidden;
-    z-index: 59;
+    isolation: isolate;
+    z-index: 70;
   }
   .mobile-menu-backdrop {
     position: absolute;

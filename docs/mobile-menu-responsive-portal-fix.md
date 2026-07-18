@@ -1,29 +1,16 @@
-# Effy Tech Mobile Menu Portal Fix
+# Effy Tech — Mobile Menu Portal Fix
 
-## Cause
+The public mobile menu is rendered into `document.body` with React
+`createPortal`. This prevents the navbar's backdrop filter and stacking context
+from clipping the overlay.
 
-The first CSS-only hotfix still left the mobile overlay inside the fixed public
-navbar. Because the navbar uses `backdrop-filter`, it creates its own containing
-and stacking context in Chromium. The browser could therefore continue clipping
-the overlay to the navbar's painted area even when an explicit viewport height
-was assigned.
+- The overlay is viewport-fixed below the 68px navigation bar.
+- It covers the remaining screen height and has its own isolated stack.
+- Body scroll locking, Escape dismissal, focus handling, backdrop dismissal,
+  and the responsive panel remain unchanged.
+- The public menu is hidden on custom showcase and admin routes as before.
 
-## Fix
+Files involved:
 
-- Render the open mobile navigation into `document.body` with a React portal.
-- Keep the overlay fixed from the 68px navbar edge to the viewport bottom.
-- Isolate the overlay stack and place it above page content.
-- Preserve the existing backdrop, panel scrolling, safe-area padding, focus
-  trap, Escape dismissal, focus restoration, search action, and body scroll
-  lock.
-
-The portal removes the menu from every navbar-specific containing block, so the
-homepage hero and header effects can no longer constrain its height.
-
-## Responsive contract
-
-- At widths up to 860px, the overlay fills all space below the navbar.
-- The panel is full width on phones and capped at 520px on wider mobile/tablet
-  layouts.
-- Only the panel's vertical content scrolls; horizontal overflow remains hidden.
-- The desktop navigation remains unchanged.
+- `src/components/layout/Navbar.jsx`
+- `src/app/globals.css`
