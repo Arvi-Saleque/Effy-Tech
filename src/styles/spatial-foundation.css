@@ -1,0 +1,74 @@
+/*
+ * Effy Tech spatial visual foundation.
+ *
+ * Phase 01 centralizes the current public-site aliases and defines the limits
+ * for future 2.5D components. These tokens are intentionally non-visual until
+ * a component opts into them in Phase 02.
+ */
+
+@layer base {
+  :root {
+    /* Existing brand aliases — now mapped to the Tailwind theme source. */
+    --effy-ink: var(--color-neutral-900);
+    --effy-ink-2: var(--color-neutral-800);
+    --effy-ink-3: var(--color-neutral-700);
+    --effy-ivory: var(--color-neutral-100);
+    --effy-paper: var(--color-neutral-50);
+    --effy-stone: var(--color-neutral-300);
+    --effy-sage: var(--color-neutral-400);
+    --effy-gold: var(--color-accent);
+    --effy-gold-dark: var(--color-primary);
+    --effy-line: rgb(32 38 31 / 14%);
+
+    /* Spatial surfaces. */
+    --effy-spatial-canvas: var(--effy-paper);
+    --effy-spatial-surface: var(--color-neutral-white);
+    --effy-spatial-surface-muted: var(--effy-ivory);
+    --effy-spatial-structure: var(--effy-ink);
+    --effy-spatial-highlight: var(--effy-gold);
+    --effy-spatial-line: var(--effy-line);
+
+    /* Depth levels: one vocabulary for cards, devices, and hero objects. */
+    --effy-depth-flat: none;
+    --effy-depth-raised: 0 10px 28px rgb(32 38 31 / 8%);
+    --effy-depth-floating: 0 22px 52px rgb(32 38 31 / 12%);
+    --effy-depth-focus: 0 34px 78px rgb(32 38 31 / 16%);
+    --effy-depth-highlight: 0 18px 48px rgb(123 102 58 / 18%);
+
+    /* Perspective and movement limits protect legibility and performance. */
+    --effy-perspective-stage: 1200px;
+    --effy-perspective-card: 900px;
+    --effy-tilt-limit: 4deg;
+    --effy-parallax-limit: 14px;
+    --effy-float-distance: 8px;
+
+    /* Motion timing. Only transform and opacity should consume these. */
+    --effy-motion-fast: 160ms;
+    --effy-motion-base: 280ms;
+    --effy-motion-slow: 520ms;
+    --effy-motion-idle: 6s;
+    --effy-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --effy-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Touch devices receive static depth; pointer tilt is a desktop enhancement. */
+@media (hover: none), (pointer: coarse) {
+  :root {
+    --effy-tilt-limit: 0deg;
+    --effy-parallax-limit: 0px;
+  }
+}
+
+/* The same token contract gives every future spatial component a static mode. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --effy-tilt-limit: 0deg;
+    --effy-parallax-limit: 0px;
+    --effy-float-distance: 0px;
+    --effy-motion-fast: 1ms;
+    --effy-motion-base: 1ms;
+    --effy-motion-slow: 1ms;
+    --effy-motion-idle: 1ms;
+  }
+}
