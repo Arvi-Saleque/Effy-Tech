@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Mail, Menu, Search, X } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import CommandPalette from "@/components/layout/CommandPalette";
 import projects from "@/data/projects";
 import siteConfig from "@/theme/siteConfig";
+import useModalFocus from "@/hooks/useModalFocus";
 
 const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA", "/projects/BUEK"];
 
@@ -29,6 +30,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const mobileCloseRef = useRef(null);
+  const mobileDialogRef = useModalFocus(open, {
+    initialFocusRef: mobileCloseRef,
+    onDismiss: () => setOpen(false),
+  });
   const hideGlobal = CUSTOM_NAVBAR_ROUTES.includes(pathname) || pathname?.startsWith("/admin");
 
   useEffect(() => {
@@ -54,11 +60,6 @@ export default function Navbar() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
 
   if (hideGlobal) return null;
 
@@ -92,17 +93,42 @@ export default function Navbar() {
             onClick={() => setOpen((value) => !value)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-navigation-dialog"
           >
-            {open ? <X size={23}/> : <Menu size={23}/>} 
+            {open ? <X size={23}/> : <Menu size={23}/>}
           </button>
         </div>
 
         {open && (
           <div className="mobile-menu-layer">
-            <button className="mobile-menu-backdrop" onClick={() => setOpen(false)} aria-label="Close menu" />
-            <div className="mobile-nav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+            <button
+              className="mobile-menu-backdrop"
+              onClick={() => setOpen(false)}
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+            <div
+              ref={mobileDialogRef}
+              id="mobile-navigation-dialog"
+              className="mobile-nav"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-navigation-title"
+              tabIndex={-1}
+            >
               <div className="mobile-nav-intro">
-                <span className="eyebrow">Navigate Effy Tech</span>
+                <div className="mobile-nav-heading-row">
+                  <span id="mobile-navigation-title" className="eyebrow">Navigate Effy Tech</span>
+                  <button
+                    ref={mobileCloseRef}
+                    type="button"
+                    className="mobile-nav-close"
+                    onClick={() => setOpen(false)}
+                    aria-label="Close mobile navigation"
+                  >
+                    <X size={20} aria-hidden="true" />
+                  </button>
+                </div>
                 <p>Explore our capabilities, selected work, and the way we build connected digital systems.</p>
               </div>
 
