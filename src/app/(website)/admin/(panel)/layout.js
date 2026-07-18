@@ -5,7 +5,8 @@ import {
   UsersRound, 
   FolderKanban,
   CheckSquare, 
-  BarChart3 
+  BarChart3,
+  Landmark,
 } from "lucide-react";
 import NavLink from "./NavLink";
 import LogoutButton from "./LogoutButton";
@@ -27,7 +28,11 @@ export default async function PanelLayout({ children }) {
     { name: "Projects", href: "/admin/projects", icon: FolderKanban },
     { name: "My Work", href: "/admin/my-work", icon: CheckSquare },
     { name: "Reports", href: "/admin/reports", icon: BarChart3 },
+    { name: "Finance", href: "/admin/finance", icon: Landmark },
   ];
+  const visibleNavigation = isAdmin
+    ? navigation
+    : navigation.filter((item) => item.name === "My Work");
 
   return (
     <div className="admin-shell min-h-screen bg-[#020617] text-neutral-100 flex flex-col font-sans">
@@ -55,13 +60,11 @@ export default async function PanelLayout({ children }) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2">
-            {navigation.map((item) => (
-              isAdmin || item.name !== "Dashboard" && item.name !== "Clients" && item.name !== "Projects" && item.name !== "Reports" ? (
-                <NavLink key={item.name} href={item.href}>
-                  {item.name}
-                </NavLink>
-              ) : null
+          <nav className="hidden lg:flex items-center gap-2">
+            {visibleNavigation.map((item) => (
+              <NavLink key={item.name} href={item.href}>
+                {item.name}
+              </NavLink>
             ))}
           </nav>
 
@@ -77,13 +80,11 @@ export default async function PanelLayout({ children }) {
       </header>
 
       {/* Mobile Navigation bar */}
-      <div className="md:hidden border-b border-neutral-800/60 bg-neutral-900/20 py-2 px-4 flex justify-center gap-3 relative z-40">
-        {navigation.map((item) => (
-          isAdmin || item.name !== "Dashboard" && item.name !== "Clients" && item.name !== "Projects" && item.name !== "Reports" ? (
-            <NavLink key={item.name} href={item.href}>
-              {item.name}
-            </NavLink>
-          ) : null
+      <div className="lg:hidden border-b border-neutral-800/60 bg-neutral-900/20 py-2 px-4 flex gap-2 overflow-x-auto relative z-40">
+        {visibleNavigation.map((item) => (
+          <NavLink key={item.name} href={item.href}>
+            {item.name}
+          </NavLink>
         ))}
       </div>
 
