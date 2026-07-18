@@ -47,7 +47,7 @@ export default function NotFound() {
             </span>
             <div className="not-found-asset-frame">
               <Image
-                src="/images/effy_tech/spatial/tools.webp"
+                src="/images/effy_tech/tools.jpeg"
                 alt="3D software tools by Effy Tech"
                 width={1254}
                 height={1254}
