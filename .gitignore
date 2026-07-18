@@ -75,3 +75,8 @@ LANDING_PAGES_*_REPORT.md
 PHASE_*_REPORT.md
 component_mid.txt
 gpt/
+
+# Handoff deliveries, repairs and backups
+EFFY_TECH_*/
+repair-backups/
+.effy-repair-backups/
