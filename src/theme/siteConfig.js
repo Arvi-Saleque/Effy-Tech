@@ -9,7 +9,7 @@ const siteConfig = {
   name: "Effy Tech",
   tagline: "Smart Solutions. Simple Execution.",
   description:
-    "We craft modern, scalable, and beautiful digital products that drive growth and innovation.",
+    "Effy Tech designs and engineers custom websites, mobile apps, operational platforms, automation, AI workflows, and launch-ready digital products.",
   url: "https://www.effytechbd.com",
 
   /* ── Navigation Links ────────────────────────────────────── */
