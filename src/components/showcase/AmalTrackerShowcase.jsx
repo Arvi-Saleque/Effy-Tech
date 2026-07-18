@@ -30,6 +30,7 @@ import {
   HiX,
 } from "react-icons/hi";
 import IAMAppTour from "@/components/showcase/iam/IAMAppTour";
+import { MotionBoundary, TiltSurface } from "@/components/visuals";
 import { trackCTAClick, trackEvent } from "@/lib/analytics";
 
 const SCROLL_THRESHOLD = 64;
@@ -609,7 +610,7 @@ export default function AmalTrackerShowcase({ data }) {
             initial={{ opacity: 0, y: 28, scale: 0.985 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.78, delay: 0.14 }}
-            className="mx-auto w-full max-w-[620px]"
+            className="iam-hero-preview mx-auto w-full max-w-[620px]"
           >
             <div className="mb-5 flex items-center justify-between px-1">
               <div>
@@ -618,7 +619,13 @@ export default function AmalTrackerShowcase({ data }) {
               </div>
               <span className="hidden rounded-full border border-black/10 bg-white/60 px-3 py-1.5 text-[10px] font-black text-[#727867] sm:inline">Swipe · Scroll</span>
             </div>
-            <IAMAppTour appName={name} />
+            <MotionBoundary className="iam-hero-motion" strict={false}>
+              <TiltSurface className="iam-hero-tilt" maxTilt={2.2} perspective={1250}>
+                <div className="iam-spatial-preview">
+                  <IAMAppTour appName={name} />
+                </div>
+              </TiltSurface>
+            </MotionBoundary>
           </motion.div>
         </div>
 
@@ -627,7 +634,7 @@ export default function AmalTrackerShowcase({ data }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.36 }}
-            className="grid overflow-hidden rounded-[1.2rem] border border-black/[0.08] bg-white/55 sm:grid-cols-3"
+            className="iam-proof-strip grid overflow-hidden rounded-[1.2rem] border border-black/[0.08] bg-white/55 sm:grid-cols-3"
           >
             {socialProof.map((item, index) => (
               <div key={item.label} className={`p-5 text-center sm:p-6 ${index > 0 ? "border-t border-black/[0.08] sm:border-l sm:border-t-0" : ""}`}>
@@ -649,7 +656,7 @@ export default function AmalTrackerShowcase({ data }) {
             { icon: FaShieldAlt, title: "Offline-first reliability", copy: "Internet ছাড়াই core tracking; প্রয়োজন হলে optional cloud backup ও sync।" },
             { icon: FaChartLine, title: "Progress you can understand", copy: "Daily, weekly ও monthly insights থেকে নিজের consistency ও gap বুঝুন।" },
           ].map((item, index) => (
-            <motion.div key={item.title} variants={fadeUp} custom={index} className="rounded-[1.25rem] border border-black/[0.07] bg-[var(--iam-ink)] p-6 text-[#fbf8ef] shadow-[0_14px_34px_rgba(34,39,31,0.11)]">
+            <motion.div key={item.title} variants={fadeUp} custom={index} className="iam-highlight-card rounded-[1.25rem] border border-black/[0.07] bg-[var(--iam-ink)] p-6 text-[#fbf8ef] shadow-[0_14px_34px_rgba(34,39,31,0.11)]">
               <div className="flex items-center justify-between">
                 <span className="grid h-12 w-12 place-items-center rounded-[0.9rem] border border-white/10 bg-white/[0.06] text-[#d8c9a4]"><item.icon className="h-5 w-5" /></span>
                 <span className="text-[10px] font-mono text-white/30">0{index + 1}</span>

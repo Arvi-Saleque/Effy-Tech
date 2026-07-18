@@ -1,0 +1,211 @@
+/* Reusable 2.5D primitives. No public page opts into these in Phase 02. */
+
+@layer components {
+  .effy-motion-boundary {
+    position: relative;
+  }
+
+  .effy-spatial-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    perspective: var(--effy-perspective-stage);
+    background: var(--effy-spatial-canvas);
+    border: 1px solid var(--effy-spatial-line);
+  }
+
+  .effy-spatial-stage[data-tone="graphite"] {
+    color: var(--effy-ivory);
+    background:
+      radial-gradient(
+        circle at 72% 24%,
+        rgb(170 145 88 / 18%),
+        transparent 34%
+      ),
+      linear-gradient(145deg, var(--effy-ink-2), var(--effy-ink));
+    border-color: rgb(255 255 255 / 10%);
+  }
+
+  .effy-spatial-grid,
+  .effy-spatial-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .effy-spatial-grid {
+    z-index: -2;
+    opacity: 0.42;
+    background-image:
+      linear-gradient(rgb(156 164 147 / 11%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(156 164 147 / 11%) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black, transparent 88%);
+  }
+
+  .effy-spatial-glow {
+    z-index: -1;
+    background: radial-gradient(
+      circle at 50% 62%,
+      rgb(170 145 88 / 15%),
+      transparent 38%
+    );
+  }
+
+  .effy-spatial-layer {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .effy-spatial-layer[data-layer="back"] {
+    transform: translateZ(-24px) scale(1.02);
+  }
+
+  .effy-spatial-layer[data-layer="mid"] {
+    transform: translateZ(0);
+  }
+
+  .effy-spatial-layer[data-layer="front"] {
+    transform: translateZ(34px);
+  }
+
+  .effy-tilt-surface {
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: center;
+  }
+
+  .effy-depth-card {
+    position: relative;
+    border: 1px solid var(--effy-spatial-line);
+    background: var(--effy-spatial-surface);
+  }
+
+  .effy-depth-card[data-depth="flat"] {
+    box-shadow: var(--effy-depth-flat);
+  }
+
+  .effy-depth-card[data-depth="raised"] {
+    box-shadow: var(--effy-depth-raised);
+  }
+
+  .effy-depth-card[data-depth="floating"] {
+    box-shadow: var(--effy-depth-floating);
+  }
+
+  .effy-depth-card[data-depth="focus"] {
+    box-shadow: var(--effy-depth-focus);
+  }
+
+  .effy-depth-card[data-depth="highlight"] {
+    border-color: rgb(170 145 88 / 34%);
+    box-shadow: var(--effy-depth-highlight);
+  }
+
+  .effy-floating-asset {
+    position: relative;
+    margin: 0;
+    transform: translateZ(24px);
+    transform-style: preserve-3d;
+  }
+
+  .effy-floating-asset img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 30px rgb(32 38 31 / 13%));
+  }
+
+  .effy-device-mockup {
+    position: relative;
+    width: min(240px, 100%);
+    padding: 12px;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 32px;
+    background: var(--effy-ink);
+    box-shadow: var(--effy-depth-floating);
+  }
+
+  .effy-device-mockup[data-device="tablet"] {
+    width: min(430px, 100%);
+    border-radius: 24px;
+  }
+
+  .effy-device-speaker {
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+    left: 50%;
+    width: 42px;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: rgb(244 242 232 / 28%);
+    transform: translateX(-50%);
+  }
+
+  .effy-device-screen {
+    position: relative;
+    overflow: hidden;
+    min-height: 390px;
+    border-radius: 23px;
+    background: var(--effy-paper);
+  }
+
+  .effy-device-mockup[data-device="tablet"] .effy-device-screen {
+    min-height: 280px;
+    border-radius: 16px;
+  }
+
+  .effy-browser-mockup {
+    overflow: hidden;
+    width: min(680px, 100%);
+    border: 1px solid rgb(32 38 31 / 16%);
+    background: var(--effy-paper);
+    box-shadow: var(--effy-depth-floating);
+  }
+
+  .effy-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--effy-line);
+    background: var(--effy-ivory);
+  }
+
+  .effy-browser-bar > span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--effy-sage);
+  }
+
+  .effy-browser-bar small {
+    overflow: hidden;
+    max-width: 56%;
+    margin-left: 8px;
+    color: var(--effy-ink-3);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effy-browser-screen {
+    position: relative;
+    min-height: 330px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .effy-tilt-surface {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-motion-boundary .effy-tilt-surface,
+  .effy-motion-boundary .effy-floating-asset {
+    transform: none !important;
+  }
+}

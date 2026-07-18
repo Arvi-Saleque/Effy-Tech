@@ -16,11 +16,17 @@
   padding: 7.5rem 1rem 3rem;
 }
 
+.page[data-tone="error"] {
+  background:
+    radial-gradient(circle at 15% 12%, rgba(179, 66, 66, 0.1), transparent 27rem),
+    radial-gradient(circle at 88% 84%, rgba(114, 128, 104, 0.15), transparent 29rem),
+    var(--iam-paper);
+}
+
 .ambientOne,
 .ambientTwo {
   position: absolute;
   border: 1px solid rgba(32, 38, 31, 0.08);
-  border-radius: 999px;
   pointer-events: none;
 }
 
@@ -29,6 +35,7 @@
   height: 24rem;
   top: -10rem;
   right: -8rem;
+  transform: rotate(16deg);
 }
 
 .ambientTwo {
@@ -36,6 +43,7 @@
   height: 18rem;
   bottom: -9rem;
   left: -7rem;
+  transform: rotate(-13deg);
 }
 
 .shell {
@@ -74,19 +82,92 @@
   font-size: 0.72rem;
 }
 
+.motionBoundary,
+.tiltSurface {
+  width: 100%;
+}
+
+.motionBoundary {
+  perspective: 1400px;
+}
+
 .grid {
+  position: relative;
   display: grid;
+  isolation: isolate;
   grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
   border: 1px solid var(--iam-line);
-  border-radius: 2rem;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 28px 80px rgba(32, 38, 31, 0.11);
+  box-shadow:
+    0 32px 74px rgba(32, 38, 31, 0.12),
+    0 8px 18px rgba(32, 38, 31, 0.07);
+  transform-style: preserve-3d;
+}
+
+.stageGrid {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(rgba(32, 38, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 38, 31, 0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(105deg, black, transparent 61%);
+  pointer-events: none;
 }
 
 .statusCard {
+  position: relative;
+  z-index: 1;
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(20px);
   padding: clamp(2rem, 5vw, 4.5rem);
+  transform: translateZ(18px);
+}
+
+.stateBadge {
+  display: inline-flex;
+  min-height: 1.95rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+  padding: 0.38rem 0.62rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.stateBadge span {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+}
+
+.successBadge {
+  border-color: rgba(47, 124, 81, 0.19);
+  color: #276b45;
+  background: rgba(232, 243, 235, 0.72);
+}
+
+.successBadge span {
+  background: #2f7c51;
+  box-shadow: 0 0 0 4px rgba(47, 124, 81, 0.1);
+}
+
+.errorBadge {
+  border-color: rgba(179, 66, 66, 0.18);
+  color: #963737;
+  background: rgba(249, 232, 229, 0.78);
+}
+
+.errorBadge span {
+  background: #b34242;
+  box-shadow: 0 0 0 4px rgba(179, 66, 66, 0.1);
 }
 
 .statusIcon {
@@ -95,7 +176,7 @@
   width: 4.4rem;
   height: 4.4rem;
   border-radius: 1.35rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.65rem;
   font-size: 2rem;
 }
 
@@ -202,11 +283,14 @@
 }
 
 .contextPanel {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   background: var(--iam-ink);
   color: #f7f5ec;
   padding: clamp(2rem, 4vw, 3.5rem);
+  transform: translateZ(12px);
 }
 
 .contextPanel .panelKicker {
@@ -291,7 +375,12 @@
 
   .grid {
     grid-template-columns: 1fr;
-    border-radius: 1.45rem;
+    border-radius: 9px;
+  }
+
+  .statusCard,
+  .contextPanel {
+    transform: none;
   }
 
   .contextPanel {
@@ -328,9 +417,15 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .primaryAction,
   .secondaryAction {
     transition: none;
+  }
+
+  .tiltSurface,
+  .statusCard,
+  .contextPanel {
+    transform: none;
   }
 }

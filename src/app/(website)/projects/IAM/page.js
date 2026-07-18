@@ -5,6 +5,8 @@
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
 import amalTracker from "@/data/amalTracker";
 import Footer from "@/components/layout/Footer";
+import "@/styles/spatial-components.css";
+import "@/styles/iam-spatial-case-study.css";
 
 export const metadata = {
   title: "Islamic Amal Tracker — Prayer, Kaza, Dhikr & Amal App | Effy Tech",

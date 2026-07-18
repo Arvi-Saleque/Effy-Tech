@@ -1,6 +1,8 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
 import Footer from "@/components/layout/Footer";
 import buek from "@/data/buek";
+import "@/styles/spatial-components.css";
+import "@/styles/institutional-spatial-case-study.css";
 
 const canonicalUrl = "https://www.effytechbd.com/projects/BUEK";
 

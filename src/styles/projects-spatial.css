@@ -1,0 +1,365 @@
+/* Phase 04 — route-scoped 2.5D treatment for the projects index. */
+
+.effy-projects-index {
+  --projects-gold: #aa9158;
+  --projects-sage: #74806b;
+  --projects-ink: #20261f;
+}
+
+.effy-projects-index .projects-spatial-hero {
+  background:
+    radial-gradient(circle at 88% 14%, rgb(116 128 107 / 11%), transparent 30%),
+    #faf9f6;
+}
+
+.effy-projects-index .projects-hero-motion,
+.effy-projects-index .projects-hero-tilt {
+  width: 100%;
+}
+
+.effy-projects-index .projects-hero-motion {
+  perspective: 1300px;
+}
+
+.effy-projects-index .projects-spatial-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 500px;
+  overflow: hidden;
+  border: 1px solid rgb(32 38 31 / 14%);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 62% 44%, rgb(145 160 132 / 22%), transparent 38%),
+    linear-gradient(145deg, #252d24, #171c17 74%);
+  box-shadow:
+    0 38px 90px rgb(24 30 24 / 22%),
+    0 1px 0 rgb(255 255 255 / 7%) inset;
+  transform-style: preserve-3d;
+}
+
+.effy-projects-index .projects-stage-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.36;
+  background-image:
+    linear-gradient(rgb(238 240 227 / 8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(238 240 227 / 8%) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, #000, transparent 92%);
+}
+
+.effy-projects-index .projects-hero-layer {
+  position: absolute;
+  width: min(400px, 78%);
+  transform-style: preserve-3d;
+}
+
+.effy-projects-index .projects-hero-layer .effy-browser-mockup {
+  width: 100%;
+  border-color: rgb(238 240 227 / 15%);
+  border-radius: 6px;
+  background: #f4f2e8;
+  box-shadow: 0 28px 58px rgb(0 0 0 / 32%);
+}
+
+.effy-projects-index .projects-hero-layer .effy-browser-bar {
+  min-height: 31px;
+  padding-inline: 11px;
+  background: #e9e6da;
+}
+
+.effy-projects-index .projects-hero-layer .effy-browser-screen {
+  min-height: 0;
+}
+
+.effy-projects-index .projects-hero-screen {
+  position: relative;
+  aspect-ratio: 1200 / 630;
+  overflow: hidden;
+}
+
+.effy-projects-index .projects-hero-layer-1 {
+  z-index: 4;
+  top: 45px;
+  left: 9%;
+  transform: translateZ(42px) rotate(-2.5deg);
+}
+
+.effy-projects-index .projects-hero-layer-2 {
+  z-index: 3;
+  top: 164px;
+  right: 5%;
+  transform: translateZ(20px) rotate(3.5deg);
+}
+
+.effy-projects-index .projects-hero-layer-3 {
+  z-index: 2;
+  top: 273px;
+  left: 12%;
+  transform: translateZ(4px) rotate(-1.5deg);
+}
+
+.effy-projects-index .projects-stage-core {
+  position: absolute;
+  z-index: 6;
+  right: 18px;
+  bottom: 17px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 245px;
+  padding: 12px 14px;
+  border: 1px solid rgb(238 240 227 / 13%);
+  border-radius: 7px;
+  color: #eef0e3;
+  background: rgb(18 23 18 / 76%);
+  box-shadow: 0 16px 34px rgb(0 0 0 / 24%);
+  backdrop-filter: blur(12px);
+  transform: translateZ(55px);
+}
+
+.effy-projects-index .projects-stage-core > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgb(213 195 143 / 24%);
+  border-radius: 50%;
+  color: #d5c38f;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.effy-projects-index .projects-stage-core small,
+.effy-projects-index .projects-stage-core strong {
+  display: block;
+}
+
+.effy-projects-index .projects-stage-core small {
+  color: #aeb7aa;
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+}
+
+.effy-projects-index .projects-stage-core strong {
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.effy-projects-index .projects-capability-strip {
+  margin-top: 42px;
+  padding: 18px;
+  border: 1px solid rgb(32 38 31 / 12%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 55%);
+  box-shadow: 0 18px 46px rgb(32 38 31 / 7%);
+  backdrop-filter: blur(10px);
+}
+
+.effy-projects-index .projects-capability-strip > p {
+  color: #7b663a;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.18em;
+}
+
+.effy-projects-index .projects-capability-strip > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.effy-projects-index .projects-capability-strip article {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding-top: 14px;
+  border-top: 1px solid rgb(32 38 31 / 10%);
+}
+
+.effy-projects-index .projects-capability-strip article > span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(116 128 107 / 20%);
+  border-radius: 7px;
+  color: #5f6a58;
+  background: linear-gradient(145deg, #faf8ef, #e5e2d6);
+  box-shadow: 6px 8px 18px rgb(32 38 31 / 8%);
+}
+
+.effy-projects-index .projects-capability-strip h2 {
+  color: #20261f;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.effy-projects-index .projects-capability-strip article p {
+  margin-top: 4px;
+  color: #656d62;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.effy-projects-index .project-case-media {
+  perspective: 1200px;
+}
+
+.effy-projects-index .project-case-motion,
+.effy-projects-index .project-case-tilt {
+  width: 100%;
+}
+
+.effy-projects-index .project-case-tilt {
+  padding: 13px;
+  transform-style: preserve-3d;
+}
+
+.effy-projects-index .project-case-plinth {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border: 1px solid rgb(170 145 88 / 18%);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 75% 25%, rgb(116 128 107 / 12%), transparent 42%),
+    #eeece1;
+  box-shadow: 0 28px 62px rgb(32 38 31 / 10%);
+  transform: translateZ(-20px) rotate(-1deg);
+}
+
+.effy-projects-index .project-case-link {
+  border-radius: 8px;
+  box-shadow: 0 26px 64px rgb(32 38 31 / 16%);
+  transform: translateZ(28px);
+}
+
+.effy-projects-index .projects-case-browser {
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  border-color: rgb(32 38 31 / 15%);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.effy-projects-index .projects-case-browser .effy-browser-bar {
+  min-height: 38px;
+  background: linear-gradient(180deg, #f8f6ed, #e8e5d9);
+}
+
+.effy-projects-index .projects-case-browser .effy-browser-bar > span:first-child {
+  background: #aa9158;
+}
+
+.effy-projects-index .projects-case-browser .effy-browser-screen {
+  min-height: 0;
+}
+
+.effy-projects-index .projects-case-screen {
+  position: relative;
+  aspect-ratio: 1200 / 630;
+  overflow: hidden;
+}
+
+.effy-projects-index #case-studies article:nth-child(even) .project-case-plinth {
+  transform: translateZ(-20px) rotate(1deg);
+}
+
+@media (max-width: 1023px) {
+  .effy-projects-index .projects-hero-motion {
+    width: min(720px, 100%);
+    margin-inline: auto;
+  }
+
+  .effy-projects-index .projects-spatial-stage {
+    min-height: 540px;
+  }
+}
+
+@media (max-width: 767px) {
+  .effy-projects-index .projects-capability-strip > div {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .effy-projects-index .projects-spatial-stage {
+    min-height: 460px;
+  }
+
+  .effy-projects-index .projects-hero-layer {
+    width: 82%;
+  }
+
+  .effy-projects-index .projects-hero-layer-1 {
+    top: 38px;
+    left: 5%;
+  }
+
+  .effy-projects-index .projects-hero-layer-2 {
+    top: 143px;
+    right: 4%;
+  }
+
+  .effy-projects-index .projects-hero-layer-3 {
+    top: 244px;
+    left: 7%;
+  }
+
+  .effy-projects-index .projects-stage-core {
+    right: 12px;
+    bottom: 12px;
+    min-width: 218px;
+  }
+}
+
+@media (max-width: 480px) {
+  .effy-projects-index .projects-spatial-stage {
+    min-height: 390px;
+  }
+
+  .effy-projects-index .projects-hero-layer .effy-browser-bar {
+    min-height: 25px;
+  }
+
+  .effy-projects-index .projects-hero-layer-1 {
+    top: 34px;
+  }
+
+  .effy-projects-index .projects-hero-layer-2 {
+    top: 117px;
+  }
+
+  .effy-projects-index .projects-hero-layer-3 {
+    top: 199px;
+  }
+
+  .effy-projects-index .projects-stage-core {
+    left: 12px;
+    min-width: 0;
+  }
+
+  .effy-projects-index .project-case-tilt {
+    padding: 8px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .effy-projects-index .project-case-link:hover img {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-projects-index .project-case-link img {
+    transition: none !important;
+  }
+}

@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Layers3, MoveRight, ShieldCheck, Sparkles } from "lucide-react";
 import Footer from "@/components/layout/Footer";
+import { BrowserMockup, MotionBoundary, TiltSurface } from "@/components/visuals";
 import projects from "@/data/projects";
+import "@/styles/spatial-components.css";
+import "@/styles/projects-spatial.css";
 
 export const metadata = {
   title: "Live Project Case Studies | Effy Tech",
@@ -19,20 +22,61 @@ const capabilities = [
   { icon: Sparkles, title: "Purpose-built delivery", description: "Each system is shaped around the organisation, audience, and operational problem - not a generic template." },
 ];
 
+const projectPreviewTitles = {
+  IAM: "play.google.com · Islamic Amal Tracker",
+  DHA: "dhakhl.com · Darul Hikmah Academy",
+  BUEK: "buekbd.com · University platform",
+};
+
+function ProjectsHeroVisual() {
+  return (
+    <MotionBoundary className="projects-hero-motion">
+      <TiltSurface className="projects-hero-tilt" maxTilt={2.8} perspective={1300}>
+        <div className="projects-spatial-stage" aria-label="Three live Effy Tech product and platform previews">
+          <div className="projects-stage-grid" aria-hidden="true" />
+          {sortedProjects.map((project, index) => (
+            <div className={`projects-hero-layer projects-hero-layer-${index + 1}`} key={project.slug}>
+              <BrowserMockup label={`${project.title} live project preview`} title={projectPreviewTitles[project.slug]}>
+                <div className="projects-hero-screen">
+                  <Image
+                    src={project.thumbnail}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 80vw, 460px"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                </div>
+              </BrowserMockup>
+            </div>
+          ))}
+          <div className="projects-stage-core"><span>03</span><div><small>LIVE SYSTEMS</small><strong>Product · Platform · CMS</strong></div></div>
+        </div>
+      </TiltSurface>
+    </MotionBoundary>
+  );
+}
+
 function ProjectCaseStudy({ project, index }) {
   const reversed = index % 2 === 1;
   return (
     <article id={project.slug.toLowerCase()} className="scroll-mt-28 border-t border-border py-14 sm:py-20 lg:py-24">
       <div className={`grid items-center gap-10 lg:grid-cols-2 lg:gap-16 ${reversed ? "lg:[&>*:first-child]:order-2" : ""}`}>
-        <div className="relative">
-          <div className="absolute -inset-3 rounded-[8px] border border-primary-light/25 bg-primary-lightest/65" />
-          <Link href={project.caseStudyUrl} className="group relative block overflow-hidden rounded-[8px] border border-border bg-neutral-white shadow-xl">
-            <div className="relative aspect-[1200/630] overflow-hidden">
-              <Image src={project.thumbnail} alt={`${project.title} case study preview`} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.025]" priority={index === 0} />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/35 via-transparent to-transparent" />
-            </div>
-            <div className="absolute bottom-4 right-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-neutral-white/35 bg-neutral-900/80 text-neutral-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"><ArrowUpRight className="h-5 w-5" /></div>
-          </Link>
+        <div className="project-case-media relative">
+          <MotionBoundary className="project-case-motion">
+            <TiltSurface className="project-case-tilt" maxTilt={2.4} perspective={1200}>
+              <div className="project-case-plinth" aria-hidden="true" />
+              <Link href={project.caseStudyUrl} className="project-case-link group relative block">
+                <BrowserMockup className="projects-case-browser" label={`${project.title} case study preview`} title={projectPreviewTitles[project.slug]}>
+                  <div className="projects-case-screen">
+                    <Image src={project.thumbnail} alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.025]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/35 via-transparent to-transparent" />
+                  </div>
+                </BrowserMockup>
+                <div className="absolute bottom-4 right-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-neutral-white/35 bg-neutral-900/80 text-neutral-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"><ArrowUpRight className="h-5 w-5" /></div>
+              </Link>
+            </TiltSurface>
+          </MotionBoundary>
         </div>
         <div>
           <div className="flex flex-wrap items-center gap-3">
@@ -58,15 +102,16 @@ export default function ProjectsPage() {
   const jsonLd = { "@context": "https://schema.org", "@type": "ItemList", name: "Effy Tech live project case studies", itemListElement: sortedProjects.map((project, index) => ({ "@type": "ListItem", position: index + 1, item: { "@type": "CreativeWork", name: project.title, description: project.description, url: `https://www.effytechbd.com${project.caseStudyUrl}`, image: `https://www.effytechbd.com${project.thumbnail}` } })) };
   return (
     <>
-      <main className="effy-public-page min-h-screen bg-surface pt-24 text-text-primary">
-        <section className="relative overflow-hidden border-b border-border bg-surface pb-16 pt-10 sm:pb-20 lg:pb-24">
+      <main className="effy-public-page effy-projects-index min-h-screen bg-surface pt-24 text-text-primary">
+        <section className="projects-spatial-hero relative overflow-hidden border-b border-border bg-surface pb-16 pt-10 sm:pb-20 lg:pb-24">
           <div className="pointer-events-none absolute inset-0 opacity-50"><div className="absolute -right-24 top-16 h-72 w-72 rounded-full border border-primary-light/30" /><div className="absolute -right-10 top-32 h-72 w-72 rounded-full border border-neutral-300/65" /><div className="absolute inset-0 opacity-[0.28]" style={{ backgroundImage: "radial-gradient(circle, rgba(123,102,58,0.22) 1px, transparent 1px)", backgroundSize: "34px 34px", maskImage: "linear-gradient(to bottom, black, transparent 82%)" }} /></div>
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Link href="/#work" className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary"><ArrowLeft className="h-4 w-4" />Back to homepage</Link>
             <div className="mt-11 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
               <div><p className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-primary">Selected live work</p><h1 className="mt-5 max-w-5xl font-heading text-4xl font-black leading-[1.02] tracking-[-0.04em] text-text-primary sm:text-6xl lg:text-7xl">Products and platforms built for the real world.</h1><p className="mt-6 max-w-3xl text-lg leading-relaxed text-text-secondary sm:text-xl">These are not design concepts. They are live products and client systems planned, engineered, deployed, and supported by Effy Tech.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link href="/#contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-surface-dark px-6 py-3 text-sm font-bold text-text-inverse transition-transform hover:-translate-y-0.5">Start a Project<ArrowRight className="h-4 w-4" /></Link><a href="#case-studies" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] border border-border bg-neutral-white px-6 py-3 text-sm font-bold text-text-primary transition-colors hover:border-primary/45">Explore Case Studies<MoveRight className="h-4 w-4" /></a></div></div>
-              <div className="rounded-[8px] border border-neutral-700 bg-surface-dark p-6 text-text-inverse shadow-xl sm:p-8"><p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary-light">What this work demonstrates</p><div className="mt-6 space-y-6">{capabilities.map(({ icon: Icon, title, description }) => <div key={title} className="flex gap-4"><span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[8px] border border-primary-light/25 bg-primary-light/10 text-primary-light"><Icon className="h-5 w-5" /></span><div><h2 className="font-bold text-neutral-100">{title}</h2><p className="mt-1 text-sm leading-relaxed text-neutral-400">{description}</p></div></div>)}</div></div>
+              <ProjectsHeroVisual />
             </div>
+            <div className="projects-capability-strip"><p>WHAT THIS WORK DEMONSTRATES</p><div>{capabilities.map(({ icon: Icon, title, description }) => <article key={title}><span><Icon className="h-5 w-5" /></span><div><h2>{title}</h2><p>{description}</p></div></article>)}</div></div>
           </div>
         </section>
         <section id="case-studies" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{sortedProjects.map((project, index) => <ProjectCaseStudy key={project.slug} project={project} index={index} />)}</section>

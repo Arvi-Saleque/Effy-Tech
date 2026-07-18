@@ -35,6 +35,7 @@ import {
   Workflow,
   X,
 } from "lucide-react";
+import { MotionBoundary, TiltSurface } from "@/components/visuals";
 import { trackCTAClick, trackEvent, trackExternalLink } from "@/lib/analytics";
 
 const iconMap = {
@@ -119,32 +120,41 @@ function SectionHeading({ eyebrow, title, description, align = "left", dark = fa
 
 function BrowserPreview({ data }) {
   return (
-    <div className="relative">
-      <div className="absolute -inset-8 rounded-[2.6rem] bg-primary-light/10 blur-3xl" />
-      <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-neutral-black shadow-[0_28px_90px_rgba(0,0,0,0.42)]">
-        <div className="flex items-center gap-3 border-b border-white/10 bg-neutral-800 px-4 py-3">
-          <div className="flex gap-1.5" aria-hidden="true">
-            <span className="h-2.5 w-2.5 rounded-full bg-error/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-warning/90" />
-            <span className="h-2.5 w-2.5 rounded-full bg-success/90" />
+    <MotionBoundary className="institutional-browser-motion">
+      <TiltSurface className="institutional-browser-tilt" maxTilt={2.4} perspective={1350}>
+        <div className="institutional-browser-stage">
+          <div className="institutional-browser-grid" aria-hidden="true" />
+          <div className="institutional-browser-glow" aria-hidden="true" />
+          <div className="institutional-browser-frame relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-neutral-black shadow-[0_28px_90px_rgba(0,0,0,0.42)]">
+            <div className="flex items-center gap-3 border-b border-white/10 bg-neutral-800 px-4 py-3">
+              <div className="flex gap-1.5" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-error/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-warning/90" />
+                <span className="h-2.5 w-2.5 rounded-full bg-success/90" />
+              </div>
+              <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-neutral-900/80 px-3 py-2 text-[11px] text-neutral-400">
+                <ShieldCheck className="h-3.5 w-3.5 flex-none text-primary-light" />
+                <span className="truncate">{data.browserUrl}</span>
+              </div>
+            </div>
+            <div className="relative aspect-[16/10] bg-neutral-100">
+              <Image
+                src={data.heroImage}
+                alt={data.heroImageAlt}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 52vw"
+                className="object-cover object-top"
+              />
+            </div>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg bg-neutral-900/80 px-3 py-2 text-[11px] text-neutral-400">
-            <ShieldCheck className="h-3.5 w-3.5 flex-none text-primary-light" />
-            <span className="truncate">{data.browserUrl}</span>
+          <div className="institutional-browser-status" aria-hidden="true">
+            <span />
+            Production system
           </div>
         </div>
-        <div className="relative aspect-[16/10] bg-neutral-100">
-          <Image
-            src={data.heroImage}
-            alt={data.heroImageAlt}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 52vw"
-            className="object-cover object-top"
-          />
-        </div>
-      </div>
-    </div>
+      </TiltSurface>
+    </MotionBoundary>
   );
 }
 
@@ -294,7 +304,7 @@ function ScreenshotCarousel({ screenshots, projectKey }) {
 
   return (
     <>
-      <section id="screenshots" ref={ref} className="relative bg-neutral-900 py-16 sm:py-24">
+      <section id="screenshots" ref={ref} className="institutional-screenshots relative bg-neutral-900 py-16 sm:py-24">
         <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:mb-14">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -503,7 +513,7 @@ function FullPageGallery({ longScreenshots, projectKey, isBangla }) {
 
   return (
     <>
-      <section id="full-pages" ref={ref} className="relative overflow-hidden bg-neutral-900 py-16 sm:py-24">
+      <section id="full-pages" ref={ref} className="institutional-full-pages relative overflow-hidden bg-neutral-900 py-16 sm:py-24">
         <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:mb-14">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -722,8 +732,8 @@ export default function DHAShowcase({ data }) {
   };
 
   return (
-    <main className="overflow-hidden bg-neutral-50 text-neutral-900">
-      <section className="relative bg-neutral-900 pb-24 pt-32 text-neutral-50 sm:pb-28 sm:pt-36 lg:pb-32">
+    <main className={`effy-project-page effy-institutional-case effy-project-page--${data.projectKey.toLowerCase()} overflow-hidden bg-neutral-50 text-neutral-900`}>
+      <section className="institutional-case-hero relative bg-neutral-900 pb-24 pt-32 text-neutral-50 sm:pb-28 sm:pt-36 lg:pb-32">
         <div className="absolute inset-0 bg-dot-grid opacity-30" />
         <div className="absolute -left-28 top-24 h-72 w-72 rounded-full bg-primary/20 blur-[110px]" />
         <div className="absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-primary-light/10 blur-[120px]" />
@@ -807,8 +817,8 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
-        <div className="mx-auto grid max-w-7xl gap-px overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
+      <section className="institutional-proof relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
+        <div className="institutional-proof-grid mx-auto grid max-w-7xl gap-px overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
           {data.highlights.map((item) => (
             <div key={item.label} className="bg-neutral-50 px-5 py-6 sm:px-6">
               <p className="text-base font-black text-neutral-900">{item.value}</p>
@@ -818,7 +828,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="overview" className="py-20 sm:py-28">
+      <section id="overview" className="institutional-overview py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
             <Reveal>
@@ -849,7 +859,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section className="border-y border-neutral-300 bg-neutral-100 py-20 sm:py-28">
+      <section className="institutional-deliverables border-y border-neutral-300 bg-neutral-100 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
@@ -883,7 +893,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="solution" className="py-20 sm:py-28">
+      <section id="solution" className="institutional-systems py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
@@ -948,7 +958,7 @@ export default function DHAShowcase({ data }) {
         />
       ) : null}
 
-      <section className="py-20 sm:py-28">
+      <section className="institutional-capabilities py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
@@ -980,7 +990,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="engineering" className="relative bg-neutral-900 py-20 text-neutral-50 sm:py-28">
+      <section id="engineering" className="institutional-engineering relative bg-neutral-900 py-20 text-neutral-50 sm:py-28">
         <div className="absolute inset-0 bg-dot-grid opacity-20" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-20">
@@ -1023,7 +1033,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section className="bg-neutral-100 py-20 sm:py-28">
+      <section className="institutional-outcomes bg-neutral-100 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <Reveal>
@@ -1054,7 +1064,7 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="contact" className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
+      <section id="contact" className="institutional-contact px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
         <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-neutral-900 text-neutral-50 shadow-2xl">
           <div className="grid lg:grid-cols-[1.25fr_0.75fr]">
             <div className="p-8 sm:p-12 lg:p-14">

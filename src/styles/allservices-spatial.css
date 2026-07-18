@@ -1,0 +1,368 @@
+/* Phase 04 — route-scoped 2.5D treatment for the services catalog. */
+
+.effy-services-page {
+  --services-gold: #aa9158;
+  --services-sage: #74806b;
+  --services-ink: #20261f;
+}
+
+.effy-services-page .services-spatial-hero {
+  background:
+    radial-gradient(circle at 88% 18%, rgb(116 128 107 / 10%), transparent 29%),
+    #faf9f6;
+}
+
+.effy-services-page .services-hero-motion,
+.effy-services-page .services-hero-tilt {
+  width: 100%;
+}
+
+.effy-services-page .services-hero-motion {
+  perspective: 1200px;
+}
+
+.effy-services-page .services-spatial-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 500px;
+  overflow: hidden;
+  border: 1px solid rgb(32 38 31 / 15%);
+  border-radius: 8px;
+  color: #f4f2e8;
+  background:
+    radial-gradient(circle at 55% 36%, rgb(134 151 119 / 24%), transparent 40%),
+    linear-gradient(145deg, #252d24, #171c17 72%);
+  box-shadow:
+    0 38px 90px rgb(24 30 24 / 22%),
+    0 1px 0 rgb(255 255 255 / 7%) inset;
+  transform-style: preserve-3d;
+}
+
+.effy-services-page .services-stage-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgb(238 240 227 / 8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(238 240 227 / 8%) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, #000, transparent 90%);
+}
+
+.effy-services-page .services-stage-orbit {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgb(213 195 143 / 18%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.effy-services-page .services-stage-orbit::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d5c38f;
+  box-shadow: 0 0 0 7px rgb(213 195 143 / 8%);
+}
+
+.effy-services-page .services-stage-orbit-one {
+  top: 34px;
+  right: 27px;
+  width: 390px;
+  height: 390px;
+}
+
+.effy-services-page .services-stage-orbit-two {
+  top: 91px;
+  right: 83px;
+  width: 278px;
+  height: 278px;
+}
+
+.effy-services-page .services-hero-asset {
+  position: absolute;
+  z-index: 2 !important;
+  top: 5px;
+  left: 6%;
+  width: min(440px, 88%);
+}
+
+.effy-services-page .services-hero-asset img {
+  filter:
+    saturate(0.9)
+    contrast(1.02)
+    drop-shadow(0 28px 36px rgb(0 0 0 / 34%));
+}
+
+.effy-services-page .services-delivery-panel {
+  position: absolute;
+  z-index: 4;
+  right: 22px;
+  bottom: 22px;
+  left: 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid rgb(238 240 227 / 13%);
+  border-radius: 7px;
+  background: rgb(18 23 18 / 75%);
+  box-shadow: 0 20px 44px rgb(0 0 0 / 22%);
+  backdrop-filter: blur(14px);
+  transform: translateZ(48px);
+}
+
+.effy-services-page .services-delivery-panel p {
+  color: #b8c0b2;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.effy-services-page .services-delivery-panel strong {
+  display: block;
+  margin-top: 4px;
+  color: #f2f0e6;
+  font-size: 16px;
+}
+
+.effy-services-page .services-delivery-panel > svg {
+  color: #d5c38f;
+}
+
+.effy-services-page .services-delivery-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.effy-services-page .services-delivery-grid span {
+  padding-top: 9px;
+  border-top: 1px solid rgb(238 240 227 / 12%);
+  color: #c3c9bd;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.effy-services-page .services-stage-status {
+  position: absolute;
+  z-index: 5;
+  top: 18px;
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  border: 1px solid rgb(238 240 227 / 11%);
+  border-radius: 999px;
+  color: #c6cdbf;
+  background: rgb(18 23 18 / 58%);
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  backdrop-filter: blur(8px);
+}
+
+.effy-services-page .services-stage-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9aab8d;
+  box-shadow: 0 0 0 5px rgb(154 171 141 / 10%);
+}
+
+.effy-services-page .services-overview-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 320px;
+  transform-style: preserve-3d;
+}
+
+.effy-services-page .services-overview-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -60px;
+  bottom: -78px;
+  width: 190px;
+  height: 190px;
+  border: 1px solid rgb(116 128 107 / 16%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 28px rgb(116 128 107 / 3%),
+    0 0 0 56px rgb(170 145 88 / 2%);
+}
+
+.effy-services-page .services-overview-card:hover {
+  box-shadow: 0 28px 64px rgb(32 38 31 / 12%);
+  transform: perspective(900px) translateY(-7px) rotateX(1.2deg);
+}
+
+.effy-services-page .service-group-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.effy-services-page .service-group-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 4%;
+  width: 280px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(170 145 88 / 52%), transparent);
+}
+
+.effy-services-page .service-explorer-depth {
+  position: relative;
+  perspective: 1200px;
+}
+
+.effy-services-page .service-explorer-depth::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 18px -12px -14px 18px;
+  border: 1px solid rgb(116 128 107 / 14%);
+  border-radius: 8px;
+  background: rgb(116 128 107 / 4%);
+}
+
+.effy-services-page .service-group-automate .service-explorer-depth::before {
+  border-color: rgb(213 195 143 / 12%);
+  background: rgb(213 195 143 / 3%);
+}
+
+.effy-services-page .services-principle-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.effy-services-page .services-principle-card::after {
+  content: "";
+  position: absolute;
+  right: -42px;
+  bottom: -52px;
+  width: 120px;
+  height: 90px;
+  border: 1px solid rgb(170 145 88 / 13%);
+  transform: skewX(-32deg);
+}
+
+.effy-services-page .services-principle-card:hover {
+  border-color: rgb(116 128 107 / 32%);
+  box-shadow: 0 24px 52px rgb(32 38 31 / 9%);
+  transform: translateY(-5px);
+}
+
+.effy-services-page .services-final-cta {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 20%, rgb(170 145 88 / 12%), transparent 28%),
+    #20261f;
+}
+
+@media (max-width: 1023px) {
+  .effy-services-page .services-spatial-stage {
+    min-height: 520px;
+  }
+
+  .effy-services-page .services-hero-motion {
+    width: min(720px, 100%);
+    margin-inline: auto;
+  }
+
+  .effy-services-page .services-overview-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .effy-services-page .services-spatial-stage {
+    min-height: 440px;
+  }
+
+  .effy-services-page .services-hero-asset {
+    top: 16px;
+    left: 3%;
+    width: 94%;
+  }
+
+  .effy-services-page .services-stage-orbit-one {
+    top: 42px;
+    right: -62px;
+    width: 340px;
+    height: 340px;
+  }
+
+  .effy-services-page .services-stage-orbit-two {
+    top: 96px;
+    right: -8px;
+    width: 230px;
+    height: 230px;
+  }
+
+  .effy-services-page .services-delivery-panel {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    padding: 15px;
+  }
+
+  .effy-services-page .services-delivery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .effy-services-page .services-stage-status {
+    top: 12px;
+    left: 12px;
+  }
+
+  .effy-services-page .service-explorer-depth::before {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .effy-services-page .services-spatial-stage {
+    min-height: 420px;
+  }
+
+  .effy-services-page .services-delivery-panel strong {
+    font-size: 14px;
+  }
+
+  .effy-services-page .services-delivery-grid span {
+    font-size: 9px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .effy-services-page .services-overview-card:hover,
+  .effy-services-page .services-principle-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-services-page .services-overview-card,
+  .effy-services-page .services-principle-card {
+    transition: none !important;
+  }
+}

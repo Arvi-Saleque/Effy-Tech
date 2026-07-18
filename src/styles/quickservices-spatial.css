@@ -1,0 +1,237 @@
+/* Phase 06 — route-scoped spatial treatment for the service decision journey. */
+
+.effy-quickservices-page .quickservices-spatial-hero {
+  background:
+    radial-gradient(circle at 82% 22%, rgb(116 128 107 / 11%), transparent 30%),
+    linear-gradient(180deg, #faf9f6, #f3f1e8);
+}
+
+.effy-quickservices-page .quickservices-spatial-hero::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  opacity: 0.28;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(123 102 58 / 10%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(123 102 58 / 10%) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, #000, transparent 84%);
+}
+
+.effy-quickservices-page .quickservices-hero-motion,
+.effy-quickservices-page .quickservices-hero-tilt {
+  width: 100%;
+}
+
+.effy-quickservices-page .quickservices-hero-motion {
+  perspective: 1250px;
+}
+
+.effy-quickservices-page .quickservices-spatial-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid rgb(32 38 31 / 14%);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 66% 34%, rgb(170 145 88 / 18%), transparent 34%),
+    linear-gradient(145deg, #252d24, #171c17 76%);
+  box-shadow:
+    0 38px 86px rgb(32 38 31 / 19%),
+    0 1px 0 rgb(255 255 255 / 6%) inset;
+  transform-style: preserve-3d;
+}
+
+.effy-quickservices-page .quickservices-stage-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.38;
+  background-image:
+    linear-gradient(rgb(238 240 227 / 8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(238 240 227 / 8%) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, #000, transparent 92%);
+}
+
+.effy-quickservices-page .quickservices-hero-asset {
+  position: absolute;
+  z-index: 1;
+  top: -6%;
+  right: -1%;
+  width: min(88%, 460px);
+  transform: translateZ(24px);
+}
+
+.effy-quickservices-page .quickservices-hero-asset img {
+  filter: drop-shadow(0 28px 34px rgb(0 0 0 / 28%));
+}
+
+.effy-quickservices-page .quickservices-conversation-card {
+  position: absolute;
+  z-index: 4;
+  right: 20px;
+  bottom: 22px;
+  left: 20px;
+  padding: 20px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  background: rgb(18 23 18 / 82%);
+  box-shadow: 0 20px 44px rgb(0 0 0 / 26%);
+  backdrop-filter: blur(14px);
+  transform: translateZ(48px);
+}
+
+.effy-quickservices-page .quickservices-stage-label {
+  position: absolute;
+  z-index: 3;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 6px;
+  color: #eef0e3;
+  background: rgb(18 23 18 / 68%);
+  backdrop-filter: blur(10px);
+  transform: translateZ(42px);
+}
+
+.effy-quickservices-page .quickservices-stage-label > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(213 195 143 / 25%);
+  border-radius: 50%;
+  color: #d5c38f;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.effy-quickservices-page .quickservices-stage-label small,
+.effy-quickservices-page .quickservices-stage-label strong {
+  display: block;
+}
+
+.effy-quickservices-page .quickservices-stage-label small {
+  color: #9ca69a;
+  font-family: var(--font-mono), monospace;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+}
+
+.effy-quickservices-page .quickservices-stage-label strong {
+  margin-top: 2px;
+  font-size: 10px;
+}
+
+.effy-quickservices-page .quickservices-solutions {
+  background:
+    radial-gradient(circle at 12% 18%, rgb(116 128 107 / 7%), transparent 24%),
+    #efede5;
+}
+
+.effy-quickservices-page .quick-solution-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgb(32 38 31 / 6%);
+}
+
+.effy-quickservices-page .quick-solution-card::after {
+  position: absolute;
+  right: -38px;
+  bottom: -48px;
+  width: 120px;
+  height: 120px;
+  content: "";
+  border: 1px solid rgb(170 145 88 / 12%);
+  transform: rotate(34deg);
+}
+
+.effy-quickservices-page .quick-solution-icon {
+  box-shadow: 7px 9px 18px rgb(32 38 31 / 8%);
+}
+
+.effy-quickservices-page .quickservices-process {
+  background:
+    radial-gradient(circle at 86% 16%, rgb(170 145 88 / 8%), transparent 24%),
+    #faf9f6;
+}
+
+.effy-quickservices-page .quickservices-step-list {
+  position: relative;
+}
+
+.effy-quickservices-page .quickservices-step {
+  position: relative;
+  padding-left: 18px;
+}
+
+.effy-quickservices-page .quickservices-step::before {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  content: "";
+  border-radius: 50%;
+  background: #aa9158;
+  box-shadow: 0 0 0 5px rgb(170 145 88 / 10%);
+}
+
+.effy-quickservices-page .quickservices-final-cta {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(rgb(255 255 255 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px),
+    #20261f;
+  background-size: 44px 44px, 44px 44px, auto;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .effy-quickservices-page .quick-solution-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-quickservices-page .quick-solution-card {
+    transition: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .effy-quickservices-page .quickservices-spatial-stage {
+    min-height: 490px;
+  }
+
+  .effy-quickservices-page .quickservices-hero-asset {
+    top: 0;
+    right: 2%;
+    width: 96%;
+  }
+
+  .effy-quickservices-page .quickservices-conversation-card {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    padding: 16px;
+    backdrop-filter: none;
+    transform: none;
+  }
+
+  .effy-quickservices-page .quickservices-stage-label {
+    top: 10px;
+    left: 10px;
+    backdrop-filter: none;
+    transform: none;
+  }
+}
