@@ -1,0 +1,497 @@
+/* Phase 03 — route-scoped 2.5D integration for the public homepage. */
+
+.effy-home {
+  --home-spatial-gold: #aa9158;
+  --home-spatial-sage: #78836f;
+  --home-spatial-shadow: 0 34px 80px rgb(17 22 17 / 18%);
+}
+
+/* Hero: one calm interactive plane around the existing product system. */
+.effy-home .hero-spatial-boundary,
+.effy-home .hero-spatial-surface {
+  width: 100%;
+  min-height: 610px;
+}
+
+.effy-home .hero-spatial-boundary {
+  isolation: isolate;
+  perspective: 1200px;
+}
+
+.effy-home .hero-spatial-boundary::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 2%;
+  bottom: 2%;
+  width: 86%;
+  height: 25%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgb(88 103 78 / 17%) 0%,
+    rgb(170 145 88 / 8%) 38%,
+    transparent 72%
+  );
+  filter: blur(16px);
+  transform: perspective(700px) rotateX(66deg);
+  pointer-events: none;
+}
+
+.effy-home .hero-spatial-surface {
+  transform-style: preserve-3d;
+}
+
+.effy-home .hero-spatial-surface .system-window-main {
+  box-shadow:
+    0 38px 84px rgb(26 32 26 / 18%),
+    0 2px 0 rgb(255 255 255 / 60%) inset;
+}
+
+.effy-home .hero-spatial-surface .system-module {
+  border-color: rgb(68 78 65 / 18%);
+  box-shadow:
+    0 22px 54px rgb(26 32 26 / 17%),
+    0 1px 0 rgb(255 255 255 / 66%) inset;
+}
+
+.effy-home .hero-spatial-surface .system-core {
+  box-shadow:
+    0 18px 42px rgb(25 32 24 / 22%),
+    0 0 0 10px rgb(170 145 88 / 6%);
+}
+
+/* Capabilities: generated transparent assets become functional previews. */
+.effy-home .capability-system {
+  min-height: 940px;
+}
+
+.effy-home .capability-orbit {
+  gap: 104px 250px;
+}
+
+.effy-home .capability-node {
+  min-height: 402px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 22px 60px rgb(0 0 0 / 12%);
+}
+
+.effy-home .capability-node::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  background: linear-gradient(
+      135deg,
+      rgb(255 255 255 / 10%),
+      transparent 36%,
+      rgb(170 145 88 / 8%)
+    )
+    border-box;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.effy-home .capability-preview-spatial {
+  position: relative;
+  display: grid;
+  min-height: 166px;
+  padding: 0;
+  overflow: hidden;
+  border-color: rgb(238 239 228 / 13%);
+  background:
+    radial-gradient(circle at 50% 42%, rgb(140 157 125 / 18%), transparent 48%),
+    linear-gradient(145deg, #1d241d, #151a15);
+}
+
+.effy-home .capability-preview-spatial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(238 239 228 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(238 239 228 / 4%) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+}
+
+.effy-home .capability-preview-spatial .effy-motion-boundary {
+  display: grid;
+  place-items: center;
+  min-height: 166px;
+  margin: 0;
+}
+
+.effy-home .capability-preview-spatial .effy-floating-asset {
+  display: block;
+  width: min(184px, 72%);
+  margin: -18px auto -25px;
+  filter: saturate(0.92) contrast(1.02);
+}
+
+.effy-home .capability-preview-spatial .effy-floating-asset img {
+  filter: drop-shadow(0 18px 22px rgb(0 0 0 / 30%));
+}
+
+.effy-home .capability-preview-spatial .capability-preview-label {
+  position: absolute;
+  z-index: 2;
+  left: 14px;
+  bottom: 12px;
+  display: inline-flex;
+  width: auto;
+  padding: 5px 8px;
+  color: #b7bfaf;
+  background: rgb(16 21 16 / 70%);
+  border: 1px solid rgb(238 239 228 / 8%);
+  backdrop-filter: blur(8px);
+}
+
+/* Featured work: pointer depth is limited to a single case-study surface. */
+.effy-home .case-spatial-boundary,
+.effy-home .case-spatial-surface {
+  width: 100%;
+  min-height: 610px;
+  height: 100%;
+}
+
+.effy-home .case-spatial-boundary {
+  perspective: 1200px;
+}
+
+.effy-home .case-spatial-surface {
+  transform-style: preserve-3d;
+}
+
+.effy-home .case-spatial-surface .case-glow {
+  transform: translateZ(-22px);
+}
+
+.effy-home .case-spatial-surface .phone-left,
+.effy-home .case-spatial-surface .phone-right {
+  box-shadow: 0 32px 72px rgb(0 0 0 / 38%);
+}
+
+.effy-home .case-spatial-surface .phone-main {
+  box-shadow:
+    0 44px 92px rgb(0 0 0 / 46%),
+    0 0 0 1px rgb(255 255 255 / 8%);
+}
+
+.effy-home .project-browser {
+  width: 100%;
+  max-width: none;
+  min-height: 430px;
+  border: 0;
+  box-shadow: none;
+  background: #d6d6c9;
+}
+
+.effy-home .project-browser .effy-browser-bar {
+  min-height: 38px;
+  border-color: rgb(32 38 31 / 12%);
+  background: linear-gradient(180deg, #f7f5eb, #e8e5d9);
+}
+
+.effy-home .project-browser .effy-browser-bar > span:nth-child(1) {
+  background: #aa9158;
+}
+
+.effy-home .project-browser .effy-browser-screen {
+  min-height: 392px;
+}
+
+.effy-home .project-browser .effy-browser-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgb(32 38 31 / 9%);
+  pointer-events: none;
+}
+
+.effy-home .project-browser img {
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.effy-home .project-feature:hover .project-browser img {
+  transform: scale(1.025);
+}
+
+/* Process, standards, and technology use CSS depth only—no idle animation. */
+.effy-home .process-step-spatial {
+  padding: 20px 18px 28px;
+  border: 1px solid transparent;
+  background: linear-gradient(160deg, rgb(255 255 255 / 54%), transparent 72%);
+  transform-style: preserve-3d;
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.effy-home .process-step-spatial:hover {
+  z-index: 2;
+  border-color: rgb(32 38 31 / 10%);
+  box-shadow: 0 22px 54px rgb(32 38 31 / 8%);
+  transform: perspective(900px) translateY(-5px) rotateX(1.2deg);
+}
+
+.effy-home .process-step-spatial .process-icon {
+  color: #4e5a49;
+  border: 1px solid rgb(32 38 31 / 9%);
+  box-shadow:
+    10px 14px 30px rgb(32 38 31 / 10%),
+    -1px -1px 0 rgb(255 255 255 / 80%) inset;
+}
+
+.effy-home .standards-card-spatial {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 10%, rgb(170 145 88 / 12%), transparent 32%),
+    linear-gradient(145deg, rgb(255 255 255 / 4%), transparent 58%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 4%);
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.effy-home .standards-card-spatial::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -60px;
+  bottom: -86px;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgb(170 145 88 / 16%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 24px rgb(170 145 88 / 3%),
+    0 0 0 52px rgb(170 145 88 / 2%);
+}
+
+.effy-home .standards-card-spatial:hover {
+  border-color: rgb(170 145 88 / 36%);
+  box-shadow: 0 26px 60px rgb(0 0 0 / 19%);
+  transform: translateY(-5px);
+}
+
+.effy-home .standards-card-spatial .standards-icon {
+  color: #d5c38f;
+  background: linear-gradient(145deg, rgb(170 145 88 / 18%), rgb(255 255 255 / 3%));
+  box-shadow: 0 13px 28px rgb(0 0 0 / 18%);
+}
+
+.effy-home .technology-card-spatial {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 76%), rgb(244 242 232 / 80%)),
+    #fbfaf4;
+  transform-style: preserve-3d;
+}
+
+.effy-home .technology-card-spatial::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--home-spatial-sage), var(--home-spatial-gold), transparent 76%);
+  opacity: 0.72;
+}
+
+.effy-home .technology-card-spatial:hover {
+  transform: perspective(900px) translateY(-6px) rotateX(1.2deg) rotateY(-1deg);
+  box-shadow: 0 28px 60px rgb(30 36 29 / 11%);
+}
+
+.effy-home .technology-card-spatial .technology-card-top svg {
+  color: #5b6654;
+  background: linear-gradient(145deg, #f8f6ec, #e2dfd2);
+  box-shadow: 7px 9px 20px rgb(32 38 31 / 10%);
+}
+
+.effy-home .technology-card-spatial .technology-tags span {
+  box-shadow: 0 5px 12px rgb(32 38 31 / 5%);
+}
+
+/* Contact keeps the form untouched and adds one restrained system marker. */
+.effy-home .contact-copy {
+  position: relative;
+}
+
+.effy-home .contact-system-core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 190px;
+  height: 190px;
+  margin: 36px 0 6px 22px;
+}
+
+.effy-home .contact-system-core > span {
+  position: absolute;
+  border: 1px solid rgb(213 195 143 / 16%);
+  border-radius: 50%;
+}
+
+.effy-home .contact-system-core > span:nth-child(1) {
+  inset: 0;
+}
+
+.effy-home .contact-system-core > span:nth-child(2) {
+  inset: 24px;
+  border-style: dashed;
+}
+
+.effy-home .contact-system-core > span:nth-child(3) {
+  inset: 49px;
+  background: radial-gradient(circle, rgb(213 195 143 / 12%), transparent 68%);
+}
+
+.effy-home .contact-system-core img {
+  position: relative;
+  z-index: 1;
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 14px 22px rgb(0 0 0 / 32%));
+}
+
+.effy-home .contact-system-core small {
+  position: absolute;
+  bottom: 20px;
+  color: #aeb7aa;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 1180px) {
+  .effy-home .capability-system {
+    min-height: 900px;
+  }
+
+  .effy-home .capability-orbit {
+    gap: 82px 220px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .effy-home .capability-system {
+    min-height: auto;
+  }
+
+  .effy-home .capability-core {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0 auto 32px;
+    transform: none;
+  }
+
+  .effy-home .capability-connectors {
+    display: none;
+  }
+
+  .effy-home .capability-orbit {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .effy-home .capability-node {
+    min-height: 410px;
+  }
+}
+
+@media (max-width: 980px) {
+  .effy-home .project-browser,
+  .effy-home .project-browser .effy-browser-screen {
+    min-height: 330px;
+  }
+}
+
+@media (max-width: 760px) {
+  .effy-home .hero-spatial-boundary,
+  .effy-home .hero-spatial-surface {
+    min-height: 610px;
+  }
+
+  .effy-home .capability-orbit {
+    grid-template-columns: 1fr;
+  }
+
+  .effy-home .capability-node {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .effy-home .capability-preview-spatial,
+  .effy-home .capability-preview-spatial .effy-motion-boundary {
+    min-height: 184px;
+  }
+
+  .effy-home .capability-preview-spatial .effy-floating-asset {
+    width: min(210px, 70%);
+  }
+
+  .effy-home .case-spatial-boundary,
+  .effy-home .case-spatial-surface {
+    min-height: 560px;
+  }
+
+  .effy-home .project-browser,
+  .effy-home .project-browser .effy-browser-screen {
+    min-height: 300px;
+  }
+
+  .effy-home .process-step-spatial {
+    padding-inline: 14px;
+  }
+
+  .effy-home .contact-system-core {
+    width: 150px;
+    height: 150px;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .effy-home .case-spatial-boundary,
+  .effy-home .case-spatial-surface {
+    min-height: 520px;
+  }
+
+  .effy-home .project-browser,
+  .effy-home .project-browser .effy-browser-screen {
+    min-height: 250px;
+  }
+
+  .effy-home .contact-system-core {
+    display: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .effy-home .capability-node:hover,
+  .effy-home .project-feature:hover .project-browser img,
+  .effy-home .process-step-spatial:hover,
+  .effy-home .standards-card-spatial:hover,
+  .effy-home .technology-card-spatial:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-home .project-browser img,
+  .effy-home .process-step-spatial,
+  .effy-home .standards-card-spatial,
+  .effy-home .technology-card-spatial {
+    transition: none !important;
+  }
+}

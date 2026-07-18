@@ -1,24 +1,17 @@
-import { notFound } from "next/navigation";
-import LeadershipProfile from "@/components/team/LeadershipProfile";
-import { getTeamProfile, teamProfiles } from "@/data/teamProfiles";
+import { getTeamProfile } from "@/data/teamProfiles";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return Object.keys(teamProfiles).map((memberSlug) => ({ memberSlug }));
-}
-
-export async function generateMetadata({ params }) {
-  const { memberSlug } = await params;
+export function getLeadershipProfile(memberSlug) {
   const profile = getTeamProfile(memberSlug);
 
   if (!profile) {
-    return {
-      title: "Leadership Profile | Effy Tech",
-      robots: { index: false, follow: false },
-    };
+    throw new Error(`Unknown Effy Tech leadership profile: ${memberSlug}`);
   }
 
+  return profile;
+}
+
+export function createLeadershipMetadata(memberSlug) {
+  const profile = getLeadershipProfile(memberSlug);
   const title = `${profile.name} — ${profile.role} | Effy Tech`;
   const description = `${profile.name} is ${profile.role} at Effy Tech. Explore leadership responsibilities, live client work, engineering expertise, and selected technical projects.`;
   const canonical = `/${profile.slug}`;
@@ -49,13 +42,4 @@ export async function generateMetadata({ params }) {
       images: [profile.ogImage],
     },
   };
-}
-
-export default async function TeamMemberPage({ params }) {
-  const { memberSlug } = await params;
-  const profile = getTeamProfile(memberSlug);
-
-  if (!profile) notFound();
-
-  return <LeadershipProfile profile={profile} />;
 }

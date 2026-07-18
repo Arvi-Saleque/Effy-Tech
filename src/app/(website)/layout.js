@@ -6,14 +6,21 @@ import {
   GoogleTagManagerScript,
   GoogleTagManagerNoscript,
 } from "@/components/analytics/GoogleTagManager";
+import "@/styles/public-shell-spatial.css";
 
 export default function WebsiteLayout({ children }) {
   return (
     <>
+      <span id="page-top" className="public-page-top-anchor" aria-hidden="true" />
+      <a className="public-skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <GoogleTagManagerScript />
       <GoogleTagManagerNoscript />
       <Navbar />
-      {children}
+      <div id="main-content" tabIndex={-1}>
+        {children}
+      </div>
       <WhatsAppButton />
       <Analytics />
       <SpeedInsights />

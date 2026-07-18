@@ -1,0 +1,588 @@
+/* ============================================================
+   Effy Tech — Section 02 / Selected Product & Client Proof 3D
+   Isolated enhancement: targets only .client-proof-3d-section.
+   ============================================================ */
+
+.effy-home .client-proof-3d-section {
+  --proof-gold: 170 145 88;
+  --proof-sage: 105 120 97;
+  --proof-ink: 31 38 30;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 86% 12%, rgb(var(--proof-sage) / 12%), transparent 27%),
+    radial-gradient(circle at 16% 88%, rgb(var(--proof-gold) / 9%), transparent 31%),
+    linear-gradient(180deg, #f8f7ef 0%, #efeee3 100%);
+}
+
+.effy-home .client-proof-3d-section::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(rgb(52 62 49 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(52 62 49 / 5%) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 34%, #000 100%);
+}
+
+.effy-home .client-proof-atmosphere {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.effy-home .client-proof-orb,
+.effy-home .client-proof-grid-plane,
+.effy-home .client-proof-depth-line {
+  position: absolute;
+  pointer-events: none;
+}
+
+.effy-home .client-proof-orb {
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.effy-home .client-proof-orb-one {
+  top: -12%;
+  right: -4%;
+  width: 410px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 38% 40%, rgb(255 255 255 / 72%), rgb(var(--proof-sage) / 16%) 40%, transparent 72%);
+  animation: effy-proof-orb-one 15s ease-in-out infinite alternate;
+}
+
+.effy-home .client-proof-orb-two {
+  bottom: -18%;
+  left: 24%;
+  width: 360px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgb(var(--proof-gold) / 13%), transparent 69%);
+  animation: effy-proof-orb-two 18s ease-in-out infinite alternate;
+}
+
+.effy-home .client-proof-grid-plane {
+  right: -9%;
+  bottom: -36%;
+  width: min(980px, 66vw);
+  height: 620px;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgb(55 67 52 / 12%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(55 67 52 / 12%) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(ellipse at center, #000 6%, transparent 72%);
+  transform: perspective(740px) rotateX(63deg) rotateZ(-5deg);
+}
+
+.effy-home .client-proof-depth-line {
+  right: 4%;
+  width: 42%;
+  height: 1px;
+  opacity: 0.5;
+  background: linear-gradient(90deg, transparent, rgb(var(--proof-gold) / 55%), transparent);
+  transform-origin: right center;
+}
+
+.effy-home .client-proof-depth-line-one {
+  top: 18%;
+  transform: rotate(-14deg);
+}
+
+.effy-home .client-proof-depth-line-two {
+  top: 72%;
+  right: 13%;
+  transform: rotate(11deg);
+}
+
+.effy-home .client-proof-3d-section .client-trust-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Editorial copy plane */
+.effy-home .client-proof-copy-3d {
+  isolation: isolate;
+}
+
+.effy-home .client-proof-copy-3d::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -34px;
+  right: -28px;
+  bottom: -34px;
+  left: -34px;
+  border-left: 1px solid rgb(var(--proof-gold) / 35%);
+  background: linear-gradient(90deg, rgb(255 255 255 / 32%), transparent 78%);
+  pointer-events: none;
+}
+
+.effy-home .client-proof-copy-3d h2 {
+  text-shadow: 0 22px 44px rgb(var(--proof-ink) / 7%);
+}
+
+.effy-home .client-proof-3d-section .client-trust-assurance > span {
+  border-color: rgb(61 72 58 / 13%);
+  background: rgb(255 255 255 / 48%);
+  box-shadow:
+    0 12px 28px rgb(36 45 34 / 6%),
+    0 1px 0 rgb(255 255 255 / 84%) inset;
+  backdrop-filter: blur(10px);
+}
+
+.effy-home .client-proof-count {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: max-content;
+  margin-top: 32px;
+  padding: 10px 14px 10px 10px;
+  border: 1px solid rgb(57 68 54 / 13%);
+  background: rgb(255 255 255 / 40%);
+  box-shadow:
+    0 18px 36px rgb(37 46 35 / 7%),
+    0 1px 0 rgb(255 255 255 / 82%) inset;
+  backdrop-filter: blur(12px);
+}
+
+.effy-home .client-proof-count strong {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: #f1f1e7;
+  background: #273027;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+  box-shadow: 0 10px 22px rgb(31 39 30 / 18%);
+}
+
+.effy-home .client-proof-count span {
+  color: #626b5f;
+  font-size: 9px;
+  font-weight: 850;
+  line-height: 1.45;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* Staggered card deck */
+.effy-home .client-proof-deck {
+  align-items: stretch;
+  perspective: 1500px;
+  transform-style: preserve-3d;
+}
+
+.effy-home .client-proof-entry {
+  min-width: 0;
+  height: 100%;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  transform-origin: center bottom;
+}
+
+.effy-home .client-proof-motion-boundary,
+.effy-home .client-proof-tilt {
+  height: 100%;
+  min-height: inherit;
+}
+
+.effy-home .client-proof-tilt {
+  transition: filter 0.65s ease;
+}
+
+.effy-home .client-proof-card-3d {
+  --proof-accent: 170 145 88;
+  position: relative;
+  isolation: isolate;
+  height: 100%;
+  min-height: 472px;
+  overflow: visible;
+  border-color: rgb(var(--proof-accent) / 25%);
+  background:
+    linear-gradient(150deg, rgb(255 255 255 / 94%), rgb(244 243 234 / 92%));
+  box-shadow:
+    0 30px 70px rgb(31 39 30 / 13%),
+    0 1px 0 rgb(255 255 255 / 88%) inset;
+  transform: translateZ(22px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition:
+    transform 0.78s cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color 0.55s ease,
+    box-shadow 0.65s ease;
+}
+
+.effy-home .client-proof-card-3d[data-proof-index="2"] {
+  --proof-accent: 101 125 95;
+}
+
+.effy-home .client-proof-card-3d[data-proof-index="3"] {
+  --proof-accent: 80 103 82;
+}
+
+.effy-home .client-proof-card-3d::before,
+.effy-home .client-proof-card-3d::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.effy-home .client-proof-card-3d::before {
+  z-index: 8;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(118deg, transparent 30%, rgb(255 255 255 / 46%) 48%, transparent 66%);
+  transform: translateX(-75%);
+  transition:
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.effy-home .client-proof-card-3d::after {
+  z-index: 9;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 56%);
+  clip-path: polygon(0 0, 42% 0, 0 42%);
+}
+
+.effy-home .client-card-depth {
+  position: absolute;
+  z-index: -2;
+  inset: 10px -10px -10px 10px;
+  overflow: hidden;
+  border: 1px solid rgb(var(--proof-accent) / 20%);
+  background:
+    linear-gradient(145deg, rgb(var(--proof-accent) / 11%), rgb(34 43 32 / 5%));
+  box-shadow: 0 28px 64px rgb(28 36 27 / 12%);
+  transform: translateZ(-36px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.78s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.effy-home .client-card-depth::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  background-image:
+    linear-gradient(rgb(var(--proof-accent) / 20%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--proof-accent) / 20%) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.effy-home .client-card-depth i {
+  position: absolute;
+  right: -16%;
+  width: 72%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--proof-accent) / 50%));
+  transform: rotate(-28deg);
+}
+
+.effy-home .client-card-depth i:nth-child(1) { top: 24%; }
+.effy-home .client-card-depth i:nth-child(2) { top: 52%; right: -5%; }
+.effy-home .client-card-depth i:nth-child(3) { top: 78%; right: -24%; }
+
+.effy-home .client-proof-card-3d .client-logo-media {
+  height: 154px;
+  min-height: 154px;
+  border-bottom: 1px solid rgb(var(--proof-accent) / 17%);
+  background:
+    radial-gradient(circle at 72% 28%, rgb(var(--proof-accent) / 20%), transparent 38%),
+    #e8e5d9;
+  box-shadow: 0 24px 48px rgb(32 40 30 / 10%);
+  transform: translateZ(52px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.78s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.effy-home .client-proof-card-3d .client-logo-media::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgb(28 35 27 / 24%), transparent 46%),
+    linear-gradient(120deg, rgb(255 255 255 / 22%), transparent 36%);
+}
+
+.effy-home .client-proof-entry .client-proof-card-3d .client-logo-media img {
+  object-fit: cover;
+  padding: 0;
+  filter: saturate(0.86) contrast(0.97);
+  transition:
+    transform 0.82s cubic-bezier(0.25, 0.1, 0.25, 1),
+    filter 0.6s ease;
+}
+
+.effy-home .client-proof-entry .client-proof-card-3d[data-proof-index="1"] .client-logo-media img {
+  object-fit: contain;
+  padding: 26px;
+}
+
+.effy-home .client-card-status {
+  position: absolute;
+  z-index: 5;
+  left: 12px;
+  bottom: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 9px;
+  color: #eff0e4;
+  background: rgb(29 37 29 / 84%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  box-shadow: 0 12px 28px rgb(23 30 23 / 17%);
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  transform: translateZ(84px);
+  backdrop-filter: blur(10px);
+}
+
+.effy-home .client-card-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #b9cca7;
+  box-shadow: 0 0 0 4px rgb(185 204 167 / 12%);
+}
+
+.effy-home .client-proof-card-3d .client-proof-index {
+  transform: translateZ(90px);
+  box-shadow:
+    0 14px 30px rgb(22 29 22 / 22%),
+    0 1px 0 rgb(255 255 255 / 12%) inset;
+}
+
+.effy-home .client-proof-card-3d .client-logo-content {
+  position: relative;
+  z-index: 3;
+  min-height: 318px;
+  background: linear-gradient(160deg, rgb(255 255 255 / 78%), rgb(247 246 238 / 70%));
+  transform: translateZ(32px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.78s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.effy-home .client-proof-card-3d .client-logo-content > small,
+.effy-home .client-proof-card-3d .client-logo-content > strong,
+.effy-home .client-proof-card-3d .client-logo-content > p,
+.effy-home .client-proof-card-3d .client-proof-meta,
+.effy-home .client-proof-card-3d .client-logo-content > em,
+.effy-home .client-proof-card-3d .client-project-link {
+  position: relative;
+  z-index: 2;
+}
+
+.effy-home .client-proof-card-3d .client-logo-content > small {
+  border-color: rgb(var(--proof-accent) / 23%);
+  background: rgb(var(--proof-accent) / 7%);
+}
+
+.effy-home .client-proof-card-3d .client-proof-meta > div {
+  transition:
+    padding-left 0.3s ease,
+    background 0.3s ease;
+}
+
+.effy-home .client-proof-card-3d .client-project-link {
+  width: 100%;
+  justify-content: space-between;
+  border-top: 1px solid rgb(var(--proof-accent) / 17%);
+}
+
+.effy-home .client-proof-card-3d .client-project-link svg {
+  width: 28px;
+  height: 28px;
+  padding: 7px;
+  border: 1px solid rgb(var(--proof-accent) / 23%);
+  background: rgb(var(--proof-accent) / 8%);
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.effy-home .client-proof-card-3d:focus-visible {
+  outline: 3px solid rgb(var(--proof-accent) / 55%);
+  outline-offset: 6px;
+}
+
+@media (min-width: 1181px) {
+  .effy-home .client-proof-entry-2 {
+    margin-top: 26px;
+  }
+
+  .effy-home .client-proof-entry-3 {
+    margin-top: 52px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .effy-home .client-proof-tilt:hover {
+    filter: drop-shadow(0 30px 32px rgb(29 37 28 / 11%));
+  }
+
+  .effy-home .client-proof-card-3d:hover {
+    border-color: rgb(var(--proof-accent) / 48%);
+    box-shadow:
+      0 42px 94px rgb(27 35 26 / 19%),
+      0 1px 0 rgb(255 255 255 / 90%) inset;
+    transform: translateZ(30px) translateY(-3px);
+  }
+
+  .effy-home .client-proof-card-3d:hover::before {
+    opacity: 1;
+    transform: translateX(70%);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-card-depth {
+    transform: translateZ(-42px) translate(2px, 2px);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-logo-media {
+    transform: translateZ(60px) translateY(-2px);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-logo-media img {
+    filter: saturate(1) contrast(1);
+    transform: scale(1.035);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-logo-content {
+    transform: translateZ(39px);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-proof-meta > div {
+    padding-left: 6px;
+    background: rgb(var(--proof-accent) / 5%);
+  }
+
+  .effy-home .client-proof-card-3d:hover .client-project-link svg {
+    color: #f5f4eb;
+    background: rgb(var(--proof-accent));
+    transform: translate(2px, -2px);
+  }
+}
+
+@media (max-width: 1180px) {
+  .effy-home .client-proof-copy-3d::before {
+    right: 0;
+  }
+
+  .effy-home .client-proof-count {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 880px) {
+  .effy-home .client-proof-grid-plane {
+    right: -32%;
+    bottom: -20%;
+    width: 920px;
+  }
+
+  .effy-home .client-proof-entry,
+  .effy-home .client-proof-motion-boundary,
+  .effy-home .client-proof-tilt {
+    height: auto;
+  }
+
+  .effy-home .client-proof-card-3d {
+    min-height: 0;
+    transform: none;
+  }
+
+  .effy-home .client-card-depth {
+    display: none;
+  }
+
+  .effy-home .client-proof-card-3d .client-logo-media,
+  .effy-home .client-proof-card-3d .client-logo-content,
+  .effy-home .client-proof-card-3d .client-proof-index,
+  .effy-home .client-card-status {
+    transform: none;
+  }
+
+  .effy-home .client-proof-card-3d .client-logo-content {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 620px) {
+  .effy-home .client-proof-3d-section::before {
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, #000, transparent 90%);
+  }
+
+  .effy-home .client-proof-grid-plane,
+  .effy-home .client-proof-depth-line-two {
+    display: none;
+  }
+
+  .effy-home .client-proof-copy-3d::before {
+    top: -24px;
+    bottom: -20px;
+    left: -18px;
+  }
+
+  .effy-home .client-proof-count {
+    width: 100%;
+  }
+
+  .effy-home .client-proof-card-3d .client-logo-media {
+    height: 142px;
+    min-height: 142px;
+  }
+
+  .effy-home .client-proof-card-3d .client-logo-content {
+    min-height: 0;
+  }
+
+  .effy-home .client-card-status {
+    bottom: 10px;
+    left: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effy-home .client-proof-orb {
+    animation: none;
+  }
+
+  .effy-home .client-proof-entry,
+  .effy-home .client-proof-tilt,
+  .effy-home .client-proof-card-3d,
+  .effy-home .client-card-depth,
+  .effy-home .client-proof-card-3d .client-logo-media,
+  .effy-home .client-proof-card-3d .client-logo-content,
+  .effy-home .client-proof-card-3d .client-logo-media img {
+    transition: none;
+  }
+}
+
+@keyframes effy-proof-orb-one {
+  from { transform: translate3d(-10px, -12px, 0) scale(0.96); }
+  to { transform: translate3d(22px, 18px, 0) scale(1.05); }
+}
+
+@keyframes effy-proof-orb-two {
+  from { transform: translate3d(18px, 10px, 0) scale(1.04); }
+  to { transform: translate3d(-18px, -16px, 0) scale(0.95); }
+}

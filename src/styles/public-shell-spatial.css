@@ -1,0 +1,249 @@
+/* Phase 07 — final public shell polish, scoped away from admin and demo routes. */
+
+.public-page-top-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.public-skip-link {
+  position: fixed;
+  z-index: 10001;
+  top: 12px;
+  left: 12px;
+  padding: 11px 16px;
+  border: 1px solid rgb(170 145 88 / 46%);
+  border-radius: 6px;
+  color: #f4f2e8;
+  background: #20261f;
+  box-shadow: 0 12px 30px rgb(20 25 20 / 24%);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 24px));
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.public-skip-link:focus-visible {
+  outline: 3px solid #d2bd86;
+  outline-offset: 3px;
+  transform: translateY(0);
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+.mobile-nav-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mobile-nav-close {
+  display: grid;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgb(32 38 31 / 14%);
+  border-radius: 50%;
+  color: #20261f;
+  background: rgb(255 255 255 / 68%);
+  box-shadow: 0 8px 18px rgb(32 38 31 / 7%);
+  cursor: pointer;
+}
+
+.mobile-nav-close:hover {
+  border-color: rgb(123 102 58 / 38%);
+  background: #fff;
+}
+
+body:has(.effy-home) .effy-navbar,
+body:has(.effy-public-page) .effy-navbar,
+body:has(.effy-project-page) .effy-navbar,
+body:has(.coming-soon-page) .effy-navbar,
+body:has(.iam-confirmed-page) .effy-navbar {
+  border-bottom: 1px solid rgb(32 38 31 / 9%);
+  background: rgb(251 250 244 / 84%);
+  box-shadow: 0 10px 32px rgb(32 38 31 / 5%);
+  backdrop-filter: blur(16px) saturate(1.05);
+}
+
+body:has(.effy-home) .effy-navbar.is-scrolled,
+body:has(.effy-public-page) .effy-navbar.is-scrolled,
+body:has(.effy-project-page) .effy-navbar.is-scrolled,
+body:has(.coming-soon-page) .effy-navbar.is-scrolled,
+body:has(.iam-confirmed-page) .effy-navbar.is-scrolled {
+  background: rgb(251 250 244 / 94%);
+  box-shadow: 0 14px 38px rgb(32 38 31 / 8%);
+}
+
+body:has(.effy-home) .navbar-inner,
+body:has(.effy-public-page) .navbar-inner,
+body:has(.effy-project-page) .navbar-inner,
+body:has(.coming-soon-page) .navbar-inner,
+body:has(.iam-confirmed-page) .navbar-inner {
+  position: relative;
+}
+
+body:has(.effy-home) .navbar-inner::after,
+body:has(.effy-public-page) .navbar-inner::after,
+body:has(.effy-project-page) .navbar-inner::after,
+body:has(.coming-soon-page) .navbar-inner::after,
+body:has(.iam-confirmed-page) .navbar-inner::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  content: "";
+  opacity: 0.55;
+  background: linear-gradient(90deg, transparent, rgb(170 145 88 / 32%), transparent);
+}
+
+body:has(.effy-home) .nav-search,
+body:has(.effy-public-page) .nav-search,
+body:has(.coming-soon-page) .nav-search,
+body:has(.iam-confirmed-page) .nav-search {
+  border-radius: 6px;
+  box-shadow: 0 7px 18px rgb(32 38 31 / 4%);
+}
+
+body:has(.effy-home) .nav-cta,
+body:has(.effy-public-page) .nav-cta,
+body:has(.coming-soon-page) .nav-cta,
+body:has(.iam-confirmed-page) .nav-cta {
+  box-shadow: 0 11px 25px rgb(32 38 31 / 15%);
+}
+
+body:has(.effy-home) .desktop-nav a:focus-visible,
+body:has(.effy-public-page) .desktop-nav a:focus-visible,
+body:has(.coming-soon-page) .desktop-nav a:focus-visible,
+body:has(.iam-confirmed-page) .desktop-nav a:focus-visible,
+body:has(.effy-home) .nav-search:focus-visible,
+body:has(.effy-public-page) .nav-search:focus-visible,
+body:has(.coming-soon-page) .nav-search:focus-visible,
+body:has(.iam-confirmed-page) .nav-search:focus-visible,
+body:has(.effy-home) .nav-cta:focus-visible,
+body:has(.effy-public-page) .nav-cta:focus-visible,
+body:has(.coming-soon-page) .nav-cta:focus-visible,
+body:has(.iam-confirmed-page) .nav-cta:focus-visible {
+  outline: 3px solid rgb(170 145 88 / 38%);
+  outline-offset: 3px;
+}
+
+body:has(.effy-home) .new-footer,
+body:has(.effy-public-page) .new-footer,
+body:has(.effy-project-page) .new-footer,
+body:has(.coming-soon-page) .new-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(rgb(255 255 255 / 2.5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 2.5%) 1px, transparent 1px),
+    #171d17;
+  background-size: 46px 46px, 46px 46px, auto;
+}
+
+body:has(.effy-home) .new-footer::before,
+body:has(.effy-public-page) .new-footer::before,
+body:has(.effy-project-page) .new-footer::before,
+body:has(.coming-soon-page) .new-footer::before {
+  position: absolute;
+  z-index: -1;
+  top: -170px;
+  left: 8%;
+  width: 420px;
+  height: 300px;
+  content: "";
+  border-radius: 50%;
+  background: rgb(170 145 88 / 8%);
+  filter: blur(72px);
+}
+
+body:has(.effy-home) .new-footer .footer-grid > div:not(.footer-brand),
+body:has(.effy-public-page) .new-footer .footer-grid > div:not(.footer-brand),
+body:has(.effy-project-page) .new-footer .footer-grid > div:not(.footer-brand),
+body:has(.coming-soon-page) .new-footer .footer-grid > div:not(.footer-brand) {
+  padding-top: 15px;
+  border-top: 1px solid rgb(231 232 221 / 10%);
+}
+
+body:has(.effy-home) .new-footer .footer-socials a,
+body:has(.effy-public-page) .new-footer .footer-socials a,
+body:has(.effy-project-page) .new-footer .footer-socials a,
+body:has(.coming-soon-page) .new-footer .footer-socials a {
+  border-radius: 5px;
+  background: rgb(255 255 255 / 2%);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 12%);
+}
+
+body:has(.effy-home) .new-footer .footer-bottom,
+body:has(.effy-public-page) .new-footer .footer-bottom,
+body:has(.effy-project-page) .new-footer .footer-bottom,
+body:has(.coming-soon-page) .new-footer .footer-bottom {
+  border-top-color: rgb(231 232 221 / 12%);
+}
+
+body:has(.effy-home) .whatsapp-ping,
+body:has(.effy-public-page) .whatsapp-ping,
+body:has(.effy-project-page) .whatsapp-ping,
+body:has(.coming-soon-page) .whatsapp-ping,
+body:has(.iam-confirmed-page) .whatsapp-ping {
+  inset: -5px;
+  border: 1px solid rgb(37 211 102 / 24%);
+  background: transparent;
+  opacity: 1;
+  animation: none;
+}
+
+body:has(.effy-home) .whatsapp-fab,
+body:has(.effy-public-page) .whatsapp-fab,
+body:has(.effy-project-page) .whatsapp-fab,
+body:has(.coming-soon-page) .whatsapp-fab,
+body:has(.iam-confirmed-page) .whatsapp-fab {
+  border: 1px solid rgb(255 255 255 / 22%);
+  box-shadow:
+    0 13px 30px rgb(20 54 35 / 24%),
+    0 2px 8px rgb(0 0 0 / 16%);
+}
+
+@media (max-width: 860px) {
+  body:has(.effy-home) .effy-navbar,
+  body:has(.effy-public-page) .effy-navbar,
+  body:has(.effy-project-page) .effy-navbar,
+  body:has(.coming-soon-page) .effy-navbar,
+  body:has(.iam-confirmed-page) .effy-navbar {
+    background: rgb(251 250 244 / 94%);
+    backdrop-filter: blur(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-skip-link {
+    transition: none;
+  }
+
+  .mobile-nav {
+    animation: none !important;
+  }
+
+  body:has(.effy-home) .effy-navbar,
+  body:has(.effy-public-page) .effy-navbar,
+  body:has(.effy-project-page) .effy-navbar,
+  body:has(.coming-soon-page) .effy-navbar,
+  body:has(.iam-confirmed-page) .effy-navbar,
+  body:has(.effy-home) .whatsapp-fab,
+  body:has(.effy-public-page) .whatsapp-fab,
+  body:has(.effy-project-page) .whatsapp-fab,
+  body:has(.coming-soon-page) .whatsapp-fab,
+  body:has(.iam-confirmed-page) .whatsapp-fab {
+    transition: none;
+  }
+}

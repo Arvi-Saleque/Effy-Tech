@@ -10,6 +10,7 @@ import {
   FaShieldHalved,
   FaWhatsapp,
 } from "react-icons/fa6";
+import { MotionBoundary, TiltSurface } from "@/components/visuals";
 import styles from "./confirmed.module.css";
 
 const PLAY_STORE_URL =
@@ -64,7 +65,7 @@ export default async function EmailConfirmedPage({ searchParams }) {
   const isSuccess = state.tone === "success";
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} iam-confirmed-page`} data-tone={state.tone}>
       <div className={styles.ambientOne} aria-hidden="true" />
       <div className={styles.ambientTwo} aria-hidden="true" />
 
@@ -84,16 +85,32 @@ export default async function EmailConfirmedPage({ searchParams }) {
           </span>
         </Link>
 
-        <div className={styles.grid}>
-          <article className={styles.statusCard}>
-            <div
-              className={`${styles.statusIcon} ${
-                isSuccess ? styles.successIcon : styles.errorIcon
-              }`}
-              aria-hidden="true"
-            >
-              {isSuccess ? <FaCircleCheck /> : <FaCircleExclamation />}
-            </div>
+        <MotionBoundary className={styles.motionBoundary}>
+          <TiltSurface
+            className={styles.tiltSurface}
+            maxTilt={1.4}
+            perspective={1400}
+          >
+            <div className={styles.grid}>
+              <div className={styles.stageGrid} aria-hidden="true" />
+              <article className={styles.statusCard}>
+                <div
+                  className={`${styles.stateBadge} ${
+                    isSuccess ? styles.successBadge : styles.errorBadge
+                  }`}
+                >
+                  <span aria-hidden="true" />
+                  {isSuccess ? "Verification complete" : "Action required"}
+                </div>
+
+                <div
+                  className={`${styles.statusIcon} ${
+                    isSuccess ? styles.successIcon : styles.errorIcon
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isSuccess ? <FaCircleCheck /> : <FaCircleExclamation />}
+                </div>
 
             <p className={styles.eyebrow}>{state.eyebrow}</p>
             <h1>{state.title}</h1>
@@ -144,9 +161,9 @@ export default async function EmailConfirmedPage({ searchParams }) {
             <p className={styles.safetyNote}>
               If you did not request this email, no action is required.
             </p>
-          </article>
+              </article>
 
-          <aside className={styles.contextPanel}>
+              <aside className={styles.contextPanel}>
             <p className={styles.panelKicker}>WHAT HAPPENS NEXT</p>
             <h2>{isSuccess ? "Continue inside the app" : "Request a fresh link"}</h2>
             <p>
@@ -194,8 +211,10 @@ export default async function EmailConfirmedPage({ searchParams }) {
               Need help? Message Effy Tech support
               <FaArrowUpRightFromSquare aria-hidden="true" />
             </a>
-          </aside>
-        </div>
+              </aside>
+            </div>
+          </TiltSurface>
+        </MotionBoundary>
 
         <p className={styles.footerText}>
           © 2026 Effy Tech. Islamic Amal Tracker support utility.

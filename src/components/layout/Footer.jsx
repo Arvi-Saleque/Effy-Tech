@@ -31,7 +31,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="home-shell footer-bottom"><span>© {new Date().getFullYear()} Effy Tech. All rights reserved.</span><a href="#hero">Back to top <ArrowUpRight size={15}/></a></div>
+      <div className="home-shell footer-bottom"><span>© {new Date().getFullYear()} Effy Tech. All rights reserved.</span><a href="#page-top">Back to top <ArrowUpRight size={15}/></a></div>
     </footer>
   );
 }

@@ -19,6 +19,7 @@ import {
   HiOutlineSparkles,
 } from "react-icons/hi";
 import Footer from "@/components/layout/Footer";
+import { MotionBoundary, TiltSurface } from "@/components/visuals";
 
 const socialIcons = {
   linkedin: FaLinkedinIn,
@@ -33,6 +34,12 @@ const whatsappUrl =
   encodeURIComponent(
     "Hello Effy Tech, I visited a leadership profile and would like to discuss a software project.",
   );
+
+const profileSequence = {
+  salek: "01",
+  adnan: "02",
+  saif: "03",
+};
 
 function SectionHeading({ eyebrow, title, description, dark = false }) {
   return (
@@ -98,7 +105,7 @@ function MetricCard({ metric }) {
 
 function ClientProjectCard({ project }) {
   return (
-    <article className="group overflow-hidden rounded-[1.6rem] border border-[#d9d4c6] bg-[#fbfaf4] shadow-[0_18px_55px_rgba(32,38,31,0.07)] transition-transform duration-300 hover:-translate-y-1">
+    <article className="profile-client-project group overflow-hidden rounded-[1.6rem] border border-[#d9d4c6] bg-[#fbfaf4] shadow-[0_18px_55px_rgba(32,38,31,0.07)] transition-transform duration-300 hover:-translate-y-1">
       <div className="relative aspect-[5/3] overflow-hidden border-b border-[#ded9ca] bg-[#ece9dd]">
         <Image
           src={project.image}
@@ -166,7 +173,7 @@ function ClientProjectCard({ project }) {
 
 function ExpertiseCard({ item, index }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-white/[0.045] p-6 sm:p-7">
+    <article className="profile-expertise-card rounded-2xl border border-white/10 bg-white/[0.045] p-6 sm:p-7">
       <div className="flex items-center justify-between">
         <span className="font-heading text-sm font-bold text-[#d0b777]">
           0{index + 1}
@@ -193,7 +200,7 @@ function ExpertiseCard({ item, index }) {
 
 function TechnicalProjectCard({ project }) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-[#d7d1c2] bg-white/60 p-6 sm:p-7">
+    <article className="profile-technical-card flex h-full flex-col rounded-2xl border border-[#d7d1c2] bg-white/60 p-6 sm:p-7">
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
         {project.type}
       </p>
@@ -255,13 +262,13 @@ export default function LeadershipProfile({ profile }) {
   };
 
   return (
-    <main className="effy-public-page overflow-hidden bg-[#fbfaf4] text-[#20261f]">
+    <main className={`effy-public-page effy-team-profile effy-team-profile--${profile.slug} overflow-hidden bg-[#fbfaf4] text-[#20261f]`}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <section className="relative overflow-hidden bg-[#1d241d] pb-20 pt-36 text-[#fbfaf4] sm:pb-24 sm:pt-40 lg:min-h-[88vh] lg:pb-28">
+      <section className="profile-spatial-hero relative overflow-hidden bg-[#1d241d] pb-20 pt-36 text-[#fbfaf4] sm:pb-24 sm:pt-40 lg:min-h-[88vh] lg:pb-28">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -left-40 top-8 h-[520px] w-[520px] rounded-full bg-[#b99f62]/10 blur-[130px]" />
           <div className="absolute -right-40 bottom-0 h-[460px] w-[460px] rounded-full bg-[#7d8a78]/10 blur-[120px]" />
@@ -276,7 +283,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
-          <div>
+          <div className="profile-hero-copy">
             <Link
               href="/#team"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#d6c18e] transition-colors hover:text-[#f0dfb3]"
@@ -331,33 +338,46 @@ export default function LeadershipProfile({ profile }) {
               ))}
             </div>
 
-            <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-7 border-t border-white/10 pt-8 sm:grid-cols-4">
+            <div className="profile-metrics mt-10 grid grid-cols-2 gap-x-4 gap-y-7 border-t border-white/10 pt-8 sm:grid-cols-4">
               {profile.metrics.map((metric) => (
                 <MetricCard key={metric.label} metric={metric} />
               ))}
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[540px] lg:mx-0 lg:ml-auto">
-            <div className="absolute -inset-5 rounded-[2.2rem] bg-[#c8ad6e]/10 blur-3xl" />
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/12 bg-[#252d24] p-2 shadow-[0_30px_90px_rgba(0,0,0,0.33)]">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.55rem]">
-                <Image
-                  src={profile.portrait}
-                  alt={`${profile.name}, ${profile.role} at Effy Tech`}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 90vw, 42vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#1d241d]/85 to-transparent" />
-              </div>
-            </div>
+          <div className="profile-portrait-column relative mx-auto w-full max-w-[540px] lg:mx-0 lg:ml-auto">
+            <MotionBoundary className="profile-portrait-motion">
+              <TiltSurface className="profile-portrait-tilt" maxTilt={1.9} perspective={1300}>
+                <div className="profile-portrait-stage">
+                  <div className="profile-portrait-grid" aria-hidden="true" />
+                  <div className="profile-portrait-frame relative overflow-hidden rounded-[2rem] border border-white/12 bg-[#252d24] p-2 shadow-[0_30px_90px_rgba(0,0,0,0.33)]">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.55rem]">
+                      <Image
+                        src={profile.portrait}
+                        alt={`${profile.name}, ${profile.role} at Effy Tech`}
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 90vw, 42vw"
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#1d241d]/85 to-transparent" />
+                    </div>
+                  </div>
+                  <div className="profile-portrait-badge" aria-hidden="true">
+                    <span>{profileSequence[profile.slug]}</span>
+                    <div>
+                      <small>EFFY LEADERSHIP</small>
+                      <strong>{profile.role}</strong>
+                    </div>
+                  </div>
+                </div>
+              </TiltSurface>
+            </MotionBoundary>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#fbfaf4] py-20 sm:py-24">
+      <section className="profile-leadership bg-[#fbfaf4] py-20 sm:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <SectionHeading
             eyebrow={profile.leadership.eyebrow}
@@ -365,7 +385,7 @@ export default function LeadershipProfile({ profile }) {
             description={profile.leadership.description}
           />
 
-          <div className="rounded-[1.6rem] border border-[#d9d4c5] bg-[#f3f1e7] p-6 sm:p-8">
+          <div className="profile-responsibility-card rounded-[1.6rem] border border-[#d9d4c5] bg-[#f3f1e7] p-6 sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
               Core responsibilities
             </p>
@@ -384,7 +404,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section id="client-work" className="bg-[#f0eee4] py-20 sm:py-24">
+      <section id="client-work" className="profile-client-work bg-[#f0eee4] py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Selected client work"
@@ -399,7 +419,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="bg-[#202720] py-20 text-[#fbfaf4] sm:py-24">
+      <section className="profile-expertise bg-[#202720] py-20 text-[#fbfaf4] sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Core expertise"
@@ -415,7 +435,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="bg-[#fbfaf4] py-20 sm:py-24">
+      <section className="profile-experience bg-[#fbfaf4] py-20 sm:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <SectionHeading
@@ -426,7 +446,7 @@ export default function LeadershipProfile({ profile }) {
               {profile.experience.map((item) => (
                 <article
                   key={`${item.role}-${item.organization}`}
-                  className="rounded-2xl border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-7"
+                  className="profile-experience-card rounded-2xl border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-7"
                 >
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
                     {item.period}
@@ -447,7 +467,7 @@ export default function LeadershipProfile({ profile }) {
 
           <div>
             <SectionHeading eyebrow="Selected proof" title="Highlights and recognition" />
-            <div className="mt-10 rounded-[1.6rem] border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-8">
+            <div className="profile-highlight-card mt-10 rounded-[1.6rem] border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-8">
               <ul className="space-y-4">
                 {profile.highlights.map((highlight) => (
                   <li key={highlight} className="flex gap-3 text-sm leading-7 text-[#50584f]">
@@ -464,7 +484,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="bg-[#efede3] py-20 sm:py-24">
+      <section className="profile-technical-work bg-[#efede3] py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Technical work"
@@ -479,9 +499,9 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="bg-[#fbfaf4] py-20 sm:py-24">
+      <section className="profile-education bg-[#fbfaf4] py-20 sm:py-24">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
-          <div className="rounded-[1.6rem] border border-[#d8d3c4] bg-[#f4f2e9] p-7 sm:p-9">
+          <div className="profile-education-card rounded-[1.6rem] border border-[#d8d3c4] bg-[#f4f2e9] p-7 sm:p-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
               Education
             </p>
@@ -499,7 +519,7 @@ export default function LeadershipProfile({ profile }) {
             </p>
           </div>
 
-          <div className="flex flex-col justify-between rounded-[1.6rem] border border-[#d8d3c4] bg-white/65 p-7 sm:p-9">
+          <div className="profile-cv-card flex flex-col justify-between rounded-[1.6rem] border border-[#d8d3c4] bg-white/65 p-7 sm:p-9">
             <div>
               <HiOutlineBriefcase className="h-8 w-8 text-[#95783b]" aria-hidden="true" />
               <h2 className="mt-5 font-heading text-3xl font-bold text-[#20261f]">
@@ -521,7 +541,7 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#1c231c] py-20 text-center text-[#fbfaf4] sm:py-24">
+      <section className="profile-final-cta relative overflow-hidden bg-[#1c231c] py-20 text-center text-[#fbfaf4] sm:py-24">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-[#b99f62]/12 blur-[100px]" />
         </div>
