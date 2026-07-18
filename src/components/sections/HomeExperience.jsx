@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import "@/styles/home-cinematic.css";
 import ContactForm from "@/components/sections/ContactForm";
 import {
   BrowserMockup,
@@ -11,6 +10,7 @@ import {
   MotionBoundary,
   TiltSurface,
 } from "@/components/visuals";
+import { useSpatialMotion } from "@/components/visuals/MotionBoundary";
 import {
   motion,
   useReducedMotion,
@@ -20,6 +20,8 @@ import {
 } from "framer-motion";
 import {
   ArrowRight,
+  Bot,
+  Braces,
   Check,
   CircuitBoard,
   Code2,
@@ -206,123 +208,173 @@ const fade = {
   transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
 };
 
-function CinematicSection({ children, className = "", ...props }) {
-  const reducedMotion = useReducedMotion();
-
+function ProductWindow() {
   return (
-    <motion.section
-      className={`cinematic-section ${className}`}
-      initial={reducedMotion ? false : { opacity: 0.35, y: 96, scale: 0.965, rotateX: 3.5 }}
-      whileInView={reducedMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      viewport={{ once: true, amount: 0.06, margin: "0px 0px -6% 0px" }}
-      transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-      style={{ transformPerspective: 1600, transformOrigin: "50% 0%" }}
-      {...props}
-    >
-      {children}
-    </motion.section>
+    <div className="system-window system-window-main">
+      <div className="system-window-bar">
+        <span /><span /><span />
+        <p>operations.effy</p>
+      </div>
+      <div className="system-dashboard">
+        <aside>
+          <div className="dashboard-logo"><Braces size={17} /></div>
+          {Array.from({ length: 5 }).map((_, i) => <span key={i} className={i === 0 ? "active" : ""} />)}
+        </aside>
+        <div className="dashboard-content">
+          <div className="dashboard-title">
+            <div><small>BUSINESS CONTROL</small><strong>Operations overview</strong></div>
+            <span>Live</span>
+          </div>
+          <div className="metric-grid">
+            <div><small>Active workflows</small><strong>24</strong><em>+12%</em></div>
+            <div><small>Hours recovered</small><strong>186</strong><em>this month</em></div>
+            <div><small>Completion rate</small><strong>94%</strong><em>+8.4%</em></div>
+          </div>
+          <div className="chart-card">
+            <div className="chart-heading"><span>System performance</span><small>Last 30 days</small></div>
+            <svg viewBox="0 0 480 120" aria-hidden="true">
+              <path d="M0 100 C45 92, 55 62, 92 72 S150 96, 188 50 S250 70, 294 38 S360 52, 406 22 S450 26, 480 10" fill="none" stroke="currentColor" strokeWidth="3" />
+              <path d="M0 100 C45 92, 55 62, 92 72 S150 96, 188 50 S250 70, 294 38 S360 52, 406 22 S450 26, 480 10 L480 120 L0 120 Z" fill="url(#chartFill)" opacity=".25" />
+              <defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="currentColor"/><stop offset="1" stopColor="currentColor" stopOpacity="0"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function SystemHeroVisual() {
-  const reducedMotion = useReducedMotion();
-  const floatMain = reducedMotion ? undefined : { y: [0, -14, 0], rotateZ: [-1.5, 1, -1.5] };
-  const floatLeft = reducedMotion ? undefined : { y: [0, 12, 0], rotateZ: [-6, -2, -6] };
-  const floatRight = reducedMotion ? undefined : { y: [0, -10, 0], rotateZ: [7, 3, 7] };
+  const { motionAllowed } = useSpatialMotion();
 
   return (
-    <div className="system-visual cinematic-system-visual" aria-label="Layered 3D Effy Tech digital systems scene">
-      <div className="cinematic-scene-grid" aria-hidden="true" />
-      <div className="cinematic-scene-halo" aria-hidden="true" />
-      <motion.div
-        className="cinematic-scene-orbit cinematic-scene-orbit-outer"
-        animate={reducedMotion ? undefined : { rotate: 360 }}
-        transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="cinematic-scene-orbit cinematic-scene-orbit-inner"
-        animate={reducedMotion ? undefined : { rotate: -360 }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-        aria-hidden="true"
-      />
+    <div
+      className="system-visual hero-3d-scene"
+      role="img"
+      aria-label="Connected digital system with dashboard, mobile product, automation, and artificial intelligence layers"
+    >
+      <div className="hero-scene-atmosphere" aria-hidden="true">
+        <div className="hero-scene-halo" />
+        <div className="hero-scene-grid" />
+        <div className="hero-scene-glare" />
+      </div>
 
-      <motion.div
-        className="cinematic-scene-object cinematic-scene-object-main"
-        style={{ z: 90 }}
-        animate={floatMain}
-        transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Image
-          src="/images/effy_tech/spatial/business-systems.webp"
-          alt="3D business operations and analytics system"
-          fill
-          priority
-          sizes="(max-width: 760px) 92vw, 650px"
+      <div className="hero-scene-status" aria-hidden="true">
+        <i />
+        <span>SYSTEM ONLINE</span>
+        <strong>04 CONNECTED LAYERS</strong>
+      </div>
+
+      <div className="hero-depth-layer hero-depth-back" aria-hidden="true">
+        <div className="brand-rail brand-rail-one" />
+        <div className="brand-rail brand-rail-two" />
+        <div className="brand-rail brand-rail-three" />
+        <motion.div
+          className="system-orbit system-orbit-a"
+          animate={motionAllowed ? { rotate: 360 } : undefined}
+          transition={motionAllowed ? { duration: 38, repeat: Infinity, ease: "linear" } : undefined}
         />
-      </motion.div>
-
-      <motion.div
-        className="cinematic-scene-object cinematic-scene-object-left"
-        style={{ z: 145 }}
-        animate={floatLeft}
-        transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut" }}
-        aria-hidden="true"
-      >
-        <Image src="/images/effy_tech/spatial/web-application.webp" alt="" fill sizes="220px" />
-      </motion.div>
-
-      <motion.div
-        className="cinematic-scene-object cinematic-scene-object-right"
-        style={{ z: 125 }}
-        animate={floatRight}
-        transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut" }}
-        aria-hidden="true"
-      >
-        <Image src="/images/effy_tech/spatial/mobile-product.webp" alt="" fill sizes="190px" />
-      </motion.div>
-
-      <div className="cinematic-scene-chip cinematic-scene-chip-top">
-        <span>01</span><strong>CONNECTED SYSTEMS</strong><small>Product · Data · Automation</small>
+        <div className="system-orbit system-orbit-b" />
       </div>
-      <div className="cinematic-scene-chip cinematic-scene-chip-bottom">
-        <i /><strong>LIVE ARCHITECTURE</strong><small>Built to scale</small>
+
+      <div className="hero-depth-layer hero-depth-dashboard">
+        <ProductWindow />
       </div>
-      <div className="cinematic-scene-plinth" aria-hidden="true" />
+
+      <div className="hero-depth-layer hero-depth-mobile">
+        <motion.div
+          className="system-module module-mobile"
+          animate={motionAllowed ? { y: [0, -8, 0] } : undefined}
+          transition={motionAllowed ? { duration: 5, repeat: Infinity, ease: "easeInOut" } : undefined}
+        >
+          <div className="module-label"><Smartphone size={15} /> MOBILE PRODUCT</div>
+          <Image src="/images/amal/today_dashboard_prayer_times.jpeg" alt="Islamic Amal Tracker mobile interface" width={210} height={420} />
+        </motion.div>
+      </div>
+
+      <div className="hero-depth-layer hero-depth-flow">
+        <motion.div
+          className="system-module module-flow"
+          animate={motionAllowed ? { y: [0, 7, 0] } : undefined}
+          transition={motionAllowed ? { duration: 5.8, repeat: Infinity, ease: "easeInOut" } : undefined}
+        >
+          <div className="module-label"><Workflow size={15} /> AUTOMATION</div>
+          <div className="flow-list">
+            <div><span>01</span><p>New request received</p><i /></div>
+            <div><span>02</span><p>Validate and assign</p><i /></div>
+            <div><span>03</span><p>Update system</p><Check size={14} /></div>
+          </div>
+        </motion.div>
+      </div>
+
+      <div className="hero-depth-layer hero-depth-ai">
+        <div className="system-module module-ai">
+          <div className="module-label"><Bot size={15} /> AI LAYER</div>
+          <div className="ai-score"><strong>92%</strong><span>forecast confidence</span></div>
+          <div className="ai-bars"><i /><i /><i /><i /><i /><i /></div>
+        </div>
+      </div>
+
+      <div className="hero-depth-layer hero-depth-core">
+        <div className="system-core">
+          <Image src="/images/logo.png" alt="" width={50} height={50} />
+          <span>EFFY SYSTEM</span>
+        </div>
+      </div>
+
+      <div className="hero-scene-axis" aria-hidden="true">
+        <span>STRATEGY</span>
+        <i />
+        <span>DESIGN</span>
+        <i />
+        <span>ENGINEERING</span>
+      </div>
     </div>
   );
 }
 
 export default function HomeExperience() {
   const heroRef = useRef(null);
-  const reducedMotion = useReducedMotion();
-  const { scrollYProgress: pageScrollProgress } = useScroll();
-  const smoothPageProgress = useSpring(pageScrollProgress, { stiffness: 120, damping: 28, mass: 0.35 });
+  const prefersReducedMotion = Boolean(useReducedMotion());
   const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroCopyY = useTransform(heroScrollProgress, [0, 1], [0, -96]);
-  const heroVisualY = useTransform(heroScrollProgress, [0, 1], [0, 150]);
-  const heroVisualScale = useTransform(heroScrollProgress, [0, 1], [1, 0.84]);
-  const heroVisualRotate = useTransform(heroScrollProgress, [0, 1], [0, 7]);
-  const heroBackgroundY = useTransform(heroScrollProgress, [0, 1], [0, 120]);
+  const smoothHeroProgress = useSpring(heroScrollProgress, {
+    stiffness: 110,
+    damping: 28,
+    mass: 0.25,
+  });
+  const heroCopyShift = useTransform(smoothHeroProgress, [0, 1], [0, -48]);
+  const heroSceneShift = useTransform(smoothHeroProgress, [0, 1], [0, 88]);
+  const heroAtmosphereShift = useTransform(smoothHeroProgress, [0, 1], [0, 130]);
 
   return (
     <main className="effy-home">
-      <motion.div className="home-scroll-progress" style={{ scaleX: smoothPageProgress }} aria-hidden="true" />
-
-      <section ref={heroRef} id="hero" className="system-hero cinematic-hero">
-        <motion.div className="hero-grain" style={{ y: reducedMotion ? 0 : heroBackgroundY }} />
-        <div className="hero-depth-orb hero-depth-orb-one" aria-hidden="true" />
-        <div className="hero-depth-orb hero-depth-orb-two" aria-hidden="true" />
+      <section
+        ref={heroRef}
+        id="hero"
+        className="system-hero hero-3d-section"
+        data-section-effect="hero-3d-v1"
+      >
+        <motion.div
+          className="hero-3d-atmosphere"
+          aria-hidden="true"
+          style={prefersReducedMotion ? undefined : { y: heroAtmosphereShift }}
+        >
+          <div className="hero-3d-orb hero-3d-orb-gold" />
+          <div className="hero-3d-orb hero-3d-orb-sage" />
+          <div className="hero-3d-grid-plane" />
+          <div className="hero-3d-beam" />
+        </motion.div>
+        <div className="hero-grain" />
         <div className="home-shell hero-grid">
           <motion.div
-            className="hero-copy"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{ y: reducedMotion ? 0 : heroCopyY }}
-            transition={{ duration: 0.8 }}
+            className="hero-copy hero-copy-3d"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .8 }}
+            style={prefersReducedMotion ? undefined : { "--hero-copy-shift": heroCopyShift }}
           >
             <div className="eyebrow"><span /> CUSTOM SOFTWARE SYSTEMS</div>
             <h1><span>We turn complex workflows</span><span>into simple digital systems.</span></h1>
@@ -338,18 +390,14 @@ export default function HomeExperience() {
             </div>
           </motion.div>
           <motion.div
-            className="hero-system"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{
-              y: reducedMotion ? 0 : heroVisualY,
-              scale: reducedMotion ? 1 : heroVisualScale,
-              rotateZ: reducedMotion ? 0 : heroVisualRotate,
-            }}
-            transition={{ duration: 1, delay: 0.12 }}
+            className="hero-system hero-system-3d"
+            initial={{ opacity: 0, scale: .96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: .12 }}
+            style={prefersReducedMotion ? undefined : { "--hero-scene-shift": heroSceneShift }}
           >
             <MotionBoundary className="hero-spatial-boundary" strict={false}>
-              <TiltSurface className="hero-spatial-surface" maxTilt={7.5} perspective={1450}>
+              <TiltSurface className="hero-spatial-surface" maxTilt={4.5} perspective={1500}>
                 <SystemHeroVisual />
               </TiltSurface>
             </MotionBoundary>
@@ -358,14 +406,28 @@ export default function HomeExperience() {
         <div className="home-shell audience-strip">
           <span>BUILT FOR</span><p>Businesses</p><i /><p>Startups</p><i /><p>Institutions</p><i /><p>Product Teams</p>
         </div>
-        <a className="hero-scroll-cue" href="#services" aria-label="Scroll to explore Effy Tech services">
-          <span>SCROLL TO EXPLORE</span><i />
-        </a>
       </section>
 
-      <CinematicSection className="client-trust-section" aria-labelledby="client-trust-title">
+      <section
+        className="client-trust-section client-proof-3d-section"
+        aria-labelledby="client-trust-title"
+        data-section-effect="client-proof-3d-v1"
+      >
+        <div className="client-proof-atmosphere" aria-hidden="true">
+          <div className="client-proof-orb client-proof-orb-one" />
+          <div className="client-proof-orb client-proof-orb-two" />
+          <div className="client-proof-grid-plane" />
+          <div className="client-proof-depth-line client-proof-depth-line-one" />
+          <div className="client-proof-depth-line client-proof-depth-line-two" />
+        </div>
         <div className="home-shell client-trust-inner">
-          <motion.div className="client-trust-copy" {...fade}>
+          <motion.div
+            className="client-trust-copy client-proof-copy-3d"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 32 }}
+            whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 1.35, delay: 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             <span>00 — SELECTED PRODUCT &amp; PLATFORM PROOF</span>
             <h2 id="client-trust-title">Software already built for real users and operational teams.</h2>
             <p>A mix of Effy Tech-owned products and delivered client or institutional platforms—each designed and engineered for active use.</p>
@@ -373,37 +435,62 @@ export default function HomeExperience() {
               <span><CheckCircle2 size={15} /> Clear product ownership</span>
               <span><ShieldCheck size={15} /> Production-minded engineering</span>
             </div>
+            <div className="client-proof-count" aria-label="Three selected systems">
+              <strong>03</strong>
+              <span>Selected systems<br />in active use</span>
+            </div>
           </motion.div>
 
-          <div className="client-logo-wall" aria-label="Selected Effy Tech products and delivered platforms">
+          <div
+            className="client-logo-wall client-proof-deck"
+            aria-label="Selected Effy Tech products and delivered platforms"
+            data-motion-revision="calm-stable-v4"
+          >
             {clientProof.map((client, index) => (
-              <MotionBoundary className="client-logo-tilt-boundary" key={client.name}>
-                <TiltSurface className="client-logo-card-tilt" maxTilt={6.5} perspective={1100}>
-                  <Link href={client.href} className={`client-logo-card client-logo-card-${index + 1}`}>
-                    <div className="client-logo-media">
-                      <Image src={client.image} alt="" fill sizes="(max-width: 820px) 160px, 240px" />
-                      <span className="client-proof-index">0{index + 1}</span>
-                    </div>
-                    <div className="client-logo-content">
-                      <small>{client.proofType}</small>
-                      <strong>{client.name}</strong>
-                      <p>{client.note}</p>
-                      <dl className="client-proof-meta">
-                        <div><dt>Status</dt><dd>{client.status}</dd></div>
-                        <div><dt>Use case</dt><dd>{client.audience}</dd></div>
-                      </dl>
-                      <em>{client.tech}</em>
-                      <span className="client-project-link">View project <ArrowUpRight size={14} /></span>
-                    </div>
-                  </Link>
-                </TiltSurface>
-              </MotionBoundary>
+              <motion.div
+                className={`client-proof-entry client-proof-entry-${index + 1}`}
+                key={client.name}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 38 }}
+                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.32 }}
+                transition={{ duration: 1.45, delay: 0.1 + index * 0.14, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                <MotionBoundary className="client-proof-motion-boundary">
+                  <TiltSurface className="client-proof-tilt" disabled perspective={1500}>
+                    <Link
+                      href={client.href}
+                      className="client-logo-card client-proof-card-3d"
+                      data-proof-index={index + 1}
+                    >
+                      <div className="client-card-depth" aria-hidden="true">
+                        <i /><i /><i />
+                      </div>
+                      <div className="client-logo-media">
+                        <Image src={client.image} alt="" fill sizes="(max-width: 820px) 160px, 240px" />
+                        <span className="client-card-status"><i /> REAL-WORLD SYSTEM</span>
+                        <span className="client-proof-index">0{index + 1}</span>
+                      </div>
+                      <div className="client-logo-content">
+                        <small>{client.proofType}</small>
+                        <strong>{client.name}</strong>
+                        <p>{client.note}</p>
+                        <dl className="client-proof-meta">
+                          <div><dt>Status</dt><dd>{client.status}</dd></div>
+                          <div><dt>Use case</dt><dd>{client.audience}</dd></div>
+                        </dl>
+                        <em>{client.tech}</em>
+                        <span className="client-project-link">View project <ArrowUpRight size={14} /></span>
+                      </div>
+                    </Link>
+                  </TiltSurface>
+                </MotionBoundary>
+              </motion.div>
             ))}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="services" className="capability-section">
+      <section id="services" className="capability-section">
         <div className="home-shell">
           <motion.div className="section-intro section-intro-inverse" {...fade}>
             <span>01 — THE EFFY SYSTEM</span>
@@ -419,37 +506,33 @@ export default function HomeExperience() {
             <div className="capability-connectors" aria-hidden="true"><i/><i/><i/><i/></div>
             <div className="capability-orbit">
               {capabilities.map(({ number, title, description, icon: Icon, asset, assetAlt, preview }, index) => (
-                <MotionBoundary className="capability-card-boundary" key={title}>
-                  <TiltSurface className="capability-card-tilt" maxTilt={5.5} perspective={1100}>
-                    <motion.article className={`capability-node capability-node-${index+1}`} {...fade}>
-                      <div className="capability-top"><span>{number}</span><div className="capability-icon"><Icon size={24} /></div></div>
-                      <h3>{title}</h3>
-                      <p>{description}</p>
-                      <div className="capability-preview capability-preview-spatial">
-                        <MotionBoundary>
-                          <FloatingAsset
-                            alt={assetAlt}
-                            animate={false}
-                            className="capability-spatial-asset"
-                            height={800}
-                            sizes="(max-width: 760px) 72vw, 260px"
-                            src={asset}
-                            width={800}
-                          />
-                        </MotionBoundary>
-                        <b className="capability-preview-label">{preview}</b>
-                      </div>
-                      <Link href="/allservices">Explore capability <ArrowRight size={15} /></Link>
-                    </motion.article>
-                  </TiltSurface>
-                </MotionBoundary>
+                <motion.article className={`capability-node capability-node-${index+1}`} key={title} {...fade}>
+                  <div className="capability-top"><span>{number}</span><div className="capability-icon"><Icon size={24} /></div></div>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                  <div className="capability-preview capability-preview-spatial">
+                    <MotionBoundary>
+                      <FloatingAsset
+                        alt={assetAlt}
+                        animate={false}
+                        className="capability-spatial-asset"
+                        height={800}
+                        sizes="(max-width: 760px) 72vw, 260px"
+                        src={asset}
+                        width={800}
+                      />
+                    </MotionBoundary>
+                    <b className="capability-preview-label">{preview}</b>
+                  </div>
+                  <Link href="/allservices">Explore capability <ArrowRight size={15} /></Link>
+                </motion.article>
               ))}
             </div>
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="work" className="work-section">
+      <section id="work" className="work-section">
         <div className="home-shell">
           <motion.div className="section-intro" {...fade}>
             <span>02 — FEATURED WORK</span>
@@ -466,27 +549,35 @@ export default function HomeExperience() {
               <Link className="button button-ivory" href="/projects/IAM">View Case Study <ArrowRight size={17} /></Link>
             </div>
             <div className="case-visual">
-              <div className="case-glow" />
-              <div className="phone phone-main"><Image src="/images/amal/today_dashboard_prayer_times.jpeg" alt="Islamic Amal Tracker dashboard" fill sizes="260px" /></div>
-              <div className="phone phone-left"><Image src="/images/amal/more_stats_progress_today.jpeg" alt="Islamic Amal Tracker statistics" fill sizes="220px" /></div>
-              <div className="phone phone-right"><Image src="/images/amal/dhikr_dashboard.jpeg" alt="Islamic Amal Tracker dhikr screen" fill sizes="220px" /></div>
+              <MotionBoundary className="case-spatial-boundary">
+                <TiltSurface className="case-spatial-surface" maxTilt={2.5} perspective={1200}>
+                  <div className="case-glow" />
+                  <div className="phone phone-main"><Image src="/images/amal/today_dashboard_prayer_times.jpeg" alt="Islamic Amal Tracker dashboard" fill sizes="260px" /></div>
+                  <div className="phone phone-left"><Image src="/images/amal/more_stats_progress_today.jpeg" alt="Islamic Amal Tracker statistics" fill sizes="220px" /></div>
+                  <div className="phone phone-right"><Image src="/images/amal/dhikr_dashboard.jpeg" alt="Islamic Amal Tracker dhikr screen" fill sizes="220px" /></div>
+                </TiltSurface>
+              </MotionBoundary>
             </div>
           </motion.article>
 
           <div className="secondary-projects editorial-projects">
             <motion.article className="project-feature project-feature-dha" {...fade}>
-              <div className="project-screen"><Image src="/images/dha/case-study/hero.webp" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
+              <BrowserMockup className="project-screen project-browser" label="Darul Hikmah Academy website preview" title="darulhikmah.academy">
+                <Image src="/images/dha/case-study/hero.webp" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" />
+              </BrowserMockup>
               <div className="project-copy"><span>EDUCATION PLATFORM · 02</span><h3>Darul Hikmah Academy</h3><p><b>Problem:</b> Academic information and public content needed one structured, maintainable platform.</p><p><b>Solution:</b> A bilingual website with dynamic administration, course discovery, materials, and responsive public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Supabase</li><li>Outcome: Centralized content management</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
             <motion.article className="project-feature project-feature-buek" {...fade}>
-              <div className="project-screen"><Image src="/images/buek/case-study/hero.webp" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" /></div>
+              <BrowserMockup className="project-screen project-browser" label="BUEK university website preview" title="buek.edu.bd">
+                <Image src="/images/buek/case-study/hero.webp" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" />
+              </BrowserMockup>
               <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 03</span><h3>BUEK</h3><p><b>Problem:</b> Notices, events, media, and academic information needed a reliable publishing workflow.</p><p><b>Solution:</b> A structured university platform with admin-controlled content and fast public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Admin CMS</li><li>Outcome: Organized institutional publishing</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="outcomes" className="outcomes-section">
+      <section id="outcomes" className="outcomes-section">
         <div className="home-shell">
           <motion.div className="section-intro" {...fade}>
             <span>03 — CLIENT OUTCOMES</span>
@@ -503,14 +594,14 @@ export default function HomeExperience() {
             ))}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="process" className="process-section">
+      <section id="process" className="process-section">
         <div className="home-shell process-grid">
           <motion.div className="section-intro" {...fade}><span>04 — PROCESS</span><h2>A clear path from complexity to launch.</h2></motion.div>
           <div className="process-journey">
             <div className="process-spine" aria-hidden="true" />
-            {process.map(({ n, title, text, icon: Icon }, index) => <motion.article key={title} className="process-step" {...fade}>
+            {process.map(({ n, title, text, icon: Icon }, index) => <motion.article key={title} className="process-step process-step-spatial" {...fade}>
               <div className="process-number">{n}</div>
               <div className="process-artifact">
                 <div className="process-icon"><Icon size={25}/></div>
@@ -520,9 +611,9 @@ export default function HomeExperience() {
             </motion.article>)}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="standards" className="standards-section">
+      <section id="standards" className="standards-section">
         <div className="home-shell standards-layout">
           <motion.div className="standards-heading" {...fade}>
             <span>05 — ENGINEERING STANDARDS & OUTCOMES</span>
@@ -531,7 +622,7 @@ export default function HomeExperience() {
           </motion.div>
           <div className="standards-grid">
             {standards.map(([title, text, Icon, label], index) => (
-              <motion.article key={title} {...fade}>
+              <motion.article className="standards-card-spatial" key={title} {...fade}>
                 <div className="standards-icon"><Icon size={24}/></div>
                 <span>0{index + 1}</span>
                 <small>{label}</small>
@@ -541,9 +632,9 @@ export default function HomeExperience() {
             ))}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="technology" className="technology-section">
+      <section id="technology" className="technology-section">
         <div className="home-shell">
           <motion.div className="section-intro" {...fade}>
             <span>06 — TECHNOLOGY STACK</span>
@@ -552,7 +643,7 @@ export default function HomeExperience() {
           </motion.div>
           <div className="technology-grid">
             {technologyGroups.map(({ label, items, icon: Icon }, index) => (
-              <motion.article key={label} {...fade}>
+              <motion.article className="technology-card-spatial" key={label} {...fade}>
                 <div className="technology-card-top"><span>0{index + 1}</span><Icon size={23}/></div>
                 <h3>{label}</h3>
                 <div className="technology-tags">{items.map((item) => <span key={item}>{item}</span>)}</div>
@@ -560,9 +651,9 @@ export default function HomeExperience() {
             ))}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="about" className="about-industries-section">
+      <section id="about" className="about-industries-section">
         <div className="home-shell about-industries-layout">
           <motion.div className="about-company" {...fade}>
             <span>07 — ABOUT EFFY TECH</span>
@@ -582,31 +673,21 @@ export default function HomeExperience() {
             </div>
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="team" className="team-section">
+      <section id="team" className="team-section">
         <div className="home-shell">
           <motion.div className="section-intro" {...fade}><span>08 — THE TEAM</span><h2>Built by people who stay close to the work.</h2></motion.div>
           <div className="founder-stage">
             <div className="founder-statement"><span>ENGINEERING-LED. PRODUCT-FOCUSED.</span><p>Small team, direct ownership, and no distance between the people making decisions and the people building the product.</p></div>
             <div className="founder-grid">
-              {founders.map((founder, i) => (
-                <MotionBoundary className="founder-card-boundary" key={founder.name}>
-                  <TiltSurface className="founder-card-tilt" maxTilt={7} perspective={1200}>
-                    <motion.article className="founder-card" {...fade}>
-                      <span>0{i+1}</span>
-                      <div className="founder-image"><Image src={founder.image} alt={founder.name} fill sizes="400px" /></div>
-                      <div className="founder-info"><h3>{founder.name}</h3><strong>{founder.role}</strong><p>{founder.summary}</p><a href="#contact">Work with {founder.name.split(' ')[0]} <ArrowRight size={14}/></a></div>
-                    </motion.article>
-                  </TiltSurface>
-                </MotionBoundary>
-              ))}
+              {founders.map((founder, i) => <motion.article className="founder-card" key={founder.name} {...fade}><span>0{i+1}</span><div className="founder-image"><Image src={founder.image} alt={founder.name} fill sizes="400px" /></div><div className="founder-info"><h3>{founder.name}</h3><strong>{founder.role}</strong><p>{founder.summary}</p><a href="#contact">Work with {founder.name.split(' ')[0]} <ArrowRight size={14}/></a></div></motion.article>)}
             </div>
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="faq" className="faq-section">
+      <section id="faq" className="faq-section">
         <div className="home-shell faq-layout">
           <motion.div className="faq-heading" {...fade}>
             <span>09 — FAQ</span>
@@ -622,14 +703,19 @@ export default function HomeExperience() {
             ))}
           </div>
         </div>
-      </CinematicSection>
+      </section>
 
-      <CinematicSection id="contact" className="contact-section">
+      <section id="contact" className="contact-section">
         <div className="home-shell contact-layout">
           <motion.div className="contact-copy" {...fade}>
             <span>10 — START A PROJECT</span>
             <h2>Have a workflow that needs a better system?</h2>
             <p>Share the problem, the current process, and the result you need. We will help define the practical product and technical direction.</p>
+            <div className="contact-system-core" aria-hidden="true">
+              <span /><span /><span />
+              <Image src="/images/logo.png" alt="" width={56} height={56} />
+              <small>CONNECTED DELIVERY</small>
+            </div>
             <div className="contact-details">
               <a href="mailto:effytechbd@gmail.com"><Mail size={19}/><div><small>BUSINESS EMAIL</small><strong>effytechbd@gmail.com</strong></div></a>
               <a href="tel:+8801511190270"><Smartphone size={19}/><div><small>PHONE / WHATSAPP</small><strong>+880 1511-190270</strong></div></a>
@@ -642,7 +728,7 @@ export default function HomeExperience() {
             <ContactForm />
           </motion.div>
         </div>
-      </CinematicSection>
+      </section>
     </main>
   );
 }
