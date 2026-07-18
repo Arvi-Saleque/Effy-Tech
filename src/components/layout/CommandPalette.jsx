@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { HiArrowRight, HiOutlineSearch, HiX } from "react-icons/hi";
+import useModalFocus from "@/hooks/useModalFocus";
 
 const TYPE_LABELS = {
   project: "PROJECT",
@@ -87,6 +88,11 @@ function buildResults(query, projects, services, pages) {
 export default function CommandPalette({ isOpen, onClose, projects = [], services = [], pages = [] }) {
   const inputRef = useRef(null);
   const [query, setQuery] = useState("");
+  const reducedMotion = Boolean(useReducedMotion());
+  const dialogRef = useModalFocus(isOpen, {
+    initialFocusRef: inputRef,
+    onDismiss: onClose,
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -94,14 +100,6 @@ export default function CommandPalette({ isOpen, onClose, projects = [], service
     const timer = setTimeout(() => inputRef.current?.focus(), 80);
     return () => clearTimeout(timer);
   }, [isOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape" && isOpen) onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
 
   const results = useMemo(
     () => buildResults(query, projects, services, pages),
@@ -115,29 +113,35 @@ export default function CommandPalette({ isOpen, onClose, projects = [], service
         <>
           <motion.button
             type="button"
-            aria-label="Close search"
+            aria-hidden="true"
+            tabIndex={-1}
             className="fixed inset-0 z-[90] border-0 bg-[#151b15]/55 backdrop-blur-md"
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
             onClick={onClose}
           />
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Search Effy Tech"
+            aria-labelledby="effy-search-title"
+            tabIndex={-1}
             className="fixed inset-0 z-[91] flex items-start justify-center px-4 pt-[12vh] sm:pt-[17vh]"
-            initial={{ opacity: 0, y: -16 }}
+            initial={reducedMotion ? false : { opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
+            exit={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
           >
             <div className="w-full max-w-2xl overflow-hidden rounded-[24px] border border-[#20261f]/15 bg-[#fbfaf4] shadow-[0_32px_90px_rgba(19,25,19,.28)]">
+              <h2 id="effy-search-title" className="sr-only">Search Effy Tech</h2>
               <div className="flex items-center gap-3 px-5 py-4 sm:px-6 sm:py-5">
                 <HiOutlineSearch className="h-5 w-5 shrink-0 text-[#687062]" />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
+                  aria-label="Search projects, services, and pages"
+                  autoComplete="off"
                   placeholder="Search projects, services, pages..."
                   className="min-w-0 flex-1 bg-transparent text-base font-medium text-[#20261f] outline-none placeholder:text-[#7b8275] sm:text-lg"
                 />
@@ -151,7 +155,7 @@ export default function CommandPalette({ isOpen, onClose, projects = [], service
                 </button>
               </div>
 
-              <div className="max-h-[58vh] overflow-y-auto border-t border-[#20261f]/10 p-2 sm:p-3">
+              <div className="max-h-[58vh] overflow-y-auto border-t border-[#20261f]/10 p-2 sm:p-3" aria-live="polite">
                 {!hasQuery && (
                   <div className="px-5 py-8 text-center">
                     <p className="text-sm font-medium text-[#465043]">Search by project name, service, technology, or page.</p>
