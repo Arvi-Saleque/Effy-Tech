@@ -142,6 +142,47 @@ test("demo controls expose distinct student, teacher, and admin experiences", ()
   assert.match(dockSource, /ADMIN: `\$\{DEMO_HOME\}\/teacher`/);
 });
 
+test("website admin sections are prefilled instead of relying on empty fallbacks", () => {
+  const cmsSource = readFileSync(
+    join(demoFeatureRoot, "lib", "demo", "mock-cms.ts"),
+    "utf8",
+  );
+  const requiredCmsSections = [
+    "ABOUT|ABOUT_HERO",
+    "ABOUT|ABOUT_METRICS",
+    "ABOUT|ABOUT_EDUCATION",
+    "ABOUT|ABOUT_RESEARCH_EXP",
+    "ABOUT|ABOUT_PUBLICATIONS",
+    "ABOUT|ABOUT_TRAINING",
+    "ABOUT|ABOUT_PROJECTS",
+    "ABOUT|ABOUT_SKILLS",
+    "ABOUT|ABOUT_ECA",
+  ];
+
+  for (const sectionKey of requiredCmsSections) {
+    assert.match(
+      cmsSource,
+      new RegExp(`"${sectionKey.replace("|", "\\|")}"`),
+      `missing populated CMS section ${sectionKey}`,
+    );
+  }
+  assert.match(
+    cmsSource,
+    /selectedTestimonialIds:\["test-1","test-2","test-3","test-4","test-5","test-6"\]/,
+  );
+  assert.match(
+    cmsSource,
+    /featuredId:"news-1",selectedRightIds:\["news-2","news-3"\]/,
+  );
+
+  const fileStoreSource = readFileSync(
+    join(demoFeatureRoot, "lib", "demo", "mock-file-store.ts"),
+    "utf8",
+  );
+  assert.match(fileStoreSource, /finance\/receipts\/demo-rent-receipt\.txt/);
+  assert.match(fileStoreSource, /EDUPILOT COACHING ACADEMY - DEMO RECEIPT/);
+});
+
 test("demo imports and internal URLs remain isolated under their namespace", () => {
   const unscopedImport =
     /@\/(?:components|data|lib|pdf)\/|@\/features\/(?!effy-edu-demo\/)|@\/app\/(?!effy_edu_management_system\/)/;
