@@ -45,12 +45,15 @@ export default function HomeNewsEventsSection({
       newsItems[0];
   }
 
-  // Respect the admin selection, then fill any remaining card slots from available news.
-  const rightItems = selectedRightIds
+  // Determine right smaller items and fill all three demo slots.
+  const selectedRightItems = selectedRightIds
     .map((id) => newsItems.find((item) => item.id === id))
     .filter(Boolean);
 
-  const cardItems = [featuredItem, ...rightItems, ...newsItems]
+  const rightItems = [
+    ...selectedRightItems,
+    ...newsItems.filter((item) => item.id !== featuredItem?.id),
+  ]
     .filter(
       (item, index, items) =>
         item &&
@@ -58,7 +61,7 @@ export default function HomeNewsEventsSection({
     )
     .slice(0, 3);
 
-  if (cardItems.length === 0) {
+  if (!featuredItem && rightItems.length === 0) {
     return null; // Nothing to show if no items exist at all
   }
 
@@ -81,7 +84,8 @@ export default function HomeNewsEventsSection({
     };
   };
 
-  const cards = cardItems.map(formatItem);
+  const bigCard = featuredItem ? formatItem(featuredItem) : null;
+  const smallCards = rightItems.map(formatItem);
 
   const getCategoryColor = (cat: string) => {
     const upper = (cat || "").toUpperCase();
@@ -95,14 +99,14 @@ export default function HomeNewsEventsSection({
   };
 
   return (
-    <section className="py-16 md:py-20 bg-[#FFF8E6] dark:bg-[#08122B] relative overflow-hidden transition-colors duration-300 border-t border-[#E8DDBF]/40">
+    <section className="py-20 md:py-28 bg-[#FFF8E6] dark:bg-[#08122B] relative overflow-hidden transition-colors duration-300 border-t border-[#E8DDBF]/40">
       {/* Decorative background elements */}
       <div className="absolute top-1/4 left-0 w-1/3 h-1/2 bg-[#010E62]/5 dark:bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-1/4 h-1/3 bg-[#FBB503]/5 dark:bg-amber-500/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-10 md:mb-12">
+        <div className="text-center mb-16 md:mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FBB503]/15 border border-[#FBB503]/30 text-[#010E62] dark:text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
             <Bell className="w-3.5 h-3.5 text-accent" />
             <span>{eyebrowText}</span>
@@ -116,102 +120,148 @@ export default function HomeNewsEventsSection({
           </p>
         </div>
 
-        {/* Three balanced cards keep the section compact and easy to scan. */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 items-stretch">
-          {cards.map((card, idx) => {
-            const isFeatured = idx === 0;
+        {/* Layout: Left Big Featured Card (7 Cols) & Right Compact Cards (5 Cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* LEFT BIG CARD */}
+          {bigCard && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-7 flex"
+            >
+              <Link
+                href={`/effy_edu_management_system/news-events/${bigCard.id}`}
+                className="group flex flex-col w-full bg-white dark:bg-slate-900 border border-[#E8DDBF]/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl hover:border-accent transition-all duration-300"
+              >
+                {/* Big Image Container */}
+                <div className="relative h-64 sm:h-80 md:h-96 w-full bg-[#08132E] overflow-hidden shrink-0">
+                  <Image
+                    src={bigCard.imageUrl}
+                    alt={bigCard.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#08132E]/80 via-transparent to-transparent" />
 
-            return (
-              <motion.article
+                  {/* Top Badges */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black tracking-wider uppercase border shadow-md bg-white/95 backdrop-blur-md ${getCategoryColor(
+                        bigCard.category,
+                      )}`}
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>{bigCard.category}</span>
+                    </span>
+
+                    <div className="bg-[#08132E]/90 backdrop-blur-md border border-white/20 text-white px-4 py-1.5 rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg">
+                      <Calendar className="w-4 h-4 text-accent" />
+                      <span>
+                        {bigCard.date} {bigCard.month}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Big Card Content */}
+                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-[#4A5568] dark:text-slate-400">
+                      {bigCard.time && (
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#010E62] dark:text-accent" />
+                          <span>{bigCard.time}</span>
+                        </div>
+                      )}
+                      {bigCard.location && (
+                        <div className="flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#010E62] dark:text-accent" />
+                          <span>{bigCard.location}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-[#010E62] dark:text-white group-hover:text-accent transition-colors leading-tight line-clamp-2">
+                      {bigCard.title}
+                    </h3>
+
+                    <p className="text-sm sm:text-base text-[#4A5568] dark:text-slate-300 line-clamp-3 leading-relaxed font-medium">
+                      {bigCard.excerpt}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-[#E8DDBF]/60 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-accent uppercase tracking-wider">
+                      Featured Spotlight
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-[#010E62] dark:text-white group-hover:text-accent transition-colors">
+                      <span>Read Details</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          )}
+
+          {/* RIGHT SMALL COMPACT CARDS (5 Cols) */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
+            {smallCards.map((card, idx) => (
+              <motion.div
                 key={card.id || idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.08 }}
-                className="flex h-full"
+                transition={{ delay: idx * 0.1 }}
+                className="flex-1 flex"
               >
                 <Link
                   href={`/effy_edu_management_system/news-events/${card.id}`}
-                  className={`group flex h-full w-full flex-col overflow-hidden rounded-3xl border bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-xl dark:bg-slate-900 dark:border-slate-800 ${
-                    isFeatured
-                      ? "border-[#FBB503]/60 ring-1 ring-[#FBB503]/20"
-                      : "border-[#E8DDBF]/80"
-                  }`}
+                  className="group flex flex-row items-center gap-4 w-full p-4 sm:p-5 bg-white dark:bg-slate-900 border border-[#E8DDBF]/80 dark:border-slate-800 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-xl hover:border-accent transition-all duration-300"
                 >
-                  <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#08132E]">
+                  {/* Small Image Thumbnail */}
+                  <div className="relative w-24 sm:w-32 h-24 sm:h-32 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     <Image
                       src={card.imageUrl}
                       alt={card.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#08132E]/75 via-[#08132E]/5 to-transparent" />
+                    <div className="absolute top-2 left-2 bg-[#08132E]/90 text-white text-[10px] font-black px-2 py-0.5 rounded-lg shadow-xs">
+                      {card.date} {card.month}
+                    </div>
+                  </div>
 
-                    <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3">
+                  {/* Small Card Content */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-center space-y-2">
+                    <div className="flex items-center gap-2">
                       <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur-md ${getCategoryColor(
+                        className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${getCategoryColor(
                           card.category,
                         )}`}
                       >
-                        <Sparkles className="h-3 w-3" />
-                        <span>{card.category}</span>
-                      </span>
-
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-[#08132E]/90 px-3 py-1 text-[10px] font-black text-white shadow-md backdrop-blur-md">
-                        <Calendar className="h-3.5 w-3.5 text-accent" />
-                        {card.date} {card.month}
+                        {card.category}
                       </span>
                     </div>
 
-                    {isFeatured && (
-                      <span className="absolute bottom-4 left-4 rounded-full border border-white/20 bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#010E62] shadow-md">
-                        Featured
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <div className="mb-4 flex min-h-5 flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold text-[#4A5568] dark:text-slate-400">
-                      {card.time && (
-                        <span className="inline-flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5 text-[#010E62] dark:text-accent" />
-                          {card.time}
-                        </span>
-                      )}
-                      {card.location && (
-                        <span className="inline-flex min-w-0 items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5 shrink-0 text-[#010E62] dark:text-accent" />
-                          <span className="truncate">{card.location}</span>
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="line-clamp-2 text-xl font-black leading-snug text-[#010E62] transition-colors group-hover:text-accent dark:text-white">
+                    <h4 className="text-sm sm:text-base font-extrabold text-[#010E62] dark:text-white group-hover:text-accent transition-colors line-clamp-2 leading-snug">
                       {card.title}
-                    </h3>
+                    </h4>
 
-                    <p className="mt-3 line-clamp-3 text-sm font-medium leading-relaxed text-[#4A5568] dark:text-slate-300">
-                      {card.excerpt}
-                    </p>
-
-                    <div className="mt-auto flex items-center justify-between border-t border-[#E8DDBF]/60 pt-5 dark:border-slate-800">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#7A6844] dark:text-slate-400">
-                        {isFeatured ? "Featured Spotlight" : "Latest Update"}
-                      </span>
-                      <span className="inline-flex items-center gap-2 text-sm font-black text-[#010E62] transition-colors group-hover:text-accent dark:text-white">
-                        Read Details
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1.5" />
-                      </span>
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-accent pt-1">
+                      <span>View Update</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </Link>
-              </motion.article>
-            );
-          })}
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* View All CTA (Exact same style as GallerySection) */}
-        <div className="mt-10 md:mt-12 text-center">
+        <div className="mt-16 text-center">
           <Link
             href="/effy_edu_management_system/news-events"
             className="inline-flex items-center gap-3 px-8 py-4 bg-white dark:bg-slate-900 border border-[#E8DDBF] dark:border-slate-700 text-[#010E62] dark:text-white font-extrabold text-sm uppercase tracking-widest rounded-xl hover:bg-[#FBB503] hover:text-[#010E62] hover:border-[#FBB503] dark:hover:bg-[#FBB503] dark:hover:text-[#010E62] transition-all shadow-sm hover:shadow-lg group"
