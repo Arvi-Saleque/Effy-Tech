@@ -68,6 +68,20 @@ test("the complete coaching demo is mounted below the Effy Edu subpath", () => {
   }
 });
 
+test("demo controls expose distinct student, teacher, and admin experiences", () => {
+  const dockSource = readFileSync(
+    join(demoFeatureRoot, "components", "demo", "DemoControlDock.tsx"),
+    "utf8",
+  );
+
+  assert.match(dockSource, /Student demo/);
+  assert.match(dockSource, /Teacher demo/);
+  assert.match(dockSource, /Admin demo/);
+  assert.match(dockSource, /STUDENT: `\$\{DEMO_HOME\}\/student`/);
+  assert.match(dockSource, /TEACHER: `\$\{DEMO_HOME\}\/teacher\/academic`/);
+  assert.match(dockSource, /ADMIN: `\$\{DEMO_HOME\}\/teacher`/);
+});
+
 test("demo imports and internal URLs remain isolated under their namespace", () => {
   const unscopedImport =
     /@\/(?:components|data|lib|pdf)\/|@\/features\/(?!effy-edu-demo\/)|@\/app\/(?!effy_edu_management_system\/)/;

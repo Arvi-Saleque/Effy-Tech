@@ -120,6 +120,7 @@ Nested demo layout-এ source design, theme, fonts, toast system এবং role 
 
 - Public Site
 - Student Demo
+- Teacher Demo
 - Admin Demo
 - Project Details
 - Effy Tech
@@ -131,7 +132,7 @@ Login screen-এও one-click role shortcuts আছে:
 - Admin/Teacher: `teacher@demo.edu` / `demo123`
 - Student: `student@demo.edu` / `demo123`
 
-Control dock-এর Student/Admin button local mock sign-in সম্পন্ন করে সরাসরি সংশ্লিষ্ট dashboard খুলে দেয়। Dock minimize-ও করা যায়।
+Control dock-এর Student/Teacher/Admin button local mock sign-in সম্পন্ন করে সরাসরি সংশ্লিষ্ট workspace খুলে দেয়। Student Demo student dashboard-এ, Teacher Demo academic teaching workspace-এ এবং Admin Demo coaching administration overview-তে যায়। Dock minimize-ও করা যায়।
 
 ## ৬. Existing portfolio integration
 
@@ -299,7 +300,7 @@ Production/preview deployment পাওয়া গেলে final human visual pa
 1. `feat/effy-edu-management-system` branch review এবং merge করুন।
 2. Effy Tech website-এর normal production deployment চালান।
 3. Deploy শেষে `https://www.effytechbd.com/effy_edu_management_system` খুলুন।
-4. Public, Student Demo এবং Admin Demo control-dock navigation verify করুন।
+4. Public, Student Demo, Teacher Demo এবং Admin Demo control-dock navigation verify করুন।
 5. `/projects/EEMS`, homepage/project discovery এবং sitemap links verify করুন।
 
 এই subpath-এর জন্য আলাদা DNS, external database বা additional environment credential প্রয়োজন নেই।

@@ -11,23 +11,28 @@ import {
   GraduationCap,
   Home,
   Loader2,
+  Presentation,
   ShieldCheck,
   X,
 } from "lucide-react";
 import { supabase } from "@/features/effy-edu-demo/lib/supabase/client";
 
 const DEMO_HOME = "/effy_edu_management_system";
+type DemoDestination = "STUDENT" | "TEACHER" | "ADMIN";
 
 export function DemoControlDock() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const [launchingRole, setLaunchingRole] = useState<"TEACHER" | "STUDENT" | null>(null);
+  const [launchingDemo, setLaunchingDemo] = useState<DemoDestination | null>(null);
 
-  const launchRole = async (role: "TEACHER" | "STUDENT") => {
-    setLaunchingRole(role);
-    const email = role === "TEACHER" ? "teacher@demo.edu" : "student@demo.edu";
-    const destination =
-      role === "TEACHER" ? `${DEMO_HOME}/teacher` : `${DEMO_HOME}/student`;
+  const launchDemo = async (demo: DemoDestination) => {
+    setLaunchingDemo(demo);
+    const email = demo === "STUDENT" ? "student@demo.edu" : "teacher@demo.edu";
+    const destination = {
+      STUDENT: `${DEMO_HOME}/student`,
+      TEACHER: `${DEMO_HOME}/teacher/academic`,
+      ADMIN: `${DEMO_HOME}/teacher`,
+    }[demo];
 
     try {
       await supabase.auth.signInWithPassword({
@@ -57,7 +62,7 @@ export function DemoControlDock() {
 
   return (
     <aside
-      className="fixed inset-x-3 bottom-3 z-[90] mx-auto max-w-5xl rounded-2xl border border-white/15 bg-slate-950/95 p-2.5 text-white shadow-[0_24px_70px_rgba(2,6,23,0.38)] backdrop-blur-xl sm:bottom-4 sm:p-3"
+      className="fixed inset-x-3 bottom-3 z-[90] mx-auto max-w-6xl rounded-2xl border border-white/15 bg-slate-950/95 p-2.5 text-white shadow-[0_24px_70px_rgba(2,6,23,0.38)] backdrop-blur-xl sm:bottom-4 sm:p-3"
       aria-label="Generalized demo controls"
     >
       <div className="flex items-center gap-2 overflow-x-auto">
@@ -86,11 +91,11 @@ export function DemoControlDock() {
 
         <button
           type="button"
-          onClick={() => launchRole("STUDENT")}
-          disabled={launchingRole !== null}
+          onClick={() => launchDemo("STUDENT")}
+          disabled={launchingDemo !== null}
           className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white/8 px-3 py-2.5 text-xs font-black text-white transition hover:bg-white/15 disabled:opacity-60"
         >
-          {launchingRole === "STUDENT" ? (
+          {launchingDemo === "STUDENT" ? (
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
           ) : (
             <GraduationCap className="h-4 w-4 text-sky-300" aria-hidden="true" />
@@ -100,11 +105,25 @@ export function DemoControlDock() {
 
         <button
           type="button"
-          onClick={() => launchRole("TEACHER")}
-          disabled={launchingRole !== null}
+          onClick={() => launchDemo("TEACHER")}
+          disabled={launchingDemo !== null}
           className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white/8 px-3 py-2.5 text-xs font-black text-white transition hover:bg-white/15 disabled:opacity-60"
         >
-          {launchingRole === "TEACHER" ? (
+          {launchingDemo === "TEACHER" ? (
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+          ) : (
+            <Presentation className="h-4 w-4 text-violet-300" aria-hidden="true" />
+          )}
+          Teacher demo
+        </button>
+
+        <button
+          type="button"
+          onClick={() => launchDemo("ADMIN")}
+          disabled={launchingDemo !== null}
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white/8 px-3 py-2.5 text-xs font-black text-white transition hover:bg-white/15 disabled:opacity-60"
+        >
+          {launchingDemo === "ADMIN" ? (
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
           ) : (
             <ShieldCheck className="h-4 w-4 text-emerald-300" aria-hidden="true" />
