@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FinanceDateInput from "./FinanceDateInput";
 
 const periods = [
   ["today", "Today"],
@@ -31,22 +32,24 @@ export default function FinancePeriodFilter({ period }) {
         <input type="hidden" name="range" value="custom" />
         <label className="grid gap-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
           From
-          <input
-            type="date"
+          <FinanceDateInput
             name="from"
             defaultValue={period.range === "custom" ? period.start : ""}
             required
-            className="rounded-lg border border-neutral-700 bg-neutral-950/70 px-2.5 py-2 text-xs font-medium text-neutral-200 outline-none focus:border-emerald-500/60"
+            calendarLabel="Open overview start date picker"
+            containerClassName="min-w-36"
+            className="w-full rounded-lg border border-neutral-700 bg-neutral-950/70 px-2.5 py-2 text-xs font-medium text-neutral-200 outline-none focus:border-emerald-500/60"
           />
         </label>
         <label className="grid gap-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
           To
-          <input
-            type="date"
+          <FinanceDateInput
             name="to"
             defaultValue={period.range === "custom" ? period.end : ""}
             required
-            className="rounded-lg border border-neutral-700 bg-neutral-950/70 px-2.5 py-2 text-xs font-medium text-neutral-200 outline-none focus:border-emerald-500/60"
+            calendarLabel="Open overview end date picker"
+            containerClassName="min-w-36"
+            className="w-full rounded-lg border border-neutral-700 bg-neutral-950/70 px-2.5 py-2 text-xs font-medium text-neutral-200 outline-none focus:border-emerald-500/60"
           />
         </label>
         <button className="rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-xs font-bold text-neutral-200 transition hover:border-emerald-500/30 hover:text-emerald-300">
@@ -56,4 +59,3 @@ export default function FinancePeriodFilter({ period }) {
     </div>
   );
 }
-

@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, ArrowRightLeft, Loader2, Save } from "lucide-react";
 import { createFinanceTransaction, updateFinanceTransaction } from "@/lib/admin/finance-actions";
+import FinanceDateInput from "./FinanceDateInput";
+import MoneyExpressionInput from "./MoneyExpressionInput";
 
 const inputClass = "w-full rounded-xl border border-neutral-700/80 bg-neutral-950/65 px-3.5 py-2.5 text-sm text-neutral-100 outline-none transition placeholder:text-neutral-700 focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-50";
 const labelClass = "mb-1.5 block text-xs font-bold text-neutral-400";
@@ -128,7 +130,7 @@ export default function TransactionForm({ references, initialData = null, defaul
         </div>
         <div>
           <label htmlFor="amount" className={labelClass}>Amount (BDT) *</label>
-          <input id="amount" name="amount" type="number" min="0.01" max="999999999999.99" step="0.01" required defaultValue={initialData?.amount || defaults.amount || ""} placeholder="0.00" className={inputClass} />
+          <MoneyExpressionInput id="amount" name="amount" required defaultValue={initialData?.amount || defaults.amount || ""} className={inputClass} />
           <FieldError errors={fieldErrors} name="amount" />
         </div>
         <div>
@@ -141,12 +143,12 @@ export default function TransactionForm({ references, initialData = null, defaul
         </div>
         <div>
           <label htmlFor="transaction_date" className={labelClass}>{type === "transfer" ? "Transfer" : "Transaction"} date *</label>
-          <input id="transaction_date" name="transaction_date" type="date" required defaultValue={initialData?.transaction_date || defaults.transaction_date || today} className={inputClass} />
+          <FinanceDateInput id="transaction_date" name="transaction_date" required defaultValue={initialData?.transaction_date || defaults.transaction_date || today} calendarLabel="Open transaction date picker" className={inputClass} />
           <FieldError errors={fieldErrors} name="transaction_date" />
         </div>
         <div>
           <label htmlFor="due_date" className={labelClass}>Due date <span className="font-normal text-neutral-600">(optional)</span></label>
-          <input id="due_date" name="due_date" type="date" defaultValue={initialData?.due_date || defaults.due_date || ""} className={inputClass} />
+          <FinanceDateInput id="due_date" name="due_date" defaultValue={initialData?.due_date || defaults.due_date || ""} calendarLabel="Open due date picker" className={inputClass} />
           <FieldError errors={fieldErrors} name="due_date" />
         </div>
       </div>
