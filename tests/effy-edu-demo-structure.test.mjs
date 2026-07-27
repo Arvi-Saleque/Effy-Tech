@@ -232,6 +232,18 @@ test("demo data layer has no production backend or credential dependency", () =>
   assert.match(serverClient, /createMockSupabase/);
 });
 
+test("homepage news presents exactly three balanced content cards", () => {
+  const newsSection = readFileSync(
+    join(demoFeatureRoot, "components", "home", "HomeNewsEventsSection.tsx"),
+    "utf8",
+  );
+
+  assert.match(newsSection, /\.slice\(0, 3\)/);
+  assert.match(newsSection, /lg:grid-cols-3/);
+  assert.match(newsSection, /Featured Spotlight/);
+  assert.doesNotMatch(newsSection, /lg:grid-cols-12/);
+});
+
 test("all static demo assets referenced by source are available locally", () => {
   const missingAssets = new Set();
   const assetPattern =
