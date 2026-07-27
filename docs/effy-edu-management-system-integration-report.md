@@ -1,9 +1,9 @@
 # Effy Edu Management System — Effy Tech Website Integration Report
 
-তারিখ: ২৭ জুলাই ২০২৬  
-Feature branch: `feat/effy-edu-management-system`  
-Target public URL: `https://www.effytechbd.com/effy_edu_management_system`  
-Live client reference: `https://www.shifatstales.com`
+- তারিখ: ২৭ জুলাই ২০২৬
+- Feature branch: `feat/effy-edu-management-system`
+- Target public URL: `https://www.effytechbd.com/effy_edu_management_system`
+- Live client reference: `https://www.shifatstales.com`
 
 ## ১. কাজের ফলাফল
 
@@ -208,4 +208,3 @@ Deploy preview পাওয়া গেলে final human visual pass হিসে
 3. Deploy-এর পরে `https://www.effytechbd.com/effy_edu_management_system` open করুন।
 4. Homepage, `/projects`, search palette এবং sitemap থেকে route discovery confirm করুন।
 5. Social preview cache refresh প্রয়োজন হলে target URL re-scrape করুন।
-
