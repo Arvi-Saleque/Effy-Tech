@@ -27,6 +27,32 @@ const effyEduManagementSystem = {
   galleryHeading: "Role-based interface previews",
   galleryDescription:
     "These representative views use generalized records so the system can be explored without exposing client or student data.",
+  staticDemo: {
+    eyebrow: "Static portfolio demo",
+    title: "Generalized raw data only—no production database connection",
+    description:
+      "This Effy Tech showcase is fully separated from the official client system. It does not connect to the live database, authentication store, private APIs, or real student records.",
+    points: [
+      {
+        icon: "database",
+        title: "Static showcase content",
+        description:
+          "Page content is stored as local JavaScript data and pre-rendered for this portfolio.",
+      },
+      {
+        icon: "shield",
+        title: "Privacy-safe records",
+        description:
+          "Names, metrics, academic records, and interface previews are illustrative and generalized.",
+      },
+      {
+        icon: "live",
+        title: "Official system stays separate",
+        description:
+          "The live client deployment is linked only as an external reference and keeps its own protected infrastructure.",
+      },
+    ],
+  },
   overview: {
     overline: "Project context",
     title: "From a public website to a complete coaching operation",

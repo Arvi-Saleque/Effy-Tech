@@ -844,6 +844,51 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
+      {data.staticDemo ? (
+        <section className="px-5 pt-12 sm:px-8 sm:pt-16 lg:px-10" aria-labelledby="static-demo-heading">
+          <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-emerald-300/80 bg-emerald-50 shadow-[0_22px_60px_-38px_rgba(5,150,105,0.5)]">
+            <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="border-b border-emerald-200 p-7 sm:p-9 lg:border-r lg:border-b-0 lg:p-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white/80 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
+                  <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                  {data.staticDemo.eyebrow}
+                </div>
+                <h2
+                  id="static-demo-heading"
+                  className="mt-5 max-w-xl text-2xl font-black leading-tight text-neutral-950 sm:text-3xl"
+                >
+                  {data.staticDemo.title}
+                </h2>
+                <p className="mt-4 max-w-xl text-sm leading-7 text-neutral-700 sm:text-base">
+                  {data.staticDemo.description}
+                </p>
+              </div>
+
+              <div className="grid gap-px bg-emerald-200 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                {data.staticDemo.points.map((point) => {
+                  const StaticDemoIcon =
+                    point.icon === "database"
+                      ? Database
+                      : point.icon === "live"
+                        ? Globe2
+                        : ShieldCheck;
+
+                  return (
+                    <article key={point.title} className="bg-white/90 p-6 sm:p-7">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-700 text-white">
+                        <StaticDemoIcon className="h-5 w-5" aria-hidden="true" />
+                      </div>
+                      <h3 className="mt-4 text-sm font-black text-neutral-950">{point.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-neutral-600">{point.description}</p>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </Reveal>
+        </section>
+      ) : null}
+
       <section id="overview" className="institutional-overview py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
