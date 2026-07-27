@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test:finance": "node --test tests/finance-*.test.mjs"
+    "test:finance": "node --test tests/finance-*.test.mjs",
+    "test:portfolio": "node --test tests/effy-edu-static-showcase.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
