@@ -153,27 +153,180 @@ test("mock realtime, schedules, and populated workflow seeds are available", asy
   });
 
   const requiredSeeds = {
-    profiles: 9,
-    student_profiles: 8,
-    batches: 4,
-    enrollments: 8,
-    payments: 12,
-    exams: 6,
-    academic_assignments: 3,
-    academic_class_sessions: 4,
-    batch_contents: 4,
-    announcements: 3,
-    notifications: 6,
-    audit_logs: 5,
+    profiles: 13,
+    student_profiles: 12,
+    batches: 5,
+    enrollments: 15,
+    payments: 40,
+    exams: 11,
+    exam_results: 10,
+    academic_assignments: 9,
+    academic_assignment_submissions: 8,
+    academic_class_sessions: 10,
+    batch_contents: 11,
+    announcements: 8,
+    notifications: 15,
+    audit_logs: 10,
     finance_expense_categories: 9,
-    finance_expenses: 18,
-    finance_income_ledger: 12,
+    finance_expenses: 19,
+    finance_income_ledger: 30,
   };
   for (const [table, minimum] of Object.entries(requiredSeeds)) {
     assert.ok(demoTables[table].length >= minimum, `insufficient ${table} seed data`);
   }
   assert.ok(demoTables.exams.some((exam) => exam.status === "RESULT_DRAFT"));
   assert.ok(demoTables.enrollments.some((enrollment) => enrollment.status === "DISABLED"));
+});
+
+test("every client-facing demo workflow has representative records", () => {
+  const activeBatches = demoTables.batches.filter((batch) =>
+    ["OPEN", "RUNNING"].includes(batch.status),
+  );
+  const demoStudentEnrollments = demoTables.enrollments.filter(
+    (enrollment) => enrollment.student_id === "student-1",
+  );
+
+  assert.ok(
+    demoStudentEnrollments.some((enrollment) => enrollment.status === "ACTIVE"),
+    "demo student needs an active batch",
+  );
+  assert.ok(
+    demoStudentEnrollments.some((enrollment) => enrollment.status === "COMPLETED"),
+    "demo student needs completed-batch history",
+  );
+  const demoStudentActiveBatchIds = demoStudentEnrollments
+    .filter((enrollment) => enrollment.status === "ACTIVE")
+    .map((enrollment) => enrollment.batch_id);
+  const demoStudentSubmissionIds = new Set(
+    demoTables.academic_assignment_submissions
+      .filter((submission) => submission.student_id === "student-1")
+      .map((submission) => submission.assignment_id),
+  );
+  assert.ok(
+    demoTables.academic_assignments.some(
+      (assignment) =>
+        assignment.status === "PUBLISHED" &&
+        demoStudentActiveBatchIds.includes(assignment.batch_id) &&
+        !demoStudentSubmissionIds.has(assignment.id),
+    ),
+    "demo student dashboard needs a pending assignment",
+  );
+
+  for (const batch of activeBatches) {
+    const subjects = demoTables.batch_subjects.filter(
+      (subject) => subject.batch_id === batch.id,
+    );
+    assert.ok(subjects.length >= 2, `${batch.code} needs multiple subjects`);
+    for (const subject of subjects) {
+      assert.ok(
+        demoTables.subject_units.some((unit) => unit.subject_id === subject.id),
+        `${subject.code} needs a syllabus unit`,
+      );
+    }
+    assert.ok(
+      demoTables.enrollments.some(
+        (enrollment) =>
+          enrollment.batch_id === batch.id && enrollment.status === "ACTIVE",
+      ),
+      `${batch.code} needs active students`,
+    );
+    assert.ok(
+      demoTables.exams.some((exam) => exam.batch_id === batch.id),
+      `${batch.code} needs exams`,
+    );
+    assert.ok(
+      demoTables.academic_assignments.some(
+        (assignment) => assignment.batch_id === batch.id,
+      ),
+      `${batch.code} needs assignments`,
+    );
+    assert.ok(
+      demoTables.academic_class_sessions.some(
+        (session) => session.batch_id === batch.id,
+      ),
+      `${batch.code} needs routine entries`,
+    );
+    assert.ok(
+      demoTables.batch_contents.some((content) => content.batch_id === batch.id),
+      `${batch.code} needs study materials`,
+    );
+    assert.ok(
+      demoTables.announcements.some(
+        (announcement) => announcement.batch_id === batch.id,
+      ),
+      `${batch.code} needs announcements`,
+    );
+  }
+
+  for (const status of ["PAID", "PARTIALLY_PAID", "UNPAID"]) {
+    assert.ok(
+      demoTables.payments.some((payment) => payment.status === status),
+      `payment ledger needs ${status} records`,
+    );
+  }
+  for (const status of ["DRAFT", "PUBLISHED", "CLOSED"]) {
+    assert.ok(
+      demoTables.academic_assignments.some(
+        (assignment) => assignment.status === status,
+      ),
+      `assignment workspace needs ${status} records`,
+    );
+  }
+  for (const status of ["SCHEDULED", "COMPLETED", "CANCELLED"]) {
+    assert.ok(
+      demoTables.academic_class_sessions.some(
+        (session) => session.status === status,
+      ),
+      `routine needs ${status} records`,
+    );
+  }
+  for (const session of demoTables.academic_class_sessions) {
+    assert.equal(
+      Number.isNaN(new Date(session.starts_at).getTime()),
+      false,
+      `${session.id} needs a valid start time`,
+    );
+    assert.equal(
+      Number.isNaN(new Date(session.ends_at).getTime()),
+      false,
+      `${session.id} needs a valid end time`,
+    );
+  }
+  for (const status of ["DRAFT", "PUBLISHED", "ARCHIVED"]) {
+    assert.ok(
+      demoTables.batch_contents.some((content) => content.status === status),
+      `materials workspace needs ${status} records`,
+    );
+  }
+  for (const category of demoTables.finance_expense_categories) {
+    assert.ok(
+      demoTables.finance_expenses.some(
+        (expense) => expense.category_id === category.id,
+      ),
+      `${category.name} needs a representative expense`,
+    );
+  }
+  assert.ok(
+    demoTables.finance_expenses.some(
+      (expense) =>
+        expense.receipt_storage_path &&
+        expense.receipt_file_name &&
+        expense.receipt_content_type,
+    ),
+    "finance needs a downloadable receipt example",
+  );
+  assert.ok(
+    demoTables.notifications.filter(
+      (notification) => notification.user_id === "profile-student-1",
+    ).length >= 8,
+    "student notification inbox needs representative records",
+  );
+  assert.ok(
+    demoTables.notifications.filter(
+      (notification) => notification.user_id === "profile-teacher",
+    ).length >= 6,
+    "teacher notification inbox needs representative records",
+  );
 });
 
 test("finance summaries, periods, relations, and reversible mutations work locally", async () => {
