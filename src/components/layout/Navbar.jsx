@@ -10,7 +10,12 @@ import projects from "@/data/projects";
 import siteConfig from "@/theme/siteConfig";
 import useModalFocus from "@/hooks/useModalFocus";
 
-const CUSTOM_NAVBAR_ROUTES = ["/projects/IAM", "/projects/DHA", "/projects/BUEK"];
+const CUSTOM_NAVBAR_ROUTES = [
+  "/projects/IAM",
+  "/projects/DHA",
+  "/projects/BUEK",
+  "/effy_edu_management_system",
+];
 
 const searchPages = [
   { label: "Homepage", href: "/", type: "page", description: "Effy Tech company homepage", keywords: ["home", "effy tech"] },

@@ -24,7 +24,7 @@
 .effy-projects-index .projects-spatial-stage {
   position: relative;
   isolation: isolate;
-  min-height: 500px;
+  min-height: 620px;
   overflow: hidden;
   border: 1px solid rgb(32 38 31 / 14%);
   border-radius: 8px;
@@ -98,6 +98,13 @@
   top: 273px;
   left: 12%;
   transform: translateZ(4px) rotate(-1.5deg);
+}
+
+.effy-projects-index .projects-hero-layer-4 {
+  z-index: 1;
+  top: 382px;
+  right: 8%;
+  transform: translateZ(-8px) rotate(2.5deg);
 }
 
 .effy-projects-index .projects-stage-core {
@@ -281,7 +288,7 @@
   }
 
   .effy-projects-index .projects-spatial-stage {
-    min-height: 540px;
+    min-height: 620px;
   }
 }
 
@@ -292,7 +299,7 @@
   }
 
   .effy-projects-index .projects-spatial-stage {
-    min-height: 460px;
+    min-height: 540px;
   }
 
   .effy-projects-index .projects-hero-layer {
@@ -305,13 +312,18 @@
   }
 
   .effy-projects-index .projects-hero-layer-2 {
-    top: 143px;
+    top: 139px;
     right: 4%;
   }
 
   .effy-projects-index .projects-hero-layer-3 {
-    top: 244px;
+    top: 240px;
     left: 7%;
+  }
+
+  .effy-projects-index .projects-hero-layer-4 {
+    top: 341px;
+    right: 5%;
   }
 
   .effy-projects-index .projects-stage-core {
@@ -323,7 +335,7 @@
 
 @media (max-width: 480px) {
   .effy-projects-index .projects-spatial-stage {
-    min-height: 390px;
+    min-height: 440px;
   }
 
   .effy-projects-index .projects-hero-layer .effy-browser-bar {
@@ -335,11 +347,15 @@
   }
 
   .effy-projects-index .projects-hero-layer-2 {
-    top: 117px;
+    top: 108px;
   }
 
   .effy-projects-index .projects-hero-layer-3 {
-    top: 199px;
+    top: 182px;
+  }
+
+  .effy-projects-index .projects-hero-layer-4 {
+    top: 256px;
   }
 
   .effy-projects-index .projects-stage-core {

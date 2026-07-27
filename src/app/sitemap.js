@@ -6,6 +6,7 @@ const routes = [
   { path: "/quickservices", priority: 0.8, changeFrequency: "monthly" },
   { path: "/projects", priority: 0.9, changeFrequency: "monthly" },
   { path: "/projects/IAM", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/effy_edu_management_system", priority: 0.9, changeFrequency: "monthly" },
   { path: "/projects/DHA", priority: 0.8, changeFrequency: "monthly" },
   { path: "/projects/BUEK", priority: 0.8, changeFrequency: "monthly" },
   { path: "/salek", priority: 0.6, changeFrequency: "monthly" },
@@ -14,7 +15,7 @@ const routes = [
 ];
 
 export default function sitemap() {
-  const lastModified = new Date("2026-07-17T00:00:00+06:00");
+  const lastModified = new Date("2026-07-27T00:00:00+06:00");
 
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${siteConfig.url}${path}`,

@@ -5125,6 +5125,9 @@ h4 {
 .effy-home .secondary-projects {
   gap: 22px;
 }
+.effy-home .project-feature-eems {
+  grid-column: 1 / -1;
+}
 .effy-home .project-feature {
   min-height: 470px;
 }
@@ -6078,7 +6081,7 @@ h4 {
 
 .effy-home .client-logo-wall {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   border: 0;
   background: transparent;

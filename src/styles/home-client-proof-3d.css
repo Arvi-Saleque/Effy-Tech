@@ -430,7 +430,11 @@
   }
 
   .effy-home .client-proof-entry-3 {
-    margin-top: 52px;
+    margin-top: 0;
+  }
+
+  .effy-home .client-proof-entry-4 {
+    margin-top: 26px;
   }
 }
 

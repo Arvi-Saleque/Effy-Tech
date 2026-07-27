@@ -118,6 +118,16 @@ const clientProof = [
     href: "/projects/IAM",
   },
   {
+    name: "Effy Edu Management System",
+    proofType: "Client operations platform",
+    status: "Live production platform",
+    audience: "Coaching management",
+    tech: "Next.js · TypeScript · Role-based portals",
+    note: "A connected public website, student portal, teacher/admin console, academic workflow system, reporting layer, and website CMS.",
+    image: "/images/effy-edu-management-system/case-study/hero.webp",
+    href: "/effy_edu_management_system",
+  },
+  {
     name: "Darul Hikmah Academy",
     proofType: "Client platform",
     status: "Production platform",
@@ -435,8 +445,8 @@ export default function HomeExperience() {
               <span><CheckCircle2 size={15} /> Clear product ownership</span>
               <span><ShieldCheck size={15} /> Production-minded engineering</span>
             </div>
-            <div className="client-proof-count" aria-label="Three selected systems">
-              <strong>03</strong>
+            <div className="client-proof-count" aria-label={`${clientProof.length} selected systems`}>
+              <strong>{String(clientProof.length).padStart(2, "0")}</strong>
               <span>Selected systems<br />in active use</span>
             </div>
           </motion.div>
@@ -561,17 +571,23 @@ export default function HomeExperience() {
           </motion.article>
 
           <div className="secondary-projects editorial-projects">
+            <motion.article className="project-feature project-feature-eems" {...fade}>
+              <BrowserMockup className="project-screen project-browser" label="Effy Edu Management System preview" title="shifatstales.com">
+                <Image src="/images/effy-edu-management-system/case-study/hero.webp" alt="Effy Edu coaching management system" fill sizes="(max-width: 768px) 100vw, 60vw" />
+              </BrowserMockup>
+              <div className="project-copy"><span>COACHING MANAGEMENT · 02</span><h3>Effy Edu Management System</h3><p><b>Problem:</b> Public content, student services, and recurring coaching operations were split across disconnected processes.</p><p><b>Solution:</b> One role-based platform with a public website, student portal, teacher/admin console, academic workflows, reporting, payments, and CMS.</p><ul><li>Status: Live client platform</li><li>Stack: Next.js · TypeScript</li><li>Outcome: Connected education operations</li></ul><Link href="/effy_edu_management_system">Open case study <ArrowRight size={15}/></Link></div>
+            </motion.article>
             <motion.article className="project-feature project-feature-dha" {...fade}>
               <BrowserMockup className="project-screen project-browser" label="Darul Hikmah Academy website preview" title="darulhikmah.academy">
                 <Image src="/images/dha/case-study/hero.webp" alt="Darul Hikmah Academy website" fill sizes="(max-width: 768px) 100vw, 50vw" />
               </BrowserMockup>
-              <div className="project-copy"><span>EDUCATION PLATFORM · 02</span><h3>Darul Hikmah Academy</h3><p><b>Problem:</b> Academic information and public content needed one structured, maintainable platform.</p><p><b>Solution:</b> A bilingual website with dynamic administration, course discovery, materials, and responsive public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Supabase</li><li>Outcome: Centralized content management</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
+              <div className="project-copy"><span>EDUCATION PLATFORM · 03</span><h3>Darul Hikmah Academy</h3><p><b>Problem:</b> Academic information and public content needed one structured, maintainable platform.</p><p><b>Solution:</b> A bilingual website with dynamic administration, course discovery, materials, and responsive public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Supabase</li><li>Outcome: Centralized content management</li></ul><Link href="/projects/DHA">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
             <motion.article className="project-feature project-feature-buek" {...fade}>
               <BrowserMockup className="project-screen project-browser" label="BUEK university website preview" title="buek.edu.bd">
                 <Image src="/images/buek/case-study/hero.webp" alt="BUEK university website" fill sizes="(max-width: 768px) 100vw, 50vw" />
               </BrowserMockup>
-              <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 03</span><h3>BUEK</h3><p><b>Problem:</b> Notices, events, media, and academic information needed a reliable publishing workflow.</p><p><b>Solution:</b> A structured university platform with admin-controlled content and fast public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Admin CMS</li><li>Outcome: Organized institutional publishing</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
+              <div className="project-copy"><span>INSTITUTIONAL PLATFORM · 04</span><h3>BUEK</h3><p><b>Problem:</b> Notices, events, media, and academic information needed a reliable publishing workflow.</p><p><b>Solution:</b> A structured university platform with admin-controlled content and fast public access.</p><ul><li>Status: Production platform</li><li>Stack: Next.js · Admin CMS</li><li>Outcome: Organized institutional publishing</li></ul><Link href="/projects/BUEK">Open case study <ArrowRight size={15}/></Link></div>
             </motion.article>
           </div>
         </div>

@@ -35,7 +35,7 @@ function buildResults(query, projects, services, pages) {
     title: project.title,
     description: project.description,
     meta: [project.category, ...(project.tags || []).slice(0, 3)].filter(Boolean).join(" · "),
-    href: `/projects/${project.slug}`,
+    href: project.caseStudyUrl || `/projects/${project.slug}`,
     type: "project",
     keywords: [project.slug, project.clientName, ...(project.tags || [])].filter(Boolean),
     score:
