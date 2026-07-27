@@ -172,7 +172,7 @@ test("website admin sections are prefilled instead of relying on empty fallbacks
   );
   assert.match(
     cmsSource,
-    /featuredId:"news-1",selectedRightIds:\["news-2","news-3"\]/,
+    /featuredId:"news-1",selectedRightIds:\["news-2","news-3","news-4"\]/,
   );
 
   const fileStoreSource = readFileSync(
@@ -232,16 +232,18 @@ test("demo data layer has no production backend or credential dependency", () =>
   assert.match(serverClient, /createMockSupabase/);
 });
 
-test("homepage news presents exactly three balanced content cards", () => {
+test("homepage news keeps its featured card beside three compact update rows", () => {
   const newsSection = readFileSync(
     join(demoFeatureRoot, "components", "home", "HomeNewsEventsSection.tsx"),
     "utf8",
   );
 
   assert.match(newsSection, /\.slice\(0, 3\)/);
-  assert.match(newsSection, /lg:grid-cols-3/);
+  assert.match(newsSection, /lg:grid-cols-12/);
+  assert.match(newsSection, /lg:col-span-7/);
+  assert.match(newsSection, /lg:col-span-5/);
   assert.match(newsSection, /Featured Spotlight/);
-  assert.doesNotMatch(newsSection, /lg:grid-cols-12/);
+  assert.match(newsSection, /smallCards\.map/);
 });
 
 test("all static demo assets referenced by source are available locally", () => {
