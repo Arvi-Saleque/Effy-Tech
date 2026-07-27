@@ -1,0 +1,213 @@
+// @ts-nocheck -- Isolated generalized demo uses a dynamic local mock adapter.
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import { Award, GraduationCap, Users, Send } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { siteInfo, teachingMethods } from "@/features/effy-edu-demo/data/site";
+
+// Dynamically import the 3D scene with SSR disabled for optimal bundle performance
+const HeroScene = dynamic(() => import("../three/HeroScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center bg-transparent">
+      <div className="w-8 h-8 border-3 border-accent/20 border-t-accent rounded-full animate-spin" />
+    </div>
+  ),
+});
+
+interface TeacherSectionProps {
+  isTeacherFlying?: boolean;
+  teacherData?: any;
+}
+
+export default function TeacherSection({ isTeacherFlying = false, teacherData }: TeacherSectionProps) {
+  const content = teacherData?.content || {};
+
+  const teacherName = content.teacherName || siteInfo.teacherName || "Dr. Arif Rahman";
+  const teacherSpecialty = content.teacherSpecialty || siteInfo.teacherSpecialty || "Instructor & CEO";
+  const teacherBio = content.teacherBio || siteInfo.teacherBio;
+  const teacherTitle = content.teacherTitle || "Instructor & CEO";
+  const teacherSubtitle = content.teacherSubtitle || "Physics & Mathematics";
+  const teacherImage = content.teacherImage || "/effy_edu_management_system/images/demo-instructor.png";
+  const methods = content.teachingMethods || teachingMethods;
+
+  const whatsappLink = `https://wa.me/${siteInfo.whatsapp}?text=Hello%20${encodeURIComponent(teacherName.split(" ").pop()!)}%20Sir%2C%20I%20would%20like%20to%20discuss%2520admissions%20for%20myself%20/%20my%20child.`;
+  const shouldReduceMotion = useReducedMotion();
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const gridContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.08,
+      }
+    }
+  };
+
+  const gridItemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  return (
+    <section id="teacher" className="brand-section-wrapper bg-bg relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 right-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="brand-container">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+          {/* Teacher Image/Badge Column (entire block is hidable as a target landing unit) */}
+          <div
+            id="teacher-instructor-block"
+            className={`lg:col-span-5 w-full flex flex-col items-center justify-center relative min-h-[450px] sm:min-h-[550px] z-10 transition-opacity duration-200 ${isTeacherFlying ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+          >
+            {/* 3D Scene Layer (only on large displays for best performance) - full size background */}
+            <div className="absolute inset-0 z-0 hidden md:block w-full h-full pointer-events-none">
+              <HeroScene />
+            </div>
+
+            {/* Centered Teacher Portrait container (no overflow-hidden to allow shadows to bleed) */}
+            <div className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-[1/1.2] flex items-end justify-center z-10 select-none">
+              {/* Radial shadows & ambient gold/blue glows behind photo for realistic 3D shadow integration */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[85%] h-[20%] bg-primary-dark/25 rounded-full blur-xl z-0 pointer-events-none animate-pulse" style={{ animationDuration: '4s' }} />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-accent/6 rounded-full blur-[80px] z-0 pointer-events-none" />
+
+              {/* Gradient fade overlay to smoothly dissolve cropped bottom edge into cream background */}
+              <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#FFF8E6] via-[#FFF8E6]/85 to-transparent z-10 pointer-events-none" />
+
+              <Image
+                src={teacherImage}
+                alt={teacherName}
+                fill
+                sizes="(max-width: 768px) 280px, 340px"
+                className="object-contain object-bottom filter drop-shadow-[0_16px_32px_rgba(1,14,98,0.22)] z-10"
+                priority
+              />
+            </div>
+
+            {/* Compact Designation Tag under portrait */}
+            <div className="mt-6 z-20 text-center w-full max-w-[280px] sm:max-w-[340px] bg-white border border-border p-3.5 rounded-xl shadow-sm hover:border-accent/30 hover:shadow-md transition-all duration-300">
+              <span className="block text-accent font-extrabold text-[10px] sm:text-xs uppercase tracking-widest">
+                {teacherTitle}
+              </span>
+              <h4 className="font-extrabold text-base sm:text-lg text-primary mt-1">
+                {teacherName}
+              </h4>
+              <span className="block text-xs text-muted font-bold mt-0.5">
+                {teacherSubtitle}
+              </span>
+            </div>
+          </div>
+
+          {/* Teacher Info/Letter Column */}
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+            <div className="space-y-3">
+              <motion.h2
+                variants={headerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-xs font-bold text-accent tracking-widest uppercase"
+              >
+                Meet Your Teacher
+              </motion.h2>
+              <motion.h3
+                variants={headerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
+              >
+                {teacherName}
+              </motion.h3>
+              <motion.p
+                variants={headerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-primary-dark text-sm font-semibold flex items-center gap-1.5"
+              >
+                <GraduationCap className="h-4.5 w-4.5 text-accent animate-bounce" style={{ animationDuration: "3s" }} />
+                <span>{teacherSpecialty}</span>
+              </motion.p>
+            </div>
+
+            {/* Short Bio */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-text text-sm sm:text-base leading-relaxed"
+            >
+              {teacherBio}
+            </motion.p>
+
+            {/* Teaching Method Cards */}
+            <div className="space-y-3">
+              <span className="block text-xs font-bold text-primary-dark uppercase tracking-wider">
+                Our Teaching Methodology:
+              </span>
+              <motion.div
+                variants={gridContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {methods.map((method: any, i: number) => (
+                  <motion.div
+                    key={i}
+                    variants={gridItemVariants}
+                    className="brand-card p-4 bg-white border border-border rounded-xl space-y-1.5 shadow-sm hover:border-accent hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <span className="block font-extrabold text-primary text-sm">{method.title}</span>
+                    <span className="block text-xs text-muted leading-relaxed font-semibold">{method.desc}</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Call to Action */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-col sm:flex-row items-center gap-4 pt-4"
+            >
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="primary-btn flex items-center justify-center space-x-2 w-full sm:w-auto text-center hover:shadow-md hover:scale-[1.01] transition-all"
+              >
+                <Send className="h-4 w-4" />
+                <span>Contact Sir</span>
+              </a>
+            </motion.div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
