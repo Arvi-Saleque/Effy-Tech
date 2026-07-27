@@ -13,6 +13,16 @@ Routes:
 - `/admin/finance/targets` — revenue, net-profit, and expense-limit targets
 - `/admin/finance/settings` — accounts, categories, opening balances, and recent audit activity
 
+For a complete Bangla route and workflow guide, see `docs/finance-management-v1-bangla-guide.md`.
+
+## V1.1 input interaction update
+
+- Every Finance date field now has an always-visible calendar button. Clicking either the field or the button opens the browser date picker.
+- Every monetary field accepts safe calculations such as `400+300+1450`, `(1200+800)*2`, `1000/4`, and `1,200+800`.
+- The calculated total is previewed immediately and only the final two-decimal value is submitted.
+- The expression parser never uses `eval`; invalid characters, incomplete calculations, division by zero, negative regular amounts, and oversized values are rejected in both the browser and server validation.
+- This interaction update does not change the V1 database schema. If the V1 migration has already been applied, no new SQL is required.
+
 ## Database migration
 
 Run this migration before opening the Finance routes:
@@ -85,9 +95,8 @@ npm run lint
 npm run build
 ```
 
-Expected Finance test result: 10 passed, 0 failed.
+Expected Finance test result: 14 passed, 0 failed.
 
 ## Deliberate V1 boundaries
 
 This version does not claim to be a statutory accounting package. It does not yet include multi-currency conversion, bank API synchronization, invoice PDF generation, receipt file storage, payroll, VAT/tax filing, double-entry journals, or approval workflows. These can be added later without replacing the current ledger and project-finance foundation.
-

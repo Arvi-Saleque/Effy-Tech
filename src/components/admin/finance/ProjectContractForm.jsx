@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2, Save } from "lucide-react";
 import { createProjectContract, updateProjectContract } from "@/lib/admin/finance-actions";
+import FinanceDateInput from "./FinanceDateInput";
+import MoneyExpressionInput from "./MoneyExpressionInput";
 
 const inputClass = "w-full rounded-xl border border-neutral-700/80 bg-neutral-950/65 px-3.5 py-2.5 text-sm text-neutral-100 outline-none transition placeholder:text-neutral-700 focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/10 disabled:opacity-60";
 const labelClass = "mb-1.5 block text-xs font-bold text-neutral-400";
@@ -51,7 +53,7 @@ export default function ProjectContractForm({ projects, initialData = null }) {
       <div className="grid gap-5 md:grid-cols-2">
         <div>
           <label htmlFor="contract_value" className={labelClass}>Agreed project value (BDT) *</label>
-          <input id="contract_value" name="contract_value" type="number" min="0.01" step="0.01" required defaultValue={initialData?.contract_value || ""} placeholder="0.00" className={inputClass} />
+          <MoneyExpressionInput id="contract_value" name="contract_value" required defaultValue={initialData?.contract_value || ""} className={inputClass} />
           {errors?.contract_value?.[0] ? <p className="mt-1.5 text-xs text-rose-400">{errors.contract_value[0]}</p> : null}
         </div>
         <div>
@@ -60,11 +62,11 @@ export default function ProjectContractForm({ projects, initialData = null }) {
         </div>
         <div>
           <label htmlFor="signed_date" className={labelClass}>Agreement / start date</label>
-          <input id="signed_date" name="signed_date" type="date" defaultValue={initialData?.signed_date || ""} className={inputClass} />
+          <FinanceDateInput id="signed_date" name="signed_date" defaultValue={initialData?.signed_date || ""} calendarLabel="Open agreement date picker" className={inputClass} />
         </div>
         <div>
           <label htmlFor="payment_deadline" className={labelClass}>Final payment deadline</label>
-          <input id="payment_deadline" name="payment_deadline" type="date" defaultValue={initialData?.payment_deadline || ""} className={inputClass} />
+          <FinanceDateInput id="payment_deadline" name="payment_deadline" defaultValue={initialData?.payment_deadline || ""} calendarLabel="Open payment deadline picker" className={inputClass} />
           {errors?.payment_deadline?.[0] ? <p className="mt-1.5 text-xs text-rose-400">{errors.payment_deadline[0]}</p> : null}
         </div>
       </div>
@@ -82,4 +84,3 @@ export default function ProjectContractForm({ projects, initialData = null }) {
     </form>
   );
 }
-

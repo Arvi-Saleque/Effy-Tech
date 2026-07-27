@@ -9,7 +9,7 @@ import "@/styles/projects-spatial.css";
 
 export const metadata = {
   title: "Live Project Case Studies | Effy Tech",
-  description: "Explore live Effy Tech products and client platforms: a mobile product, an academic operations platform, and a university website with custom CMS.",
+  description: "Explore live Effy Tech products and client platforms across mobile, coaching management, academic operations, institutional websites, and custom content systems.",
   alternates: { canonical: "/projects" },
   openGraph: { title: "Live Project Case Studies | Effy Tech", description: "Real products and operational systems designed, engineered, launched, and supported by Effy Tech.", url: "/projects", images: [{ url: "/images/projects/og-1200x630.jpg", width: 1200, height: 630, alt: "Effy Tech live project case studies" }] },
   twitter: { card: "summary_large_image", title: "Live Project Case Studies | Effy Tech", description: "Real products and operational systems designed, engineered, launched, and supported by Effy Tech.", images: ["/images/projects/og-1200x630.jpg"] },
@@ -24,6 +24,7 @@ const capabilities = [
 
 const projectPreviewTitles = {
   IAM: "play.google.com · Islamic Amal Tracker",
+  EEMS: "shifatstales.com · Coaching management",
   DHA: "dhakhl.com · Darul Hikmah Academy",
   BUEK: "buekbd.com · University platform",
 };
@@ -32,7 +33,10 @@ function ProjectsHeroVisual() {
   return (
     <MotionBoundary className="projects-hero-motion">
       <TiltSurface className="projects-hero-tilt" maxTilt={2.8} perspective={1300}>
-        <div className="projects-spatial-stage" aria-label="Three live Effy Tech product and platform previews">
+        <div
+          className="projects-spatial-stage"
+          aria-label={`${sortedProjects.length} live Effy Tech product and platform previews`}
+        >
           <div className="projects-stage-grid" aria-hidden="true" />
           {sortedProjects.map((project, index) => (
             <div className={`projects-hero-layer projects-hero-layer-${index + 1}`} key={project.slug}>
@@ -50,7 +54,7 @@ function ProjectsHeroVisual() {
               </BrowserMockup>
             </div>
           ))}
-          <div className="projects-stage-core"><span>03</span><div><small>LIVE SYSTEMS</small><strong>Product · Platform · CMS</strong></div></div>
+          <div className="projects-stage-core"><span>{String(sortedProjects.length).padStart(2, "0")}</span><div><small>LIVE SYSTEMS</small><strong>Product · Platforms · CMS</strong></div></div>
         </div>
       </TiltSurface>
     </MotionBoundary>

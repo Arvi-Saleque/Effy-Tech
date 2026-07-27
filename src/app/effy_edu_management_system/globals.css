@@ -1,0 +1,471 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFFCF2; /* Soft Cream */
+  --foreground: #1F2937; /* Main Text */
+
+  --color-primary: #010E62; /* Deep Navy */
+  --color-primary-dark: #0B1B4D; /* Oxford Blue */
+  --color-accent: #FBB503; /* Gold Accent */
+  --color-bg: #FFF8E6; /* Cream Background */
+  --color-bg-soft: #FFFCF2; /* Soft Cream */
+  --color-text: #1F2937; /* Main Text */
+  --color-muted: #6B7280; /* Muted Text */
+  --color-border: #E7E0D2; /* Border */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-accent: var(--color-accent);
+  --color-bg: var(--color-bg);
+  --color-bg-soft: var(--color-bg-soft);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-muted);
+  --color-border: var(--color-border);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-display: var(--font-outfit), sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg-soft);
+    color: var(--color-text);
+    font-family: var(--font-inter), var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit), var(--font-display);
+    font-weight: 800;
+  }
+  h1:not([class*="text-"]),
+  h2:not([class*="text-"]),
+  h3:not([class*="text-"]),
+  h4:not([class*="text-"]),
+  h5:not([class*="text-"]),
+  h6:not([class*="text-"]) {
+    color: var(--color-primary);
+  }
+
+  /* Universal button interaction feedback */
+  button:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="button"]:not(:disabled) {
+    cursor: pointer;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+
+  button:hover:not(:disabled),
+  input[type="submit"]:hover:not(:disabled),
+  input[type="button"]:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+
+  button:active:not(:disabled),
+  input[type="submit"]:active:not(:disabled),
+  input[type="button"]:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* Custom scrollbar to match the premium warm theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-soft);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Reusable Components/Layout Utilities */
+.brand-container {
+  width: 100%;
+  max-width: 80rem; /* 1280px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 640px) {
+  .brand-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .brand-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.brand-section-wrapper {
+  padding-top: 5.5rem;
+  padding-bottom: 5.5rem;
+  position: relative;
+}
+@media (min-width: 768px) {
+  .brand-section-wrapper {
+    padding-top: 6.5rem;
+    padding-bottom: 6.5rem;
+  }
+}
+
+/* Reusable Buttons */
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 10px -1px rgba(251, 181, 3, 0.2);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
+  border: 1px solid transparent;
+}
+.primary-btn:hover {
+  background-color: #e2a202; /* slightly darker brand gold */
+  box-shadow: 0 6px 15px -1px rgba(251, 181, 3, 0.35);
+  transform: translateY(-1px);
+}
+.primary-btn:active {
+  transform: translateY(0);
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--color-primary);
+  background-color: transparent;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+.secondary-btn:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.secondary-btn:active {
+  transform: translateY(0);
+}
+
+/* Reusable Cards */
+.brand-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 4px 25px -2px rgba(1, 14, 98, 0.03), 0 2px 10px -1px rgba(1, 14, 98, 0.02);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+.brand-card:hover {
+  border-color: #d8cfbe;
+  box-shadow: 0 12px 35px -4px rgba(1, 14, 98, 0.07), 0 4px 15px -2px rgba(1, 14, 98, 0.04);
+}
+
+/* Reusable Badges */
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+
+.brand-badge-blue {
+  background-color: rgba(1, 14, 98, 0.05);
+  color: var(--color-primary);
+  border: 1px solid rgba(1, 14, 98, 0.1);
+}
+
+/* Subtle highlights */
+.glow-accent-gold {
+  box-shadow: 0 0 20px rgba(251, 181, 3, 0.15);
+}
+
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Infinite Vertical Scrolling Marquee */
+@keyframes scroll-up {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-marquee-vertical {
+  animation: scroll-up var(--marquee-duration, 30s) linear infinite;
+}
+
+.animate-marquee-vertical-hover-pause:hover {
+  animation-play-state: paused;
+}
+
+/* Playlist Equalizer Waves Animation */
+@keyframes equalizer {
+  0% {
+    height: 4px;
+  }
+  100% {
+    height: 16px;
+  }
+}
+
+.animate-equalizer-bar-1 {
+  animation: equalizer 0.6s ease-in-out infinite alternate;
+}
+.animate-equalizer-bar-2 {
+  animation: equalizer 0.6s ease-in-out infinite alternate 0.15s;
+}
+.animate-equalizer-bar-3 {
+  animation: equalizer 0.6s ease-in-out infinite alternate 0.3s;
+}
+
+/* =========================================================================
+   AUTHENTICATED AREA COLOR SYSTEM & SURFACE HIERARCHY
+   ========================================================================= */
+
+.authenticated-shell {
+  /* Color theme override */
+  --background: #F8F7F2;
+  --foreground: #101C3D;
+
+  --color-primary: #0B1F55; /* Deep Navy */
+  --color-primary-dark: #071A45; /* Midnight Navy */
+  --color-accent: #FFB703; /* Warm Amber */
+  --color-bg: #FFFFFF; /* Card Background */
+  --color-bg-soft: #F8F7F2; /* Page Background */
+  --color-text: #101C3D; /* Ink Navy */
+  --color-muted: #64748B; /* Slate */
+  --color-border: #DDE3EC; /* Border */
+
+  background-color: #F8F7F2 !important;
+  color: #101C3D !important;
+}
+
+/* Fonts and headers */
+
+
+/* Neutral text formatting */
+.authenticated-shell .text-muted,
+.authenticated-shell .text-slate-500,
+.authenticated-shell .text-gray-500,
+.authenticated-shell .text-slate-400,
+.authenticated-shell .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* Cards & Surface hierarchy */
+.authenticated-shell .brand-card,
+.authenticated-shell .bg-white {
+  background-color: #FFFFFF !important;
+  border: 1px solid #DDE3EC !important;
+  box-shadow: 0 4px 16px rgba(11, 31, 85, 0.06) !important;
+}
+
+/* Filter panel faint blue-gray interior */
+.authenticated-shell form[method="GET"],
+.authenticated-shell .filter-panel {
+  background-color: #F9FAFC !important;
+  border: 1px solid #DDE3EC !important;
+  box-shadow: none !important;
+}
+
+/* Forms controls interior */
+.authenticated-shell input,
+.authenticated-shell select,
+.authenticated-shell textarea {
+  background-color: #FFFFFF !important;
+  border: 1px solid #DDE3EC !important;
+  color: #101C3D !important;
+}
+
+.authenticated-shell input:focus,
+.authenticated-shell select:focus,
+.authenticated-shell textarea:focus {
+  border-color: #0B1F55 !important;
+  outline: none !important;
+}
+
+/* Table layout styling overrides */
+.authenticated-shell table {
+  background-color: #FFFFFF !important;
+  border-collapse: collapse !important;
+}
+
+.authenticated-shell thead tr {
+  background-color: #F4F6FA !important;
+  color: #64748B !important;
+  border-bottom: 1px solid #E5EAF1 !important;
+}
+
+.authenticated-shell thead th {
+  color: #64748B !important;
+  font-weight: 800 !important;
+}
+
+.authenticated-shell tbody tr {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E5EAF1 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.authenticated-shell tbody tr:hover {
+  background-color: #F8FAFD !important;
+  border-left: 3px solid #0B1F55 !important;
+}
+
+/* Reusable buttons styles overrides */
+.authenticated-shell .primary-btn {
+  background-color: #FFB703 !important;
+  color: #071A45 !important;
+  box-shadow: none !important;
+  border: 1px solid transparent !important;
+}
+
+.authenticated-shell .primary-btn:hover {
+  background-color: #EFA500 !important;
+}
+
+.authenticated-shell .secondary-btn {
+  background-color: #FFFFFF !important;
+  color: #0B1F55 !important;
+  border: 1px solid #CBD3E0 !important;
+  box-shadow: none !important;
+}
+
+.authenticated-shell .secondary-btn:hover {
+  background-color: #F8FAFD !important;
+  color: #0B1F55 !important;
+}
+
+/* Tertiary action or info link style */
+.authenticated-shell .tertiary-link,
+.authenticated-shell a[href*="details"],
+.authenticated-shell a[href*="edit"] {
+  color: #0F766E !important;
+  transition: color 0.15s ease;
+}
+
+.authenticated-shell .tertiary-link:hover,
+.authenticated-shell a[href*="details"]:hover,
+.authenticated-shell a[href*="edit"]:hover {
+  color: #115E59 !important;
+}
+
+/* Secondary Teal Accent conversions for status */
+.authenticated-shell .text-teal,
+.authenticated-shell .text-emerald-700,
+.authenticated-shell .text-green-700,
+.authenticated-shell .text-emerald-600 {
+  color: #0F766E !important;
+}
+
+.authenticated-shell .bg-teal-soft,
+.authenticated-shell .bg-emerald-50,
+.authenticated-shell .bg-green-50,
+.authenticated-shell .bg-emerald-50\/40 {
+  background-color: #CCFBF1 !important;
+  color: #0F766E !important;
+  border-color: #CCFBF1 !important;
+}
+
+/* ==========================================
+   THEME-MATCHED SUPER LEVEL SITE LOADER
+   EduPilot Coaching Academy - Physics & Higher Mathematics Care
+   Theme Colors: Cream (#FFFCF2), Navy (#010E62), Gold (#FBB503)
+   ========================================== */
+@keyframes loader-atom-orbit-1 {
+  0% { transform: rotateX(65deg) rotateY(35deg) rotateZ(0deg); }
+  100% { transform: rotateX(65deg) rotateY(35deg) rotateZ(360deg); }
+}
+
+@keyframes loader-atom-orbit-2 {
+  0% { transform: rotateX(65deg) rotateY(-35deg) rotateZ(0deg); }
+  100% { transform: rotateX(65deg) rotateY(-35deg) rotateZ(-360deg); }
+}
+
+@keyframes loader-float-symbol {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.18; }
+  50% { transform: translateY(-18px) rotate(10deg) scale(1.08); opacity: 0.35; }
+}
+
+@keyframes loader-shimmer-gold {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes loader-pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.15); opacity: 0.45; }
+}
+
+.animate-atom-orbit-1 {
+  animation: loader-atom-orbit-1 7s linear infinite;
+}
+
+.animate-atom-orbit-2 {
+  animation: loader-atom-orbit-2 9s linear infinite;
+}
+
+.animate-float-symbol {
+  animation: loader-float-symbol 4s ease-in-out infinite;
+}
+
+.animate-shimmer-gold {
+  animation: loader-shimmer-gold 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse-glow {
+  animation: loader-pulse-glow 3s ease-in-out infinite;
+}

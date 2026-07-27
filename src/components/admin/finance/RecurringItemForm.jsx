@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2, Save } from "lucide-react";
 import { createRecurringFinanceItem, updateRecurringFinanceItem } from "@/lib/admin/finance-actions";
+import FinanceDateInput from "./FinanceDateInput";
+import MoneyExpressionInput from "./MoneyExpressionInput";
 
 const inputClass = "w-full rounded-xl border border-neutral-700/80 bg-neutral-950/65 px-3.5 py-2.5 text-sm text-neutral-100 outline-none transition placeholder:text-neutral-700 focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/10";
 const labelClass = "mb-1.5 block text-xs font-bold text-neutral-400";
@@ -67,12 +69,12 @@ export default function RecurringItemForm({ references, initialData = null, toda
         {errors?.title?.[0] ? <p className="mt-1.5 text-xs text-rose-400">{errors.title[0]}</p> : null}
       </div>
       <div className="grid gap-5 md:grid-cols-2">
-        <div><label htmlFor="amount" className={labelClass}>Amount (BDT) *</label><input id="amount" name="amount" type="number" min="0.01" step="0.01" required defaultValue={initialData?.amount || ""} className={inputClass} />{errors?.amount?.[0] ? <p className="mt-1.5 text-xs text-rose-400">{errors.amount[0]}</p> : null}</div>
+        <div><label htmlFor="amount" className={labelClass}>Amount (BDT) *</label><MoneyExpressionInput id="amount" name="amount" required defaultValue={initialData?.amount || ""} className={inputClass} />{errors?.amount?.[0] ? <p className="mt-1.5 text-xs text-rose-400">{errors.amount[0]}</p> : null}</div>
         <div><label htmlFor="category_id" className={labelClass}>Category *</label><select key={type} id="category_id" name="category_id" required defaultValue={initialData?.category_id || categories[0]?.id || ""} className={inputClass}><option value="">Choose category</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></div>
         <div><label htmlFor="account_id" className={labelClass}>Account *</label><select id="account_id" name="account_id" required defaultValue={initialData?.account_id || references.accounts.find((account) => account.is_active)?.id || ""} className={inputClass}>{references.accounts.filter((account) => account.is_active || account.id === initialData?.account_id).map((account) => <option key={account.id} value={account.id}>{account.name}</option>)}</select></div>
         <div><label htmlFor="payment_method" className={labelClass}>Payment method *</label><select id="payment_method" name="payment_method" defaultValue={initialData?.payment_method || "bank_transfer"} className={inputClass}><option value="bank_transfer">Bank transfer</option><option value="cash">Cash</option><option value="mobile_banking">Mobile banking</option><option value="card">Card</option><option value="online_gateway">Online gateway</option><option value="cheque">Cheque</option><option value="other">Other</option></select></div>
         <div><label htmlFor="frequency" className={labelClass}>Frequency *</label><select id="frequency" name="frequency" defaultValue={initialData?.frequency || "yearly"} className={inputClass}><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="yearly">Yearly</option></select></div>
-        <div><label htmlFor="next_due_date" className={labelClass}>Next due date *</label><input id="next_due_date" name="next_due_date" type="date" required defaultValue={initialData?.next_due_date || today} className={inputClass} /></div>
+        <div><label htmlFor="next_due_date" className={labelClass}>Next due date *</label><FinanceDateInput id="next_due_date" name="next_due_date" required defaultValue={initialData?.next_due_date || today} calendarLabel="Open next due date picker" className={inputClass} /></div>
         <div><label htmlFor="reminder_days" className={labelClass}>Reminder lead time (days) *</label><input id="reminder_days" name="reminder_days" type="number" min="0" max="365" required defaultValue={initialData?.reminder_days ?? 7} className={inputClass} /></div>
         <div><label htmlFor="status" className={labelClass}>Status *</label><select id="status" name="status" defaultValue={initialData?.status || "active"} className={inputClass}><option value="active">Active</option><option value="paused">Paused</option><option value="ended">Ended</option></select></div>
       </div>
@@ -89,4 +91,3 @@ export default function RecurringItemForm({ references, initialData = null, toda
     </form>
   );
 }
-

@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Effy Edu website content management preview</title>
+  <desc id="desc">A privacy-safe website CMS workspace with page navigation, a live hero preview, editable content fields, visibility controls and publishing status.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#edf2fb"/><stop offset="1" stop-color="#f8f7f2"/></linearGradient>
+    <linearGradient id="nav" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#102a66"/><stop offset="1" stop-color="#071a45"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd45e"/><stop offset="1" stop-color="#ffb703"/></linearGradient>
+    <linearGradient id="previewHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1f55"/><stop offset="1" stop-color="#2456b3"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#071a45" flood-opacity=".2"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#071a45" flood-opacity=".09"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1490" cy="72" r="260" fill="#ffb703" opacity=".09"/>
+  <circle cx="85" cy="830" r="250" fill="#0b1f55" opacity=".06"/>
+
+  <g filter="url(#shadow)">
+    <rect x="62" y="52" width="1476" height="796" rx="30" fill="#fff"/>
+    <rect x="62" y="52" width="1476" height="62" rx="30" fill="#f8fafc"/>
+    <rect x="62" y="90" width="1476" height="24" fill="#f8fafc"/>
+    <circle cx="98" cy="83" r="7" fill="#ff7d78"/><circle cx="122" cy="83" r="7" fill="#ffcf57"/><circle cx="146" cy="83" r="7" fill="#51ca87"/>
+    <rect x="516" y="67" width="568" height="31" rx="15.5" fill="#edf1f6"/>
+    <circle cx="541" cy="82.5" r="6" fill="#0f9f6e"/>
+    <text x="562" y="88" fill="#667085" font-family="Arial, sans-serif" font-size="13">app.effyedu.com / website / home / hero</text>
+
+    <path d="M62 114h245v734H92a30 30 0 0 1-30-30Z" fill="url(#nav)"/>
+    <rect x="86" y="143" width="43" height="43" rx="12" fill="url(#gold)"/>
+    <text x="107.5" y="171" text-anchor="middle" fill="#071a45" font-family="Arial, sans-serif" font-size="16" font-weight="800">E</text>
+    <text x="142" y="163" fill="#fff" font-family="Arial, sans-serif" font-size="17" font-weight="800">EFFY EDU</text>
+    <text x="142" y="181" fill="#9fb0d0" font-family="Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="1.4">WEBSITE CMS</text>
+    <text x="87" y="223" fill="#7287aa" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="1.2">WEBSITE PAGES</text>
+
+    <rect x="81" y="241" width="205" height="42" rx="10" fill="#fff" opacity=".13"/>
+    <rect x="95" y="252" width="20" height="20" rx="5" fill="#ffb703"/>
+    <path d="M100 257h10v10h-10Zm3-4v4m4-4v4" fill="none" stroke="#071a45" stroke-width="1.8"/>
+    <text x="130" y="268" fill="#fff" font-family="Arial, sans-serif" font-size="12.5" font-weight="700">Home Page</text>
+    <path d="m265 257 5 5-5 5" fill="none" stroke="#fff" stroke-width="2"/>
+
+    <g fill="#aebdd8" font-family="Arial, sans-serif" font-size="12" font-weight="600">
+      <text x="118" y="312">Hero</text><text x="118" y="345">Trust Statistics</text><text x="118" y="378">Programs</text>
+      <text x="118" y="411">Why Choose Us</text><text x="118" y="444">Student Success</text><text x="118" y="477">Testimonials</text>
+      <text x="118" y="510">Gallery</text><text x="118" y="543">News &amp; Events</text>
+    </g>
+    <rect x="99" y="292" width="170" height="34" rx="8" fill="#ffb703"/>
+    <circle cx="108" cy="309" r="3" fill="#071a45"/>
+    <text x="118" y="313" fill="#071a45" font-family="Arial, sans-serif" font-size="12" font-weight="800">Hero</text>
+
+    <line x1="84" y1="567" x2="284" y2="567" stroke="#fff" stroke-opacity=".1"/>
+    <g fill="#aebdd8" font-family="Arial, sans-serif" font-size="12.5" font-weight="600">
+      <text x="121" y="605">About</text><text x="121" y="648">Courses</text><text x="121" y="691">Results</text><text x="121" y="734">Contact &amp; FAQ</text>
+    </g>
+    <g fill="none" stroke="#9fb0d0" stroke-width="2">
+      <circle cx="103" cy="600" r="7"/><path d="M93 613c2-8 18-8 20 0"/>
+      <path d="M94 638h18v17H94Zm4 4h10m-10 5h8"/>
+      <path d="M95 686h16m-13-7v13m5-8v8m5-15v15"/>
+      <rect x="94" y="723" width="18" height="16" rx="2"/><path d="M98 728h10m-10 5h7"/>
+    </g>
+    <rect x="81" y="774" width="205" height="49" rx="12" fill="#fff" opacity=".07"/>
+    <circle cx="103" cy="798.5" r="12" fill="#0f9f6e"/>
+    <path d="m98 799 4 4 7-9" fill="none" stroke="#fff" stroke-width="2"/>
+    <text x="123" y="795" fill="#fff" font-family="Arial, sans-serif" font-size="10.5" font-weight="700">All changes saved</text>
+    <text x="123" y="810" fill="#9fb0d0" font-family="Arial, sans-serif" font-size="8.5">Draft auto-save enabled</text>
+
+    <rect x="307" y="114" width="1231" height="734" fill="#f8fafc"/>
+    <rect x="307" y="114" width="1231" height="68" fill="#fff"/>
+    <line x1="307" y1="182" x2="1538" y2="182" stroke="#e5eaf1"/>
+    <text x="342" y="145" fill="#101c3d" font-family="Arial, sans-serif" font-size="18" font-weight="800">Home Page · Hero</text>
+    <text x="342" y="164" fill="#64748b" font-family="Arial, sans-serif" font-size="9.5">Edit content and preview the public experience.</text>
+    <rect x="1130" y="128" width="121" height="38" rx="19" fill="#f4f6fa"/>
+    <circle cx="1151" cy="147" r="5" fill="#0f9f6e"/>
+    <text x="1165" y="151" fill="#475569" font-family="Arial, sans-serif" font-size="9" font-weight="800">SAVED</text>
+    <rect x="1263" y="128" width="104" height="38" rx="19" fill="#fff" stroke="#dce2eb"/>
+    <path d="M1284 140h16v14h-16Zm4-5v5m8-5v5" fill="none" stroke="#0b1f55" stroke-width="1.7"/>
+    <text x="1310" y="151" fill="#0b1f55" font-family="Arial, sans-serif" font-size="9" font-weight="800">PREVIEW</text>
+    <rect x="1379" y="128" width="124" height="38" rx="19" fill="#0b1f55"/>
+    <path d="M1401 151h16m-12-8 4-4 4 4m-4-4v17" fill="none" stroke="#ffb703" stroke-width="1.8"/>
+    <text x="1424" y="151" fill="#fff" font-family="Arial, sans-serif" font-size="9" font-weight="800">PUBLISH</text>
+
+    <g filter="url(#soft)">
+      <rect x="336" y="209" width="790" height="594" rx="18" fill="#e9edf3"/>
+      <rect x="357" y="229" width="748" height="554" rx="13" fill="#fff"/>
+      <rect x="357" y="229" width="748" height="36" rx="13" fill="#f8fafc"/>
+      <rect x="357" y="250" width="748" height="15" fill="#f8fafc"/>
+      <circle cx="377" cy="247" r="4" fill="#ff7d78"/><circle cx="391" cy="247" r="4" fill="#ffcf57"/><circle cx="405" cy="247" r="4" fill="#51ca87"/>
+      <rect x="555" y="237" width="352" height="20" rx="10" fill="#edf1f6"/>
+      <text x="731" y="251" text-anchor="middle" fill="#7b8798" font-family="Arial, sans-serif" font-size="7.5">effyedu.demo</text>
+
+      <rect x="357" y="265" width="748" height="48" fill="#fff"/>
+      <rect x="374" y="278" width="25" height="25" rx="7" fill="#ffb703"/>
+      <text x="386.5" y="295" text-anchor="middle" fill="#071a45" font-family="Arial, sans-serif" font-size="9" font-weight="800">E</text>
+      <text x="408" y="290" fill="#0b1f55" font-family="Arial, sans-serif" font-size="10.5" font-weight="800">EFFY EDU</text>
+      <text x="408" y="302" fill="#64748b" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" letter-spacing=".8">ACADEMIC MANAGEMENT</text>
+      <g fill="#475569" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+        <text x="700" y="293">Home</text><text x="742" y="293">Programs</text><text x="796" y="293">Results</text><text x="841" y="293">Gallery</text><text x="885" y="293">Contact</text>
+      </g>
+      <rect x="1001" y="278" width="87" height="24" rx="12" fill="#0b1f55"/>
+      <text x="1044.5" y="293" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="6" font-weight="800">STUDENT LOGIN</text>
+
+      <rect x="357" y="313" width="748" height="293" fill="url(#previewHero)"/>
+      <circle cx="953" cy="454" r="112" fill="#fff" opacity=".04"/>
+      <ellipse cx="952" cy="454" rx="96" ry="37" fill="none" stroke="#ffb703" stroke-width="2.5" transform="rotate(-18 952 454)"/>
+      <ellipse cx="952" cy="454" rx="96" ry="37" fill="none" stroke="#ffb703" stroke-width="2.5" transform="rotate(42 952 454)"/>
+      <ellipse cx="952" cy="454" rx="96" ry="37" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="2" transform="rotate(102 952 454)"/>
+      <circle cx="952" cy="454" r="24" fill="#ffb703"/>
+      <rect x="392" y="353" width="122" height="19" rx="9.5" fill="#ffb703"/>
+      <text x="453" y="366" text-anchor="middle" fill="#071a45" font-family="Arial, sans-serif" font-size="6.5" font-weight="800">ADMISSIONS OPEN</text>
+      <text x="392" y="416" fill="#fff" font-family="Arial, sans-serif" font-size="28" font-weight="800">Learn with clarity.</text>
+      <text x="392" y="451" fill="#ffb703" font-family="Arial, sans-serif" font-size="28" font-weight="800">Grow with confidence.</text>
+      <text x="392" y="480" fill="#dce5f5" font-family="Arial, sans-serif" font-size="8.5">Structured classes, measurable progress and focused support.</text>
+      <rect x="392" y="511" width="106" height="28" rx="14" fill="#ffb703"/>
+      <text x="445" y="529" text-anchor="middle" fill="#071a45" font-family="Arial, sans-serif" font-size="6.5" font-weight="800">EXPLORE PROGRAMS</text>
+      <rect x="507" y="511" width="95" height="28" rx="14" fill="none" stroke="#fff" stroke-opacity=".5"/>
+      <text x="554.5" y="529" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="6.5" font-weight="800">VIEW RESULTS</text>
+      <rect x="381" y="578" width="700" height="56" rx="12" fill="#fff" filter="url(#soft)"/>
+      <g font-family="Arial, sans-serif">
+        <text x="410" y="601" fill="#0b1f55" font-size="13" font-weight="800">Structured</text><text x="410" y="617" fill="#64748b" font-size="5.5" font-weight="700">LEARNING JOURNEYS</text>
+        <line x1="548" y1="592" x2="548" y2="620" stroke="#e7e9ef"/>
+        <text x="575" y="601" fill="#0b1f55" font-size="13" font-weight="800">Active</text><text x="575" y="617" fill="#64748b" font-size="5.5" font-weight="700">ACADEMIC BATCHES</text>
+        <line x1="711" y1="592" x2="711" y2="620" stroke="#e7e9ef"/>
+        <text x="738" y="601" fill="#0b1f55" font-size="13" font-weight="800">Weekly</text><text x="738" y="617" fill="#64748b" font-size="5.5" font-weight="700">ASSESSMENTS</text>
+        <line x1="873" y1="592" x2="873" y2="620" stroke="#e7e9ef"/>
+        <text x="900" y="601" fill="#0b1f55" font-size="13" font-weight="800">Visible</text><text x="900" y="617" fill="#64748b" font-size="5.5" font-weight="700">PROGRESS UPDATES</text>
+      </g>
+      <text x="381" y="678" fill="#0b1f55" font-family="Arial, sans-serif" font-size="15" font-weight="800">Programs built around progress</text>
+      <text x="381" y="697" fill="#64748b" font-family="Arial, sans-serif" font-size="7">Clear learning paths for every academic stage.</text>
+      <rect x="381" y="716" width="220" height="44" rx="10" fill="#eef4ff"/>
+      <rect x="395" y="727" width="24" height="24" rx="7" fill="#0b1f55"/>
+      <text x="430" y="739" fill="#0b1f55" font-family="Arial, sans-serif" font-size="7.5" font-weight="800">HSC Science Mastery</text>
+      <text x="430" y="751" fill="#64748b" font-family="Arial, sans-serif" font-size="5.5">Physics · Mathematics · Weekly exams</text>
+      <rect x="616" y="716" width="220" height="44" rx="10" fill="#fff8df"/>
+      <rect x="630" y="727" width="24" height="24" rx="7" fill="#ffb703"/>
+      <text x="665" y="739" fill="#0b1f55" font-family="Arial, sans-serif" font-size="7.5" font-weight="800">Board Exam Sprint</text>
+      <text x="665" y="751" fill="#64748b" font-family="Arial, sans-serif" font-size="5.5">Model tests · Feedback · Strategy</text>
+      <rect x="851" y="716" width="230" height="44" rx="10" fill="#edf9f4"/>
+      <rect x="865" y="727" width="24" height="24" rx="7" fill="#0f9f6e"/>
+      <text x="900" y="739" fill="#0b1f55" font-family="Arial, sans-serif" font-size="7.5" font-weight="800">Admission Intensive</text>
+      <text x="900" y="751" fill="#64748b" font-family="Arial, sans-serif" font-size="5.5">Practice · Ranking · Insights</text>
+    </g>
+
+    <g filter="url(#soft)" font-family="Arial, sans-serif">
+      <rect x="1144" y="209" width="359" height="594" rx="18" fill="#fff"/>
+      <text x="1171" y="249" fill="#101c3d" font-size="16" font-weight="800">Hero content</text>
+      <text x="1171" y="270" fill="#64748b" font-size="9.5">Update text, actions and visibility.</text>
+      <line x1="1171" y1="291" x2="1476" y2="291" stroke="#e8ecf2"/>
+
+      <text x="1171" y="320" fill="#475569" font-size="9" font-weight="800">EYEBROW LABEL</text>
+      <rect x="1171" y="331" width="305" height="38" rx="9" fill="#f8fafc" stroke="#dfe5ed"/>
+      <text x="1185" y="355" fill="#101c3d" font-size="10">Admissions Open</text>
+
+      <text x="1171" y="397" fill="#475569" font-size="9" font-weight="800">PRIMARY HEADLINE</text>
+      <rect x="1171" y="408" width="305" height="57" rx="9" fill="#f8fafc" stroke="#dfe5ed"/>
+      <text x="1185" y="432" fill="#101c3d" font-size="10">Learn with clarity.</text>
+      <text x="1185" y="450" fill="#101c3d" font-size="10">Grow with confidence.</text>
+
+      <text x="1171" y="493" fill="#475569" font-size="9" font-weight="800">SUPPORTING TEXT</text>
+      <rect x="1171" y="504" width="305" height="70" rx="9" fill="#f8fafc" stroke="#dfe5ed"/>
+      <text x="1185" y="528" fill="#475569" font-size="9">Structured classes, measurable progress</text>
+      <text x="1185" y="545" fill="#475569" font-size="9">and focused support for every learner.</text>
+      <text x="1459" y="562" text-anchor="end" fill="#94a3b8" font-size="7.5">82 / 180</text>
+
+      <text x="1171" y="602" fill="#475569" font-size="9" font-weight="800">PRIMARY ACTION</text>
+      <rect x="1171" y="613" width="189" height="38" rx="9" fill="#f8fafc" stroke="#dfe5ed"/>
+      <text x="1185" y="637" fill="#101c3d" font-size="9.5">Explore Programs</text>
+      <rect x="1372" y="613" width="104" height="38" rx="9" fill="#fff2cc"/>
+      <text x="1424" y="637" text-anchor="middle" fill="#9a6200" font-size="8.5" font-weight="800">/courses</text>
+
+      <line x1="1171" y1="678" x2="1476" y2="678" stroke="#e8ecf2"/>
+      <text x="1171" y="708" fill="#475569" font-size="9" font-weight="800">SECTION VISIBILITY</text>
+      <rect x="1409" y="692" width="67" height="32" rx="16" fill="#0f9f6e"/>
+      <circle cx="1460" cy="708" r="12" fill="#fff"/>
+      <text x="1171" y="735" fill="#64748b" font-size="9">Visible on public website</text>
+
+      <rect x="1171" y="757" width="305" height="34" rx="10" fill="#e4f8ef"/>
+      <circle cx="1190" cy="774" r="5" fill="#0f9f6e"/>
+      <text x="1204" y="778" fill="#087a55" font-size="8.5" font-weight="800">READY TO PUBLISH</text>
+      <text x="1459" y="778" text-anchor="end" fill="#087a55" font-size="8">Updated just now</text>
+    </g>
+  </g>
+  <rect x="126" y="17" width="191" height="32" rx="16" fill="#ffb703"/>
+  <text x="221.5" y="38" text-anchor="middle" fill="#071a45" font-family="Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="1.2">WEBSITE CMS</text>
+</svg>
