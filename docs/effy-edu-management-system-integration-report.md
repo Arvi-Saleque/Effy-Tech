@@ -1,113 +1,193 @@
-# Effy Edu Management System — Effy Tech Website Integration Report
+# Effy Edu Management System — Full Demo Integration Report
 
 - তারিখ: ২৭ জুলাই ২০২৬
 - Feature branch: `feat/effy-edu-management-system`
-- Target public URL: `https://www.effytechbd.com/effy_edu_management_system`
+- Target URL: `https://www.effytechbd.com/effy_edu_management_system`
+- Source project: `D:\work\web developments\generalized-coaching-management-demo-student-dashboard-fixed\generalized-coaching-management-demo`
 - Live client reference: `https://www.shifatstales.com`
 
-## ১. কাজের ফলাফল
+## ১. চূড়ান্ত ফলাফল
 
-Effy Tech website-এ recent coaching-management client project-এর জন্য একটি পূর্ণ case-study experience যুক্ত করা হয়েছে। নতুন page-টি শুধু একটি portfolio card নয়; এটি public website, student portal, teacher/admin workspace, academic operations, exams/results, payments, reporting এবং website CMS—পুরো product scope-টি structuredভাবে ব্যাখ্যা করে।
+আগের single product/case-study page-এর পরিবর্তে source project-এর সম্পূর্ণ generalized coaching management demo Effy Tech website-এর ভেতরে integrate করা হয়েছে। Client এখন একটি live application-এর মতো public website, student portal, teacher/admin dashboard এবং website CMS ঘুরে দেখতে পারবে।
 
-`/effy_edu_management_system` একটি URL subpath, subdomain নয়। তাই এটি চালু করতে আলাদা DNS record প্রয়োজন হবে না; branch merge করে Effy Tech website deploy করলেই route-টি প্রকাশিত হবে।
+`/effy_edu_management_system` একটি URL subpath, subdomain নয়। তাই আলাদা DNS বা আলাদা hosting প্রয়োজন হবে না। Feature branch merge করে বর্তমান Effy Tech application deploy করলেই target URL প্রকাশিত হবে।
 
-## ২. নতুন case-study page
+আগের descriptive case study হারানো হয়নি। সেটি এখন:
 
-প্রধান implementation:
+`https://www.effytechbd.com/projects/EEMS`
 
-- `src/app/(website)/effy_edu_management_system/page.js`
-- `src/data/effyEduManagementSystem.js`
-- `src/components/showcase/DHAShowcase.jsx`
-- `public/images/effy-edu-management-system/case-study/`
+## ২. Integrated application scope
 
-Page-এ যোগ হয়েছে:
+### Public coaching website
 
-- Live client project hero এবং direct live-site CTA
-- Project context, challenge এবং solution narrative
-- Public coaching website scope
-- Student self-service portal scope
-- Teacher/admin operations scope
-- Batch, subject, routine, assignment, material, exam এবং result workflows
-- Payment, report, notification, audit এবং CMS capability
-- Engineering architecture এবং technology summary
-- Project outcome এবং education-platform CTA
-- Footer এবং existing Effy Tech spatial case-study design system
+- Home, About এবং Contact
+- Courses
+- Academic calendar এবং class routine
+- Results
+- Learning materials
+- Gallery এবং album details
+- News/events এবং details
+- Reviews
+- Projects এবং details
+- Login, registration, forgot/reset password
 
-## ৩. Privacy-safe visual system
+### Student portal
 
-Production client/student information বা identifiable student photo ব্যবহার করা হয়নি। তার বদলে source-audited feature set-এর ওপর ভিত্তি করে generalized, screenshot-style SVG interface preview তৈরি হয়েছে:
+- Student dashboard
+- Academic overview
+- Enrolled batch details
+- Batch academics এবং announcements
+- Assignments এবং assignment details
+- Exams, exam details এবং results
+- Materials এবং protected material access
+- Payment history
+- Routine
+- Notifications
+- Profile, profile edit এবং security
 
-- `hero.svg` — connected coaching operations overview
-- `public-site.svg` — public coaching website
-- `student-portal.svg` — student dashboard
-- `teacher-console.svg` — teacher/admin operations console
-- `exam-analytics.svg` — exam and progress analytics
-- `website-cms.svg` — public website content manager
+### Teacher/admin operations
 
-সব SVG:
+- Teacher/admin dashboard
+- Batch create, edit এবং details
+- Student list, details, edit এবং payment history
+- Enrollment management
+- Assignment create, edit এবং review
+- Exam create, edit, results এবং printable result
+- Academic content এবং materials
+- Payment management
+- Routine/session management
+- Reports, academic report এবং student progress report
+- PDF report endpoints
+- Notifications
+- Audit logs
+- Profile এবং settings
 
-- `1600 × 900`
-- Valid XML
-- Accessible `<title>` এবং `<desc>` আছে
-- Generic/demo records ব্যবহার করে
-- কোনো real student বা client-private record দেখায় না
+### Website CMS
 
-Hero-এর জন্য optimized `1600 × 900` WebP এবং social sharing-এর জন্য `1200 × 630` JPEG তৈরি হয়েছে।
+Admin/teacher dashboard-এর ভেতর থেকে demo public website-এর নিম্নোক্ত অংশ manage করার interface রাখা হয়েছে:
 
-## ৪. Homepage এবং project discovery
+- Home page sections
+- About page sections
+- Courses
+- Academic calendar
+- Class routine
+- Materials
+- Gallery
+- News/events
+- Results
+- Reviews
+- Contact information এবং FAQ
+- Footer এবং general settings
 
-নতুন project এখন নিচের সব entry point থেকে পাওয়া যায়:
+## ৩. Integration architecture
 
-- Homepage selected product/platform proof section
-- Homepage featured work section
-- `/projects` case-study index
-- Global command/search palette
-- XML sitemap
-- Project index JSON-LD
+Demo application-টি main Effy Tech codebase-এর সঙ্গে collision এড়াতে isolated namespace-এ রাখা হয়েছে:
 
-Four-project layout-এর জন্য:
+- Route tree: `src/app/effy_edu_management_system/`
+- Demo components/data/lib: `src/features/effy-edu-demo/`
+- Demo assets: `public/effy_edu_management_system/`
 
-- Homepage proof grid desktop-এ `2 × 2`
-- Tablet/mobile-এ single-column fallback
-- Effy Edu featured card full-width emphasis
-- Projects hero-তে fourth visual layer
-- Mobile-specific fourth-layer positioning
-- Project count hardcoded `03` থেকে dynamic count-এ পরিবর্তন
+বর্তমান inventory:
 
-Command palette-এর একটি existing routing limitation-ও ঠিক হয়েছে: project search result এখন default slug বানানোর আগে `caseStudyUrl` ব্যবহার করে। ফলে root-level `/effy_edu_management_system` route সঠিকভাবে open হয়।
+- `136` page routes
+- `7` API routes
+- `146` isolated feature files
+- `34` local static assets
+- `885` prefixed internal route/API/asset references
 
-## ৫. SEO এবং structured data
+Source project-এর internal routes, API calls এবং asset URLs সবগুলো `/effy_edu_management_system` prefix-এর অধীনে আনা হয়েছে। ফলে Effy Tech-এর existing `/admin`, portfolio routes, assets বা shared modules-এর সঙ্গে demo-এর route collision নেই।
 
-নতুন route-এ যোগ হয়েছে:
+Nested demo layout-এ source design, theme, fonts, toast system এবং role layouts সংরক্ষণ করা হয়েছে। Main application-এর global HTML/body layout duplicate করা হয়নি।
 
-- Canonical URL
-- Page title এবং meta description
-- Relevant search keywords
-- Open Graph metadata
-- Twitter card metadata
-- `CreativeWork` JSON-LD
-- `SoftwareApplication` JSON-LD
-- Local `1200 × 630` social image
+## ৪. Generalized raw/mock data policy
 
-`sitemap.xml` source-এ নতুন route যোগ হয়েছে এবং production build output-এ route-টি পাওয়া গেছে।
+এই demo কোনো official/production database ব্যবহার করে না।
 
-Projects index-এর social preview-ও চারটি live system দেখানোর জন্য পুনরায় তৈরি হয়েছে।
+- কোনো Supabase, PostgreSQL, MySQL বা অন্য cloud database connection নেই
+- কোনো client production credential, database URL, private key বা service-role key নেই
+- সব student, teacher, batch, exam, result, payment এবং CMS content generalized seed/mock data
+- Authentication local mock adapter-এর মাধ্যমে চলে
+- Browser session cookie/local storage শুধু demo role/session বোঝাতে ব্যবহৃত হয়
+- Runtime mutation process-local; server restart/redeploy হলে initial demo state ফিরে আসে
+- Demo upload/resource endpoint process-local এবং production storage নয়
+- Public control dock-এ `Local mock data · Changes reset` status সবসময় দেখা যায়
 
-## ৬. Live reference verification
+অতএব prospect dashboard-এ feature ব্যবহার করতে পারবে, কিন্তু client-এর real system বা real database-এর কোনো data access করবে না।
 
-নিচের production client URL-গুলো `200` response দিয়েছে:
+## ৫. Demo access এবং navigation
 
-- `https://www.shifatstales.com/`
-- `https://www.shifatstales.com/login`
-- `https://www.shifatstales.com/courses`
-- `https://www.shifatstales.com/results`
-- `https://www.shifatstales.com/materials`
+সব demo screen-এর ওপর একটি persistent control dock যোগ করা হয়েছে। সেখান থেকে:
 
-Portfolio link-এ canonical `https://www.shifatstales.com` URL ব্যবহার করা হয়েছে।
+- Public Site
+- Student Demo
+- Admin Demo
+- Project Details
+- Effy Tech
 
-## ৭. Verification result
+এক click-এ open করা যায়।
 
-### Full lint
+Login screen-এও one-click role shortcuts আছে:
+
+- Admin/Teacher: `teacher@demo.edu` / `demo123`
+- Student: `student@demo.edu` / `demo123`
+
+Control dock-এর Student/Admin button local mock sign-in সম্পন্ন করে সরাসরি সংশ্লিষ্ট dashboard খুলে দেয়। Dock minimize-ও করা যায়।
+
+## ৬. Existing portfolio integration
+
+- Full demo root: `/effy_edu_management_system`
+- Detailed case study: `/projects/EEMS`
+- Homepage project discovery থেকে full demo CTA
+- Projects index থেকে demo discovery
+- Sitemap-এ demo এবং case-study দুই route
+- Case-study canonical URL `/projects/EEMS`
+
+ফলে client-facing interactive demo এবং Effy Tech-এর project explanation—দুইটি আলাদা উদ্দেশ্যে আলাদা route-এ পাওয়া যাবে।
+
+## ৭. Dependency এবং security work
+
+- Next.js `16.2.12`
+- React `19.2.4`
+- TypeScript support এবং strict checking main project-এ সক্রিয়
+- Source demo-এর dynamic mock adapter isolated রাখতে শুধু imported demo TypeScript files-এ scoped `@ts-nocheck`; global build type checking বন্ধ করা হয়নি
+- PDF.js/react-pdf-viewer dependency বাদ দিয়ে browser-native PDF preview ব্যবহার করা হয়েছে
+- Demo subpath-এর জন্য scoped security headers যোগ করা হয়েছে
+- Demo image sources এবং required rendering dependencies configure করা হয়েছে
+- Production dependency audit: `0` vulnerability
+
+## ৮. Automated verification
+
+### Demo structure এবং data-safety tests
+
+Command:
+
+```text
+npm run test:portfolio
+```
+
+Result:
+
+- `6/6` tests passed
+- Minimum route/API inventory verified
+- Required public, student, teacher/admin এবং CMS routes verified
+- Internal URL prefix isolation verified
+- Static asset existence verified
+- Production backend/credential/database import না থাকা verified
+- Mock authentication, enrollment, realtime adapter এবং populated seed states verified
+
+### Existing finance regression tests
+
+Command:
+
+```text
+npm run test:finance
+```
+
+Result:
+
+- `14/14` tests passed
+
+### Lint
 
 Command:
 
@@ -119,10 +199,9 @@ Result:
 
 - Pass
 - `0` errors
-- `21` existing warnings
-- নতুন implementation থেকে কোনো lint error নেই
+- Repository-level non-blocking warnings আছে; কোনো lint failure নেই
 
-### Production build
+### Final production build
 
 Command:
 
@@ -132,79 +211,95 @@ npm run build
 
 Result:
 
-- Compile pass
-- Type checking pass
-- Static generation pass
-- `/effy_edu_management_system` static route হিসেবে prerender হয়েছে
+- Next.js `16.2.12` production compile passed
+- TypeScript passed
+- Page-data collection passed
+- `135/135` static pages generated
+- Final page optimization passed
+- Chart server-render warning নেই
 
-### Regression test
+### Production dependency audit
 
 Command:
 
 ```text
-npm run test:finance
+npm audit --omit=dev
 ```
 
 Result:
 
-- `14/14` tests passed
-- Existing finance work-এর regression ধরা পড়েনি
+- `0` vulnerabilities
 
-### Local production-server smoke test
+## ৯. Local production runtime verification
 
-Built server temporary local port-এ চালিয়ে নিচের সব target `200` response দিয়েছে:
+Production build temporary local server-এ চালিয়ে নিচের representative routes `200` response দিয়েছে:
 
-- `/`
-- `/projects`
 - `/effy_edu_management_system`
-- `/sitemap.xml`
-- `/images/effy-edu-management-system/case-study/hero.webp`
-- `/images/effy-edu-management-system/case-study/student-portal.svg`
+- `/effy_edu_management_system/login`
+- `/effy_edu_management_system/courses`
+- `/effy_edu_management_system/materials`
+- `/effy_edu_management_system/student`
+- `/effy_edu_management_system/student/academics`
+- `/effy_edu_management_system/teacher`
+- `/effy_edu_management_system/teacher/students`
+- `/effy_edu_management_system/teacher/website`
+- `/projects/EEMS`
+- `/effy_edu_management_system/images/edupilot-logo.svg`
 
-### Static output checks
+Student এবং admin protected routes demo session cookie-সহ verify করা হয়েছে।
 
-Generated HTML-এ যাচাই হয়েছে:
+Process-local upload/resource API-ও verify করা হয়েছে:
 
-- Correct page title
-- Correct canonical URL
-- Open Graph image
-- `CreativeWork` JSON-LD
-- `SoftwareApplication` JSON-LD
-- Live client URL
-- Generalized-data privacy note
-- Homepage এবং projects page-এর internal case-study links
+- Upload request successful
+- Uploaded bytes exactভাবে stored/read হয়েছে
+- Resource response `200`
+- `Cache-Control: private, no-store`
 
-## ৮. Git delivery
+Smoke-test server কাজ শেষে বন্ধ করা হয়েছে; test port-এ কোনো listener রাখা হয়নি।
 
-Feature কাজের জন্য branch edit শুরুর আগেই তৈরি ও remote-এ push করা হয়েছে।
+## ১০. Git delivery
+
+Branch:
+
+`feat/effy-edu-management-system`
 
 Implementation commits:
 
 1. `6c18623 feat(case-study): add Effy Edu management platform showcase`
 2. `3e7d384 feat(portfolio): feature Effy Edu across project discovery`
+3. `c89dd2d docs(portfolio): add Effy Edu integration report`
+4. `494acaf fix(docs): clean integration report formatting`
+5. `b605726 feat(case-study): clarify static demo data mode`
+6. `adccdeb test(portfolio): enforce database-free Effy Edu showcase`
+7. `3064f0b refactor(portfolio): reserve Effy Edu path for full demo`
+8. `7a2206e feat(demo): mount full coaching management experience`
 
-প্রতিটি commit-এর পরে branch remote-এ push করা হয়েছে।
+প্রতিটি implementation portion proper commit message-সহ remote feature branch-এ push করা হয়েছে।
 
-কাজ শুরুর আগে repository-তে থাকা finance/admin এবং report-related uncommitted change-গুলো untouched রাখা হয়েছে। সেগুলো এই feature-এর কোনো commit-এ stage বা include করা হয়নি।
+কাজ শুরুর আগে repository-তে থাকা finance/admin এবং অন্যান্য report-related uncommitted changes untouched রাখা হয়েছে। সেগুলো এই feature-এর কোনো commit-এ stage বা include করা হয়নি।
 
-## ৯. QA limitation
+## ১১. QA limitation
 
-এই Codex session-এ in-app visual browser available ছিল না। তাই actual page-এর interactive desktop/mobile screenshot test চালানো যায়নি। এর পরিবর্তে:
+এই Codex session-এ in-app visual browser available ছিল না, তাই automated interactive screenshot/viewport pass চালানো যায়নি। এর পরিবর্তে:
 
-- সব visual asset contact sheet-এ inspect করা হয়েছে
-- Responsive CSS rules source-level verify করা হয়েছে
-- Production build pass করানো হয়েছে
-- Built HTML এবং runtime HTTP routes verify করা হয়েছে
-- Assets direct runtime response verify করা হয়েছে
+- Full production compile এবং TypeScript verification
+- Static route generation
+- Mock behavior unit/runtime tests
+- Role-cookie protected route smoke tests
+- Public/student/admin/CMS HTTP route verification
+- Asset response verification
+- Upload/resource API round-trip verification
 
-Deploy preview পাওয়া গেলে final human visual pass হিসেবে desktop, tablet এবং mobile-এ hero stack, homepage four-card grid, screenshot lightbox এবং CTA focus states একবার দেখা উচিত।
+সম্পন্ন হয়েছে।
 
-## ১০. Deployment handoff
+Production/preview deployment পাওয়া গেলে final human visual pass হিসেবে desktop, tablet এবং mobile viewport-এ public home, login, student dashboard, admin dashboard এবং CMS একবার দেখা ভালো।
 
-পরবর্তী ধাপ:
+## ১২. Deployment handoff
 
-1. `feat/effy-edu-management-system` branch review/merge করুন।
-2. Effy Tech production deployment চালান।
-3. Deploy-এর পরে `https://www.effytechbd.com/effy_edu_management_system` open করুন।
-4. Homepage, `/projects`, search palette এবং sitemap থেকে route discovery confirm করুন।
-5. Social preview cache refresh প্রয়োজন হলে target URL re-scrape করুন।
+1. `feat/effy-edu-management-system` branch review এবং merge করুন।
+2. Effy Tech website-এর normal production deployment চালান।
+3. Deploy শেষে `https://www.effytechbd.com/effy_edu_management_system` খুলুন।
+4. Public, Student Demo এবং Admin Demo control-dock navigation verify করুন।
+5. `/projects/EEMS`, homepage/project discovery এবং sitemap links verify করুন।
+
+এই subpath-এর জন্য আলাদা DNS, external database বা additional environment credential প্রয়োজন নেই।
