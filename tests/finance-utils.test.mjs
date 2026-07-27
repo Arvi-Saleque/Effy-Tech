@@ -4,9 +4,38 @@ import {
   advanceRecurringDate,
   buildCashflowTrend,
   daysBetween,
+  evaluateMoneyExpression,
   percentageChange,
   resolveFinanceRange,
 } from "../src/lib/admin/finance-utils.js";
+
+test("money expressions add partial amounts and ignore readable separators", () => {
+  assert.deepEqual(evaluateMoneyExpression("400+300+1450"), {
+    valid: true,
+    value: 2150,
+    hasExpression: true,
+    error: null,
+  });
+  assert.equal(evaluateMoneyExpression("1,200 + 800").value, 2000);
+});
+
+test("money expressions support brackets, multiplication, and division", () => {
+  assert.equal(evaluateMoneyExpression("(1200+800)*2").value, 4000);
+  assert.equal(evaluateMoneyExpression("1000/4").value, 250);
+  assert.equal(evaluateMoneyExpression("200\u00d73 + 800\u00f74").value, 800);
+});
+
+test("money expressions reject unsafe input and invalid arithmetic", () => {
+  assert.equal(evaluateMoneyExpression("alert(1)").valid, false);
+  assert.equal(evaluateMoneyExpression("100/0").valid, false);
+  assert.equal(evaluateMoneyExpression("400+").valid, false);
+});
+
+test("negative money is opt-in for account opening balances only", () => {
+  assert.equal(evaluateMoneyExpression("400-900").valid, false);
+  assert.deepEqual(evaluateMoneyExpression("400-900", { allowNegative: true }).value, -500);
+  assert.equal(evaluateMoneyExpression("-1.005", { allowNegative: true }).value, -1.01);
+});
 
 test("month range uses calendar month and the exact previous calendar month", () => {
   const range = resolveFinanceRange({ range: "month" }, "2026-07-18");
@@ -61,4 +90,3 @@ test("comparison and date helpers handle zero baselines and overdue dates", () =
   assert.equal(percentageChange(150, 100), 50);
   assert.equal(daysBetween("2026-07-18", "2026-07-15"), -3);
 });
-

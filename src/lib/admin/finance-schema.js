@@ -7,6 +7,7 @@ import {
   TARGET_PERIODS,
   TRANSACTION_STATUSES,
   TRANSACTION_TYPES,
+  evaluateMoneyExpression,
 } from "./finance-utils";
 
 export const financeUuidSchema = z.string().uuid({ message: "Invalid identifier." });
@@ -47,10 +48,24 @@ const nullableDate = z
     message: "Use a valid date.",
   });
 
-const moneySchema = z.coerce
-  .number({ message: "Enter a valid amount." })
-  .positive("Amount must be greater than zero.")
-  .max(999999999999.99, "Amount is too large.")
+const moneySchema = z
+  .preprocess((input) => {
+    const calculation = evaluateMoneyExpression(input);
+    return calculation.valid ? calculation.value : Number.NaN;
+  }, z
+    .number({ message: "Enter a valid amount or calculation." })
+    .positive("Amount must be greater than zero.")
+    .max(999999999999.99, "Amount is too large."))
+  .transform((value) => Math.round(value * 100) / 100);
+
+const openingBalanceSchema = z
+  .preprocess((input) => {
+    const calculation = evaluateMoneyExpression(input, { allowNegative: true });
+    return calculation.valid ? calculation.value : Number.NaN;
+  }, z
+    .number({ message: "Enter a valid opening balance or calculation." })
+    .min(-999999999999.99, "Opening balance is too small.")
+    .max(999999999999.99, "Opening balance is too large."))
   .transform((value) => Math.round(value * 100) / 100);
 
 export const financeTransactionSchema = z
@@ -135,11 +150,7 @@ export const targetSchema = z
 export const financeAccountSchema = z.object({
   name: requiredText("Account name", 120),
   account_type: z.enum(ACCOUNT_TYPES),
-  opening_balance: z.coerce
-    .number({ message: "Enter a valid opening balance." })
-    .min(-999999999999.99)
-    .max(999999999999.99)
-    .transform((value) => Math.round(value * 100) / 100),
+  opening_balance: openingBalanceSchema,
   notes: optionalText(1000),
 });
 

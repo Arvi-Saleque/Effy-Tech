@@ -42,6 +42,102 @@ export const METRIC_LABELS = {
   expense_limit: "Expense limit",
 };
 
+const MAX_MONEY_VALUE = 999999999999.99;
+
+/**
+ * Safely evaluates a small arithmetic expression without using eval or the
+ * Function constructor. Finance inputs accept +, -, *, /, parentheses,
+ * commas, and the visible multiplication/division symbols.
+ */
+export function evaluateMoneyExpression(input, { allowNegative = false } = {}) {
+  const original = String(input ?? "").trim();
+  const invalid = (error) => ({ valid: false, value: null, hasExpression: false, error });
+
+  if (!original) return invalid("Enter an amount.");
+  if (original.length > 120) return invalid("The calculation is too long.");
+  if (!/^[0-9+\-*/().,\s\u00d7\u00f7]+$/.test(original)) {
+    return invalid("Use only numbers and +, -, *, /, or brackets.");
+  }
+
+  const expression = original
+    .replaceAll("\u00d7", "*")
+    .replaceAll("\u00f7", "/")
+    .replace(/[\s,]/g, "");
+  const hasExpression = /[+\-*/()]/.test(expression);
+  let cursor = 0;
+
+  const fail = (message) => {
+    throw new Error(message);
+  };
+
+  const assertFinite = (value) => {
+    if (!Number.isFinite(value)) fail("The calculation is not finite.");
+    if (Math.abs(value) > MAX_MONEY_VALUE) fail("Amount is too large.");
+    return value;
+  };
+
+  const parsePrimary = () => {
+    if (expression[cursor] === "(") {
+      cursor += 1;
+      const value = parseExpression();
+      if (expression[cursor] !== ")") fail("Check the brackets in the calculation.");
+      cursor += 1;
+      return value;
+    }
+
+    const match = expression.slice(cursor).match(/^(?:\d+(?:\.\d*)?|\.\d+)/);
+    if (!match) fail("Enter a complete calculation.");
+    cursor += match[0].length;
+    return assertFinite(Number(match[0]));
+  };
+
+  const parseUnary = () => {
+    if (expression[cursor] === "+") {
+      cursor += 1;
+      return parseUnary();
+    }
+    if (expression[cursor] === "-") {
+      cursor += 1;
+      return assertFinite(-parseUnary());
+    }
+    return parsePrimary();
+  };
+
+  const parseTerm = () => {
+    let value = parseUnary();
+    while (expression[cursor] === "*" || expression[cursor] === "/") {
+      const operator = expression[cursor];
+      cursor += 1;
+      const right = parseUnary();
+      if (operator === "/" && right === 0) fail("Cannot divide by zero.");
+      value = assertFinite(operator === "*" ? value * right : value / right);
+    }
+    return value;
+  };
+
+  function parseExpression() {
+    let value = parseTerm();
+    while (expression[cursor] === "+" || expression[cursor] === "-") {
+      const operator = expression[cursor];
+      cursor += 1;
+      const right = parseTerm();
+      value = assertFinite(operator === "+" ? value + right : value - right);
+    }
+    return value;
+  }
+
+  try {
+    if (!expression) return invalid("Enter an amount.");
+    const value = parseExpression();
+    if (cursor !== expression.length) return invalid("Enter a complete calculation.");
+    if (!allowNegative && value < 0) return invalid("Amount cannot be negative.");
+    const rounded = Math.sign(value) * Math.round((Math.abs(value) + Number.EPSILON) * 100) / 100;
+    return { valid: true, value: rounded, hasExpression, error: null };
+  } catch (error) {
+    return { valid: false, value: null, hasExpression, error: error.message || "Invalid calculation." };
+  }
+}
+
 export function formatMoney(value, { compact = false, decimals = 0 } = {}) {
   const amount = Number(value || 0);
   const formatter = new Intl.NumberFormat("en-BD", {
