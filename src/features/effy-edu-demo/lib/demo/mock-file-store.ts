@@ -32,6 +32,26 @@ export function putDemoFile(key: string, bytes: Uint8Array, contentType = "appli
   return record;
 }
 
+const seededReceiptKey = "finance/receipts/demo-rent-receipt.txt";
+if (!store.has(seededReceiptKey)) {
+  putDemoFile(
+    seededReceiptKey,
+    new TextEncoder().encode(
+      [
+        "EDUPILOT COACHING ACADEMY - DEMO RECEIPT",
+        "Expense: Academy classroom rent",
+        "Payee: Urban Learning Space",
+        "Amount: BDT 18,000",
+        "Method: Bank transfer",
+        "Reference: RNT-CURRENT",
+        "Status: PAID (DEMO DATA ONLY)",
+      ].join("\n")
+    ),
+    "text/plain; charset=utf-8",
+    "academy-rent-receipt.txt"
+  );
+}
+
 export function getDemoFile(key: string) {
   return store.get(key.replace(/^\/+/, "")) || null;
 }
