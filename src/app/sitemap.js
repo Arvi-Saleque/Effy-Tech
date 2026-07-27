@@ -7,6 +7,7 @@ const routes = [
   { path: "/projects", priority: 0.9, changeFrequency: "monthly" },
   { path: "/projects/IAM", priority: 0.9, changeFrequency: "weekly" },
   { path: "/effy_edu_management_system", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/projects/EEMS", priority: 0.7, changeFrequency: "monthly" },
   { path: "/projects/DHA", priority: 0.8, changeFrequency: "monthly" },
   { path: "/projects/BUEK", priority: 0.8, changeFrequency: "monthly" },
   { path: "/salek", priority: 0.6, changeFrequency: "monthly" },

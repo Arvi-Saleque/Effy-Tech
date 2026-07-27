@@ -1,6 +1,6 @@
 const effyEduManagementSystem = {
   projectKey: "EEMS",
-  caseStudyPath: "/effy_edu_management_system",
+  caseStudyPath: "/projects/EEMS",
   locale: "en",
   name: "Effy Edu Management System",
   shortName: "Effy Edu",

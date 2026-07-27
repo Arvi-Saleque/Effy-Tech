@@ -4,7 +4,7 @@ import effyEduManagementSystem from "@/data/effyEduManagementSystem";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/effy_edu_management_system";
+const canonicalUrl = "https://www.effytechbd.com/projects/EEMS";
 const liveProductionUrl = "https://www.shifatstales.com";
 const ogImageUrl = effyEduManagementSystem.ogImage.startsWith("http")
   ? effyEduManagementSystem.ogImage
@@ -54,7 +54,7 @@ export const metadata = {
   },
 };
 
-export default function EffyEduManagementSystemPage() {
+export default function EffyEduManagementSystemCaseStudyPage() {
   const creator = {
     "@type": "Organization",
     name: "Effy Tech",
