@@ -172,6 +172,7 @@ export async function createPaymentAction(rawInput: {
     }
 
     revalidatePath("/effy_edu_management_system/teacher/payments");
+    revalidatePath("/effy_edu_management_system/teacher/finance");
     revalidatePath(`/effy_edu_management_system/teacher/students/${studentId}`);
     revalidatePath(`/effy_edu_management_system/teacher/batches/${batchId}`);
     return { success: true, payment: newPayment };
@@ -344,6 +345,7 @@ export async function updatePaymentAction(
     }
 
     revalidatePath("/effy_edu_management_system/teacher/payments");
+    revalidatePath("/effy_edu_management_system/teacher/finance");
     revalidatePath(`/effy_edu_management_system/teacher/payments/${paymentId}`);
     revalidatePath(`/effy_edu_management_system/teacher/students/${oldPayment.student_id}`);
     revalidatePath(`/effy_edu_management_system/teacher/batches/${oldPayment.batch_id}`);
@@ -464,6 +466,7 @@ export async function generateMonthlyDuesAction(
     }
 
     revalidatePath("/effy_edu_management_system/teacher/payments");
+    revalidatePath("/effy_edu_management_system/teacher/finance");
     revalidatePath(`/effy_edu_management_system/teacher/batches/${batchId}`);
     return {
       success: true,
@@ -515,6 +518,7 @@ export async function deletePaymentAction(paymentId: string) {
     });
 
     revalidatePath("/effy_edu_management_system/teacher/payments");
+    revalidatePath("/effy_edu_management_system/teacher/finance");
     if (payment.batch_id) {
       revalidatePath(`/effy_edu_management_system/teacher/batches/${payment.batch_id}`);
     }

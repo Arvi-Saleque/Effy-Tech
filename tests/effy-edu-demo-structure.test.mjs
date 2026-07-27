@@ -42,17 +42,33 @@ test("the complete coaching demo is mounted below the Effy Edu subpath", () => {
   const pageFiles = walk(demoAppRoot).filter((file) => file.endsWith("page.tsx"));
   const apiRoutes = walk(demoAppRoot).filter((file) => file.endsWith("route.ts"));
 
-  assert.ok(pageFiles.length >= 130, `expected at least 130 pages, got ${pageFiles.length}`);
-  assert.ok(apiRoutes.length >= 7, `expected at least 7 API routes, got ${apiRoutes.length}`);
+  assert.ok(pageFiles.length >= 131, `expected at least 131 pages, got ${pageFiles.length}`);
+  assert.ok(apiRoutes.length >= 9, `expected at least 9 API routes, got ${apiRoutes.length}`);
 
   const requiredPaths = [
     join(demoAppRoot, "(public)", "page.tsx"),
     join(demoAppRoot, "(auth)", "login", "page.tsx"),
     join(demoAppRoot, "student", "page.tsx"),
     join(demoAppRoot, "teacher", "page.tsx"),
+    join(demoAppRoot, "teacher", "finance", "page.tsx"),
     join(demoAppRoot, "teacher", "website", "page.tsx"),
+    join(demoAppRoot, "actions", "finance.ts"),
+    join(demoAppRoot, "api", "finance", "export", "route.ts"),
+    join(
+      demoAppRoot,
+      "api",
+      "finance",
+      "expenses",
+      "[expenseId]",
+      "receipt",
+      "route.ts",
+    ),
     join(demoFeatureRoot, "lib", "demo", "mock-data.ts"),
     join(demoFeatureRoot, "lib", "demo", "mock-supabase.ts"),
+    join(demoFeatureRoot, "lib", "finance", "finance-domain.ts"),
+    join(demoFeatureRoot, "lib", "validations", "finance.ts"),
+    join(demoFeatureRoot, "components", "finance", "expense-controls.tsx"),
+    join(demoFeatureRoot, "components", "finance", "finance-charts.tsx"),
     join(demoFeatureRoot, "components", "demo", "DemoControlDock.tsx"),
     join(demoPublicRoot, "images", "edupilot-logo.svg"),
     join(demoPublicRoot, "demo", "vector-formulas.pdf"),
@@ -66,6 +82,50 @@ test("the complete coaching demo is mounted below the Effy Edu subpath", () => {
       `missing integrated demo path: ${relative(repositoryRoot, requiredPath)}`,
     );
   }
+});
+
+test("finance management is interactive, auditable, and process-local", () => {
+  const page = readFileSync(
+    join(demoAppRoot, "teacher", "finance", "page.tsx"),
+    "utf8",
+  );
+  const actions = readFileSync(
+    join(demoAppRoot, "actions", "finance.ts"),
+    "utf8",
+  );
+  const charts = readFileSync(
+    join(demoFeatureRoot, "components", "finance", "finance-charts.tsx"),
+    "utf8",
+  );
+  const sidebar = readFileSync(
+    join(demoFeatureRoot, "components", "dashboard", "teacher-sidebar.tsx"),
+    "utf8",
+  );
+  const receiptRoute = readFileSync(
+    join(
+      demoAppRoot,
+      "api",
+      "finance",
+      "expenses",
+      "[expenseId]",
+      "receipt",
+      "route.ts",
+    ),
+    "utf8",
+  );
+
+  assert.match(sidebar, /Finance Management/);
+  assert.match(page, /Expected fees and unpaid dues are never counted as income/);
+  assert.match(page, /Generalized finance demo · no production database/);
+  assert.match(charts, /12-month comparison/);
+  assert.match(page, /Where money is going/);
+  assert.match(actions, /createFinanceExpenseAction/);
+  assert.match(actions, /updateFinanceExpenseAction/);
+  assert.match(actions, /voidFinanceExpenseAction/);
+  assert.match(actions, /restoreFinanceExpenseAction/);
+  assert.doesNotMatch(actions, /\.from\("finance_expenses"\)\s*\.delete\(\)/);
+  assert.match(receiptRoute, /getDemoFile/);
+  assert.doesNotMatch(receiptRoute, /@aws-sdk|process\.env|generateR2DownloadUrl/);
 });
 
 test("demo controls expose distinct student, teacher, and admin experiences", () => {
@@ -86,7 +146,7 @@ test("demo imports and internal URLs remain isolated under their namespace", () 
   const unscopedImport =
     /@\/(?:components|data|lib|pdf)\/|@\/features\/(?!effy-edu-demo\/)|@\/app\/(?!effy_edu_management_system\/)/;
   const unprefixedRoute =
-    /(["'`])\/(?:teacher|student|login|register|forgot-password|reset-password|pending-approval|account-disabled|about|academic|academic-calendar|class-routine|contact|courses|gallery|materials|news-events|projects|results|reviews|api|images|demo)(?:\/|["'`?#])/;
+    /(["'`])\/(?:teacher|student|login|register|forgot-password|reset-password|pending-approval|account-disabled|about|academic|academic-calendar|class-routine|contact|courses|finance|gallery|materials|news-events|projects|results|reviews|api|images|demo)(?:\/|["'`?#])/;
 
   for (const file of sourceFiles) {
     const source = readFileSync(file, "utf8");

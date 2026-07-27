@@ -133,6 +133,105 @@ enrollments.filter(e=>e.status==="ACTIVE").forEach((e, idx) => {
   }
 });
 
+const financeCategorySeed = [
+  ["10000000-0000-4000-8000-000000000001", "RENT_UTILITY", "Rent & Utility", "#2563EB"],
+  ["10000000-0000-4000-8000-000000000002", "SHEETS_PRINTING", "Sheets Making & Printing", "#7C3AED"],
+  ["10000000-0000-4000-8000-000000000003", "QUESTIONS_PRINTING", "Question Making & Printing", "#DB2777"],
+  ["10000000-0000-4000-8000-000000000004", "EXAM_GUARD", "Exam Guard", "#EA580C"],
+  ["10000000-0000-4000-8000-000000000005", "SCRIPT_EVALUATION", "Exam Script Evaluation", "#D97706"],
+  ["10000000-0000-4000-8000-000000000006", "STATIONERY", "Markers, Duster & Stationery", "#059669"],
+  ["10000000-0000-4000-8000-000000000007", "TRANSPORT", "Transportation", "#0891B2"],
+  ["10000000-0000-4000-8000-000000000008", "EVENTS", "Events & Student Programs", "#4F46E5"],
+  ["10000000-0000-4000-8000-000000000009", "OTHER", "Other", "#64748B"],
+];
+
+const financeExpenseCategories: DemoRow[] = financeCategorySeed.map(
+  ([id, code, name, color_hex], index) => ({
+    id,
+    code,
+    name,
+    color_hex,
+    display_order: index + 1,
+    is_active: true,
+    created_at: iso(-360),
+    updated_at: iso(-1),
+  })
+);
+
+const financeDate = (monthOffset: number, day: number) => {
+  const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - monthOffset, day));
+  return d.toISOString().slice(0, 10);
+};
+
+const financeExpenses: DemoRow[] = [
+  [1, 0, 4, "Academy classroom rent", 18000, "BANK_TRANSFER", "Urban Learning Space", "RNT-CURRENT", "Monthly classroom and office rent", "POSTED"],
+  [2, 0, 7, "HSC revision sheets", 4250, "BKASH", "Scholars Print House", "SHEET-0726", "Physics and mathematics revision sheets", "POSTED"],
+  [6, 0, 10, "Whiteboard markers and stationery", 1850, "CASH", "Campus Stationery", null, "Markers, paper, folders and dusters", "POSTED"],
+  [4, 0, 14, "Weekly exam invigilation", 2400, "CASH", "Demo Invigilation Team", null, "Four weekly assessment sessions", "POSTED"],
+  [5, 0, 18, "Model test script evaluation", 5600, "BANK_TRANSFER", "Academic Review Team", "EVAL-26-07", "HSC and admission model-test scripts", "POSTED"],
+  [7, 0, 22, "Material delivery transport", 1200, "NAGAD", "City Courier", "TR-7821", "Printed material delivery", "VOID"],
+  [1, 1, 4, "Academy classroom rent", 18000, "BANK_TRANSFER", "Urban Learning Space", "RNT-PREV", "Monthly classroom and office rent", "POSTED"],
+  [3, 1, 8, "Admission model-test questions", 6900, "BANK_TRANSFER", "Scholars Print House", "QST-0626", "Question preparation and secure printing", "POSTED"],
+  [6, 1, 12, "Classroom supplies", 2150, "CASH", "Campus Stationery", null, "Board and classroom consumables", "POSTED"],
+  [8, 1, 20, "Student success workshop", 8500, "BKASH", "Learning Event Services", "EVT-0626", "Workshop logistics and refreshments", "POSTED"],
+  [1, 2, 4, "Academy classroom rent", 18000, "BANK_TRANSFER", "Urban Learning Space", "RNT-M02", "Monthly classroom and office rent", "POSTED"],
+  [2, 2, 9, "Practice sheet printing", 3900, "CASH", "Scholars Print House", "SHEET-M02", "Batch practice sheets", "POSTED"],
+  [1, 3, 4, "Academy classroom rent", 17500, "BANK_TRANSFER", "Urban Learning Space", "RNT-M03", "Monthly classroom and office rent", "POSTED"],
+  [5, 3, 18, "Exam script evaluation", 4800, "BKASH", "Academic Review Team", "EVAL-M03", "Monthly exam evaluation", "POSTED"],
+  [1, 5, 4, "Academy classroom rent", 17500, "BANK_TRANSFER", "Urban Learning Space", "RNT-M05", "Monthly classroom and office rent", "POSTED"],
+  [8, 5, 23, "Guardian progress seminar", 7200, "CASH", "Demo Event Services", "EVT-M05", "Guardian reporting seminar", "POSTED"],
+  [1, 8, 4, "Academy classroom rent", 16500, "BANK_TRANSFER", "Urban Learning Space", "RNT-M08", "Monthly classroom and office rent", "POSTED"],
+  [3, 10, 15, "Annual question bank printing", 11200, "BANK_TRANSFER", "Scholars Print House", "QST-M10", "Annual question-bank production", "POSTED"],
+].map(([categoryNumber, monthOffset, day, title, amount, payment_method, payee, reference_number, description, status], index) => ({
+  id: `finance-expense-${index + 1}`,
+  category_id: financeExpenseCategories[Number(categoryNumber) - 1].id,
+  title,
+  amount,
+  expense_date: financeDate(Number(monthOffset), Number(day)),
+  payment_method,
+  payee,
+  reference_number,
+  description,
+  receipt_storage_path: null,
+  receipt_file_name: null,
+  receipt_content_type: null,
+  receipt_size_bytes: null,
+  status,
+  void_reason: status === "VOID" ? "Duplicate transport entry retained for audit demonstration." : null,
+  voided_at: status === "VOID" ? iso(-3) : null,
+  voided_by: status === "VOID" ? "profile-teacher" : null,
+  created_by: "profile-teacher",
+  updated_by: "profile-teacher",
+  created_at: iso(-90 + index),
+  updated_at: iso(-1),
+}));
+
+const financeIncomeLedger: DemoRow[] = payments
+  .filter((payment) =>
+    ["PAID", "PARTIALLY_PAID"].includes(payment.status) && Number(payment.paid_amount) > 0
+  )
+  .map((payment) => {
+    const student = studentProfiles.find((item) => item.id === payment.student_id);
+    const profile = profiles.find((item) => item.id === student?.profile_id);
+    const batch = batches.find((item) => item.id === payment.batch_id);
+    return {
+      payment_id: payment.id,
+      transaction_date: String(payment.payment_date || payment.confirmed_at).slice(0, 10),
+      amount: Number(payment.paid_amount),
+      status: payment.status,
+      payment_method: String(payment.payment_method || "CASH").toUpperCase().replaceAll(" ", "_"),
+      reference_number: payment.reference_number,
+      billing_month: payment.billing_month,
+      billing_year: payment.billing_year,
+      student_id: payment.student_id,
+      batch_id: payment.batch_id,
+      student_code: student?.student_code || "EDU-DEMO",
+      student_name: profile?.full_name || "Demo Student",
+      batch_name: batch?.name || "Demo Batch",
+      batch_code: batch?.code || "DEMO",
+    };
+  });
+
 const exams: DemoRow[] = [
   {id:"exam-1",batch_id:"batch-hsc27",subject_id:"sub-hsc27-phy",name:"Vector & Motion Weekly Exam",description:"Conceptual and numerical assessment",exam_type:"WEEKLY_EXAM",exam_date:date(-18),total_marks:50,pass_marks:20,status:"RESULT_PUBLISHED",published_at:iso(-15),created_at:iso(-30),updated_at:iso(-15),start_time:"17:00",duration:60,result_publication_note:"Reviewed with solution discussion."},
   {id:"exam-2",batch_id:"batch-hsc27",subject_id:"sub-hsc27-math",name:"Calculus Class Test",description:"Limits and differentiation",exam_type:"CLASS_TEST",exam_date:date(-7),total_marks:30,pass_marks:12,status:"RESULT_PUBLISHED",published_at:iso(-5),created_at:iso(-20),updated_at:iso(-5),start_time:"18:00",duration:40,result_publication_note:null},
@@ -203,7 +302,7 @@ const batchProgress = batchSubjects.map((s:any,idx:number)=>({id:`progress-${idx
 const subjectProgress = batchSubjects.map((s:any,idx:number)=>({subject_id:s.id,batch_id:s.batch_id,subject_name:s.name,status:s.status,total_units:4,completed_units:idx%3,completion_percentage:idx%3===0?68:idx%3===1?52:34}));
 const studentPerformance = examResults.map((r:any)=>({student_id:r.student_id,batch_id:exams.find(e=>e.id===r.exam_id)?.batch_id,exam_id:r.exam_id,obtained_marks:r.obtained_marks,total_marks:exams.find(e=>e.id===r.exam_id)?.total_marks,percentage:Math.round(r.obtained_marks/(exams.find(e=>e.id===r.exam_id)?.total_marks||1)*100),grade:r.grade,rank:r.rank}));
 
-export const demoTables: Record<string, DemoRow[]> = {
+const seededDemoTables: Record<string, DemoRow[]> = {
   profiles,
   student_profiles: studentProfiles,
   teacher_profiles:[{id:"teacher-1",profile_id:"profile-teacher",designation:"Lead Instructor & Academic Director",coaching_center_name:"EduPilot Coaching Academy",public_contact_info:"teacher@demo.edu | +880 1700-000001",created_at:iso(-600),updated_at:iso(-1)}],
@@ -213,6 +312,9 @@ export const demoTables: Record<string, DemoRow[]> = {
   subject_units:subjectUnits,
   enrollments,
   payments,
+  finance_expense_categories: financeExpenseCategories,
+  finance_expenses: financeExpenses,
+  finance_income_ledger: financeIncomeLedger,
   exams,
   exam_results:examResults,
   academic_assignments:academicAssignments,
@@ -228,6 +330,13 @@ export const demoTables: Record<string, DemoRow[]> = {
   rate_limits:[],
   site_settings:[{id:1,site_name:"EduPilot Coaching Academy",site_short_name:"EduPilot",tagline:"Concept-first learning. Measurable progress.",site_description:"A complete academic and admission coaching ecosystem.",primary_phone:"+880 1700-000001",secondary_phone:"+880 1700-000002",whatsapp_number:"8801700000001",email:"hello@edupilot.demo",address_line:"Education Avenue",city:"Dhaka",country:"Bangladesh"}],
 };
+
+type DemoTableGlobal = typeof globalThis & {
+  __EDUPILOT_DEMO_TABLES__?: Record<string, DemoRow[]>;
+};
+
+const demoGlobal = globalThis as DemoTableGlobal;
+export const demoTables = demoGlobal.__EDUPILOT_DEMO_TABLES__ ||= seededDemoTables;
 
 export const getDemoUser = (role: "TEACHER" | "STUDENT" = "TEACHER") => role === "TEACHER"
   ? { id:"auth-teacher", email:"teacher@demo.edu", user_metadata:{full_name:"Dr. Arif Rahman"} }

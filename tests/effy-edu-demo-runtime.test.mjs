@@ -43,6 +43,7 @@ const transpile = (relativePath) => {
 transpile("src/features/effy-edu-demo/lib/demo/mock-data.ts");
 transpile("src/features/effy-edu-demo/lib/demo/mock-supabase.ts");
 transpile("src/features/effy-edu-demo/lib/schedule.ts");
+transpile("src/features/effy-edu-demo/lib/finance/finance-domain.ts");
 
 class LocalStorageMock {
   values = new Map();
@@ -88,6 +89,11 @@ const { createMockSupabase } = require(
 );
 const { demoTables } = require(join(temporaryRoot, "lib", "demo", "mock-data.js"));
 const { normalizeSchedule } = require(join(temporaryRoot, "lib", "schedule.js"));
+const {
+  calculateFinanceSummary,
+  percentageChange,
+  resolveFinancePeriod,
+} = require(join(temporaryRoot, "lib", "finance", "finance-domain.js"));
 
 after(() => rmSync(temporaryRoot, { recursive: true, force: true }));
 
@@ -159,10 +165,106 @@ test("mock realtime, schedules, and populated workflow seeds are available", asy
     announcements: 3,
     notifications: 6,
     audit_logs: 5,
+    finance_expense_categories: 9,
+    finance_expenses: 18,
+    finance_income_ledger: 12,
   };
   for (const [table, minimum] of Object.entries(requiredSeeds)) {
     assert.ok(demoTables[table].length >= minimum, `insufficient ${table} seed data`);
   }
   assert.ok(demoTables.exams.some((exam) => exam.status === "RESULT_DRAFT"));
   assert.ok(demoTables.enrollments.some((enrollment) => enrollment.status === "DISABLED"));
+});
+
+test("finance summaries, periods, relations, and reversible mutations work locally", async () => {
+  assert.deepEqual(
+    resolveFinancePeriod("this_month", undefined, undefined, "2026-07-27"),
+    {
+      key: "this_month",
+      label: "July 2026",
+      from: "2026-07-01",
+      to: "2026-07-31",
+      previousFrom: "2026-06-01",
+      previousTo: "2026-06-30",
+    },
+  );
+  assert.deepEqual(
+    resolveFinancePeriod("custom", "2026-07-10", "2026-07-16", "2026-07-27"),
+    {
+      key: "custom",
+      label: "2026-07-10 to 2026-07-16",
+      from: "2026-07-10",
+      to: "2026-07-16",
+      previousFrom: "2026-07-03",
+      previousTo: "2026-07-09",
+    },
+  );
+  assert.equal(percentageChange(500, 0), null);
+  assert.equal(percentageChange(125, 100), 25);
+
+  const summary = calculateFinanceSummary(
+    demoTables.finance_income_ledger.map((item) => ({
+      paid_amount: item.amount,
+      status: item.status,
+    })),
+    demoTables.finance_expenses,
+  );
+  assert.ok(summary.income > 0);
+  assert.ok(summary.expense > 0);
+  assert.equal(
+    summary.expenseCount,
+    demoTables.finance_expenses.filter((item) => item.status === "POSTED").length,
+  );
+  assert.ok(demoTables.finance_expenses.some((item) => item.status === "VOID"));
+
+  const client = createMockSupabase("TEACHER");
+  const relatedExpense = await client
+    .from("finance_expenses")
+    .select("*, category:finance_expense_categories(id, name, color_hex)")
+    .eq("id", "finance-expense-1")
+    .single();
+  assert.equal(relatedExpense.error, null);
+  assert.equal(relatedExpense.data.category.name, "Rent & Utility");
+
+  const inserted = await client
+    .from("finance_expenses")
+    .insert({
+      id: "finance-expense-runtime-test",
+      category_id: demoTables.finance_expense_categories[0].id,
+      title: "Runtime test expense",
+      amount: 100,
+      expense_date: "2026-07-20",
+      payment_method: "CASH",
+      status: "POSTED",
+    })
+    .select("*")
+    .single();
+  assert.equal(inserted.data.status, "POSTED");
+
+  const voided = await client
+    .from("finance_expenses")
+    .update({ status: "VOID", void_reason: "Runtime verification" })
+    .eq("id", "finance-expense-runtime-test")
+    .select("*")
+    .single();
+  assert.equal(voided.data.status, "VOID");
+
+  const restored = await client
+    .from("finance_expenses")
+    .update({ status: "POSTED", void_reason: null })
+    .eq("id", "finance-expense-runtime-test")
+    .select("*")
+    .single();
+  assert.equal(restored.data.status, "POSTED");
+
+  await client
+    .from("finance_expenses")
+    .delete()
+    .eq("id", "finance-expense-runtime-test");
+  assert.equal(
+    demoTables.finance_expenses.some(
+      (item) => item.id === "finance-expense-runtime-test",
+    ),
+    false,
+  );
 });

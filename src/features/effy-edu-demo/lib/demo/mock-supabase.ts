@@ -28,6 +28,10 @@ function enrich(table:string, raw:DemoRow):DemoRow {
     const b=find("batches",row.batch_id); const s=find("student_profiles",row.student_id); const e=find("enrollments",row.enrollment_id);
     row.batch=b; row.batches=b; row.student=s?{...s,profile:profileForStudent(s),profiles:profileForStudent(s)}:null; row.student_profiles=row.student; row.enrollment=e;
   }
+  if (table === "finance_expenses") {
+    const category=find("finance_expense_categories",row.category_id);
+    row.category=category; row.finance_expense_categories=category;
+  }
   if (table === "batch_subjects") { const b=find("batches",row.batch_id); row.batch=b; row.batches=b; }
   if (table === "subject_units") { const s=find("batch_subjects",row.subject_id); row.subject=s; row.batch_subjects=s; }
   if (table === "academic_assignments") {

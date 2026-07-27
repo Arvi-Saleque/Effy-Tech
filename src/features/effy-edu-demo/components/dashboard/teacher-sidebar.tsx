@@ -29,7 +29,8 @@ import {
   BookOpenCheck,
   BarChart3,
   ClipboardList,
-  CalendarRange
+  CalendarRange,
+  WalletCards
 } from "lucide-react";
 
 interface SidebarProps {
@@ -54,6 +55,7 @@ export const teacherNavItems: NavItem[] = [
   { label: "Assignments", href: "/effy_edu_management_system/teacher/assignments", icon: ClipboardList },
   { label: "Academic Reports", href: "/effy_edu_management_system/teacher/reports/academic", icon: BarChart3 },
   { label: "Payment Ledger", href: "/effy_edu_management_system/teacher/payments", icon: CreditCard },
+  { label: "Finance Management", href: "/effy_edu_management_system/teacher/finance", icon: WalletCards },
   { label: "Study Materials", href: "/effy_edu_management_system/teacher/materials", icon: FileText },
   { label: "Exams & Grading", href: "/effy_edu_management_system/teacher/exams", icon: GraduationCap },
   { label: "Security & Audit Logs", href: "/effy_edu_management_system/teacher/audit-logs", icon: ShieldAlert },
