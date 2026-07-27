@@ -5,6 +5,17 @@ import { topStudentsData } from "@/features/effy-edu-demo/data/top-students";
 import { youtubeClasses } from "@/features/effy-edu-demo/data/youtubeClasses";
 import { albumsData } from "@/features/effy-edu-demo/data/albums";
 import { faqs } from "@/features/effy-edu-demo/data/faq";
+import {
+  ecaData,
+  educationData,
+  metricsData,
+  profileData,
+  projectsData,
+  publicationsData,
+  researchExperienceData,
+  skillCategoriesData,
+  trainingData,
+} from "@/features/effy-edu-demo/data/about";
 
 export type DemoSection = {
   id: string;
@@ -98,9 +109,40 @@ const siteSections: Record<string, DemoSection> = {
   "HOME|HOME_TOP_STUDENTS": section("HOME","HOME_TOP_STUDENTS",{content:{header:{eyebrow:"Monthly Excellence",title:"Top of the Month",description:"Celebrating consistency, improvement and academic discipline."},months:topStudentsData}}),
   "HOME|HOME_STUDENT_SUCCESS": section("HOME","HOME_STUDENT_SUCCESS",{eyebrow:"Student Outcomes",title:"Success Stories",description:"Students who converted consistent preparation into remarkable academic results.",content:{selectedStudentIds:studentResults.slice(0,5).map(s=>s.id)}}),
   "HOME|HOME_YOUTUBE_CLASSES": section("HOME","HOME_YOUTUBE_CLASSES",{content:{header:{badge:"Free Concept Lectures",title:"Concept Breakdown Theater",description:"Explore selected concept lectures and solution sessions from the demo playlist.",moreTitle:"More free lectures",moreText:"Additional concept breakdowns, model-test solutions and revision videos can be published through the CMS.",playlistTitle:"Playlist Classes"},classes:youtubeClasses}}),
-  "HOME|HOME_TESTIMONIALS": section("HOME","HOME_TESTIMONIALS",{eyebrow:"Student & Guardian Voice",title:"What our community says",description:"Feedback from learners and families about the learning experience.",content:{selectedTestimonialIds:[]}}),
-  "HOME|HOME_NEWS_EVENTS": section("HOME","HOME_NEWS_EVENTS",{eyebrow:"Latest Updates",title:"News & Events",description:"Admission notices, workshops, exams and academic celebrations.",content:{}}),
+  "HOME|HOME_TESTIMONIALS": section("HOME","HOME_TESTIMONIALS",{eyebrow:"Student & Guardian Voice",title:"What our community says",description:"Feedback from learners and families about the learning experience.",content:{selectedTestimonialIds:["test-1","test-2","test-3","test-4","test-5","test-6"]}}),
+  "HOME|HOME_NEWS_EVENTS": section("HOME","HOME_NEWS_EVENTS",{eyebrow:"Latest Updates",title:"News & Events",description:"Admission notices, workshops, exams and academic celebrations.",content:{featuredId:"news-1",selectedRightIds:["news-2","news-3"]}}),
   "HOME|HOME_GALLERY": section("HOME","HOME_GALLERY",{eyebrow:"Captured Moments",title:"Inside the Academy",description:"Classrooms, workshops, resources and student achievements.",content:{selectedAlbumIds:albumsData.slice(0,4).map(a=>a.id)}}),
+
+  "ABOUT|ABOUT_HERO": section("ABOUT","ABOUT_HERO",{content:profileData}),
+  "ABOUT|ABOUT_METRICS": section("ABOUT","ABOUT_METRICS",{content:{metrics:metricsData}}),
+  "ABOUT|ABOUT_EDUCATION": section("ABOUT","ABOUT_EDUCATION",{content:{
+    header:{badge:"Academic Journey",title1:"Education &",title2:"Qualifications",description:"Academic foundations and formal qualifications that shape the instructor's teaching practice."},
+    education:educationData,
+  }}),
+  "ABOUT|ABOUT_RESEARCH_EXP": section("ABOUT","ABOUT_RESEARCH_EXP",{content:{
+    header:{badge:"Research Experience",title1:"Applied Research &",title2:"Investigation",description:"Research work connecting analytical thinking, engineering practice and evidence-based problem solving."},
+    researchData:researchExperienceData,
+  }}),
+  "ABOUT|ABOUT_PUBLICATIONS": section("ABOUT","ABOUT_PUBLICATIONS",{content:{
+    header:{badge:"Research Publications",title1:"Published Work &",title2:"Conference Contributions",description:"Selected journal and conference contributions from the instructor's academic portfolio."},
+    publications:publicationsData,
+  }}),
+  "ABOUT|ABOUT_TRAINING": section("ABOUT","ABOUT_TRAINING",{content:{
+    header:{badge:"Industrial Training",title1:"Professional",title2:"Experience",description:"Hands-on technical training that connects classroom theory with real engineering workflows."},
+    training:trainingData,
+  }}),
+  "ABOUT|ABOUT_PROJECTS": section("ABOUT","ABOUT_PROJECTS",{content:{
+    header:{badge:"Engineering Portfolio",title1:"Selected Projects &",title2:"Case Studies",description:"Applied engineering projects demonstrating design, analysis, documentation and delivery."},
+    projects:projectsData,
+  }}),
+  "ABOUT|ABOUT_SKILLS": section("ABOUT","ABOUT_SKILLS",{content:{
+    header:{badge:"Technical Skills",title1:"Tools, Methods &",title2:"Capabilities",description:"A practical toolkit used for teaching, research, simulation and technical communication."},
+    skills:skillCategoriesData,
+  }}),
+  "ABOUT|ABOUT_ECA": section("ABOUT","ABOUT_ECA",{content:{
+    header:{badge:"Leadership & Activities",title1:"Extra Curricular",title2:"Experience",description:"Leadership, teamwork and community activities beyond formal academic work."},
+    ecaList:ecaData,
+  }}),
 
   "COURSES|COURSES_HERO": section("COURSES","COURSES_HERO",{eyebrow:"ACADEMIC PROGRAMS",title:"Courses &",subtitle:"Batches",description:"Explore structured programs for board preparation, academic mastery and competitive admissions.",mediaUrl:"/effy_edu_management_system/images/flyer_hsc26_hsc27.jpg"}),
   "RESULTS|RESULTS_HERO": section("RESULTS","RESULTS_HERO",{eyebrow:"STUDENT OUTCOMES",title:"Success Stories &",subtitle:"Achievements",description:"Celebrate students who transformed consistent preparation into exceptional results.",mediaUrl:"/effy_edu_management_system/images/gallery-event.png"}),
