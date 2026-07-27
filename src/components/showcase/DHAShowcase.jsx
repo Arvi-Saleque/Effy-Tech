@@ -244,7 +244,13 @@ function Lightbox({ images, index, onClose, onChange }) {
   );
 }
 
-function ScreenshotCarousel({ screenshots, projectKey }) {
+function ScreenshotCarousel({
+  screenshots,
+  projectKey,
+  eyebrow = "Screenshots",
+  heading = "Web Interface",
+  description = "",
+}) {
   const total = screenshots.length;
   const [current, setCurrent] = useState(0);
   const [lightbox, setLightbox] = useState(null);
@@ -312,7 +318,7 @@ function ScreenshotCarousel({ screenshots, projectKey }) {
             transition={{ duration: 0.5 }}
             className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary-light"
           >
-            Screenshots
+            {eyebrow}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -320,8 +326,18 @@ function ScreenshotCarousel({ screenshots, projectKey }) {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl font-bold leading-tight text-neutral-100 sm:text-4xl"
           >
-            Web Interface
+            {heading}
           </motion.h2>
+          {description ? (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.16 }}
+              className="mt-4 text-sm leading-7 text-neutral-400 sm:text-base"
+            >
+              {description}
+            </motion.p>
+          ) : null}
         </div>
 
         <motion.div
@@ -686,9 +702,9 @@ export default function DHAShowcase({ data }) {
     () => ({
       page_name: data.projectKey,
       project_name: data.name,
-      page_location: `/projects/${data.projectKey}`,
+      page_location: data.caseStudyPath || `/projects/${data.projectKey}`,
     }),
-    [data],
+    [data.caseStudyPath, data.name, data.projectKey],
   );
 
   useEffect(() => {
@@ -948,7 +964,13 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <ScreenshotCarousel screenshots={screenshots} projectKey={data.projectKey} />
+      <ScreenshotCarousel
+        screenshots={screenshots}
+        projectKey={data.projectKey}
+        eyebrow={data.galleryEyebrow}
+        heading={data.galleryHeading}
+        description={data.galleryDescription}
+      />
 
       {longScreenshots.length > 0 ? (
         <FullPageGallery
