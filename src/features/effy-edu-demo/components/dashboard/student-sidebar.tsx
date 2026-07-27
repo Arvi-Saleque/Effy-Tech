@@ -49,9 +49,20 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData?.user) return;
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("auth_user_id", userData.user.id)
+          .single();
+        if (!profile) return;
+
         const { count, error } = await supabase
           .from("notifications")
           .select("id", { count: "exact", head: true })
+          .eq("user_id", profile.id)
           .is("read_at", null);
 
         if (!error && count !== null) {

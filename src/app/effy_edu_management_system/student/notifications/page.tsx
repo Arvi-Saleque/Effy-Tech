@@ -47,9 +47,20 @@ export default function StudentNotificationsPage() {
 
   const fetchNotifications = async () => {
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("auth_user_id", userData.user.id)
+        .single();
+      if (!profile) return;
+
       const { data, error } = await supabase
         .from("notifications")
         .select("*")
+        .eq("user_id", profile.id)
         .order("created_at", { ascending: false });
 
       if (!error && data) {
