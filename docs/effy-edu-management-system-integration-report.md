@@ -55,12 +55,41 @@
 - Exam create, edit, results এবং printable result
 - Academic content এবং materials
 - Payment management
+- Finance management
 - Routine/session management
 - Reports, academic report এবং student progress report
 - PDF report endpoints
 - Notifications
 - Audit logs
 - Profile এবং settings
+
+### Finance management
+
+`shifats-tales-finance-management-final.zip` archive-এর finance feature-set audit করে demo-তে database-free implementation যোগ করা হয়েছে:
+
+- Payment Ledger-এর confirmed `PAID` এবং `PARTIALLY_PAID` collection থেকে automatic income
+- Expected fee, unpaid due, waived/cancelled/refunded amount income থেকে বাদ
+- `9` generalized operating-expense categories
+- Populated current, previous এবং historical expense records
+- Collected fees, total expenses, net profit এবং profit-margin summary
+- Previous-period percentage comparison
+- 12-month income, expense এবং net-profit chart
+- Expense-category distribution chart
+- Unified income/expense ledger
+- Period, type, category, payment method এবং text search filters
+- Expense create এবং edit
+- Non-destructive void এবং restore workflow
+- Payee, reference, description এবং payment-method fields
+- Process-local PDF/image receipt upload এবং protected viewing
+- CSV export এবং printable report
+- Payment change-এর পর finance route revalidation
+- Audit-log entries for create, edit, void এবং restore
+
+Finance route:
+
+`/effy_edu_management_system/teacher/finance`
+
+Original ZIP-এর Supabase migration, RLS, R2 credentials বা production database dependency demo-তে apply করা হয়নি। একই business rules generalized mock tables এবং process-local file store দিয়ে implement করা হয়েছে।
 
 ### Website CMS
 
@@ -89,11 +118,11 @@ Demo application-টি main Effy Tech codebase-এর সঙ্গে collision
 
 বর্তমান inventory:
 
-- `136` page routes
-- `7` API routes
-- `146` isolated feature files
+- `137` page routes
+- `9` API routes
+- `150` isolated feature files
 - `34` local static assets
-- `885` prefixed internal route/API/asset references
+- `978` prefixed internal route/API/asset references
 
 Source project-এর internal routes, API calls এবং asset URLs সবগুলো `/effy_edu_management_system` prefix-এর অধীনে আনা হয়েছে। ফলে Effy Tech-এর existing `/admin`, portfolio routes, assets বা shared modules-এর সঙ্গে demo-এর route collision নেই।
 
@@ -105,11 +134,12 @@ Nested demo layout-এ source design, theme, fonts, toast system এবং role 
 
 - কোনো Supabase, PostgreSQL, MySQL বা অন্য cloud database connection নেই
 - কোনো client production credential, database URL, private key বা service-role key নেই
-- সব student, teacher, batch, exam, result, payment এবং CMS content generalized seed/mock data
+- সব student, teacher, batch, exam, result, payment, finance এবং CMS content generalized seed/mock data
 - Authentication local mock adapter-এর মাধ্যমে চলে
 - Browser session cookie/local storage শুধু demo role/session বোঝাতে ব্যবহৃত হয়
 - Runtime mutation process-local; server restart/redeploy হলে initial demo state ফিরে আসে
 - Demo upload/resource endpoint process-local এবং production storage নয়
+- Finance expense এবং receipt mutation process-local; কোনো Supabase migration apply করা হয়নি
 - Public control dock-এ `Local mock data · Changes reset` status সবসময় দেখা যায়
 
 অতএব prospect dashboard-এ feature ব্যবহার করতে পারবে, কিন্তু client-এর real system বা real database-এর কোনো data access করবে না।
@@ -168,13 +198,16 @@ npm run test:portfolio
 
 Result:
 
-- `6/6` tests passed
+- `9/9` tests passed
 - Minimum route/API inventory verified
 - Required public, student, teacher/admin এবং CMS routes verified
 - Internal URL prefix isolation verified
 - Static asset existence verified
 - Production backend/credential/database import না থাকা verified
 - Mock authentication, enrollment, realtime adapter এবং populated seed states verified
+- Finance period calculation, actual-income rule এবং void-expense exclusion verified
+- Finance category relation এবং create/void/restore mutation verified
+- Finance route, actions, CSV এবং process-local receipt safety verified
 
 ### Existing finance regression tests
 
@@ -215,7 +248,7 @@ Result:
 - Next.js `16.2.12` production compile passed
 - TypeScript passed
 - Page-data collection passed
-- `135/135` static pages generated
+- `137/137` static pages generated
 - Final page optimization passed
 - Chart server-render warning নেই
 
@@ -242,6 +275,8 @@ Production build temporary local server-এ চালিয়ে নিচের r
 - `/effy_edu_management_system/student`
 - `/effy_edu_management_system/student/academics`
 - `/effy_edu_management_system/teacher`
+- `/effy_edu_management_system/teacher/finance`
+- `/effy_edu_management_system/teacher/finance?period=all_time&type=EXPENSE`
 - `/effy_edu_management_system/teacher/students`
 - `/effy_edu_management_system/teacher/website`
 - `/projects/EEMS`
@@ -255,6 +290,16 @@ Process-local upload/resource API-ও verify করা হয়েছে:
 - Uploaded bytes exactভাবে stored/read হয়েছে
 - Resource response `200`
 - `Cache-Control: private, no-store`
+
+Finance runtime checks:
+
+- Finance dashboard response `200`
+- Generalized/no-production-database notice rendered
+- All-time expense filter response `200`
+- CSV export response `200`
+- CSV content type `text/csv; charset=utf-8`
+- CSV-তে income এবং expense দুই ধরনের entry
+- Finance receipt test bytes exactভাবে process-local store থেকে read
 
 Smoke-test server কাজ শেষে বন্ধ করা হয়েছে; test port-এ কোনো listener রাখা হয়নি।
 
@@ -274,6 +319,8 @@ Implementation commits:
 6. `adccdeb test(portfolio): enforce database-free Effy Edu showcase`
 7. `3064f0b refactor(portfolio): reserve Effy Edu path for full demo`
 8. `7a2206e feat(demo): mount full coaching management experience`
+9. `acf0da2 feat(demo): add dedicated teacher shortcut`
+10. `ec95aa3 feat(demo): integrate mock finance management`
 
 প্রতিটি implementation portion proper commit message-সহ remote feature branch-এ push করা হয়েছে।
 
@@ -301,6 +348,7 @@ Production/preview deployment পাওয়া গেলে final human visual pa
 2. Effy Tech website-এর normal production deployment চালান।
 3. Deploy শেষে `https://www.effytechbd.com/effy_edu_management_system` খুলুন।
 4. Public, Student Demo, Teacher Demo এবং Admin Demo control-dock navigation verify করুন।
-5. `/projects/EEMS`, homepage/project discovery এবং sitemap links verify করুন।
+5. Admin sidebar থেকে Finance Management খুলে period filters, charts, expense modal, CSV এবং print verify করুন।
+6. `/projects/EEMS`, homepage/project discovery এবং sitemap links verify করুন।
 
 এই subpath-এর জন্য আলাদা DNS, external database বা additional environment credential প্রয়োজন নেই।
