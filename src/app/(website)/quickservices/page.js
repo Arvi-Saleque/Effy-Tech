@@ -13,7 +13,11 @@ import {
   Workflow,
 } from "lucide-react";
 import Footer from "@/components/layout/Footer";
-import { FloatingAsset, MotionBoundary, TiltSurface } from "@/components/visuals";
+import {
+  FloatingAsset,
+  MotionBoundary,
+  TiltSurface,
+} from "@/components/visuals";
 import "@/styles/spatial-components.css";
 import "@/styles/quickservices-spatial.css";
 
@@ -21,12 +25,12 @@ export const metadata = {
   title: "Choose the Right Software Solution | Effy Tech",
   description:
     "A practical Effy Tech service guide for organisations that need a website, mobile app, management platform, MVP, automation, or connected digital system.",
-  alternates: { canonical: "/quickservices" },
+  alternates: { canonical: "/services" },
   openGraph: {
     title: "Choose the Right Software Solution | Effy Tech",
     description:
       "Start with the outcome you need. Effy Tech will shape the right website, app, platform, or automation system.",
-    url: "/quickservices",
+    url: "/services",
     images: [
       {
         url: "/images/services/og-1200x630.jpg",
@@ -57,8 +61,8 @@ const solutions = [
       "Staff need to publish notices, pages, files, news, or galleries",
       "You need one reliable public information source",
     ],
-    href: "/allservices#build",
-    proof: "/projects/BUEK",
+    href: "/services#build",
+    proof: "/projects/bangladesh-university-of-excellence-khulna",
     proofLabel: "See the BUEK case study",
   },
   {
@@ -72,8 +76,8 @@ const solutions = [
       "Staff repeat the same manual steps every day",
       "You need roles, dashboards, records, reports, or approvals",
     ],
-    href: "/allservices#build",
-    proof: "/projects/DHA",
+    href: "/services#build",
+    proof: "/projects/darul-hikmah-academy",
     proofLabel: "See the DHA case study",
   },
   {
@@ -87,8 +91,8 @@ const solutions = [
       "Users need reminders, offline access, accounts, or sync",
       "You need launch support and ongoing product iteration",
     ],
-    href: "/allservices#build",
-    proof: "/projects/IAM",
+    href: "/services#build",
+    proof: "/projects/islamic-amal-tracker",
     proofLabel: "See the IAM case study",
   },
   {
@@ -102,7 +106,7 @@ const solutions = [
       "A generic website builder cannot support the workflow",
       "The product needs to scale after initial validation",
     ],
-    href: "/allservices#build",
+    href: "/services#build",
     proof: "/projects",
     proofLabel: "Review our live work",
   },
@@ -117,7 +121,7 @@ const solutions = [
       "Leads, orders, reports, or updates are handled manually",
       "Existing software needs APIs, messaging, email, or payment integration",
     ],
-    href: "/allservices#automate",
+    href: "/services#automate",
     proof: "/#contact",
     proofLabel: "Map your workflow with us",
   },
@@ -132,7 +136,7 @@ const solutions = [
       "Support or internal knowledge is difficult to scale",
       "AI needs to work inside a controlled business process",
     ],
-    href: "/allservices#automate",
+    href: "/services#automate",
     proof: "/#contact",
     proofLabel: "Discuss a practical AI use case",
   },
@@ -159,7 +163,11 @@ const steps = [
 function QuickServicesHeroVisual() {
   return (
     <MotionBoundary className="quickservices-hero-motion">
-      <TiltSurface className="quickservices-hero-tilt" maxTilt={2.6} perspective={1250}>
+      <TiltSurface
+        className="quickservices-hero-tilt"
+        maxTilt={2.6}
+        perspective={1250}
+      >
         <div className="quickservices-spatial-stage">
           <div className="quickservices-stage-grid" aria-hidden="true" />
           <FloatingAsset
@@ -180,12 +188,17 @@ function QuickServicesHeroVisual() {
               </p>
             </div>
             <p className="mt-4 text-base font-bold leading-relaxed text-neutral-100">
-              Tell us what is slow, confusing, manual, unreliable, or hard to scale.
+              Tell us what is slow, confusing, manual, unreliable, or hard to
+              scale.
             </p>
             <p className="mt-2 text-sm leading-relaxed text-neutral-400">
-              We will help separate essential scope from optional features and propose a practical route to launch.
+              We will help separate essential scope from optional features and
+              propose a practical route to launch.
             </p>
-            <Link href="/#contact" className="mt-5 inline-flex items-center gap-2 text-sm font-black text-primary-light">
+            <Link
+              href="/contact"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-black text-primary-light"
+            >
               Describe your project
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -218,12 +231,19 @@ function SolutionCard({ solution }) {
       <h2 className="mt-6 font-heading text-2xl font-black leading-tight text-text-primary">
         {solution.title}
       </h2>
-      <p className="mt-4 leading-relaxed text-text-secondary">{solution.description}</p>
+      <p className="mt-4 leading-relaxed text-text-secondary">
+        {solution.description}
+      </p>
       <div className="mt-6 border-t border-border pt-5">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">This fits when</p>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+          This fits when
+        </p>
         <ul className="mt-4 space-y-3">
           {solution.signals.map((signal) => (
-            <li key={signal} className="flex gap-3 text-sm leading-relaxed text-text-secondary">
+            <li
+              key={signal}
+              className="flex gap-3 text-sm leading-relaxed text-text-secondary"
+            >
               <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
               <span>{signal}</span>
             </li>
@@ -231,11 +251,17 @@ function SolutionCard({ solution }) {
         </ul>
       </div>
       <div className="mt-auto flex flex-col gap-3 pt-7 sm:flex-row sm:items-center sm:justify-between">
-        <Link href={solution.href} className="inline-flex items-center gap-2 text-sm font-black text-text-primary transition-colors hover:text-primary">
+        <Link
+          href={solution.href}
+          className="inline-flex items-center gap-2 text-sm font-black text-text-primary transition-colors hover:text-primary"
+        >
           Explore services
           <ArrowRight className="h-4 w-4" />
         </Link>
-        <Link href={solution.proof} className="text-sm font-semibold text-text-tertiary underline decoration-border underline-offset-4 transition-colors hover:text-primary">
+        <Link
+          href={solution.proof}
+          className="text-sm font-semibold text-text-tertiary underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+        >
           {solution.proofLabel}
         </Link>
       </div>
@@ -253,7 +279,10 @@ export default function QuickServicesPage() {
             <div className="absolute -left-10 top-28 h-80 w-80 rounded-full border border-neutral-300/70" />
           </div>
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Link href="/#services" className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary"
+            >
               <ArrowLeft className="h-4 w-4" />
               Back to homepage
             </Link>
@@ -266,7 +295,9 @@ export default function QuickServicesPage() {
                   Start with the outcome - not a technology label.
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg leading-relaxed text-text-secondary sm:text-xl">
-                  You do not need to know whether the answer is a website, app, portal, automation, or custom platform. Explain what needs to improve; we will define the right system.
+                  You do not need to know whether the answer is a website, app,
+                  portal, automation, or custom platform. Explain what needs to
+                  improve; we will define the right system.
                 </p>
               </div>
               <QuickServicesHeroVisual />
@@ -295,22 +326,33 @@ export default function QuickServicesPage() {
                   A clear route from problem to production.
                 </h2>
                 <p className="mt-5 leading-relaxed text-text-secondary">
-                  We reduce ambiguity early so design and engineering effort is spent on the parts that create actual operational value.
+                  We reduce ambiguity early so design and engineering effort is
+                  spent on the parts that create actual operational value.
                 </p>
-                <Link href="/allservices" className="mt-7 inline-flex items-center gap-2 text-sm font-black text-primary-dark">
+                <Link
+                  href="/services"
+                  className="mt-7 inline-flex items-center gap-2 text-sm font-black text-primary-dark"
+                >
                   View the complete service system
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
               <div className="quickservices-step-list border-t border-border">
                 {steps.map((step) => (
-                  <div key={step.number} className="quickservices-step grid gap-3 border-b border-border py-6 sm:grid-cols-[72px_1fr] sm:gap-5">
+                  <div
+                    key={step.number}
+                    className="quickservices-step grid gap-3 border-b border-border py-6 sm:grid-cols-[72px_1fr] sm:gap-5"
+                  >
                     <span className="font-mono text-xs font-bold tracking-[0.2em] text-primary">
                       {step.number}
                     </span>
                     <div>
-                      <h3 className="font-heading text-xl font-black text-text-primary">{step.title}</h3>
-                      <p className="mt-2 leading-relaxed text-text-secondary">{step.text}</p>
+                      <h3 className="font-heading text-xl font-black text-text-primary">
+                        {step.title}
+                      </h3>
+                      <p className="mt-2 leading-relaxed text-text-secondary">
+                        {step.text}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -329,10 +371,14 @@ export default function QuickServicesPage() {
                 Bring the problem. We will help define the product.
               </h2>
               <p className="mt-4 max-w-2xl leading-relaxed text-neutral-400">
-                A short project brief, current process, reference, or even a rough idea is enough to begin a useful conversation.
+                A short project brief, current process, reference, or even a
+                rough idea is enough to begin a useful conversation.
               </p>
             </div>
-            <Link href="/#contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-primary-light px-7 py-3 text-sm font-black text-neutral-900 transition-transform hover:-translate-y-0.5">
+            <Link
+              href="/contact"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-primary-light px-7 py-3 text-sm font-black text-neutral-900 transition-transform hover:-translate-y-0.5"
+            >
               Start the Conversation
               <MonitorSmartphone className="h-4 w-4" />
             </Link>

@@ -9,7 +9,7 @@ export default function robots() {
         "/admin/",
         "/api/",
         "/coming-soon",
-        "/projects/IAM/confirmed",
+        "/projects/islamic-amal-tracker/confirmed",
         "/spatial-lab",
       ],
     },

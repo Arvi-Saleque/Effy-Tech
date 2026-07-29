@@ -4,7 +4,8 @@ import buek from "@/data/buek";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/projects/BUEK";
+const canonicalUrl =
+  "https://www.effytechbd.com/projects/bangladesh-university-of-excellence-khulna";
 
 export const metadata = {
   title: "BUEK University Website & Custom CMS Case Study | Effy Tech",

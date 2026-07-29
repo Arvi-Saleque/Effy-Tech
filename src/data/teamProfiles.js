@@ -11,10 +11,26 @@ export const teamProfiles = {
     email: "alifsalek.as@gmail.com",
     cvUrl: "/files/salek-cv.pdf",
     socials: [
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/salek-bin-hossain/", type: "linkedin" },
-      { label: "GitHub", href: "https://github.com/Arvi-Saleque", type: "github" },
-      { label: "Codeforces", href: "https://codeforces.com/profile/Arvi_saleque", type: "code" },
-      { label: "Facebook", href: "https://www.facebook.com/arviman019", type: "facebook" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/salek-bin-hossain/",
+        type: "linkedin",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/Arvi-Saleque",
+        type: "github",
+      },
+      {
+        label: "Codeforces",
+        href: "https://codeforces.com/profile/Arvi_saleque",
+        type: "code",
+      },
+      {
+        label: "Facebook",
+        href: "https://www.facebook.com/arviman019",
+        type: "facebook",
+      },
       { label: "Email", href: "mailto:alifsalek.as@gmail.com", type: "mail" },
     ],
     metrics: [
@@ -40,8 +56,9 @@ export const teamProfiles = {
         title: "Islamic Amal Tracker",
         category: "Offline-first Android product",
         image: "/images/profiles/projects/iam.webp",
-        caseStudyUrl: "/projects/IAM",
-        externalUrl: "https://play.google.com/store/apps/details?id=com.amaltracker.app",
+        caseStudyUrl: "/projects/islamic-amal-tracker",
+        externalUrl:
+          "https://play.google.com/store/apps/details?id=com.amaltracker.app",
         contribution: "Product owner, architect, and lead engineer",
         description:
           "Designed and built the core product experience, Flutter application architecture, local-first data layer, Supabase synchronization, reminders, widgets, tracking modules, and release workflow.",
@@ -51,7 +68,7 @@ export const teamProfiles = {
         title: "Darul Hikmah Academy",
         category: "Academic website and operations platform",
         image: "/images/profiles/projects/dha.webp",
-        caseStudyUrl: "/projects/DHA",
+        caseStudyUrl: "/projects/darul-hikmah-academy",
         externalUrl: "https://www.dhakhl.com",
         contribution: "Backend architecture and academic workflow systems",
         description:
@@ -62,7 +79,7 @@ export const teamProfiles = {
         title: "Bangladesh University of Excellence Khulna",
         category: "University website and custom CMS",
         image: "/images/profiles/projects/buek.webp",
-        caseStudyUrl: "/projects/BUEK",
+        caseStudyUrl: "/projects/bangladesh-university-of-excellence-khulna",
         externalUrl: "https://buekbd.com",
         contribution: "Backend architecture and CMS systems",
         description:
@@ -73,22 +90,31 @@ export const teamProfiles = {
     expertise: [
       {
         title: "Product Architecture",
-        description: "Requirement analysis, system boundaries, data flow, release planning, and long-term technical direction.",
-        items: ["System design", "Product scoping", "Data integrity", "Technical strategy"],
+        description:
+          "Requirement analysis, system boundaries, data flow, release planning, and long-term technical direction.",
+        items: [
+          "System design",
+          "Product scoping",
+          "Data integrity",
+          "Technical strategy",
+        ],
       },
       {
         title: "Mobile Engineering",
-        description: "Production Flutter applications with offline-first data, background workflows, platform integration, and polished UX.",
+        description:
+          "Production Flutter applications with offline-first data, background workflows, platform integration, and polished UX.",
         items: ["Flutter", "Dart", "Drift", "Android integration"],
       },
       {
         title: "Web & Backend Systems",
-        description: "Full-stack products, admin systems, API design, authentication, databases, and cloud integration.",
+        description:
+          "Full-stack products, admin systems, API design, authentication, databases, and cloud integration.",
         items: ["Next.js", "REST APIs", "Supabase", "MongoDB"],
       },
       {
         title: "Algorithmic Problem Solving",
-        description: "Structured reasoning and optimization backed by competitive programming experience and 2,000+ solved problems.",
+        description:
+          "Structured reasoning and optimization backed by competitive programming experience and 2,000+ solved problems.",
         items: ["Algorithms", "Graph theory", "Optimization", "Debugging"],
       },
     ],
@@ -148,9 +174,21 @@ export const teamProfiles = {
     email: "bsse1442@iit.du.ac.bd",
     cvUrl: "/files/adnan-cv.pdf",
     socials: [
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/adnan-bin-wahid/", type: "linkedin" },
-      { label: "GitHub", href: "https://github.com/adnan-bin-wahid", type: "github" },
-      { label: "Facebook", href: "https://www.facebook.com/adnan08072/", type: "facebook" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/adnan-bin-wahid/",
+        type: "linkedin",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/adnan-bin-wahid",
+        type: "github",
+      },
+      {
+        label: "Facebook",
+        href: "https://www.facebook.com/adnan08072/",
+        type: "facebook",
+      },
       { label: "Email", href: "mailto:bsse1442@iit.du.ac.bd", type: "mail" },
     ],
     metrics: [
@@ -176,9 +214,10 @@ export const teamProfiles = {
         title: "Darul Hikmah Academy",
         category: "Academic website and operations platform",
         image: "/images/profiles/projects/dha.webp",
-        caseStudyUrl: "/projects/DHA",
+        caseStudyUrl: "/projects/darul-hikmah-academy",
         externalUrl: "https://www.dhakhl.com",
-        contribution: "Frontend systems, admin workflows, and quality assurance",
+        contribution:
+          "Frontend systems, admin workflows, and quality assurance",
         description:
           "Contributed structured interface modules, administrative workflows, implementation support, and testing for the live academic platform.",
         tags: ["Next.js", "Admin UX", "Responsive UI", "Testing"],
@@ -187,7 +226,7 @@ export const teamProfiles = {
         title: "Bangladesh University of Excellence Khulna",
         category: "University website and custom CMS",
         image: "/images/profiles/projects/buek.webp",
-        caseStudyUrl: "/projects/BUEK",
+        caseStudyUrl: "/projects/bangladesh-university-of-excellence-khulna",
         externalUrl: "https://buekbd.com",
         contribution: "Frontend engineering, CMS experience, and testing",
         description:
@@ -198,22 +237,26 @@ export const teamProfiles = {
     expertise: [
       {
         title: "Full-Stack Product Systems",
-        description: "Frontend, backend, authentication, database design, integrations, and deployable application workflows.",
+        description:
+          "Frontend, backend, authentication, database design, integrations, and deployable application workflows.",
         items: ["React", "Angular", "Node.js", "ASP.NET Core"],
       },
       {
         title: "Backend & Data Engineering",
-        description: "REST services, relational and document databases, migration workflows, and scalable server-side logic.",
+        description:
+          "REST services, relational and document databases, migration workflows, and scalable server-side logic.",
         items: ["FastAPI", "PostgreSQL", "MongoDB", "MS SQL Server"],
       },
       {
         title: "Developer Tooling",
-        description: "Repository intelligence, VS Code extensions, semantic analysis, AST workflows, and AI-assisted engineering tools.",
+        description:
+          "Repository intelligence, VS Code extensions, semantic analysis, AST workflows, and AI-assisted engineering tools.",
         items: ["TypeScript", "VS Code API", "AST", "Semantic retrieval"],
       },
       {
         title: "Testing & Quality",
-        description: "Unit testing, coverage, mutation testing, browser automation, debugging, and maintainable delivery practices.",
+        description:
+          "Unit testing, coverage, mutation testing, browser automation, debugging, and maintainable delivery practices.",
         items: ["JUnit", "JaCoCo", "Selenium", "Mutation testing"],
       },
     ],
@@ -288,10 +331,22 @@ export const teamProfiles = {
     email: "abdullahalsaif17313@gmail.com",
     cvUrl: "/files/saif-cv.pdf",
     socials: [
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/abdullahalsaif2107017/", type: "linkedin" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/abdullahalsaif2107017/",
+        type: "linkedin",
+      },
       { label: "GitHub", href: "https://github.com/saif17313", type: "github" },
-      { label: "Facebook", href: "https://www.facebook.com/saif17313.remian6501", type: "facebook" },
-      { label: "Email", href: "mailto:abdullahalsaif17313@gmail.com", type: "mail" },
+      {
+        label: "Facebook",
+        href: "https://www.facebook.com/saif17313.remian6501",
+        type: "facebook",
+      },
+      {
+        label: "Email",
+        href: "mailto:abdullahalsaif17313@gmail.com",
+        type: "mail",
+      },
     ],
     metrics: [
       { value: "3.76", label: "KUET CSE CGPA" },
@@ -316,9 +371,10 @@ export const teamProfiles = {
         title: "Darul Hikmah Academy",
         category: "Academic website and operations platform",
         image: "/images/profiles/projects/dha.webp",
-        caseStudyUrl: "/projects/DHA",
+        caseStudyUrl: "/projects/darul-hikmah-academy",
         externalUrl: "https://www.dhakhl.com",
-        contribution: "Responsive interface, content integration, and release support",
+        contribution:
+          "Responsive interface, content integration, and release support",
         description:
           "Contributed responsive implementation, content integration, cross-device checks, and production-release support for the live academic platform.",
         tags: ["Responsive UI", "Content Integration", "Release QA", "Next.js"],
@@ -327,9 +383,10 @@ export const teamProfiles = {
         title: "Bangladesh University of Excellence Khulna",
         category: "University website and custom CMS",
         image: "/images/profiles/projects/buek.webp",
-        caseStudyUrl: "/projects/BUEK",
+        caseStudyUrl: "/projects/bangladesh-university-of-excellence-khulna",
         externalUrl: "https://buekbd.com",
-        contribution: "Interface implementation, responsive QA, and deployment support",
+        contribution:
+          "Interface implementation, responsive QA, and deployment support",
         description:
           "Contributed interface implementation, responsive validation, content readiness, and deployment support for the live institutional website.",
         tags: ["Interface Delivery", "Responsive QA", "Deployment", "CMS"],
@@ -338,23 +395,32 @@ export const teamProfiles = {
     expertise: [
       {
         title: "Mobile Product Engineering",
-        description: "Flutter applications, mobile workflows, responsive interaction, and practical user-facing product delivery.",
+        description:
+          "Flutter applications, mobile workflows, responsive interaction, and practical user-facing product delivery.",
         items: ["Flutter", "Dart", "Firebase", "Supabase"],
       },
       {
         title: "Web & Backend Development",
-        description: "Database-backed applications, Laravel systems, REST APIs, admin workflows, and frontend implementation.",
+        description:
+          "Database-backed applications, Laravel systems, REST APIs, admin workflows, and frontend implementation.",
         items: ["Laravel", "PHP", "MySQL", "JavaScript"],
       },
       {
         title: "IoT Integration",
-        description: "GPS, GSM, ESP32, real-time monitoring, and device-to-application communication for connected systems.",
+        description:
+          "GPS, GSM, ESP32, real-time monitoring, and device-to-application communication for connected systems.",
         items: ["ESP32", "GPS", "GSM", "Live tracking"],
       },
       {
         title: "Delivery & Quality Coordination",
-        description: "Responsive validation, content integration, deployment support, and practical coordination across engineering stages.",
-        items: ["Release QA", "Cross-device testing", "Deployment", "Product polish"],
+        description:
+          "Responsive validation, content integration, deployment support, and practical coordination across engineering stages.",
+        items: [
+          "Release QA",
+          "Cross-device testing",
+          "Deployment",
+          "Product polish",
+        ],
       },
     ],
     experience: [
@@ -412,7 +478,8 @@ export const teamProfiles = {
       institution: "Khulna University of Engineering & Technology (KUET)",
       description:
         "CGPA 3.76 with focus on software development, artificial intelligence, IoT systems, mobile applications, and product-oriented engineering.",
-      previous: "Dhaka Residential Model College — HSC and SSC in Science, GPA 5.00",
+      previous:
+        "Dhaka Residential Model College — HSC and SSC in Science, GPA 5.00",
     },
   },
 };

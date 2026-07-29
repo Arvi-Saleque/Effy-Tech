@@ -4,7 +4,8 @@ import effyEduManagementSystem from "@/data/effyEduManagementSystem";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/projects/EEMS";
+const canonicalUrl =
+  "https://www.effytechbd.com/projects/effy-edu-management-system";
 const liveProductionUrl = "https://www.shifatstales.com";
 const ogImageUrl = effyEduManagementSystem.ogImage.startsWith("http")
   ? effyEduManagementSystem.ogImage

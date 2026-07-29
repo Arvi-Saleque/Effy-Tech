@@ -8,7 +8,6 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import {
-  HiOutlineArrowLeft,
   HiOutlineArrowRight,
   HiOutlineBriefcase,
   HiOutlineCheckCircle,
@@ -18,6 +17,7 @@ import {
   HiOutlineMail,
   HiOutlineSparkles,
 } from "react-icons/hi";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
 import { MotionBoundary, TiltSurface } from "@/components/visuals";
 
@@ -39,6 +39,12 @@ const profileSequence = {
   salek: "01",
   adnan: "02",
   saif: "03",
+};
+
+const profileRoutes = {
+  salek: "/team/salek-bin-hossain",
+  saif: "/team/abdullah-al-saif",
+  adnan: "/team/adnan-bin-wahid",
 };
 
 function SectionHeading({ eyebrow, title, description, dark = false }) {
@@ -183,7 +189,9 @@ function ExpertiseCard({ item, index }) {
       <h3 className="mt-7 font-heading text-2xl font-bold text-[#fbfaf4]">
         {item.title}
       </h3>
-      <p className="mt-3 text-sm leading-7 text-[#b7beb3]">{item.description}</p>
+      <p className="mt-3 text-sm leading-7 text-[#b7beb3]">
+        {item.description}
+      </p>
       <div className="mt-5 flex flex-wrap gap-2">
         {item.items.map((skill) => (
           <span
@@ -248,7 +256,7 @@ export default function LeadershipProfile({ profile }) {
     name: profile.name,
     jobTitle: profile.role,
     description: profile.intro,
-    url: `https://www.effytechbd.com/${profile.slug}`,
+    url: `https://www.effytechbd.com${profileRoutes[profile.slug]}`,
     image: `https://www.effytechbd.com${profile.portrait}`,
     email: profile.email,
     worksFor: {
@@ -262,7 +270,9 @@ export default function LeadershipProfile({ profile }) {
   };
 
   return (
-    <main className={`effy-public-page effy-team-profile effy-team-profile--${profile.slug} overflow-hidden bg-[#fbfaf4] text-[#20261f]`}>
+    <main
+      className={`effy-public-page effy-team-profile effy-team-profile--${profile.slug} overflow-hidden bg-[#fbfaf4] text-[#20261f]`}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -284,13 +294,14 @@ export default function LeadershipProfile({ profile }) {
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div className="profile-hero-copy">
-            <Link
-              href="/#team"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#d6c18e] transition-colors hover:text-[#f0dfb3]"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back to Effy Tech team
-            </Link>
+            <Breadcrumb
+              dark
+              items={[
+                { label: "Company", href: "/about" },
+                { label: "Team", href: "/team" },
+              ]}
+              current={profile.name}
+            />
 
             <p className="mt-10 text-xs font-bold uppercase tracking-[0.24em] text-[#d0b777]">
               Effy Tech leadership
@@ -310,7 +321,7 @@ export default function LeadershipProfile({ profile }) {
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
-                href="/#contact"
+                href="/contact"
                 className="inline-flex items-center gap-2 rounded-full bg-[#c7ad70] px-6 py-3 text-sm font-bold text-[#20261f] transition-all hover:bg-[#dcc58d]"
               >
                 Start a project with Effy Tech
@@ -347,7 +358,11 @@ export default function LeadershipProfile({ profile }) {
 
           <div className="profile-portrait-column relative mx-auto w-full max-w-[540px] lg:mx-0 lg:ml-auto">
             <MotionBoundary className="profile-portrait-motion">
-              <TiltSurface className="profile-portrait-tilt" maxTilt={1.9} perspective={1300}>
+              <TiltSurface
+                className="profile-portrait-tilt"
+                maxTilt={1.9}
+                perspective={1300}
+              >
                 <div className="profile-portrait-stage">
                   <div className="profile-portrait-grid" aria-hidden="true" />
                   <div className="profile-portrait-frame relative overflow-hidden rounded-[2rem] border border-white/12 bg-[#252d24] p-2 shadow-[0_30px_90px_rgba(0,0,0,0.33)]">
@@ -391,7 +406,10 @@ export default function LeadershipProfile({ profile }) {
             </p>
             <ul className="mt-6 space-y-5">
               {profile.leadership.responsibilities.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-7 text-[#4f574e] sm:text-base">
+                <li
+                  key={item}
+                  className="flex gap-3 text-sm leading-7 text-[#4f574e] sm:text-base"
+                >
                   <HiOutlineCheckCircle
                     className="mt-1 h-5 w-5 shrink-0 text-[#9b7d3d]"
                     aria-hidden="true"
@@ -404,7 +422,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section id="client-work" className="profile-client-work bg-[#f0eee4] py-20 sm:py-24">
+      <section
+        id="client-work"
+        className="profile-client-work bg-[#f0eee4] py-20 sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Selected client work"
@@ -466,11 +487,17 @@ export default function LeadershipProfile({ profile }) {
           </div>
 
           <div>
-            <SectionHeading eyebrow="Selected proof" title="Highlights and recognition" />
+            <SectionHeading
+              eyebrow="Selected proof"
+              title="Highlights and recognition"
+            />
             <div className="profile-highlight-card mt-10 rounded-[1.6rem] border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-8">
               <ul className="space-y-4">
                 {profile.highlights.map((highlight) => (
-                  <li key={highlight} className="flex gap-3 text-sm leading-7 text-[#50584f]">
+                  <li
+                    key={highlight}
+                    className="flex gap-3 text-sm leading-7 text-[#50584f]"
+                  >
                     <HiOutlineSparkles
                       className="mt-1 h-5 w-5 shrink-0 text-[#9a7c3c]"
                       aria-hidden="true"
@@ -521,12 +548,16 @@ export default function LeadershipProfile({ profile }) {
 
           <div className="profile-cv-card flex flex-col justify-between rounded-[1.6rem] border border-[#d8d3c4] bg-white/65 p-7 sm:p-9">
             <div>
-              <HiOutlineBriefcase className="h-8 w-8 text-[#95783b]" aria-hidden="true" />
+              <HiOutlineBriefcase
+                className="h-8 w-8 text-[#95783b]"
+                aria-hidden="true"
+              />
               <h2 className="mt-5 font-heading text-3xl font-bold text-[#20261f]">
                 Detailed professional record
               </h2>
               <p className="mt-4 text-sm leading-7 text-[#5f675e] sm:text-base">
-                The CV contains the complete academic, technical, project, and professional history in a structured format.
+                The CV contains the complete academic, technical, project, and
+                professional history in a structured format.
               </p>
             </div>
             <a
@@ -553,7 +584,9 @@ export default function LeadershipProfile({ profile }) {
             Need a serious website, application, or operational software system?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#bdc4b9] sm:text-lg">
-            Discuss the requirement with the Effy Tech team. We will help define the scope, architecture, delivery plan, and the right path to production.
+            Discuss the requirement with the Effy Tech team. We will help define
+            the scope, architecture, delivery plan, and the right path to
+            production.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <a
@@ -566,7 +599,7 @@ export default function LeadershipProfile({ profile }) {
               Discuss a project
             </a>
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-[#e1e5de] transition-colors hover:border-[#d0b777]/55 hover:text-[#f0dfb3]"
             >
               Send a project brief

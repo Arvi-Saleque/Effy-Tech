@@ -1,5 +1,11 @@
 import { getTeamProfile } from "@/data/teamProfiles";
 
+const canonicalProfileRoutes = {
+  salek: "/team/salek-bin-hossain",
+  saif: "/team/abdullah-al-saif",
+  adnan: "/team/adnan-bin-wahid",
+};
+
 export function getLeadershipProfile(memberSlug) {
   const profile = getTeamProfile(memberSlug);
 
@@ -14,7 +20,7 @@ export function createLeadershipMetadata(memberSlug) {
   const profile = getLeadershipProfile(memberSlug);
   const title = `${profile.name} — ${profile.role} | Effy Tech`;
   const description = `${profile.name} is ${profile.role} at Effy Tech. Explore leadership responsibilities, live client work, engineering expertise, and selected technical projects.`;
-  const canonical = `/${profile.slug}`;
+  const canonical = canonicalProfileRoutes[profile.slug];
 
   return {
     title,
