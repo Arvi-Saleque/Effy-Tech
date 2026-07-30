@@ -1,99 +1,182 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   Building2,
-  CheckCircle2,
   Mail,
   MessageCircle,
   Phone,
 } from "lucide-react";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
-import ContactForm from "@/components/sections/ContactForm";
-import siteConfig from "@/theme/siteConfig";
-import "@/styles/corporate-pages.css";
+import ContactInquiryForm from "@/components/contact/ContactInquiryForm";
+import {
+  contactChannels,
+  inquirySteps,
+  projectBriefChecklist,
+  socialLinks,
+} from "@/data/contactPage";
+import "@/styles/contact-step6.css";
 
 export const metadata = {
   title: "Contact Effy Tech | Start a Software Project",
   description:
-    "Share your software product, website, mobile app, automation, AI, or operational-system requirement with Effy Tech.",
+    "Share your workflow, users, constraints, and desired outcome with Effy Tech to begin a focused software-project discussion.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Start a Project with Effy Tech",
+    description:
+      "Share the operational problem, users, constraints, and delivery context behind your software requirement.",
+    url: "/contact",
+    type: "website",
+  },
 };
 
-export default function ContactPage() {
-  const whatsappUrl =
-    "https://wa.me/8801511190270?text=" +
-    encodeURIComponent(
-      "Hello Effy Tech, I would like to discuss a software project.",
-    );
+const channelIcons = {
+  email: Mail,
+  phone: Phone,
+  whatsapp: MessageCircle,
+  location: Building2,
+};
+
+function ContactChannel({ channel }) {
+  const Icon = channelIcons[channel.id];
+  const content = (
+    <>
+      <span className="contact6-channel-icon">
+        <Icon aria-hidden="true" />
+      </span>
+      <span className="contact6-channel-text">
+        <small>{channel.label}</small>
+        <strong>{channel.value}</strong>
+      </span>
+      {channel.href && <ArrowRight aria-hidden="true" />}
+    </>
+  );
+
+  if (!channel.href) {
+    return <div className="contact6-channel">{content}</div>;
+  }
 
   return (
-    <>
-      <main className="effy-public-page corporate-page contact-page bg-surface text-text-primary">
-        <section className="contact-page-section">
-          <div className="corporate-grid" aria-hidden="true" />
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Breadcrumb current="Contact" />
-            <div className="contact-page-layout">
-              <div className="contact-page-copy">
-                <p className="corporate-eyebrow">START A PROJECT</p>
-                <h1>Tell us what needs to work better.</h1>
-                <p>
-                  Share the problem, current workflow, target users, deadline,
-                  and outcome you need. We will help define a practical product
-                  and technical direction.
-                </p>
+    <a
+      className="contact6-channel"
+      href={channel.href}
+      target={channel.external ? "_blank" : undefined}
+      rel={channel.external ? "noopener noreferrer" : undefined}
+    >
+      {content}
+    </a>
+  );
+}
 
-                <div className="contact-page-details">
-                  <a href={`mailto:${siteConfig.contact.email}`}>
-                    <Mail size={20} aria-hidden="true" />
-                    <span>
-                      <small>Business email</small>
-                      <strong>{siteConfig.contact.email}</strong>
-                    </span>
+export default function ContactPage() {
+  return (
+    <>
+      <main className="contact6-page">
+        <section className="contact6-hero">
+          <div className="contact6-grid" aria-hidden="true" />
+          <div className="contact6-shell">
+            <Breadcrumb current="Contact" />
+
+            <div className="contact6-hero-grid">
+              <div className="contact6-hero-copy">
+                <p className="contact6-eyebrow">START A PROJECT</p>
+                <h1>Start with the problem. Build the right system.</h1>
+                <p>
+                  Share the workflow, users, constraints, and outcome behind the
+                  requirement. A useful first discussion should clarify the real
+                  problem before it turns into a feature list.
+                </p>
+                <div className="contact6-hero-actions">
+                  <a className="contact6-primary-action" href="#project-brief">
+                    Share project brief
+                    <ArrowRight aria-hidden="true" />
                   </a>
-                  <a href={`tel:${siteConfig.contact.phone}`}>
-                    <Phone size={20} aria-hidden="true" />
-                    <span>
-                      <small>Phone</small>
-                      <strong>{siteConfig.contact.phone}</strong>
-                    </span>
-                  </a>
+                  <Link className="contact6-secondary-action" href="/process">
+                    Review delivery process
+                  </Link>
+                </div>
+              </div>
+
+              <aside
+                className="contact6-brief-card"
+                aria-labelledby="brief-checklist-title"
+              >
+                <p id="brief-checklist-title">A useful brief includes</p>
+                <ul>
+                  {projectBriefChecklist.map((item) => (
+                    <li key={item.title}>
+                      <strong>{item.title}</strong>
+                      <span>{item.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section className="contact6-conversion" id="project-brief">
+          <div className="contact6-shell contact6-conversion-grid">
+            <div className="contact6-channel-copy">
+              <p className="contact6-eyebrow">DIRECT CONTACT</p>
+              <h2>Choose the clearest way to reach us.</h2>
+              <p>
+                Use the structured brief for a new project. Email and WhatsApp
+                remain available for references, documents, and direct context.
+              </p>
+
+              <div className="contact6-channels">
+                {contactChannels.map((channel) => (
+                  <ContactChannel key={channel.id} channel={channel} />
+                ))}
+              </div>
+
+              <div className="contact6-socials" aria-label="Effy Tech socials">
+                <span>Follow:</span>
+                {socialLinks.map((social) => (
                   <a
-                    href={whatsappUrl}
+                    key={social.platform}
+                    href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <MessageCircle size={20} aria-hidden="true" />
-                    <span>
-                      <small>WhatsApp</small>
-                      <strong>Direct project discussion</strong>
-                    </span>
+                    {social.platform}
                   </a>
-                  <div>
-                    <Building2 size={20} aria-hidden="true" />
-                    <span>
-                      <small>Location</small>
-                      <strong>{siteConfig.contact.address}</strong>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="contact-response-note">
-                  <CheckCircle2 size={18} aria-hidden="true" />
-                  Usually responds within one business day.
-                </div>
-                <Link href="/process" className="corporate-text-link">
-                  See how delivery works
-                </Link>
+                ))}
               </div>
+            </div>
 
-              <div className="contact-page-form">
+            <div className="contact6-form-card">
+              <div className="contact6-form-head">
                 <div>
-                  <p className="corporate-eyebrow">PROJECT BRIEF</p>
-                  <h2>Share the requirement.</h2>
+                  <p className="contact6-eyebrow">PROJECT BRIEF</p>
+                  <h2>Describe the requirement.</h2>
                 </div>
-                <ContactForm />
+                <p>
+                  Focus on the current workflow and required outcome. Technical
+                  details can be clarified afterward.
+                </p>
               </div>
+              <ContactInquiryForm />
+            </div>
+          </div>
+        </section>
+
+        <section className="contact6-next" aria-labelledby="contact-next-title">
+          <div className="contact6-shell">
+            <p className="contact6-eyebrow">AFTER THE INQUIRY</p>
+            <h2 id="contact-next-title">
+              A clear path from context to the next decision.
+            </h2>
+            <div className="contact6-step-grid">
+              {inquirySteps.map((step) => (
+                <article className="contact6-step" key={step.number}>
+                  <span>{step.number}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </article>
+              ))}
             </div>
           </div>
         </section>

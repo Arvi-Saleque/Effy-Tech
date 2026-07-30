@@ -1,3 +1,11 @@
+export const teamProfileOrder = ["salek", "saif", "adnan"];
+
+export const teamProfileRoutes = {
+  salek: "/team/salek-bin-hossain",
+  saif: "/team/abdullah-al-saif",
+  adnan: "/team/adnan-bin-wahid",
+};
+
 export const teamProfiles = {
   salek: {
     slug: "salek",
@@ -51,6 +59,43 @@ export const teamProfiles = {
         "Keep product decisions aligned with usability, maintainability, and real business outcomes.",
       ],
     },
+    workingPrinciples: [
+      {
+        title: "Define the system before the screens",
+        description:
+          "Clarify users, workflows, data, constraints, and ownership before implementation choices become expensive.",
+      },
+      {
+        title: "Keep architecture tied to operations",
+        description:
+          "Connect interface, backend, data integrity, integrations, and release planning to the way the product will actually be used.",
+      },
+      {
+        title: "Own the production outcome",
+        description:
+          "Review technical decisions against maintainability, launch readiness, and the product's long-term direction.",
+      },
+    ],
+    serviceLinks: [
+      {
+        label: "Build",
+        href: "/services#build",
+        description:
+          "Product architecture, mobile applications, web systems, and administration platforms.",
+      },
+      {
+        label: "Automate",
+        href: "/services#automate",
+        description:
+          "Backend workflows, data synchronization, APIs, and connected operational systems.",
+      },
+      {
+        label: "Launch & Grow",
+        href: "/services#grow",
+        description:
+          "Release planning, technical ownership, production support, and future iteration.",
+      },
+    ],
     clientWork: [
       {
         title: "Islamic Amal Tracker",
@@ -209,6 +254,37 @@ export const teamProfiles = {
         "Turn technical requirements into maintainable implementation across the stack.",
       ],
     },
+    workingPrinciples: [
+      {
+        title: "Make system behavior explicit",
+        description:
+          "Model data flows, failure states, interfaces, and implementation boundaries so the code remains understandable.",
+      },
+      {
+        title: "Test the risky paths",
+        description:
+          "Use testing, debugging, and review around workflows where data, access, or release quality can fail.",
+      },
+      {
+        title: "Build for the next engineer",
+        description:
+          "Prefer maintainable modules, clear contracts, and evidence-backed fixes over short-term implementation patches.",
+      },
+    ],
+    serviceLinks: [
+      {
+        label: "Build",
+        href: "/services#build",
+        description:
+          "Full-stack applications, admin workflows, backend services, and database-backed products.",
+      },
+      {
+        label: "Automate",
+        href: "/services#automate",
+        description:
+          "APIs, data workflows, applied AI, integrations, and developer-facing automation.",
+      },
+    ],
     clientWork: [
       {
         title: "Darul Hikmah Academy",
@@ -366,6 +442,37 @@ export const teamProfiles = {
         "Bring mobile, backend, and IoT experience into practical product execution.",
       ],
     },
+    workingPrinciples: [
+      {
+        title: "Validate the real interface",
+        description:
+          "Check responsive behavior, interaction, content, and device constraints instead of relying on a single ideal screen.",
+      },
+      {
+        title: "Treat release readiness as engineering",
+        description:
+          "Include integration, cross-device verification, deployment support, and production polish in the delivery process.",
+      },
+      {
+        title: "Coordinate through completion",
+        description:
+          "Keep implementation details, content readiness, quality checks, and delivery stages aligned until the product is usable.",
+      },
+    ],
+    serviceLinks: [
+      {
+        label: "Build",
+        href: "/services#build",
+        description:
+          "Mobile products, responsive web applications, backend systems, and connected-device experiences.",
+      },
+      {
+        label: "Launch & Grow",
+        href: "/services#grow",
+        description:
+          "Responsive validation, deployment support, release QA, and production-ready product polish.",
+      },
+    ],
     clientWork: [
       {
         title: "Darul Hikmah Academy",

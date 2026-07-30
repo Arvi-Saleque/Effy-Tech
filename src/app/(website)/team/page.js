@@ -1,10 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck, Workflow } from "lucide-react";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
-import { teamProfiles } from "@/data/teamProfiles";
+import LeadershipRoster from "@/components/team/LeadershipRoster";
+import { teamProfileOrder, teamProfiles } from "@/data/teamProfiles";
 import "@/styles/corporate-pages.css";
+import "@/styles/team-leadership-step5.css";
 
 export const metadata = {
   title: "Leadership & Team | Effy Tech",
@@ -13,14 +14,32 @@ export const metadata = {
   alternates: { canonical: "/team" },
 };
 
-const routes = {
-  salek: "/team/salek-bin-hossain",
-  saif: "/team/abdullah-al-saif",
-  adnan: "/team/adnan-bin-wahid",
-};
+const accountabilityPrinciples = [
+  {
+    icon: Workflow,
+    number: "01",
+    title: "Direct decision path",
+    description:
+      "Product, architecture, implementation, and release questions stay connected to the people responsible for the outcome.",
+  },
+  {
+    icon: CheckCircle2,
+    number: "02",
+    title: "Visible responsibility",
+    description:
+      "Each profile states the work owned, the systems contributed to, and the engineering strengths brought into delivery.",
+  },
+  {
+    icon: ShieldCheck,
+    number: "03",
+    title: "Review through launch",
+    description:
+      "Scope, technical quality, responsive behavior, data workflows, and release readiness are reviewed as one delivery system.",
+  },
+];
 
 export default function TeamPage() {
-  const profiles = ["salek", "saif", "adnan"].map((slug) => teamProfiles[slug]);
+  const profiles = teamProfileOrder.map((slug) => teamProfiles[slug]);
 
   return (
     <>
@@ -40,37 +59,67 @@ export default function TeamPage() {
                 implementation, quality, launch, and long-term product
                 decisions.
               </p>
+              <div className="corporate-actions">
+                <a href="#leadership" className="corporate-button-primary">
+                  Explore leadership roles <ArrowRight size={17} />
+                </a>
+                <Link href="/process" className="corporate-button-secondary">
+                  See our delivery process
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="corporate-section">
+        <section
+          id="leadership"
+          aria-labelledby="leadership-title"
+          className="corporate-section team-leadership-section"
+        >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="team-page-grid">
-              {profiles.map((profile, index) => (
-                <article key={profile.slug} className="team-page-card">
-                  <div className="team-page-image">
-                    <span>0{index + 1}</span>
-                    <Image
-                      src={profile.portrait}
-                      alt={`${profile.name}, ${profile.role} at Effy Tech`}
-                      fill
-                      priority={index === 0}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="team-page-copy">
-                    <h2>{profile.name}</h2>
-                    <strong>{profile.role}</strong>
-                    <small>{profile.discipline}</small>
-                    <p>{profile.intro}</p>
-                    <Link href={routes[profile.slug]}>
-                      Explore leadership profile <ArrowRight size={16} />
-                    </Link>
-                  </div>
-                </article>
-              ))}
+            <div className="corporate-section-heading corporate-heading-row">
+              <div>
+                <p className="corporate-eyebrow">WHO OWNS WHAT</p>
+                <h2 id="leadership-title">
+                  Leadership responsibilities, not decorative titles.
+                </h2>
+              </div>
+              <p className="team-leadership-guidance">
+                Select a profile to inspect its delivery role. Use the arrow
+                keys, Home, or End when navigating by keyboard.
+              </p>
+            </div>
+            <LeadershipRoster profiles={profiles} />
+          </div>
+        </section>
+
+        <section className="team-accountability-section">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="team-accountability-heading">
+              <div>
+                <p className="corporate-eyebrow">HOW THE TEAM OPERATES</p>
+                <h2>Accountability follows the work from scope to release.</h2>
+              </div>
+              <p>
+                Effy Tech keeps ownership visible across the decisions that
+                shape a production system. Individual profiles show the specific
+                responsibilities and evidence behind each role.
+              </p>
+            </div>
+
+            <div className="team-accountability-grid">
+              {accountabilityPrinciples.map(
+                ({ icon: Icon, number, title, description }) => (
+                  <article key={number}>
+                    <div>
+                      <span>{number}</span>
+                      <Icon aria-hidden="true" size={22} />
+                    </div>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </article>
+                ),
+              )}
             </div>
           </div>
         </section>

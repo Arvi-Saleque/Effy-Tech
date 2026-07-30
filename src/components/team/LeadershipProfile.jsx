@@ -20,6 +20,11 @@ import {
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
 import { MotionBoundary, TiltSurface } from "@/components/visuals";
+import {
+  teamProfileOrder,
+  teamProfileRoutes,
+  teamProfiles,
+} from "@/data/teamProfiles";
 
 const socialIcons = {
   linkedin: FaLinkedinIn,
@@ -37,15 +42,18 @@ const whatsappUrl =
 
 const profileSequence = {
   salek: "01",
-  adnan: "02",
-  saif: "03",
+  saif: "02",
+  adnan: "03",
 };
 
-const profileRoutes = {
-  salek: "/team/salek-bin-hossain",
-  saif: "/team/abdullah-al-saif",
-  adnan: "/team/adnan-bin-wahid",
-};
+const profileSections = [
+  { label: "Role", href: "#role" },
+  { label: "Client work", href: "#client-work" },
+  { label: "Expertise", href: "#expertise" },
+  { label: "Experience", href: "#experience" },
+  { label: "Technical work", href: "#technical-work" },
+  { label: "Education", href: "#education" },
+];
 
 function SectionHeading({ eyebrow, title, description, dark = false }) {
   return (
@@ -249,6 +257,92 @@ function TechnicalProjectCard({ project }) {
   );
 }
 
+function ProfileContextNav({ profile }) {
+  return (
+    <section className="profile-context-bar" aria-label="Profile navigation">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div>
+          <p>Viewing leadership profile</p>
+          <strong>
+            {profileSequence[profile.slug]} — {profile.name}
+          </strong>
+        </div>
+        <nav aria-label={`${profile.name} profile sections`}>
+          {profileSections.map((section) => (
+            <a key={section.href} href={section.href}>
+              {section.label}
+            </a>
+          ))}
+        </nav>
+        <Link href="/team">
+          All leaders
+          <HiOutlineArrowRight aria-hidden="true" className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function WorkingPrincipleCard({ principle, index }) {
+  return (
+    <article className="profile-working-principle">
+      <span>{String(index + 1).padStart(2, "0")}</span>
+      <div>
+        <h3>{principle.title}</h3>
+        <p>{principle.description}</p>
+      </div>
+    </article>
+  );
+}
+
+function LeadershipPeers({ currentSlug }) {
+  const peers = teamProfileOrder
+    .filter((slug) => slug !== currentSlug)
+    .map((slug) => teamProfiles[slug]);
+
+  return (
+    <section className="profile-peer-section" aria-labelledby="peer-title">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="profile-peer-heading">
+          <div>
+            <p className="corporate-eyebrow">CONNECTED LEADERSHIP</p>
+            <h2 id="peer-title">See how the rest of the team contributes.</h2>
+          </div>
+          <Link href="/team">
+            View team overview
+            <HiOutlineArrowRight aria-hidden="true" className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="profile-peer-grid">
+          {peers.map((peer) => (
+            <Link key={peer.slug} href={teamProfileRoutes[peer.slug]}>
+              <div className="profile-peer-image">
+                <Image
+                  src={peer.portrait}
+                  alt=""
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <small>{peer.role}</small>
+                <h3>{peer.name}</h3>
+                <p>{peer.discipline}</p>
+              </div>
+              <HiOutlineArrowRight
+                aria-hidden="true"
+                className="h-5 w-5 shrink-0"
+              />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LeadershipProfile({ profile }) {
   const structuredData = {
     "@context": "https://schema.org",
@@ -256,7 +350,7 @@ export default function LeadershipProfile({ profile }) {
     name: profile.name,
     jobTitle: profile.role,
     description: profile.intro,
-    url: `https://www.effytechbd.com${profileRoutes[profile.slug]}`,
+    url: `https://www.effytechbd.com${teamProfileRoutes[profile.slug]}`,
     image: `https://www.effytechbd.com${profile.portrait}`,
     email: profile.email,
     worksFor: {
@@ -392,7 +486,12 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-leadership bg-[#fbfaf4] py-20 sm:py-24">
+      <ProfileContextNav profile={profile} />
+
+      <section
+        id="role"
+        className="profile-leadership scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <SectionHeading
             eyebrow={profile.leadership.eyebrow}
@@ -424,7 +523,7 @@ export default function LeadershipProfile({ profile }) {
 
       <section
         id="client-work"
-        className="profile-client-work bg-[#f0eee4] py-20 sm:py-24"
+        className="profile-client-work scroll-mt-24 bg-[#f0eee4] py-20 sm:py-24"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
@@ -440,7 +539,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-expertise bg-[#202720] py-20 text-[#fbfaf4] sm:py-24">
+      <section
+        id="expertise"
+        className="profile-expertise scroll-mt-24 bg-[#202720] py-20 text-[#fbfaf4] sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Core expertise"
@@ -456,7 +558,52 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-experience bg-[#fbfaf4] py-20 sm:py-24">
+      <section className="profile-principles-services bg-[#fbfaf4] py-20 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+          <div>
+            <SectionHeading
+              eyebrow="Working principles"
+              title="How this role approaches engineering decisions"
+              description="These principles translate the role's stated responsibilities into a practical standard for scope, implementation, review, and delivery."
+            />
+            <div className="profile-working-principles">
+              {profile.workingPrinciples.map((principle, index) => (
+                <WorkingPrincipleCard
+                  key={principle.title}
+                  principle={principle}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+
+          <aside className="profile-service-map">
+            <p className="corporate-eyebrow">RELATED SERVICES</p>
+            <h2>Where this expertise enters an Effy Tech engagement</h2>
+            <p>
+              Follow the relevant service group to see the selectable
+              capabilities, expected deliverables, and related project proof.
+            </p>
+            <div>
+              {profile.serviceLinks.map((service) => (
+                <Link key={service.href} href={service.href}>
+                  <span>{service.label}</span>
+                  <p>{service.description}</p>
+                  <HiOutlineArrowRight
+                    aria-hidden="true"
+                    className="h-5 w-5 shrink-0"
+                  />
+                </Link>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        id="experience"
+        className="profile-experience scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <SectionHeading
@@ -511,7 +658,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-technical-work bg-[#efede3] py-20 sm:py-24">
+      <section
+        id="technical-work"
+        className="profile-technical-work scroll-mt-24 bg-[#efede3] py-20 sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Technical work"
@@ -526,7 +676,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-education bg-[#fbfaf4] py-20 sm:py-24">
+      <section
+        id="education"
+        className="profile-education scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
           <div className="profile-education-card rounded-[1.6rem] border border-[#d8d3c4] bg-[#f4f2e9] p-7 sm:p-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
@@ -571,6 +724,8 @@ export default function LeadershipProfile({ profile }) {
           </div>
         </div>
       </section>
+
+      <LeadershipPeers currentSlug={profile.slug} />
 
       <section className="profile-final-cta relative overflow-hidden bg-[#1c231c] py-20 text-center text-[#fbfaf4] sm:py-24">
         <div className="pointer-events-none absolute inset-0">

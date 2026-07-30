@@ -403,7 +403,7 @@ export default function AmalTrackerShowcase({ data }) {
   }, []);
 
   return (
-    <div className="effy-project-page effy-project-page--iam min-h-screen overflow-x-hidden">
+    <main className="effy-project-page effy-project-page--iam min-h-screen overflow-x-hidden">
       <section
         ref={heroRef}
         className="project-showcase-hero project-showcase-hero--iam relative overflow-hidden pb-20 pt-32 sm:pb-24 sm:pt-36 lg:min-h-[calc(100vh-82px)] lg:pt-[126px]"
@@ -1104,6 +1104,6 @@ export default function AmalTrackerShowcase({ data }) {
           </motion.div>
         </div>
       </Section>
-    </div>
+    </main>
   );
 }

@@ -113,7 +113,7 @@ export default function CoursesSection({ courseItems = [], headerData }: { cours
 
     const interval = setInterval(() => {
       if (!document.hidden) {
-        handleNext();
+        setActiveIndex((previous) => (N <= 1 ? previous : (previous + 1) % N));
       }
     }, 4800);
 

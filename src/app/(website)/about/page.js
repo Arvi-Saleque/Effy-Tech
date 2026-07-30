@@ -1,193 +1,403 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Building2,
-  GraduationCap,
-  HeartPulse,
-  Landmark,
-  Rocket,
-  ShoppingBag,
+  Blocks,
+  Bot,
+  Check,
+  CloudCog,
+  Code2,
+  Database,
+  Layers3,
+  MoveRight,
+  ShieldCheck,
+  Smartphone,
+  Sparkles,
+  Workflow,
 } from "lucide-react";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
-import { teamProfiles } from "@/data/teamProfiles";
-import "@/styles/corporate-pages.css";
+import projects from "@/data/projects";
+import "@/styles/about-process.css";
 
 export const metadata = {
-  title: "About Effy Tech | Software Product & Systems Company",
+  title: "About Effy Tech | Digital Product & Software Studio",
   description:
-    "Learn how Effy Tech plans, designs, engineers, deploys, and supports practical software systems for businesses, institutions, and product teams.",
+    "Effy Tech is a product-minded, engineering-led software studio building custom platforms, mobile products, automation, cloud systems, and practical AI.",
   alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Effy Tech | Digital Product & Software Studio",
+    description:
+      "We translate real workflows into practical, maintainable software systems with direct product and engineering ownership.",
+    url: "/about",
+    images: [
+      {
+        url: "/images/projects/og-1200x630.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Effy Tech digital products and software systems",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Effy Tech | Digital Product & Software Studio",
+    description:
+      "Product-minded, engineering-led software delivery shaped around real workflows.",
+    images: ["/images/projects/og-1200x630.jpg"],
+  },
 };
 
-const industries = [
-  [
-    "Education",
-    "Academic platforms, portals, results, materials, and administration.",
-    GraduationCap,
-  ],
-  [
-    "Islamic Technology",
-    "Purpose-built products for worship, learning, and community workflows.",
-    Landmark,
-  ],
-  [
-    "Business Operations",
-    "Internal tools, dashboards, reporting, and workflow automation.",
-    Building2,
-  ],
-  [
-    "E-commerce",
-    "Product discovery, ordering, inventory, and management systems.",
-    ShoppingBag,
-  ],
-  [
-    "Healthcare & Services",
-    "Structured experiences for appointments, records, and service delivery.",
-    HeartPulse,
-  ],
-  [
-    "Startups & Product Teams",
-    "MVPs, scalable product foundations, and controlled iteration.",
-    Rocket,
-  ],
+const deliveryCapabilities = [
+  {
+    icon: Blocks,
+    number: "01",
+    label: "BUILD",
+    title: "Products and platforms",
+    text: "Custom websites, mobile apps, role-based platforms, dashboards, and operational software designed around the people who will use and manage them.",
+    link: "/services#build",
+    linkLabel: "Explore build capabilities",
+  },
+  {
+    icon: Workflow,
+    number: "02",
+    label: "AUTOMATE",
+    title: "Connected workflows",
+    text: "Automation, APIs, reporting, integrations, and practical AI that reduce repeated work and keep operational information dependable.",
+    link: "/services#automate",
+    linkLabel: "Explore automation",
+  },
+  {
+    icon: CloudCog,
+    number: "03",
+    label: "LAUNCH & GROW",
+    title: "Production ownership",
+    text: "Deployment, analytics, technical SEO, documentation, handover, maintenance, and iteration planned as part of the product—not as an afterthought.",
+    link: "/services#grow",
+    linkLabel: "Explore launch support",
+  },
 ];
 
-const profileRoutes = {
-  salek: "/team/salek-bin-hossain",
-  saif: "/team/abdullah-al-saif",
-  adnan: "/team/adnan-bin-wahid",
-};
+const engineeringLayers = [
+  {
+    icon: Smartphone,
+    title: "Product & experience",
+    text: "Scope, journeys, interface systems, responsive web, and mobile product decisions.",
+    tools: "UX · Next.js · Flutter",
+  },
+  {
+    icon: Code2,
+    title: "Application engineering",
+    text: "Frontend, backend, role-based administration, business rules, and dependable integrations.",
+    tools: "React · APIs · Custom CMS",
+  },
+  {
+    icon: Database,
+    title: "Data & cloud",
+    text: "Structured data models, authentication, local-first workflows, synchronization, and managed media.",
+    tools: "PostgreSQL · MongoDB · Supabase",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Quality & ownership",
+    text: "Permissions, validation, testing, production verification, monitoring, documentation, and handover.",
+    tools: "Security · QA · Deployment",
+  },
+];
+
+const principles = [
+  {
+    title: "Product-minded",
+    text: "Users, workflow gaps, constraints, and intended outcomes shape each decision.",
+  },
+  {
+    title: "Engineering-led",
+    text: "Maintainable foundations, explicit data flows, and controlled releases take priority over fragile shortcuts.",
+  },
+  {
+    title: "Direct ownership",
+    text: "Product direction and engineering remain close to the work from discovery through production.",
+  },
+  {
+    title: "Built to evolve",
+    text: "Clear boundaries, documentation, handover, and support leave the system ready for its next workflow.",
+  },
+];
+
+const liveProjects = [...projects].sort((a, b) => a.order - b.order);
 
 export default function AboutPage() {
-  const founders = ["salek", "saif", "adnan"].map((slug) => teamProfiles[slug]);
-
   return (
     <>
-      <main className="effy-public-page corporate-page bg-surface text-text-primary">
-        <section className="corporate-hero">
-          <div className="corporate-grid" aria-hidden="true" />
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <main className="effy-public-page ap-page">
+        <section className="ap-hero">
+          <div className="ap-dot-field" aria-hidden="true" />
+          <div className="ap-orbit ap-orbit-one" aria-hidden="true" />
+          <div className="ap-orbit ap-orbit-two" aria-hidden="true" />
+          <div className="ap-shell">
             <Breadcrumb current="About" />
-            <div className="corporate-hero-copy">
-              <p className="corporate-eyebrow">ABOUT EFFY TECH</p>
-              <h1>Practical software systems, built with direct ownership.</h1>
-              <p>
-                Effy Tech plans, designs, engineers, deploys, and supports
-                digital products for businesses, institutions, and product
-                teams. We stay close to the real workflow and build for
-                maintainable ownership after launch.
-              </p>
-              <div className="corporate-actions">
-                <Link href="/projects" className="corporate-button-primary">
-                  Explore Our Work <ArrowRight size={17} />
-                </Link>
-                <Link href="/contact" className="corporate-button-secondary">
-                  Start a Conversation <ArrowRight size={17} />
-                </Link>
+            <div className="ap-hero-layout">
+              <div className="ap-hero-copy">
+                <p className="ap-eyebrow">DIGITAL PRODUCT & SOFTWARE STUDIO</p>
+                <h1>
+                  We turn real workflows into{" "}
+                  <span>software people can operate.</span>
+                </h1>
+                <p className="ap-hero-lede">
+                  Effy Tech plans, designs, engineers, deploys, and supports
+                  custom platforms, mobile products, automation, cloud systems,
+                  and practical AI. We start with the operational problem—not a
+                  generic template or a predetermined stack.
+                </p>
+                <div className="ap-actions">
+                  <Link href="/projects" className="ap-button ap-button-dark">
+                    See Live Work <ArrowRight size={17} aria-hidden="true" />
+                  </Link>
+                  <Link href="/contact" className="ap-button ap-button-light">
+                    Discuss Your System{" "}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </Link>
+                </div>
+                <div className="ap-hero-proof" aria-label="Effy Tech approach">
+                  <span>
+                    <Check size={15} aria-hidden="true" /> Product-minded
+                  </span>
+                  <span>
+                    <Check size={15} aria-hidden="true" /> Engineering-led
+                  </span>
+                  <span>
+                    <Check size={15} aria-hidden="true" /> Direct ownership
+                  </span>
+                </div>
+              </div>
+
+              <div
+                className="ap-system-map"
+                aria-label="Effy Tech connects workflow, product, engineering, and operations"
+              >
+                <div className="ap-map-grid" aria-hidden="true" />
+                <div className="ap-map-label">
+                  <i />
+                  DELIVERY MODEL
+                </div>
+                <div className="ap-map-node ap-map-node-workflow">
+                  <Workflow size={19} aria-hidden="true" />
+                  <span>
+                    <small>INPUT</small>
+                    <strong>Real workflow</strong>
+                  </span>
+                </div>
+                <div className="ap-map-node ap-map-node-product">
+                  <Sparkles size={19} aria-hidden="true" />
+                  <span>
+                    <small>SHAPE</small>
+                    <strong>Product decisions</strong>
+                  </span>
+                </div>
+                <div className="ap-map-core">
+                  <Layers3 size={27} aria-hidden="true" />
+                  <span>
+                    <small>CONNECTED SYSTEM</small>
+                    <strong>Effy Tech</strong>
+                  </span>
+                </div>
+                <div className="ap-map-node ap-map-node-engineering">
+                  <Code2 size={19} aria-hidden="true" />
+                  <span>
+                    <small>BUILD</small>
+                    <strong>Engineering</strong>
+                  </span>
+                </div>
+                <div className="ap-map-node ap-map-node-operations">
+                  <CloudCog size={19} aria-hidden="true" />
+                  <span>
+                    <small>OUTCOME</small>
+                    <strong>Owned operations</strong>
+                  </span>
+                </div>
+                <div className="ap-map-status">
+                  <i /> DISCOVER → DESIGN → BUILD → OPERATE
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="corporate-section">
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
-            <article className="corporate-story-card">
-              <p className="corporate-eyebrow">OUR FOCUS</p>
-              <h2>
-                Technology shaped around the problem—not the other way around.
-              </h2>
-              <p>
-                We turn complex operational ideas into clear product scope,
-                connected architecture, usable interfaces, dependable data
-                workflows, and production-ready delivery.
-              </p>
-            </article>
-            <div className="corporate-principles">
-              {[
-                [
-                  "Business-first planning",
-                  "The workflow and outcome define the technical direction.",
-                ],
-                [
-                  "Scalable engineering",
-                  "Clear boundaries and maintainable architecture leave room for growth.",
-                ],
-                [
-                  "Direct communication",
-                  "The people making product decisions remain involved in delivery.",
-                ],
-                [
-                  "Long-term reliability",
-                  "Security, handover, support, and ownership are built into the engagement.",
-                ],
-              ].map(([title, text], index) => (
-                <article key={title}>
+        <section className="ap-section">
+          <div className="ap-shell">
+            <div className="ap-positioning">
+              <div className="ap-section-heading">
+                <p className="ap-eyebrow">WHO WE ARE</p>
+                <h2>
+                  A small, accountable team for connected software delivery.
+                </h2>
+              </div>
+              <div className="ap-positioning-copy">
+                <p>
+                  We work where a public interface, internal operation, data,
+                  administration, and long-term ownership need to function as
+                  one system.
+                </p>
+                <p>
+                  That may be a consumer mobile product, an institutional
+                  website with its own publishing workflow, or a role-based
+                  platform that replaces disconnected manual processes.
+                </p>
+                <Link href="/team">
+                  Meet the people responsible for delivery
+                  <MoveRight size={17} aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="ap-principle-grid">
+              {principles.map((principle, index) => (
+                <article key={principle.title}>
                   <span>0{index + 1}</span>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{text}</p>
-                  </div>
+                  <h3>{principle.title}</h3>
+                  <p>{principle.text}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="corporate-section bg-surface-alt">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="corporate-section-heading">
-              <p className="corporate-eyebrow">WHO WE WORK WITH</p>
-              <h2>
-                Focused experience across product and operational domains.
-              </h2>
-            </div>
-            <div className="industry-page-grid">
-              {industries.map(([title, text, Icon]) => (
-                <article key={title}>
-                  <Icon size={23} aria-hidden="true" />
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="corporate-section">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="corporate-section-heading corporate-heading-row">
-              <div>
-                <p className="corporate-eyebrow">LEADERSHIP</p>
-                <h2>The people responsible for direction and delivery.</h2>
+        <section className="ap-section ap-section-soft">
+          <div className="ap-shell">
+            <div className="ap-heading-row">
+              <div className="ap-section-heading">
+                <p className="ap-eyebrow">WHAT WE BUILD</p>
+                <h2>
+                  One delivery model across product, automation, and growth.
+                </h2>
               </div>
-              <Link href="/team" className="corporate-text-link">
-                Meet the full team <ArrowRight size={17} />
+              <Link href="/services" className="ap-inline-link">
+                View all 20 capabilities
+                <ArrowRight size={17} aria-hidden="true" />
               </Link>
             </div>
-            <div className="team-page-grid">
-              {founders.map((profile) => (
-                <article key={profile.slug} className="team-page-card">
-                  <div className="team-page-image">
-                    <Image
-                      src={profile.portrait}
-                      alt={profile.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="team-page-copy">
-                    <h3>{profile.name}</h3>
-                    <strong>{profile.role}</strong>
-                    <p>{profile.intro}</p>
-                    <Link href={profileRoutes[profile.slug]}>
-                      View profile <ArrowRight size={16} />
+            <div className="ap-capability-grid">
+              {deliveryCapabilities.map(
+                ({
+                  icon: Icon,
+                  number,
+                  label,
+                  title,
+                  text,
+                  link,
+                  linkLabel,
+                }) => (
+                  <article key={title}>
+                    <div className="ap-card-topline">
+                      <span>{number}</span>
+                      <Icon size={23} aria-hidden="true" />
+                    </div>
+                    <p className="ap-card-label">{label}</p>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                    <Link href={link}>
+                      {linkLabel}
+                      <ArrowRight size={16} aria-hidden="true" />
                     </Link>
-                  </div>
+                  </article>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="ap-section ap-section-dark">
+          <div className="ap-shell">
+            <div className="ap-dark-heading">
+              <div className="ap-section-heading">
+                <p className="ap-eyebrow">ENGINEERING CAPABILITY</p>
+                <h2>The full system—not only the visible screen.</h2>
+              </div>
+              <p>
+                Technology is selected around the product, existing workflow,
+                data responsibility, integrations, delivery risk, and the way
+                the system will be owned after launch.
+              </p>
+            </div>
+            <div className="ap-engineering-grid">
+              {engineeringLayers.map(({ icon: Icon, title, text, tools }) => (
+                <article key={title}>
+                  <span className="ap-icon-box">
+                    <Icon size={21} aria-hidden="true" />
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <small>{tools}</small>
                 </article>
               ))}
+            </div>
+            <div className="ap-ai-note">
+              <Bot size={24} aria-hidden="true" />
+              <div>
+                <strong>Practical AI, where it earns its place.</strong>
+                <p>
+                  We use AI for suitable classification, retrieval, drafting,
+                  support, document, and structured decision workflows—inside a
+                  controlled product, not as a decorative feature.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ap-section">
+          <div className="ap-shell">
+            <div className="ap-heading-row">
+              <div className="ap-section-heading">
+                <p className="ap-eyebrow">VERIFIED DELIVERY</p>
+                <h2>
+                  Different domains. The same accountable system thinking.
+                </h2>
+              </div>
+              <Link href="/projects" className="ap-inline-link">
+                Explore all case studies
+                <ArrowRight size={17} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="ap-project-grid">
+              {liveProjects.map((project, index) => (
+                <Link href={project.caseStudyUrl} key={project.slug}>
+                  <div className="ap-project-number">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <small>{project.status}</small>
+                  </div>
+                  <p>{project.eyebrow}</p>
+                  <h3>{project.title}</h3>
+                  <div>{project.outcome}</div>
+                  <span className="ap-project-action">
+                    View case study
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="ap-cta">
+          <div className="ap-shell">
+            <div>
+              <p className="ap-eyebrow">SMART SOLUTIONS. SIMPLE EXECUTION.</p>
+              <h2>Bring the workflow. We will help define the system.</h2>
+              <p>
+                Share the current process, the operational gap, or the product
+                idea. We will turn it into a clear route from discovery to
+                production ownership.
+              </p>
+            </div>
+            <div className="ap-actions">
+              <Link href="/contact" className="ap-button ap-button-gold">
+                Start a Conversation
+                <ArrowRight size={17} aria-hidden="true" />
+              </Link>
+              <Link href="/process" className="ap-button ap-button-ghost">
+                See Our Process
+                <ArrowRight size={17} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>
