@@ -1,15 +1,8 @@
 import "./pioneer-college.css";
+import { notFound } from "next/navigation";
 
-export const metadata = {
-  title: "Govt. Pioneer Girls College, Khulna",
-  description:
-    "Official-style institutional website for Govt. Pioneer Girls College, Khulna.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
-export default function PioneerGirlsCollegeLayout({ children }) {
-  return children;
+// This demo is no longer public. The segment stays in the repository, but
+// every URL under it returns Next.js's 404 response.
+export default function PioneerGirlsCollegeLayout() {
+  notFound();
 }
