@@ -14,6 +14,7 @@
     "test:projects": "node --test tests/projects-architecture.test.mjs",
     "test:about-process": "node --test tests/about-process-architecture.test.mjs",
     "test:team": "node --test tests/team-leadership-architecture.test.mjs",
+    "test:home-team": "node --test tests/home-team-carousel.test.mjs",
     "test:contact": "node --test tests/contact-conversion-architecture.test.mjs",
     "test:qa": "node --test tests/final-global-qa.test.mjs"
   },
