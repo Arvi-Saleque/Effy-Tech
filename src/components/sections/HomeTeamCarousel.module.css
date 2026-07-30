@@ -1,0 +1,470 @@
+.carousel {
+  --team-card-width: clamp(340px, 35vw, 470px);
+  --team-card-height: 586px;
+  position: relative;
+  margin-top: 34px;
+}
+
+.guide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 54px;
+  padding: 0 2px;
+  border-bottom: 1px solid rgba(32, 38, 31, 0.12);
+}
+
+.guide span {
+  color: #8b7a3f;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.guide p {
+  max-width: 480px;
+  color: #697165;
+  font-size: 13px;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.viewport {
+  position: relative;
+  height: calc(var(--team-card-height) + 34px);
+  overflow: hidden;
+  cursor: grab;
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: translate3d(var(--team-drag-offset), 0, 0);
+  transform-style: preserve-3d;
+}
+
+.depthField {
+  position: absolute;
+  inset: 15% 6% 10%;
+  pointer-events: none;
+}
+
+.depthField::before {
+  content: "";
+  position: absolute;
+  inset: 16% 3% 1%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(69, 78, 63, 0.13),
+    rgba(69, 78, 63, 0) 68%
+  );
+  filter: blur(18px);
+}
+
+.depthField i {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: min(86vw, 940px);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(143, 123, 58, 0.22),
+    transparent
+  );
+  transform: translate(-50%, -50%) rotate(-8deg);
+}
+
+.depthField i:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(8deg);
+}
+
+.depthField i:nth-child(3) {
+  top: 78%;
+  width: min(62vw, 720px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(32, 38, 31, 0.14),
+    transparent
+  );
+  transform: translate(-50%, -50%);
+}
+
+.carouselCard {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 330px 1fr;
+  width: var(--team-card-width);
+  height: var(--team-card-height);
+  border: 1px solid rgba(32, 38, 31, 0.16);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.72), transparent 48%),
+    var(--effy-ivory);
+  box-shadow: 0 28px 66px rgba(27, 33, 26, 0.12);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.55s ease,
+    filter 0.55s ease,
+    border-color 0.55s ease,
+    box-shadow 0.55s ease;
+  will-change: transform;
+}
+
+.carouselCard[data-position="active"] {
+  z-index: 3;
+  border-color: rgba(153, 130, 58, 0.5);
+  box-shadow:
+    0 38px 82px rgba(27, 33, 26, 0.18),
+    0 0 0 1px rgba(197, 183, 125, 0.2);
+  opacity: 1;
+  filter: none;
+  transform: translate3d(-50%, 0, 105px) rotateY(0deg) scale(1);
+}
+
+.carouselCard[data-position="previous"] {
+  z-index: 1;
+  opacity: 0.58;
+  filter: saturate(0.55) contrast(0.93);
+  transform: translate3d(calc(-50% - 82%), 21px, -105px) rotateY(22deg)
+    scale(0.82);
+  transform-origin: right center;
+}
+
+.carouselCard[data-position="next"] {
+  z-index: 2;
+  opacity: 0.58;
+  filter: saturate(0.55) contrast(0.93);
+  transform: translate3d(calc(-50% + 82%), 21px, -105px) rotateY(-22deg)
+    scale(0.82);
+  transform-origin: left center;
+}
+
+.carouselCard[data-position="previous"]:hover,
+.carouselCard[data-position="next"]:hover {
+  opacity: 0.78;
+  filter: saturate(0.74) contrast(0.96);
+}
+
+.cardIndex {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 4;
+  padding: 8px 10px;
+  color: #f3f0df;
+  background: rgba(29, 36, 28, 0.78);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+  backdrop-filter: blur(10px);
+}
+
+.portrait {
+  position: relative;
+  overflow: hidden;
+  background: #d7d7cc;
+  clip-path: polygon(
+    18px 0,
+    100% 0,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0 100%,
+    0 18px
+  );
+}
+
+.portrait img {
+  object-fit: cover;
+  object-position: center 24%;
+  filter: saturate(0.84) contrast(0.98);
+  transform: scale(1.01);
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.55s ease;
+}
+
+.carouselCard[data-position="active"]:hover .portrait img {
+  filter: saturate(0.98) contrast(1);
+  transform: scale(1.045);
+}
+
+.portraitShade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent 54%,
+    rgba(24, 31, 24, 0.5) 100%
+  );
+  pointer-events: none;
+}
+
+.activeMark {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #f4f2e6;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+.activeMark::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: #c5b77d;
+}
+
+.cardBody {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px 30px 30px;
+}
+
+.cardBody small {
+  color: #8b7a3f;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.cardBody h3 {
+  margin-top: 10px;
+  color: var(--effy-ink);
+  font-size: 29px;
+  line-height: 1.06;
+}
+
+.cardBody p {
+  margin-top: 13px;
+  color: #656d62;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+
+.cardBody a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+  color: #2d352c;
+  border-bottom: 1px solid rgba(45, 53, 44, 0.42);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    gap 0.25s ease;
+}
+
+.cardBody a:hover,
+.cardBody a:focus-visible {
+  gap: 12px;
+  color: #8b7a3f;
+  border-color: #8b7a3f;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.arrowButton {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #30372f;
+  border: 1px solid rgba(32, 38, 31, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.36);
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.arrowButton:hover,
+.arrowButton:focus-visible {
+  color: #fffdf3;
+  border-color: #2e372d;
+  background: #2e372d;
+  transform: translateY(-2px);
+}
+
+.arrowButton:focus-visible,
+.cardBody a:focus-visible {
+  outline: 3px solid rgba(166, 139, 54, 0.38);
+  outline-offset: 3px;
+}
+
+.liveStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 980px) {
+  .carousel {
+    --team-card-width: clamp(330px, 50vw, 430px);
+    --team-card-height: 566px;
+  }
+
+  .carouselCard {
+    grid-template-rows: 310px 1fr;
+  }
+
+  .carouselCard[data-position="previous"] {
+    transform: translate3d(calc(-50% - 72%), 25px, -110px) rotateY(20deg)
+      scale(0.8);
+  }
+
+  .carouselCard[data-position="next"] {
+    transform: translate3d(calc(-50% + 72%), 25px, -110px) rotateY(-20deg)
+      scale(0.8);
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel {
+    --team-card-width: min(82vw, 350px);
+    --team-card-height: 536px;
+  }
+
+  .guide {
+    display: grid;
+    gap: 8px;
+    min-height: 72px;
+    padding: 14px 0;
+  }
+
+  .guide p {
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .viewport {
+    height: calc(var(--team-card-height) + 24px);
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .carouselCard {
+    top: 16px;
+    grid-template-rows: 285px 1fr;
+  }
+
+  .carouselCard[data-position="previous"] {
+    opacity: 0.42;
+    transform: translate3d(calc(-50% - 73%), 19px, -120px) rotateY(17deg)
+      scale(0.77);
+  }
+
+  .carouselCard[data-position="next"] {
+    opacity: 0.42;
+    transform: translate3d(calc(-50% + 73%), 19px, -120px) rotateY(-17deg)
+      scale(0.77);
+  }
+
+  .cardBody {
+    padding: 23px 24px 25px;
+  }
+
+  .cardBody h3 {
+    font-size: 25px;
+  }
+
+  .cardBody p {
+    font-size: 12.5px;
+  }
+
+  .controls {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .arrowButton {
+    width: 44px;
+    height: 44px;
+  }
+
+}
+
+@media (max-width: 390px) {
+  .carousel {
+    --team-card-width: 82vw;
+    --team-card-height: 522px;
+  }
+
+  .carouselCard {
+    grid-template-rows: 270px 1fr;
+  }
+
+  .cardBody {
+    padding: 21px 21px 23px;
+  }
+
+  .cardBody h3 {
+    font-size: 23px;
+  }
+
+  .cardBody p {
+    line-height: 1.55;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .carouselCard,
+  .portrait img,
+  .arrowButton,
+  .cardBody a {
+    transition-duration: 0.01ms !important;
+  }
+
+  .carouselCard[data-position="previous"],
+  .carouselCard[data-position="next"] {
+    filter: none;
+  }
+}

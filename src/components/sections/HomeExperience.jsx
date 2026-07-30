@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ContactForm from "@/components/sections/ContactForm";
+import HomeTeamCarousel from "@/components/sections/HomeTeamCarousel";
 import {
   BrowserMockup,
   FloatingAsset,
@@ -1315,34 +1316,7 @@ export default function HomeExperience() {
                 making decisions and the people building the product.
               </p>
             </div>
-            <div className="founder-grid">
-              {founders.map((founder, i) => (
-                <motion.article
-                  className="founder-card"
-                  key={founder.name}
-                  {...fade}
-                >
-                  <span>0{i + 1}</span>
-                  <div className="founder-image">
-                    <Image
-                      src={founder.image}
-                      alt={founder.name}
-                      fill
-                      sizes="400px"
-                    />
-                  </div>
-                  <div className="founder-info">
-                    <h3>{founder.name}</h3>
-                    <strong>{founder.role}</strong>
-                    <p>{founder.summary}</p>
-                    <Link href={founder.href}>
-                      View {founder.name.split(" ")[0]}&apos;s profile{" "}
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
+            <HomeTeamCarousel founders={founders} />
           </div>
         </div>
       </section>

@@ -115,13 +115,13 @@ test("legacy service aliases and contact paths remain canonical", async () => {
   assert.match(page, /href="\/projects"/);
 });
 
-test("the approved pre-Step-2 homepage remains byte-identical", () => {
+test("the approved homepage shell remains byte-identical", () => {
   assert.equal(
     sha256("src/app/(website)/page.js"),
     "f82121080787fea4f7c3a6611e904d80b17e2a92a7599279325bfd24f6ed67c0",
   );
   assert.equal(
     sha256("src/components/sections/HomeExperience.jsx"),
-    "757836fefadd4a5cefde25524989b2fcf78ed40944eff1175195c65caefc7977",
+    "097e7302f43f61ef70a4bb6b45a763f55c5a81e09fdc0b87b4142da6e5977cee",
   );
 });

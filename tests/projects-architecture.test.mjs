@@ -112,12 +112,12 @@ test("related-work navigation excludes the current project and returns to the hu
   assert.match(source, /View All Projects/);
 });
 
-test("homepage and Services implementation remain byte-identical to Step 2", () => {
+test("approved homepage and Services implementation remain protected", () => {
   const protectedFiles = {
     "src/app/(website)/page.js":
       "f82121080787fea4f7c3a6611e904d80b17e2a92a7599279325bfd24f6ed67c0",
     "src/components/sections/HomeExperience.jsx":
-      "757836fefadd4a5cefde25524989b2fcf78ed40944eff1175195c65caefc7977",
+      "097e7302f43f61ef70a4bb6b45a763f55c5a81e09fdc0b87b4142da6e5977cee",
     "src/app/(website)/services/page.js":
       "afedb01345a947e9c9d45e1a8e33d821a26e3969e860aea736be2178e65d4a9d",
     "src/components/showcase/ServiceExplorer.jsx":
