@@ -3,6 +3,7 @@
    ============================================================ */
 
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import amalTracker from "@/data/amalTracker";
 import Footer from "@/components/layout/Footer";
 import "@/styles/spatial-components.css";
@@ -91,6 +92,7 @@ export default function AmalTrackerPage() {
         }}
       />
       <AmalTrackerShowcase data={amalTracker} />
+      <CaseStudyFooterNav currentSlug="IAM" />
       <Footer />
     </>
   );

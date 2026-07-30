@@ -1,4 +1,5 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import dha from "@/data/dha";
 import "@/styles/spatial-components.css";
@@ -64,6 +65,7 @@ export default function DHAPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <DHAShowcase data={dha} />
+      <CaseStudyFooterNav currentSlug="DHA" />
       <Footer />
     </>
   );

@@ -1,4 +1,5 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import effyEduManagementSystem from "@/data/effyEduManagementSystem";
 import "@/styles/spatial-components.css";
@@ -120,6 +121,7 @@ export default function EffyEduManagementSystemCaseStudyPage() {
         }}
       />
       <DHAShowcase data={effyEduManagementSystem} />
+      <CaseStudyFooterNav currentSlug="EEMS" />
       <Footer />
     </>
   );

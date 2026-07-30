@@ -1,4 +1,5 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import buek from "@/data/buek";
 import "@/styles/spatial-components.css";
@@ -65,6 +66,7 @@ export default function BUEKPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <DHAShowcase data={buek} />
+      <CaseStudyFooterNav currentSlug="BUEK" />
       <Footer />
     </>
   );

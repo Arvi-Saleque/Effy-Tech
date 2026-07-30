@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  ArrowUpRight,
-  Check,
   Layers3,
   MoveRight,
   ShieldCheck,
@@ -11,6 +9,7 @@ import {
 } from "lucide-react";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
+import ProjectPortfolioExplorer from "@/components/showcase/ProjectPortfolioExplorer";
 import {
   BrowserMockup,
   MotionBoundary,
@@ -125,131 +124,6 @@ function ProjectsHeroVisual() {
   );
 }
 
-function ProjectCaseStudy({ project, index }) {
-  const reversed = index % 2 === 1;
-  return (
-    <article
-      id={project.slug.toLowerCase()}
-      className="scroll-mt-28 border-t border-border py-14 sm:py-20 lg:py-24"
-    >
-      <div
-        className={`grid items-center gap-10 lg:grid-cols-2 lg:gap-16 ${reversed ? "lg:[&>*:first-child]:order-2" : ""}`}
-      >
-        <div className="project-case-media relative">
-          <MotionBoundary className="project-case-motion">
-            <TiltSurface
-              className="project-case-tilt"
-              maxTilt={2.4}
-              perspective={1200}
-            >
-              <div className="project-case-plinth" aria-hidden="true" />
-              <Link
-                href={project.caseStudyUrl}
-                className="project-case-link group relative block"
-              >
-                <BrowserMockup
-                  className="projects-case-browser"
-                  label={`${project.title} case study preview`}
-                  title={projectPreviewTitles[project.slug]}
-                >
-                  <div className="projects-case-screen">
-                    <Image
-                      src={project.thumbnail}
-                      alt=""
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.025]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/35 via-transparent to-transparent" />
-                  </div>
-                </BrowserMockup>
-                <div className="absolute bottom-4 right-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-neutral-white/35 bg-neutral-900/80 text-neutral-white backdrop-blur-sm transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
-                  <ArrowUpRight className="h-5 w-5" />
-                </div>
-              </Link>
-            </TiltSurface>
-          </MotionBoundary>
-        </div>
-        <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              {String(index + 1).padStart(2, "0")} - {project.eyebrow}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-neutral-white px-3 py-1 text-xs font-bold text-text-secondary">
-              <span className="h-2 w-2 rounded-full bg-success" />
-              {project.status}
-            </span>
-          </div>
-          <h2 className="mt-5 max-w-2xl font-heading text-3xl font-black leading-tight text-text-primary sm:text-4xl lg:text-5xl">
-            {project.title}
-          </h2>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-text-secondary">
-            {project.description}
-          </p>
-          <div className="mt-7 rounded-[8px] border border-border bg-neutral-white p-5 shadow-sm sm:p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              Delivered value
-            </p>
-            <p className="mt-3 leading-relaxed text-text-secondary">
-              {project.outcome}
-            </p>
-          </div>
-          <div className="mt-7 grid gap-3 sm:grid-cols-3">
-            {project.deliverables.map((item) => (
-              <div
-                key={item}
-                className="flex gap-3 border-t border-border pt-3 text-sm leading-relaxed text-text-secondary"
-              >
-                <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-7 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-border bg-surface-alt px-3 py-1.5 font-mono text-xs text-text-secondary"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href={project.caseStudyUrl}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-surface-dark px-6 py-3 text-sm font-bold text-text-inverse transition-transform hover:-translate-y-0.5"
-            >
-              View Case Study
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            {project.demoUrl ? (
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] border border-primary/35 bg-primary-lightest px-6 py-3 text-sm font-bold text-primary-dark transition-colors hover:border-primary hover:bg-primary-light/25"
-              >
-                {project.demoLabel || "Interactive Demo"}
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-            ) : null}
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] border border-primary/35 bg-primary-lightest px-6 py-3 text-sm font-bold text-primary-dark transition-colors hover:border-primary hover:bg-primary-light/25"
-            >
-              {project.liveLabel}
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
-
 export default function ProjectsPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -336,18 +210,7 @@ export default function ProjectsPage() {
             </div>
           </div>
         </section>
-        <section
-          id="case-studies"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        >
-          {sortedProjects.map((project, index) => (
-            <ProjectCaseStudy
-              key={project.slug}
-              project={project}
-              index={index}
-            />
-          ))}
-        </section>
+        <ProjectPortfolioExplorer />
         <section className="bg-surface-alt py-16 sm:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 border-y border-border py-8 sm:grid-cols-3">

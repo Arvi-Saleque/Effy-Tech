@@ -1,4 +1,12 @@
-/* Effy Tech selected live project case studies. */
+/* Effy Tech selected live project case studies.
+   Keep portfolio labels, proof, routes, and filter taxonomy canonical here. */
+export const projectFilters = [
+  { id: "all", label: "All work" },
+  { id: "mobile-product", label: "Mobile product" },
+  { id: "operations-platform", label: "Operations platforms" },
+  { id: "institutional-web", label: "Institutional web" },
+];
+
 const projects = [
   {
     id: "11",
@@ -7,8 +15,13 @@ const projects = [
     slug: "IAM",
     eyebrow: "Mobile Product",
     status: "Live on Google Play",
+    portfolioCategory: "mobile-product",
     description:
       "An offline-first Islamic habit and worship companion for prayer, daily Amal, Dhikr, reminders, routines, progress insights, Qur'anic Dua, and home-screen widgets.",
+    problem:
+      "Daily worship tracking was fragmented across memory, notes, and single-purpose tools, making consistency difficult to review.",
+    solution:
+      "A bilingual, offline-first Android product that connects prayer, Kaza, Amal, Dhikr, routines, reminders, widgets, and progress insights.",
     outcome:
       "A complete consumer product delivered from product planning and mobile engineering to cloud sync, release, analytics, and ongoing iteration.",
     category: "Android App",
@@ -35,8 +48,13 @@ const projects = [
     slug: "EEMS",
     eyebrow: "Coaching Operations Platform",
     status: "Live Client Project",
+    portfolioCategory: "operations-platform",
     description:
       "A role-based coaching management platform connecting a public website, student self-service, teacher administration, academic delivery, reporting, payments, and content management.",
+    problem:
+      "Public communication, student service, teaching workflows, fees, reporting, and content updates were difficult to operate as disconnected processes.",
+    solution:
+      "One role-aware platform connecting the public website, student centre, teacher operations, academic workflows, reporting, payments, and CMS.",
     outcome:
       "The client received one live system for public communication and recurring coaching operations, with focused experiences for students and staff.",
     category: "Web Platform",
@@ -64,8 +82,13 @@ const projects = [
     slug: "DHA",
     eyebrow: "Academic Operations Platform",
     status: "Live Client Project",
+    portfolioCategory: "operations-platform",
     description:
       "A bilingual academic website and operations platform connecting public information, assignments, absence records, routines, results, teachers, documents, and staff-controlled administration.",
+    problem:
+      "Students, parents, and staff needed recurring academic information to remain current without relying on scattered pages or developer-led updates.",
+    solution:
+      "A bilingual public experience connected to staff-managed assignment, attendance, routine, document, teacher, news, gallery, and communication workflows.",
     outcome:
       "The institution received one connected system for its public presence and recurring academic workflows instead of scattered pages and manual processes.",
     category: "Web Platform",
@@ -91,8 +114,13 @@ const projects = [
     slug: "BUEK",
     eyebrow: "University Website & CMS",
     status: "Live Client Project",
+    portfolioCategory: "institutional-web",
     description:
       "A modern university website with a protected content-management system for academic information, news, events, galleries, media, contact content, and institutional pages.",
+    problem:
+      "University information and frequently updated content needed a credible public structure and a publishing workflow the internal team could operate.",
+    solution:
+      "A responsive institutional website backed by a protected custom CMS for pages, news, events, galleries, media, and global site content.",
     outcome:
       "BUEK gained a professional public website and an internal publishing workflow that lets its team manage recurring content without developer dependence.",
     category: "Institutional Website",

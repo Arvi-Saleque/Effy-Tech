@@ -83,6 +83,9 @@ test("legacy public routes permanently redirect to canonical routes", async () =
 test("Effy Edu case study and interactive demo are separate destinations", async () => {
   const projects = read("src/data/projects.js");
   const projectIndex = read("src/app/(website)/projects/page.js");
+  const projectExplorer = read(
+    "src/components/showcase/ProjectPortfolioExplorer.jsx",
+  );
   const { default: nextConfig } = await import("../next.config.mjs");
   const rewrites = await nextConfig.rewrites();
 
@@ -91,7 +94,7 @@ test("Effy Edu case study and interactive demo are separate destinations", async
     /caseStudyUrl: "\/projects\/effy-edu-management-system"/,
   );
   assert.match(projects, /demoUrl: "\/demos\/effy-edu-management-system"/);
-  assert.match(projectIndex, /target="_blank"/);
+  assert.match(`${projectIndex}\n${projectExplorer}`, /target="_blank"/);
   assert.ok(
     rewrites.some(
       (item) =>
