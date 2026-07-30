@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test:finance": "node --test tests/finance-*.test.mjs",
     "test:portfolio": "node --test tests/effy-edu-demo-*.test.mjs",
-    "test:routing": "node --test tests/public-routing-foundation.test.mjs"
+    "test:routing": "node --test tests/public-routing-foundation.test.mjs",
+    "test:services": "node --test tests/services-architecture.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

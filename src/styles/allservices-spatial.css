@@ -93,10 +93,7 @@
 }
 
 .effy-services-page .services-hero-asset img {
-  filter:
-    saturate(0.9)
-    contrast(1.02)
-    drop-shadow(0 28px 36px rgb(0 0 0 / 34%));
+  filter: saturate(0.9) contrast(1.02) drop-shadow(0 28px 36px rgb(0 0 0 / 34%));
 }
 
 .effy-services-page .services-delivery-panel {
@@ -220,7 +217,12 @@
   right: 4%;
   width: 280px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(170 145 88 / 52%), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(170 145 88 / 52%),
+    transparent
+  );
 }
 
 .effy-services-page .service-explorer-depth {
@@ -236,6 +238,38 @@
   border: 1px solid rgb(116 128 107 / 14%);
   border-radius: 8px;
   background: rgb(116 128 107 / 4%);
+}
+
+.effy-services-page .services-service-nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(116 128 107 / 45%) transparent;
+}
+
+.effy-services-page .services-service-nav::-webkit-scrollbar {
+  height: 5px;
+}
+
+.effy-services-page .services-service-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.effy-services-page .services-service-nav::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(116 128 107 / 42%);
+}
+
+.effy-services-page .services-service-tab {
+  scroll-snap-align: start;
+}
+
+.effy-services-page .services-service-tab:focus-visible,
+.effy-services-page .services-service-panel:focus-visible {
+  outline: 3px solid rgb(170 145 88 / 58%);
+  outline-offset: -3px;
+}
+
+.effy-services-page .services-scope-grid {
+  box-shadow: 0 1px 0 rgb(255 255 255 / 32%) inset;
 }
 
 .effy-services-page .service-group-automate .service-explorer-depth::before {
@@ -336,6 +370,11 @@
 
   .effy-services-page .service-explorer-depth::before {
     display: none;
+  }
+
+  .effy-services-page .services-service-nav {
+    scroll-padding-inline: 1.25rem;
+    scroll-snap-type: x proximity;
   }
 }
 

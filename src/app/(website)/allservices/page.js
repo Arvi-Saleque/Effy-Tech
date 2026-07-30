@@ -13,6 +13,7 @@ import {
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
 import ServiceExplorer from "@/components/showcase/ServiceExplorer";
+import { explorerServices } from "@/data/serviceExplorer";
 import {
   FloatingAsset,
   MotionBoundary,
@@ -97,7 +98,12 @@ const groups = [
     ],
     tone: "light",
   },
-];
+].map((group) => ({
+  ...group,
+  capabilityCount: explorerServices.filter(
+    (service) => service.group === group.groupId,
+  ).length,
+}));
 const principles = [
   {
     icon: Compass,
@@ -196,6 +202,9 @@ function OverviewCard({ group }) {
       <p className="mt-3 text-sm leading-relaxed text-text-secondary">
         {group.description}
       </p>
+      <span className="mt-5 inline-flex rounded-full border border-border bg-surface-alt px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-text-tertiary">
+        {group.capabilityCount} selectable capabilities
+      </span>
       <span className="mt-6 inline-flex items-center gap-2 text-sm font-black text-text-primary transition-colors group-hover:text-primary">
         Explore this group
         <ArrowRight className="h-4 w-4" />
@@ -208,6 +217,7 @@ function GroupSection({ group }) {
   return (
     <section
       id={group.id}
+      aria-labelledby={`${group.id}-title`}
       className={`service-group-section service-group-${group.id} scroll-mt-24 py-16 sm:py-20 lg:py-24 ${dark ? "bg-surface-dark text-text-inverse" : "bg-surface text-text-primary"}`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -219,10 +229,16 @@ function GroupSection({ group }) {
               {group.number} - {group.label}
             </p>
             <h2
+              id={`${group.id}-title`}
               className={`mt-4 font-heading text-3xl font-black leading-tight sm:text-5xl ${dark ? "text-neutral-100" : "text-text-primary"}`}
             >
               {group.title}
             </h2>
+            <p
+              className={`mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.16em] ${dark ? "text-neutral-500" : "text-text-tertiary"}`}
+            >
+              {group.capabilityCount} capabilities · select one below
+            </p>
           </div>
           <div>
             <p
@@ -246,7 +262,12 @@ function GroupSection({ group }) {
           </div>
         </div>
         <div className="service-explorer-depth">
-          <ServiceExplorer groupId={group.groupId} tone={group.tone} />
+          <ServiceExplorer
+            groupId={group.groupId}
+            groupLabel={group.label}
+            groupNumber={group.number}
+            tone={group.tone}
+          />
         </div>
       </div>
     </section>
