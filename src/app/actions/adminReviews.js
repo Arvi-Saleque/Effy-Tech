@@ -40,7 +40,11 @@ async function saveReviews(reviews) {
     const { join } = await import("path");
     const dir = join(process.cwd(), "data");
     await mkdir(dir, { recursive: true });
-    await writeFile(join(dir, "reviews-amal.json"), JSON.stringify(reviews, null, 2), "utf-8");
+    await writeFile(
+      join(dir, "reviews-amal.json"),
+      JSON.stringify(reviews, null, 2),
+      "utf-8",
+    );
   }
 }
 
@@ -76,7 +80,7 @@ export async function approveReview(secret, reviewId) {
 
     reviews[index].approved = true;
     await saveReviews(reviews);
-    revalidatePath("/projects/IAM");
+    revalidatePath("/projects/islamic-amal-tracker");
     return { success: true };
   } catch (err) {
     console.error("Failed to approve review:", err);
@@ -99,7 +103,7 @@ export async function unapproveReview(secret, reviewId) {
 
     reviews[index].approved = false;
     await saveReviews(reviews);
-    revalidatePath("/projects/IAM");
+    revalidatePath("/projects/islamic-amal-tracker");
     return { success: true };
   } catch (err) {
     console.error("Failed to unapprove review:", err);
@@ -122,7 +126,7 @@ export async function deleteReview(secret, reviewId) {
     }
 
     await saveReviews(filtered);
-    revalidatePath("/projects/IAM");
+    revalidatePath("/projects/islamic-amal-tracker");
     return { success: true };
   } catch (err) {
     console.error("Failed to delete review:", err);

@@ -33,7 +33,7 @@ export function DebouncedSearchInput({
     if (currentParam !== value && !debounceRef.current) {
       setValue(currentParam);
     }
-  }, [searchParams, paramName]);
+  }, [searchParams, paramName, value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

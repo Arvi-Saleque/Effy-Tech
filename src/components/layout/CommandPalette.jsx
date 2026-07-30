@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { HiArrowRight, HiOutlineSearch, HiX } from "react-icons/hi";
@@ -34,16 +35,25 @@ function buildResults(query, projects, services, pages) {
     id: `project-${project.id}`,
     title: project.title,
     description: project.description,
-    meta: [project.category, ...(project.tags || []).slice(0, 3)].filter(Boolean).join(" · "),
+    meta: [project.category, ...(project.tags || []).slice(0, 3)]
+      .filter(Boolean)
+      .join(" · "),
     href: project.caseStudyUrl || `/projects/${project.slug}`,
     type: "project",
-    keywords: [project.slug, project.clientName, ...(project.tags || [])].filter(Boolean),
+    keywords: [
+      project.slug,
+      project.clientName,
+      ...(project.tags || []),
+    ].filter(Boolean),
     score:
       scoreText(project.title, q, 5) +
       scoreText(project.slug, q, 4) +
       scoreText(project.category, q, 2) +
       scoreText(project.description, q, 1) +
-      (project.tags || []).reduce((total, tag) => total + scoreText(tag, q, 2), 0),
+      (project.tags || []).reduce(
+        (total, tag) => total + scoreText(tag, q, 2),
+        0,
+      ),
   }));
 
   const serviceItems = services.map((service) => ({
@@ -51,14 +61,21 @@ function buildResults(query, projects, services, pages) {
     title: service.shortTitle || service.title,
     description: service.description,
     meta: "Effy Tech capability",
-    href: service.href || `/#services`,
+    href: service.href || "/services",
     type: "service",
-    keywords: [service.title, service.shortTitle, ...(service.examples || [])].filter(Boolean),
+    keywords: [
+      service.title,
+      service.shortTitle,
+      ...(service.examples || []),
+    ].filter(Boolean),
     score:
       scoreText(service.title, q, 5) +
       scoreText(service.shortTitle, q, 4) +
       scoreText(service.description, q, 2) +
-      (service.examples || []).reduce((total, item) => total + scoreText(item, q, 1), 0),
+      (service.examples || []).reduce(
+        (total, item) => total + scoreText(item, q, 1),
+        0,
+      ),
   }));
 
   const pageItems = pages.map((page) => ({
@@ -72,20 +89,34 @@ function buildResults(query, projects, services, pages) {
     score:
       scoreText(page.label, q, 5) +
       scoreText(page.description, q, 2) +
-      (page.keywords || []).reduce((total, item) => total + scoreText(item, q, 2), 0),
+      (page.keywords || []).reduce(
+        (total, item) => total + scoreText(item, q, 2),
+        0,
+      ),
   }));
 
   return [...projectItems, ...serviceItems, ...pageItems]
     .map((item) => ({
       ...item,
-      score: item.score + item.keywords.reduce((total, keyword) => total + scoreText(keyword, q, 1), 0),
+      score:
+        item.score +
+        item.keywords.reduce(
+          (total, keyword) => total + scoreText(keyword, q, 1),
+          0,
+        ),
     }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 10);
 }
 
-export default function CommandPalette({ isOpen, onClose, projects = [], services = [], pages = [] }) {
+export default function CommandPalette({
+  isOpen,
+  onClose,
+  projects = [],
+  services = [],
+  pages = [],
+}) {
   const inputRef = useRef(null);
   const [query, setQuery] = useState("");
   const reducedMotion = Boolean(useReducedMotion());
@@ -133,7 +164,9 @@ export default function CommandPalette({ isOpen, onClose, projects = [], service
             exit={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
           >
             <div className="w-full max-w-2xl overflow-hidden rounded-[24px] border border-[#20261f]/15 bg-[#fbfaf4] shadow-[0_32px_90px_rgba(19,25,19,.28)]">
-              <h2 id="effy-search-title" className="sr-only">Search Effy Tech</h2>
+              <h2 id="effy-search-title" className="sr-only">
+                Search Effy Tech
+              </h2>
               <div className="flex items-center gap-3 px-5 py-4 sm:px-6 sm:py-5">
                 <HiOutlineSearch className="h-5 w-5 shrink-0 text-[#687062]" />
                 <input
@@ -146,43 +179,74 @@ export default function CommandPalette({ isOpen, onClose, projects = [], service
                   className="min-w-0 flex-1 bg-transparent text-base font-medium text-[#20261f] outline-none placeholder:text-[#7b8275] sm:text-lg"
                 />
                 {query && (
-                  <button type="button" onClick={() => setQuery("")} className="text-[#7b8275] hover:text-[#20261f]" aria-label="Clear search">
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className="text-[#7b8275] hover:text-[#20261f]"
+                    aria-label="Clear search"
+                  >
                     <HiX className="h-4 w-4" />
                   </button>
                 )}
-                <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full border border-[#20261f]/10 text-[#687062] hover:bg-[#20261f] hover:text-[#f4f2e8]" aria-label="Close search">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="grid h-9 w-9 place-items-center rounded-full border border-[#20261f]/10 text-[#687062] hover:bg-[#20261f] hover:text-[#f4f2e8]"
+                  aria-label="Close search"
+                >
                   <HiX className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="max-h-[58vh] overflow-y-auto border-t border-[#20261f]/10 p-2 sm:p-3" aria-live="polite">
+              <div
+                className="max-h-[58vh] overflow-y-auto border-t border-[#20261f]/10 p-2 sm:p-3"
+                aria-live="polite"
+              >
                 {!hasQuery && (
                   <div className="px-5 py-8 text-center">
-                    <p className="text-sm font-medium text-[#465043]">Search by project name, service, technology, or page.</p>
-                    <p className="mt-2 text-xs text-[#7b8275]">Try “mobile app”, “IAM”, “automation”, “process”, or “team”.</p>
+                    <p className="text-sm font-medium text-[#465043]">
+                      Search by project name, service, technology, or page.
+                    </p>
+                    <p className="mt-2 text-xs text-[#7b8275]">
+                      Try “mobile app”, “IAM”, “automation”, “process”, or
+                      “team”.
+                    </p>
                   </div>
                 )}
 
                 {hasQuery && results.length === 0 && (
                   <div className="px-5 py-8 text-center">
-                    <p className="text-sm font-medium text-[#465043]">No matching project, service, or page found.</p>
+                    <p className="text-sm font-medium text-[#465043]">
+                      No matching project, service, or page found.
+                    </p>
                   </div>
                 )}
 
                 {results.map((item) => (
-                  <a key={item.id} href={item.href} onClick={onClose} className="group grid grid-cols-[1fr_auto] gap-4 rounded-2xl px-4 py-3.5 transition hover:bg-[#f0eee4] sm:px-5">
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={onClose}
+                    className="group grid grid-cols-[1fr_auto] gap-4 rounded-2xl px-4 py-3.5 transition hover:bg-[#f0eee4] sm:px-5"
+                  >
                     <div className="min-w-0">
                       <div className="mb-1.5 flex items-center gap-2">
                         <span className="rounded-full border border-[#20261f]/12 bg-white/70 px-2 py-1 text-[9px] font-extrabold tracking-[.14em] text-[#687062]">
                           {TYPE_LABELS[item.type] || "PAGE"}
                         </span>
-                        <span className="truncate text-xs text-[#7b8275]">{item.meta}</span>
+                        <span className="truncate text-xs text-[#7b8275]">
+                          {item.meta}
+                        </span>
                       </div>
-                      <p className="truncate text-sm font-extrabold text-[#20261f] sm:text-base">{item.title}</p>
-                      <p className="mt-1 line-clamp-1 text-xs leading-5 text-[#5d655a] sm:text-sm">{item.description}</p>
+                      <p className="truncate text-sm font-extrabold text-[#20261f] sm:text-base">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 line-clamp-1 text-xs leading-5 text-[#5d655a] sm:text-sm">
+                        {item.description}
+                      </p>
                     </div>
                     <HiArrowRight className="mt-6 h-4 w-4 text-[#7b8275] transition group-hover:translate-x-1 group-hover:text-[#20261f]" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

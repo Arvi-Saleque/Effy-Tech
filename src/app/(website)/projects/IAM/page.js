@@ -1,8 +1,9 @@
 /* ============================================================
-   /projects/IAM — Islamic Amal Tracker promotional case study
+   /projects/islamic-amal-tracker — Islamic Amal Tracker case study
    ============================================================ */
 
 import AmalTrackerShowcase from "@/components/showcase/AmalTrackerShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import amalTracker from "@/data/amalTracker";
 import Footer from "@/components/layout/Footer";
 import "@/styles/spatial-components.css";
@@ -22,7 +23,7 @@ export const metadata = {
     "Bangla Islamic app",
   ],
   alternates: {
-    canonical: "/projects/IAM",
+    canonical: "/projects/islamic-amal-tracker",
   },
   openGraph: {
     title: "Islamic Amal Tracker — Remember More. Miss Less. Grow Daily.",
@@ -52,7 +53,7 @@ const softwareApplicationJsonLd = {
   applicationCategory: "LifestyleApplication",
   operatingSystem: "Android",
   description: amalTracker.description,
-  url: "https://www.effytechbd.com/projects/IAM",
+  url: "https://www.effytechbd.com/projects/islamic-amal-tracker",
   downloadUrl: amalTracker.playStoreUrl,
   softwareVersion: "2.0",
   aggregateRating: {
@@ -84,10 +85,14 @@ export default function AmalTrackerPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareApplicationJsonLd).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(softwareApplicationJsonLd).replace(
+            /</g,
+            "\\u003c",
+          ),
         }}
       />
       <AmalTrackerShowcase data={amalTracker} />
+      <CaseStudyFooterNav currentSlug="IAM" />
       <Footer />
     </>
   );

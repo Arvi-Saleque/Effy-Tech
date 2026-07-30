@@ -1,5 +1,4 @@
 // @ts-nocheck -- Isolated generalized demo uses a dynamic local mock adapter.
-/* eslint-disable @next/next/no-img-element */
 import {
   Award,
   BookOpenCheck,

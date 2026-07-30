@@ -1,10 +1,12 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import buek from "@/data/buek";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/projects/BUEK";
+const canonicalUrl =
+  "https://www.effytechbd.com/projects/bangladesh-university-of-excellence-khulna";
 
 export const metadata = {
   title: "BUEK University Website & Custom CMS Case Study | Effy Tech",
@@ -64,6 +66,7 @@ export default function BUEKPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <DHAShowcase data={buek} />
+      <CaseStudyFooterNav currentSlug="BUEK" />
       <Footer />
     </>
   );

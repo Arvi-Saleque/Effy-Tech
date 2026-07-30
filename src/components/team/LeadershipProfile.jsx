@@ -8,7 +8,6 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import {
-  HiOutlineArrowLeft,
   HiOutlineArrowRight,
   HiOutlineBriefcase,
   HiOutlineCheckCircle,
@@ -18,8 +17,14 @@ import {
   HiOutlineMail,
   HiOutlineSparkles,
 } from "react-icons/hi";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
 import { MotionBoundary, TiltSurface } from "@/components/visuals";
+import {
+  teamProfileOrder,
+  teamProfileRoutes,
+  teamProfiles,
+} from "@/data/teamProfiles";
 
 const socialIcons = {
   linkedin: FaLinkedinIn,
@@ -37,9 +42,18 @@ const whatsappUrl =
 
 const profileSequence = {
   salek: "01",
-  adnan: "02",
-  saif: "03",
+  saif: "02",
+  adnan: "03",
 };
+
+const profileSections = [
+  { label: "Role", href: "#role" },
+  { label: "Client work", href: "#client-work" },
+  { label: "Expertise", href: "#expertise" },
+  { label: "Experience", href: "#experience" },
+  { label: "Technical work", href: "#technical-work" },
+  { label: "Education", href: "#education" },
+];
 
 function SectionHeading({ eyebrow, title, description, dark = false }) {
   return (
@@ -183,7 +197,9 @@ function ExpertiseCard({ item, index }) {
       <h3 className="mt-7 font-heading text-2xl font-bold text-[#fbfaf4]">
         {item.title}
       </h3>
-      <p className="mt-3 text-sm leading-7 text-[#b7beb3]">{item.description}</p>
+      <p className="mt-3 text-sm leading-7 text-[#b7beb3]">
+        {item.description}
+      </p>
       <div className="mt-5 flex flex-wrap gap-2">
         {item.items.map((skill) => (
           <span
@@ -241,6 +257,92 @@ function TechnicalProjectCard({ project }) {
   );
 }
 
+function ProfileContextNav({ profile }) {
+  return (
+    <section className="profile-context-bar" aria-label="Profile navigation">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div>
+          <p>Viewing leadership profile</p>
+          <strong>
+            {profileSequence[profile.slug]} — {profile.name}
+          </strong>
+        </div>
+        <nav aria-label={`${profile.name} profile sections`}>
+          {profileSections.map((section) => (
+            <a key={section.href} href={section.href}>
+              {section.label}
+            </a>
+          ))}
+        </nav>
+        <Link href="/team">
+          All leaders
+          <HiOutlineArrowRight aria-hidden="true" className="h-4 w-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function WorkingPrincipleCard({ principle, index }) {
+  return (
+    <article className="profile-working-principle">
+      <span>{String(index + 1).padStart(2, "0")}</span>
+      <div>
+        <h3>{principle.title}</h3>
+        <p>{principle.description}</p>
+      </div>
+    </article>
+  );
+}
+
+function LeadershipPeers({ currentSlug }) {
+  const peers = teamProfileOrder
+    .filter((slug) => slug !== currentSlug)
+    .map((slug) => teamProfiles[slug]);
+
+  return (
+    <section className="profile-peer-section" aria-labelledby="peer-title">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="profile-peer-heading">
+          <div>
+            <p className="corporate-eyebrow">CONNECTED LEADERSHIP</p>
+            <h2 id="peer-title">See how the rest of the team contributes.</h2>
+          </div>
+          <Link href="/team">
+            View team overview
+            <HiOutlineArrowRight aria-hidden="true" className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="profile-peer-grid">
+          {peers.map((peer) => (
+            <Link key={peer.slug} href={teamProfileRoutes[peer.slug]}>
+              <div className="profile-peer-image">
+                <Image
+                  src={peer.portrait}
+                  alt=""
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <small>{peer.role}</small>
+                <h3>{peer.name}</h3>
+                <p>{peer.discipline}</p>
+              </div>
+              <HiOutlineArrowRight
+                aria-hidden="true"
+                className="h-5 w-5 shrink-0"
+              />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LeadershipProfile({ profile }) {
   const structuredData = {
     "@context": "https://schema.org",
@@ -248,7 +350,7 @@ export default function LeadershipProfile({ profile }) {
     name: profile.name,
     jobTitle: profile.role,
     description: profile.intro,
-    url: `https://www.effytechbd.com/${profile.slug}`,
+    url: `https://www.effytechbd.com${teamProfileRoutes[profile.slug]}`,
     image: `https://www.effytechbd.com${profile.portrait}`,
     email: profile.email,
     worksFor: {
@@ -262,7 +364,9 @@ export default function LeadershipProfile({ profile }) {
   };
 
   return (
-    <main className={`effy-public-page effy-team-profile effy-team-profile--${profile.slug} overflow-hidden bg-[#fbfaf4] text-[#20261f]`}>
+    <main
+      className={`effy-public-page effy-team-profile effy-team-profile--${profile.slug} overflow-hidden bg-[#fbfaf4] text-[#20261f]`}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -284,13 +388,14 @@ export default function LeadershipProfile({ profile }) {
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div className="profile-hero-copy">
-            <Link
-              href="/#team"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#d6c18e] transition-colors hover:text-[#f0dfb3]"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back to Effy Tech team
-            </Link>
+            <Breadcrumb
+              dark
+              items={[
+                { label: "Company", href: "/about" },
+                { label: "Team", href: "/team" },
+              ]}
+              current={profile.name}
+            />
 
             <p className="mt-10 text-xs font-bold uppercase tracking-[0.24em] text-[#d0b777]">
               Effy Tech leadership
@@ -310,7 +415,7 @@ export default function LeadershipProfile({ profile }) {
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
-                href="/#contact"
+                href="/contact"
                 className="inline-flex items-center gap-2 rounded-full bg-[#c7ad70] px-6 py-3 text-sm font-bold text-[#20261f] transition-all hover:bg-[#dcc58d]"
               >
                 Start a project with Effy Tech
@@ -347,7 +452,11 @@ export default function LeadershipProfile({ profile }) {
 
           <div className="profile-portrait-column relative mx-auto w-full max-w-[540px] lg:mx-0 lg:ml-auto">
             <MotionBoundary className="profile-portrait-motion">
-              <TiltSurface className="profile-portrait-tilt" maxTilt={1.9} perspective={1300}>
+              <TiltSurface
+                className="profile-portrait-tilt"
+                maxTilt={1.9}
+                perspective={1300}
+              >
                 <div className="profile-portrait-stage">
                   <div className="profile-portrait-grid" aria-hidden="true" />
                   <div className="profile-portrait-frame relative overflow-hidden rounded-[2rem] border border-white/12 bg-[#252d24] p-2 shadow-[0_30px_90px_rgba(0,0,0,0.33)]">
@@ -377,7 +486,12 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-leadership bg-[#fbfaf4] py-20 sm:py-24">
+      <ProfileContextNav profile={profile} />
+
+      <section
+        id="role"
+        className="profile-leadership scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <SectionHeading
             eyebrow={profile.leadership.eyebrow}
@@ -391,7 +505,10 @@ export default function LeadershipProfile({ profile }) {
             </p>
             <ul className="mt-6 space-y-5">
               {profile.leadership.responsibilities.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-7 text-[#4f574e] sm:text-base">
+                <li
+                  key={item}
+                  className="flex gap-3 text-sm leading-7 text-[#4f574e] sm:text-base"
+                >
                   <HiOutlineCheckCircle
                     className="mt-1 h-5 w-5 shrink-0 text-[#9b7d3d]"
                     aria-hidden="true"
@@ -404,7 +521,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section id="client-work" className="profile-client-work bg-[#f0eee4] py-20 sm:py-24">
+      <section
+        id="client-work"
+        className="profile-client-work scroll-mt-24 bg-[#f0eee4] py-20 sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Selected client work"
@@ -419,7 +539,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-expertise bg-[#202720] py-20 text-[#fbfaf4] sm:py-24">
+      <section
+        id="expertise"
+        className="profile-expertise scroll-mt-24 bg-[#202720] py-20 text-[#fbfaf4] sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Core expertise"
@@ -435,7 +558,52 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-experience bg-[#fbfaf4] py-20 sm:py-24">
+      <section className="profile-principles-services bg-[#fbfaf4] py-20 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+          <div>
+            <SectionHeading
+              eyebrow="Working principles"
+              title="How this role approaches engineering decisions"
+              description="These principles translate the role's stated responsibilities into a practical standard for scope, implementation, review, and delivery."
+            />
+            <div className="profile-working-principles">
+              {profile.workingPrinciples.map((principle, index) => (
+                <WorkingPrincipleCard
+                  key={principle.title}
+                  principle={principle}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+
+          <aside className="profile-service-map">
+            <p className="corporate-eyebrow">RELATED SERVICES</p>
+            <h2>Where this expertise enters an Effy Tech engagement</h2>
+            <p>
+              Follow the relevant service group to see the selectable
+              capabilities, expected deliverables, and related project proof.
+            </p>
+            <div>
+              {profile.serviceLinks.map((service) => (
+                <Link key={service.href} href={service.href}>
+                  <span>{service.label}</span>
+                  <p>{service.description}</p>
+                  <HiOutlineArrowRight
+                    aria-hidden="true"
+                    className="h-5 w-5 shrink-0"
+                  />
+                </Link>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        id="experience"
+        className="profile-experience scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <SectionHeading
@@ -466,11 +634,17 @@ export default function LeadershipProfile({ profile }) {
           </div>
 
           <div>
-            <SectionHeading eyebrow="Selected proof" title="Highlights and recognition" />
+            <SectionHeading
+              eyebrow="Selected proof"
+              title="Highlights and recognition"
+            />
             <div className="profile-highlight-card mt-10 rounded-[1.6rem] border border-[#d8d3c4] bg-[#f5f3ea] p-6 sm:p-8">
               <ul className="space-y-4">
                 {profile.highlights.map((highlight) => (
-                  <li key={highlight} className="flex gap-3 text-sm leading-7 text-[#50584f]">
+                  <li
+                    key={highlight}
+                    className="flex gap-3 text-sm leading-7 text-[#50584f]"
+                  >
                     <HiOutlineSparkles
                       className="mt-1 h-5 w-5 shrink-0 text-[#9a7c3c]"
                       aria-hidden="true"
@@ -484,7 +658,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-technical-work bg-[#efede3] py-20 sm:py-24">
+      <section
+        id="technical-work"
+        className="profile-technical-work scroll-mt-24 bg-[#efede3] py-20 sm:py-24"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Technical work"
@@ -499,7 +676,10 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
-      <section className="profile-education bg-[#fbfaf4] py-20 sm:py-24">
+      <section
+        id="education"
+        className="profile-education scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
+      >
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
           <div className="profile-education-card rounded-[1.6rem] border border-[#d8d3c4] bg-[#f4f2e9] p-7 sm:p-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
@@ -521,12 +701,16 @@ export default function LeadershipProfile({ profile }) {
 
           <div className="profile-cv-card flex flex-col justify-between rounded-[1.6rem] border border-[#d8d3c4] bg-white/65 p-7 sm:p-9">
             <div>
-              <HiOutlineBriefcase className="h-8 w-8 text-[#95783b]" aria-hidden="true" />
+              <HiOutlineBriefcase
+                className="h-8 w-8 text-[#95783b]"
+                aria-hidden="true"
+              />
               <h2 className="mt-5 font-heading text-3xl font-bold text-[#20261f]">
                 Detailed professional record
               </h2>
               <p className="mt-4 text-sm leading-7 text-[#5f675e] sm:text-base">
-                The CV contains the complete academic, technical, project, and professional history in a structured format.
+                The CV contains the complete academic, technical, project, and
+                professional history in a structured format.
               </p>
             </div>
             <a
@@ -541,6 +725,8 @@ export default function LeadershipProfile({ profile }) {
         </div>
       </section>
 
+      <LeadershipPeers currentSlug={profile.slug} />
+
       <section className="profile-final-cta relative overflow-hidden bg-[#1c231c] py-20 text-center text-[#fbfaf4] sm:py-24">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-[#b99f62]/12 blur-[100px]" />
@@ -553,7 +739,9 @@ export default function LeadershipProfile({ profile }) {
             Need a serious website, application, or operational software system?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#bdc4b9] sm:text-lg">
-            Discuss the requirement with the Effy Tech team. We will help define the scope, architecture, delivery plan, and the right path to production.
+            Discuss the requirement with the Effy Tech team. We will help define
+            the scope, architecture, delivery plan, and the right path to
+            production.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <a
@@ -566,7 +754,7 @@ export default function LeadershipProfile({ profile }) {
               Discuss a project
             </a>
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-[#e1e5de] transition-colors hover:border-[#d0b777]/55 hover:text-[#f0dfb3]"
             >
               Send a project brief

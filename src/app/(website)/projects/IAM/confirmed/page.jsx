@@ -65,12 +65,18 @@ export default async function EmailConfirmedPage({ searchParams }) {
   const isSuccess = state.tone === "success";
 
   return (
-    <main className={`${styles.page} iam-confirmed-page`} data-tone={state.tone}>
+    <main
+      className={`${styles.page} iam-confirmed-page`}
+      data-tone={state.tone}
+    >
       <div className={styles.ambientOne} aria-hidden="true" />
       <div className={styles.ambientTwo} aria-hidden="true" />
 
       <section className={styles.shell} aria-live="polite">
-        <Link href="/projects/IAM" className={styles.brandLink}>
+        <Link
+          href="/projects/islamic-amal-tracker"
+          className={styles.brandLink}
+        >
           <Image
             src="/images/amal/logo.png"
             alt="Islamic Amal Tracker logo"
@@ -112,105 +118,112 @@ export default async function EmailConfirmedPage({ searchParams }) {
                   {isSuccess ? <FaCircleCheck /> : <FaCircleExclamation />}
                 </div>
 
-            <p className={styles.eyebrow}>{state.eyebrow}</p>
-            <h1>{state.title}</h1>
-            <p className={styles.description}>{state.description}</p>
-            <p className={styles.bangla}>{state.bangla}</p>
+                <p className={styles.eyebrow}>{state.eyebrow}</p>
+                <h1>{state.title}</h1>
+                <p className={styles.description}>{state.description}</p>
+                <p className={styles.bangla}>{state.bangla}</p>
 
-            <div className={styles.actions}>
-              {isSuccess ? (
-                <>
-                  <a
-                    href={PLAY_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.primaryAction}
-                  >
-                    Open on Google Play
-                    <FaArrowUpRightFromSquare aria-hidden="true" />
-                  </a>
-                  <Link href="/projects/IAM" className={styles.secondaryAction}>
-                    View the app page
-                    <FaArrowRight aria-hidden="true" />
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <a
-                    href={SUPPORT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.primaryAction}
-                  >
-                    Contact WhatsApp support
-                    <FaWhatsapp aria-hidden="true" />
-                  </a>
-                  <a
-                    href={PLAY_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.secondaryAction}
-                  >
-                    Open Google Play
-                    <FaArrowUpRightFromSquare aria-hidden="true" />
-                  </a>
-                </>
-              )}
-            </div>
+                <div className={styles.actions}>
+                  {isSuccess ? (
+                    <>
+                      <a
+                        href={PLAY_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.primaryAction}
+                      >
+                        Open on Google Play
+                        <FaArrowUpRightFromSquare aria-hidden="true" />
+                      </a>
+                      <Link
+                        href="/projects/islamic-amal-tracker"
+                        className={styles.secondaryAction}
+                      >
+                        View the app page
+                        <FaArrowRight aria-hidden="true" />
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href={SUPPORT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.primaryAction}
+                      >
+                        Contact WhatsApp support
+                        <FaWhatsapp aria-hidden="true" />
+                      </a>
+                      <a
+                        href={PLAY_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.secondaryAction}
+                      >
+                        Open Google Play
+                        <FaArrowUpRightFromSquare aria-hidden="true" />
+                      </a>
+                    </>
+                  )}
+                </div>
 
-            <p className={styles.safetyNote}>
-              If you did not request this email, no action is required.
-            </p>
+                <p className={styles.safetyNote}>
+                  If you did not request this email, no action is required.
+                </p>
               </article>
 
               <aside className={styles.contextPanel}>
-            <p className={styles.panelKicker}>WHAT HAPPENS NEXT</p>
-            <h2>{isSuccess ? "Continue inside the app" : "Request a fresh link"}</h2>
-            <p>
-              {isSuccess
-                ? "Email verification is complete. Your prayer, Amal, Dhikr and routine tracking continue inside Islamic Amal Tracker."
-                : "Verification emails are generated from the app. Open the account screen, request a new email and use the newest link."}
-            </p>
+                <p className={styles.panelKicker}>WHAT HAPPENS NEXT</p>
+                <h2>
+                  {isSuccess
+                    ? "Continue inside the app"
+                    : "Request a fresh link"}
+                </h2>
+                <p>
+                  {isSuccess
+                    ? "Email verification is complete. Your prayer, Amal, Dhikr and routine tracking continue inside Islamic Amal Tracker."
+                    : "Verification emails are generated from the app. Open the account screen, request a new email and use the newest link."}
+                </p>
 
-            <div className={styles.steps}>
-              <div className={styles.step}>
-                <span>
-                  <FaMobileScreenButton aria-hidden="true" />
-                </span>
-                <div>
-                  <strong>Return to the app</strong>
-                  <p>Use the same verified email address.</p>
+                <div className={styles.steps}>
+                  <div className={styles.step}>
+                    <span>
+                      <FaMobileScreenButton aria-hidden="true" />
+                    </span>
+                    <div>
+                      <strong>Return to the app</strong>
+                      <p>Use the same verified email address.</p>
+                    </div>
+                  </div>
+                  <div className={styles.step}>
+                    <span>
+                      <FaShieldHalved aria-hidden="true" />
+                    </span>
+                    <div>
+                      <strong>Private by design</strong>
+                      <p>Your account and sync access remain protected.</p>
+                    </div>
+                  </div>
+                  <div className={styles.step}>
+                    <span>
+                      <FaCloudArrowUp aria-hidden="true" />
+                    </span>
+                    <div>
+                      <strong>Optional secure sync</strong>
+                      <p>Offline-first tracking remains available.</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.step}>
-                <span>
-                  <FaShieldHalved aria-hidden="true" />
-                </span>
-                <div>
-                  <strong>Private by design</strong>
-                  <p>Your account and sync access remain protected.</p>
-                </div>
-              </div>
-              <div className={styles.step}>
-                <span>
-                  <FaCloudArrowUp aria-hidden="true" />
-                </span>
-                <div>
-                  <strong>Optional secure sync</strong>
-                  <p>Offline-first tracking remains available.</p>
-                </div>
-              </div>
-            </div>
 
-            <a
-              href={SUPPORT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.supportLink}
-            >
-              Need help? Message Effy Tech support
-              <FaArrowUpRightFromSquare aria-hidden="true" />
-            </a>
+                <a
+                  href={SUPPORT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.supportLink}
+                >
+                  Need help? Message Effy Tech support
+                  <FaArrowUpRightFromSquare aria-hidden="true" />
+                </a>
               </aside>
             </div>
           </TiltSurface>

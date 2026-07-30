@@ -1,12 +1,13 @@
 const effyEduManagementSystem = {
   projectKey: "EEMS",
-  caseStudyPath: "/projects/EEMS",
+  caseStudyPath: "/projects/effy-edu-management-system",
   locale: "en",
   name: "Effy Edu Management System",
   shortName: "Effy Edu",
   category: "Coaching Website & Operations Platform",
   status: "Live",
   liveUrl: "https://www.shifatstales.com",
+  demoUrl: "/demos/effy-edu-management-system",
   browserUrl: "shifatstales.com",
   heroImage: "/images/effy-edu-management-system/case-study/hero.webp",
   heroImageAlt:

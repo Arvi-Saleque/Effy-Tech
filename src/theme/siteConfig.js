@@ -14,16 +14,26 @@ const siteConfig = {
 
   /* ── Navigation Links ────────────────────────────────────── */
   navLinks: [
-    { label: "Services", href: "/#services" },
-    { label: "Projects", href: "/#work" },
-    { label: "Process", href: "/#process" },
-    { label: "About", href: "/#about" },
-    { label: "Contact", href: "/#contact" },
+    { label: "Services", href: "/services" },
+    { label: "Projects", href: "/projects" },
+    { label: "Process", href: "/process" },
+    {
+      label: "Company",
+      href: "/about",
+      children: [
+        { label: "About Effy Tech", href: "/about" },
+        { label: "Leadership & Team", href: "/team" },
+      ],
+    },
+    { label: "Contact", href: "/contact" },
   ],
 
   /* ── Social Media ────────────────────────────────────────── */
   socials: [
-    { platform: "facebook", url: "https://www.facebook.com/profile.php?id=61588615151448" },
+    {
+      platform: "facebook",
+      url: "https://www.facebook.com/profile.php?id=61588615151448",
+    },
     { platform: "linkedin", url: "https://www.linkedin.com/company/effy-tech" },
     { platform: "instagram", url: "https://www.instagram.com/effy__tech/" },
   ],
@@ -464,7 +474,7 @@ const siteConfig = {
       bio: "Leads Effy Tech's product vision, client strategy, and company direction.",
       photo: "/images/profiles/salek.webp",
       photoPosition: "82% center",
-      detailsUrl: "/salek",
+      detailsUrl: "/team/salek-bin-hossain",
       socials: [
         {
           platform: "facebook",
@@ -484,7 +494,7 @@ const siteConfig = {
       initials: "AW",
       bio: "Builds full-stack systems, developer tools, and scalable product features across modern web and backend stacks.",
       photo: "/images/profiles/adnan.webp",
-      detailsUrl: "/adnan",
+      detailsUrl: "/team/adnan-bin-wahid",
       socials: [
         { platform: "facebook", url: "https://www.facebook.com/adnan08072/" },
         { platform: "github", url: "https://github.com/adnan-bin-wahid" },
@@ -501,7 +511,7 @@ const siteConfig = {
       initials: "AS",
       bio: "Builds mobile, web, IoT, and product-focused software while guiding practical engineering execution.",
       photo: "/images/profiles/saif.webp",
-      detailsUrl: "/saif",
+      detailsUrl: "/team/abdullah-al-saif",
       socials: [
         {
           platform: "facebook",
@@ -523,28 +533,28 @@ const siteConfig = {
       {
         title: "Company",
         links: [
-          { label: "About", href: "/#about" },
+          { label: "About", href: "/about" },
           { label: "Projects", href: "/projects" },
-          { label: "Team", href: "/#team" },
-          { label: "Contact", href: "/#contact" },
+          { label: "Team", href: "/team" },
+          { label: "Contact", href: "/contact" },
         ],
       },
       {
         title: "Services",
         links: [
-          { label: "Main Services", href: "/#services" },
-          { label: "Build Services", href: "/allservices#build" },
-          { label: "Automation Services", href: "/allservices#automate" },
-          { label: "Growth Services", href: "/allservices#grow" },
+          { label: "Main Services", href: "/services" },
+          { label: "Build Services", href: "/services#build" },
+          { label: "Automation Services", href: "/services#automate" },
+          { label: "Growth Services", href: "/services#grow" },
         ],
       },
       {
         title: "Explore",
         links: [
-          { label: "Services Overview", href: "/quickservices" },
-          { label: "All Services", href: "/allservices" },
+          { label: "Services Overview", href: "/services" },
+          { label: "All Services", href: "/services" },
           { label: "Project Showcase", href: "/projects" },
-          { label: "Start a Project", href: "/#contact" },
+          { label: "Start a Project", href: "/contact" },
         ],
       },
     ],

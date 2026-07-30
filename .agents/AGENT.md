@@ -1,5 +1,15 @@
 # Effy Tech delivery log
 
+## 2026-07-29 — Public routing and navigation foundation
+
+- Added canonical Services, Projects, Process, About, Team, Contact, case-study, and leadership-profile routes.
+- Replaced homepage-section navigation with a shared route-based navbar and footer, including active states, a Company dropdown, responsive mobile navigation, and internal-page breadcrumbs.
+- Added permanent redirects for legacy service, project, and team routes.
+- Separated the Effy Edu case study from its interactive demo and connected leadership cards to canonical profiles.
+- Added public-routing regression tests and canonical sitemap/metadata updates.
+- Verified: 6/6 routing tests, 12/12 portfolio tests, 14/14 Finance tests, ESLint 0 errors, Next.js production build passed, and runtime routes/redirects passed.
+- No database migration is required for this delivery.
+
 ## 2026-07-18 — EffyOps Finance Management V1
 
 - Added admin-only Finance navigation and 14 Finance routes.

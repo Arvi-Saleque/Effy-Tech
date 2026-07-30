@@ -1,0 +1,860 @@
+/* Step 05 — isolated Team and leadership-profile credibility architecture. */
+
+.team-leadership-section {
+  background:
+    radial-gradient(circle at 88% 10%, rgb(170 145 88 / 8%), transparent 23%),
+    #fbfaf4;
+}
+
+.team-leadership-guidance {
+  max-width: 390px;
+  color: #687066;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.leadership-roster {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid rgb(32 38 31 / 14%);
+  border-radius: 12px;
+  background: #f1efe5;
+  box-shadow: 0 26px 72px rgb(32 38 31 / 9%);
+  grid-template-columns: minmax(230px, 0.29fr) minmax(0, 1fr);
+}
+
+.leadership-roster-tabs {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgb(32 38 31 / 13%);
+  background: #e9e6da;
+}
+
+.leadership-roster-tab {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  border-bottom: 1px solid rgb(32 38 31 / 11%);
+  color: #5d655c;
+  text-align: left;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.leadership-roster-tab:last-child {
+  border-bottom: 0;
+}
+
+.leadership-roster-tab:hover {
+  color: #20261f;
+  background: rgb(255 255 255 / 46%);
+}
+
+.leadership-roster-tab[aria-selected="true"] {
+  color: #fbfaf4;
+  background: #20261f;
+}
+
+.leadership-roster-tab:focus-visible {
+  z-index: 2;
+  outline: 3px solid #d2bd86;
+  outline-offset: -3px;
+}
+
+.leadership-roster-number {
+  color: #8f7335;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.leadership-roster-tab[aria-selected="true"] .leadership-roster-number {
+  color: #d2bd86;
+}
+
+.leadership-roster-tab-copy {
+  min-width: 0;
+}
+
+.leadership-roster-tab-copy strong,
+.leadership-roster-tab-copy small {
+  display: block;
+}
+
+.leadership-roster-tab-copy strong {
+  overflow: hidden;
+  color: inherit;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 16px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leadership-roster-tab-copy small {
+  margin-top: 5px;
+  overflow: hidden;
+  color: #777f75;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.leadership-roster-tab[aria-selected="true"] .leadership-roster-tab-copy small {
+  color: #b9c0b5;
+}
+
+.leadership-roster-panel {
+  display: grid;
+  min-width: 0;
+  background: #fbfaf4;
+  animation: leadership-panel-enter 260ms ease both;
+  grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+}
+
+@keyframes leadership-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leadership-roster-portrait {
+  position: relative;
+  min-height: 690px;
+  overflow: hidden;
+  background: #dedbcf;
+}
+
+.leadership-roster-portrait::after {
+  position: absolute;
+  inset: 45% 0 0;
+  content: "";
+  background: linear-gradient(to bottom, transparent, rgb(23 28 23 / 72%));
+}
+
+.leadership-roster-portrait-label {
+  position: absolute;
+  z-index: 2;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgb(255 255 255 / 17%);
+  border-radius: 7px;
+  color: #fbfaf4;
+  background: rgb(20 25 20 / 72%);
+  backdrop-filter: blur(12px);
+}
+
+.leadership-roster-portrait-label span,
+.leadership-roster-portrait-label small {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+}
+
+.leadership-roster-portrait-label span {
+  color: #d2bd86;
+}
+
+.leadership-roster-detail {
+  min-width: 0;
+  padding: clamp(30px, 4vw, 54px);
+}
+
+.leadership-roster-detail h2 {
+  margin-top: 12px;
+  color: #20261f;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.leadership-roster-detail > strong,
+.leadership-roster-detail > small {
+  display: block;
+}
+
+.leadership-roster-detail > strong {
+  margin-top: 17px;
+  color: #8f7335;
+  font-size: 15px;
+}
+
+.leadership-roster-detail > small {
+  margin-top: 7px;
+  color: #747c72;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.leadership-roster-intro {
+  max-width: 680px;
+  margin-top: 22px;
+  color: #5e665d;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.leadership-roster-responsibility {
+  margin-top: 30px;
+  padding: 22px;
+  border: 1px solid rgb(32 38 31 / 12%);
+  border-radius: 9px;
+  background: #f1efe5;
+}
+
+.leadership-roster-responsibility > p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8f7335;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.leadership-roster-responsibility h3 {
+  margin-top: 10px;
+  color: #20261f;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+.leadership-roster-responsibility ul {
+  display: grid;
+  gap: 10px;
+  margin-top: 17px;
+}
+
+.leadership-roster-responsibility li {
+  display: flex;
+  gap: 9px;
+  color: #596158;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.leadership-roster-responsibility li svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: #94783b;
+}
+
+.leadership-roster-proof {
+  margin-top: 24px;
+}
+
+.leadership-roster-proof > p {
+  color: #777f74;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.leadership-roster-proof > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.leadership-roster-proof a {
+  padding: 7px 11px;
+  border: 1px solid rgb(143 115 53 / 28%);
+  border-radius: 999px;
+  color: #72591f;
+  background: rgb(255 255 255 / 72%);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.leadership-roster-proof a:hover {
+  border-color: rgb(143 115 53 / 58%);
+}
+
+.leadership-roster-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.team-accountability-section {
+  padding: 88px 0;
+  color: #f4f2e8;
+  background:
+    radial-gradient(circle at 88% 15%, rgb(210 189 134 / 9%), transparent 26%),
+    #1d241d;
+}
+
+.team-accountability-section .corporate-eyebrow {
+  color: #d2bd86;
+}
+
+.team-accountability-heading {
+  display: grid;
+  align-items: end;
+  gap: 36px;
+  grid-template-columns: 1.05fr 0.95fr;
+}
+
+.team-accountability-heading h2 {
+  max-width: 760px;
+  margin-top: 14px;
+  color: #fbfaf4;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(2.1rem, 4vw, 3.8rem);
+  font-weight: 850;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.team-accountability-heading > p {
+  color: #b8c0b5;
+  line-height: 1.8;
+}
+
+.team-accountability-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 44px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.team-accountability-grid article {
+  padding: 26px;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: 9px;
+  background: rgb(255 255 255 / 3.5%);
+}
+
+.team-accountability-grid article > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #d2bd86;
+}
+
+.team-accountability-grid article span {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+}
+
+.team-accountability-grid h3 {
+  margin-top: 34px;
+  color: #fbfaf4;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.team-accountability-grid p {
+  margin-top: 12px;
+  color: #b5bdb2;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.effy-team-profile .profile-context-bar {
+  position: relative;
+  z-index: 5;
+  padding: 17px 0;
+  border-bottom: 1px solid rgb(32 38 31 / 13%);
+  background: #eeece2;
+}
+
+.effy-team-profile .profile-context-bar > div > div > p {
+  color: #7b8278;
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.effy-team-profile .profile-context-bar > div > div > strong {
+  display: block;
+  margin-top: 3px;
+  color: #20261f;
+  font-size: 13px;
+}
+
+.effy-team-profile .profile-context-bar nav {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.effy-team-profile .profile-context-bar nav a {
+  padding: 7px 10px;
+  border: 1px solid rgb(32 38 31 / 11%);
+  border-radius: 999px;
+  color: #626a60;
+  background: rgb(255 255 255 / 52%);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.effy-team-profile .profile-context-bar nav a:hover,
+.effy-team-profile .profile-context-bar nav a:focus-visible {
+  border-color: rgb(143 115 53 / 45%);
+  color: #72591f;
+}
+
+.effy-team-profile .profile-context-bar > div > a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  color: #72591f;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.effy-team-profile .profile-principles-services {
+  background:
+    radial-gradient(
+      circle at 14% 16%,
+      rgb(var(--profile-accent-rgb) / 7%),
+      transparent 23%
+    ),
+    #fbfaf4 !important;
+}
+
+.effy-team-profile .profile-working-principles {
+  display: grid;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.effy-team-profile .profile-working-principle {
+  display: grid;
+  gap: 17px;
+  padding: 20px 0;
+  border-top: 1px solid rgb(32 38 31 / 13%);
+  grid-template-columns: 38px minmax(0, 1fr);
+}
+
+.effy-team-profile .profile-working-principle:last-child {
+  border-bottom: 1px solid rgb(32 38 31 / 13%);
+}
+
+.effy-team-profile .profile-working-principle > span {
+  color: #8f7335;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.effy-team-profile .profile-working-principle h3 {
+  color: #20261f;
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.effy-team-profile .profile-working-principle p {
+  margin-top: 6px;
+  color: #626a60;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.effy-team-profile .profile-service-map {
+  align-self: start;
+  padding: clamp(26px, 4vw, 38px);
+  border: 1px solid rgb(32 38 31 / 14%);
+  border-radius: 10px;
+  background: #efede3;
+  box-shadow: 0 20px 54px rgb(32 38 31 / 7%);
+}
+
+.effy-team-profile .profile-service-map .corporate-eyebrow,
+.effy-team-profile .profile-peer-section .corporate-eyebrow {
+  color: #8f7335;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.effy-team-profile .profile-service-map > h2 {
+  margin-top: 13px;
+  color: #20261f;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 850;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.effy-team-profile .profile-service-map > p {
+  margin-top: 16px;
+  color: #626a60;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.effy-team-profile .profile-service-map > div {
+  display: grid;
+  gap: 9px;
+  margin-top: 25px;
+}
+
+.effy-team-profile .profile-service-map > div > a {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgb(32 38 31 / 12%);
+  border-radius: 8px;
+  color: #20261f;
+  background: rgb(255 255 255 / 62%);
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.effy-team-profile .profile-service-map > div > a:hover {
+  border-color: rgb(143 115 53 / 42%);
+  transform: translateY(-2px);
+}
+
+.effy-team-profile .profile-service-map a > span {
+  color: #72591f;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.effy-team-profile .profile-service-map a > p {
+  color: #646c62;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.effy-team-profile .profile-service-map a > svg {
+  color: #8f7335;
+}
+
+.effy-team-profile .profile-peer-section {
+  padding: 76px 0;
+  border-top: 1px solid rgb(32 38 31 / 12%);
+  background: #efede3;
+}
+
+.effy-team-profile .profile-peer-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.effy-team-profile .profile-peer-heading h2 {
+  max-width: 720px;
+  margin-top: 12px;
+  color: #20261f;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 850;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.effy-team-profile .profile-peer-heading > a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  color: #72591f;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.effy-team-profile .profile-peer-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 34px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.effy-team-profile .profile-peer-grid > a {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgb(32 38 31 / 13%);
+  border-radius: 9px;
+  color: #20261f;
+  background: rgb(255 255 255 / 64%);
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.effy-team-profile .profile-peer-grid > a:hover {
+  border-color: rgb(143 115 53 / 44%);
+  transform: translateY(-2px);
+}
+
+.effy-team-profile .profile-peer-image {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #ddd9cb;
+}
+
+.effy-team-profile .profile-peer-grid small {
+  display: block;
+  overflow: hidden;
+  color: #8f7335;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.effy-team-profile .profile-peer-grid h3 {
+  margin-top: 4px;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 20px;
+  font-weight: 850;
+}
+
+.effy-team-profile .profile-peer-grid p {
+  margin-top: 3px;
+  overflow: hidden;
+  color: #697067;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.effy-team-profile .profile-peer-grid > a > svg {
+  color: #8f7335;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leadership-roster-panel {
+    animation: none;
+  }
+
+  .leadership-roster-tab,
+  .leadership-roster-actions a,
+  .effy-team-profile .profile-service-map > div > a,
+  .effy-team-profile .profile-peer-grid > a {
+    transition: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .leadership-roster {
+    grid-template-columns: 1fr;
+  }
+
+  .leadership-roster-tabs {
+    display: grid;
+    border-right: 0;
+    border-bottom: 1px solid rgb(32 38 31 / 13%);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .leadership-roster-tab {
+    border-right: 1px solid rgb(32 38 31 / 11%);
+    border-bottom: 0;
+  }
+
+  .leadership-roster-tab:last-child {
+    border-right: 0;
+  }
+
+  .leadership-roster-portrait {
+    min-height: 610px;
+  }
+}
+
+@media (max-width: 900px) {
+  .team-accountability-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .team-accountability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .effy-team-profile .profile-peer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .team-leadership-section .corporate-heading-row,
+  .effy-team-profile .profile-peer-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .leadership-roster-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .leadership-roster-tab {
+    min-height: 74px;
+    border-right: 0;
+    border-bottom: 1px solid rgb(32 38 31 / 11%);
+  }
+
+  .leadership-roster-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .leadership-roster-portrait {
+    min-height: auto;
+    aspect-ratio: 4 / 4.6;
+  }
+
+  .team-accountability-section {
+    padding: 72px 0;
+  }
+
+  .effy-team-profile .profile-context-bar nav {
+    order: 3;
+  }
+}
+
+@media (max-width: 520px) {
+  .leadership-roster-detail {
+    padding: 26px 18px 30px;
+  }
+
+  .leadership-roster-responsibility {
+    padding: 18px;
+  }
+
+  .leadership-roster-actions {
+    flex-direction: column;
+  }
+
+  .leadership-roster-actions a {
+    width: 100%;
+  }
+
+  .leadership-roster-portrait-label {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .team-accountability-grid article {
+    padding: 22px;
+  }
+
+  .effy-team-profile .profile-service-map > div > a {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .effy-team-profile .profile-service-map a > p {
+    grid-column: 1 / -1;
+  }
+
+  .effy-team-profile .profile-peer-grid > a {
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+  }
+
+  .effy-team-profile .profile-peer-image {
+    width: 62px;
+    height: 62px;
+  }
+}
+
+@media (max-width: 390px) {
+  .leadership-roster-tab {
+    padding: 18px 14px;
+  }
+
+  .leadership-roster-tab-copy strong {
+    font-size: 15px;
+  }
+
+  .leadership-roster-detail h2 {
+    font-size: 2.2rem;
+  }
+
+  .leadership-roster-portrait {
+    aspect-ratio: 4 / 5;
+  }
+
+  .leadership-roster-portrait-label small {
+    max-width: 185px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effy-team-profile .profile-context-bar nav a {
+    padding-inline: 8px;
+    font-size: 9px;
+  }
+
+  .effy-team-profile .profile-working-principle {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .effy-team-profile .profile-service-map {
+    padding: 24px 18px;
+  }
+
+  .effy-team-profile .profile-peer-grid > a {
+    padding: 12px;
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .effy-team-profile .profile-peer-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .effy-team-profile .profile-peer-grid > a > svg {
+    display: none;
+  }
+}

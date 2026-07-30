@@ -8,7 +8,14 @@
     "start": "next start",
     "lint": "eslint .",
     "test:finance": "node --test tests/finance-*.test.mjs",
-    "test:portfolio": "node --test tests/effy-edu-demo-*.test.mjs"
+    "test:portfolio": "node --test tests/effy-edu-demo-*.test.mjs",
+    "test:routing": "node --test tests/public-routing-foundation.test.mjs",
+    "test:services": "node --test tests/services-architecture.test.mjs",
+    "test:projects": "node --test tests/projects-architecture.test.mjs",
+    "test:about-process": "node --test tests/about-process-architecture.test.mjs",
+    "test:team": "node --test tests/team-leadership-architecture.test.mjs",
+    "test:contact": "node --test tests/contact-conversion-architecture.test.mjs",
+    "test:qa": "node --test tests/final-global-qa.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

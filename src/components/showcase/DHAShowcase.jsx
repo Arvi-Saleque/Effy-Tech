@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowLeft,
   ArrowRight,
   Building2,
   Check,
@@ -35,6 +34,7 @@ import {
   Workflow,
   X,
 } from "lucide-react";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import { MotionBoundary, TiltSurface } from "@/components/visuals";
 import { trackCTAClick, trackEvent, trackExternalLink } from "@/lib/analytics";
 
@@ -87,10 +87,18 @@ function Reveal({ children, className = "", delay = 0 }) {
   );
 }
 
-function SectionHeading({ eyebrow, title, description, align = "left", dark = false }) {
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  dark = false,
+}) {
   const centered = align === "center";
   return (
-    <div className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}>
+    <div
+      className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}
+    >
       <p
         className={`text-xs font-black uppercase tracking-[0.24em] ${
           dark ? "text-primary-light" : "text-primary"
@@ -121,7 +129,11 @@ function SectionHeading({ eyebrow, title, description, align = "left", dark = fa
 function BrowserPreview({ data }) {
   return (
     <MotionBoundary className="institutional-browser-motion">
-      <TiltSurface className="institutional-browser-tilt" maxTilt={2.4} perspective={1350}>
+      <TiltSurface
+        className="institutional-browser-tilt"
+        maxTilt={2.4}
+        perspective={1350}
+      >
         <div className="institutional-browser-stage">
           <div className="institutional-browser-grid" aria-hidden="true" />
           <div className="institutional-browser-glow" aria-hidden="true" />
@@ -198,8 +210,12 @@ function Lightbox({ images, index, onClose, onChange }) {
       <div className="mx-auto flex h-full max-w-7xl flex-col">
         <div className="mb-3 flex items-center justify-between gap-4 text-neutral-50">
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold sm:text-base">{current.label}</p>
-            <p className="hidden truncate text-xs text-neutral-400 sm:block">{current.detail}</p>
+            <p className="truncate text-sm font-bold sm:text-base">
+              {current.label}
+            </p>
+            <p className="hidden truncate text-xs text-neutral-400 sm:block">
+              {current.detail}
+            </p>
           </div>
           <button
             type="button"
@@ -213,21 +229,28 @@ function Lightbox({ images, index, onClose, onChange }) {
         </div>
 
         <div className="relative min-h-0 flex-1 overflow-y-auto rounded-2xl bg-neutral-white shadow-2xl">
-          <img src={current.src} alt={current.label} className="h-auto w-full" />
+          <img
+            src={current.src}
+            alt={current.label}
+            className="h-auto w-full"
+          />
         </div>
 
         {images.length > 1 ? (
           <div className="mt-3 flex items-center justify-between text-neutral-50">
             <button
               type="button"
-              onClick={() => onChange((index - 1 + images.length) % images.length)}
+              onClick={() =>
+                onChange((index - 1 + images.length) % images.length)
+              }
               className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold transition hover:bg-white/15"
             >
               <ChevronLeft className="h-4 w-4" />
               Previous
             </button>
             <span className="text-xs font-bold tracking-[0.16em] text-neutral-400">
-              {String(index + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
+              {String(index + 1).padStart(2, "0")} /{" "}
+              {String(images.length).padStart(2, "0")}
             </span>
             <button
               type="button"
@@ -310,7 +333,11 @@ function ScreenshotCarousel({
 
   return (
     <>
-      <section id="screenshots" ref={ref} className="institutional-screenshots relative bg-neutral-900 py-16 sm:py-24">
+      <section
+        id="screenshots"
+        ref={ref}
+        className="institutional-screenshots relative bg-neutral-900 py-16 sm:py-24"
+      >
         <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:mb-14">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -441,7 +468,10 @@ function ScreenshotCarousel({
               >
                 <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
-              <div className="relative w-full max-w-6xl" onClick={(event) => event.stopPropagation()}>
+              <div
+                className="relative w-full max-w-6xl"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <img
                   src={lightbox.src}
                   alt={lightbox.label}
@@ -529,7 +559,11 @@ function FullPageGallery({ longScreenshots, projectKey, isBangla }) {
 
   return (
     <>
-      <section id="full-pages" ref={ref} className="institutional-full-pages relative overflow-hidden bg-neutral-900 py-16 sm:py-24">
+      <section
+        id="full-pages"
+        ref={ref}
+        className="institutional-full-pages relative overflow-hidden bg-neutral-900 py-16 sm:py-24"
+      >
         <div className="mx-auto mb-10 max-w-2xl px-6 text-center sm:mb-14">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -660,7 +694,10 @@ function FullPageGallery({ longScreenshots, projectKey, isBangla }) {
               >
                 <X className="h-5 w-5" />
               </button>
-              <div className="relative w-full max-w-3xl px-4" onClick={(event) => event.stopPropagation()}>
+              <div
+                className="relative w-full max-w-3xl px-4"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <div className="flex items-center gap-2 rounded-t-xl border border-b-0 border-neutral-700/50 bg-neutral-800 px-4 py-2.5">
                   <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
                   <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
@@ -693,7 +730,8 @@ export default function DHAShowcase({ data }) {
     [data.galleries],
   );
   const longScreenshots = useMemo(
-    () => screenshots.filter((image) => /\/(full|longimg)\d+\./.test(image.src)),
+    () =>
+      screenshots.filter((image) => /\/(full|longimg)\d+\./.test(image.src)),
     [screenshots],
   );
   const trackedDepths = useRef(new Set());
@@ -709,7 +747,8 @@ export default function DHAShowcase({ data }) {
 
   useEffect(() => {
     const onScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
       if (maxScroll <= 0) return;
       const percentage = Math.round((window.scrollY / maxScroll) * 100);
 
@@ -747,8 +786,18 @@ export default function DHAShowcase({ data }) {
     });
   };
 
+  const visitDemo = (position) => {
+    trackCTAClick(`Open Interactive Demo - ${position}`, {
+      ...inquiryContext,
+      button_position: position,
+      destination: data.demoUrl,
+    });
+  };
+
   return (
-    <main className={`effy-project-page effy-institutional-case effy-project-page--${data.projectKey.toLowerCase()} overflow-hidden bg-neutral-50 text-neutral-900`}>
+    <main
+      className={`effy-project-page effy-institutional-case effy-project-page--${data.projectKey.toLowerCase()} overflow-hidden bg-neutral-50 text-neutral-900`}
+    >
       <section className="institutional-case-hero relative bg-neutral-900 pb-24 pt-32 text-neutral-50 sm:pb-28 sm:pt-36 lg:pb-32">
         <div className="absolute inset-0 bg-dot-grid opacity-30" />
         <div className="absolute -left-28 top-24 h-72 w-72 rounded-full bg-primary/20 blur-[110px]" />
@@ -756,13 +805,11 @@ export default function DHAShowcase({ data }) {
 
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="mb-9 flex flex-wrap items-center justify-between gap-4">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 text-sm font-bold text-neutral-400 transition hover:text-neutral-50"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to projects
-            </Link>
+            <Breadcrumb
+              dark
+              items={[{ label: "Projects", href: "/projects" }]}
+              current={data.name}
+            />
             <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-neutral-300">
               <span className="h-2 w-2 rounded-full bg-success shadow-[0_0_0_4px_rgba(39,145,89,0.15)]" />
               {data.status} client project
@@ -776,7 +823,9 @@ export default function DHAShowcase({ data }) {
               </p>
               <h1 className="mt-5 text-4xl font-black leading-[1.03] sm:text-5xl lg:text-[4.35rem]">
                 {data.heroTitle}
-                <span className="mt-2 block text-primary-light">{data.heroAccent}</span>
+                <span className="mt-2 block text-primary-light">
+                  {data.heroAccent}
+                </span>
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-8 text-neutral-300 sm:text-lg">
                 {data.heroDescription}
@@ -784,14 +833,17 @@ export default function DHAShowcase({ data }) {
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 {data.heroPoints.map((point) => (
-                  <div key={point} className="flex items-start gap-2.5 text-sm font-semibold text-neutral-300">
+                  <div
+                    key={point}
+                    className="flex items-start gap-2.5 text-sm font-semibold text-neutral-300"
+                  >
                     <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-primary-light" />
                     <span>{point}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a
                   href={data.liveUrl}
                   target="_blank"
@@ -802,6 +854,18 @@ export default function DHAShowcase({ data }) {
                   Visit Live Website
                   <ExternalLink className="h-4 w-4" />
                 </a>
+                {data.demoUrl ? (
+                  <a
+                    href={data.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => visitDemo("hero")}
+                    className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-primary-light/45 bg-primary-light/10 px-6 py-3.5 text-sm font-black text-primary-light transition hover:-translate-y-0.5 hover:bg-primary-light/15"
+                  >
+                    Interactive Demo
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                ) : null}
                 <a
                   href={data.cta.whatsappUrl}
                   target="_blank"
@@ -809,7 +873,9 @@ export default function DHAShowcase({ data }) {
                   onClick={() => discussProject("hero")}
                   className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-black text-neutral-50 transition hover:-translate-y-0.5 hover:bg-white/10"
                 >
-                  {isBangla ? "এমন Project নিয়ে কথা বলুন" : "Discuss a Similar Project"}
+                  {isBangla
+                    ? "এমন Project নিয়ে কথা বলুন"
+                    : "Discuss a Similar Project"}
                   <MessageCircle className="h-4 w-4" />
                 </a>
               </div>
@@ -825,7 +891,11 @@ export default function DHAShowcase({ data }) {
             <motion.div
               initial={{ opacity: 0, y: 28, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{
+                duration: 0.7,
+                delay: 0.12,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
             >
               <BrowserPreview data={data} />
             </motion.div>
@@ -837,7 +907,9 @@ export default function DHAShowcase({ data }) {
         <div className="institutional-proof-grid mx-auto grid max-w-7xl gap-px overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
           {data.highlights.map((item) => (
             <div key={item.label} className="bg-neutral-50 px-5 py-6 sm:px-6">
-              <p className="text-base font-black text-neutral-900">{item.value}</p>
+              <p className="text-base font-black text-neutral-900">
+                {item.value}
+              </p>
               <p className="mt-1 text-sm text-neutral-600">{item.label}</p>
             </div>
           ))}
@@ -845,7 +917,10 @@ export default function DHAShowcase({ data }) {
       </section>
 
       {data.staticDemo ? (
-        <section className="px-5 pt-12 sm:px-8 sm:pt-16 lg:px-10" aria-labelledby="static-demo-heading">
+        <section
+          className="px-5 pt-12 sm:px-8 sm:pt-16 lg:px-10"
+          aria-labelledby="static-demo-heading"
+        >
           <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-emerald-300/80 bg-emerald-50 shadow-[0_22px_60px_-38px_rgba(5,150,105,0.5)]">
             <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
               <div className="border-b border-emerald-200 p-7 sm:p-9 lg:border-r lg:border-b-0 lg:p-10">
@@ -874,12 +949,22 @@ export default function DHAShowcase({ data }) {
                         : ShieldCheck;
 
                   return (
-                    <article key={point.title} className="bg-white/90 p-6 sm:p-7">
+                    <article
+                      key={point.title}
+                      className="bg-white/90 p-6 sm:p-7"
+                    >
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-700 text-white">
-                        <StaticDemoIcon className="h-5 w-5" aria-hidden="true" />
+                        <StaticDemoIcon
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                        />
                       </div>
-                      <h3 className="mt-4 text-sm font-black text-neutral-950">{point.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-neutral-600">{point.description}</p>
+                      <h3 className="mt-4 text-sm font-black text-neutral-950">
+                        {point.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-neutral-600">
+                        {point.description}
+                      </p>
                     </article>
                   );
                 })}
@@ -905,15 +990,26 @@ export default function DHAShowcase({ data }) {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 text-primary-light">
                   <ListFilter className="h-5 w-5" />
                 </div>
-                <h3 className="mt-6 text-xl font-black text-neutral-900">{data.overview.challengeTitle}</h3>
-                <p className="mt-3 text-sm leading-7 text-neutral-600">{data.overview.challenge}</p>
+                <h3 className="mt-6 text-xl font-black text-neutral-900">
+                  {data.overview.challengeTitle}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-neutral-600">
+                  {data.overview.challenge}
+                </p>
               </Reveal>
-              <Reveal delay={0.08} className="rounded-2xl border border-primary/25 bg-primary-lightest p-7 sm:p-8">
+              <Reveal
+                delay={0.08}
+                className="rounded-2xl border border-primary/25 bg-primary-lightest p-7 sm:p-8"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-neutral-50">
                   <Sparkles className="h-5 w-5" />
                 </div>
-                <h3 className="mt-6 text-xl font-black text-neutral-900">{data.overview.solutionTitle}</h3>
-                <p className="mt-3 text-sm leading-7 text-neutral-600">{data.overview.solution}</p>
+                <h3 className="mt-6 text-xl font-black text-neutral-900">
+                  {data.overview.solutionTitle}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-neutral-600">
+                  {data.overview.solution}
+                </p>
               </Reveal>
             </div>
           </div>
@@ -925,7 +1021,11 @@ export default function DHAShowcase({ data }) {
           <Reveal>
             <SectionHeading
               eyebrow="Scope delivered"
-              title={isBangla ? "Project-এর জন্য যা যা তৈরি করা হয়েছে" : "What Effy Tech delivered"}
+              title={
+                isBangla
+                  ? "Project-এর জন্য যা যা তৈরি করা হয়েছে"
+                  : "What Effy Tech delivered"
+              }
               description={
                 isBangla
                   ? "Design থেকে operational workflow পর্যন্ত project-টিকে একটি complete, maintainable system হিসেবে তৈরি করা হয়েছে।"
@@ -944,8 +1044,12 @@ export default function DHAShowcase({ data }) {
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 text-primary-light">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h3 className="mt-6 text-xl font-black text-neutral-900">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-neutral-600">{item.description}</p>
+                    <h3 className="mt-6 text-xl font-black text-neutral-900">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-neutral-600">
+                      {item.description}
+                    </p>
                   </div>
                 </Reveal>
               );
@@ -983,19 +1087,30 @@ export default function DHAShowcase({ data }) {
                       : "border-neutral-700 bg-neutral-900 text-neutral-50"
                   }`}
                 >
-                  <p className={`text-xs font-black uppercase tracking-[0.22em] ${index === 0 ? "text-primary" : "text-primary-light"}`}>
+                  <p
+                    className={`text-xs font-black uppercase tracking-[0.22em] ${index === 0 ? "text-primary" : "text-primary-light"}`}
+                  >
                     {system.label}
                   </p>
-                  <h3 className={`mt-4 text-2xl font-black leading-tight sm:text-3xl ${index === 0 ? "text-neutral-900" : "text-neutral-50"}`}>
+                  <h3
+                    className={`mt-4 text-2xl font-black leading-tight sm:text-3xl ${index === 0 ? "text-neutral-900" : "text-neutral-50"}`}
+                  >
                     {system.title}
                   </h3>
-                  <p className={`mt-4 text-sm leading-7 ${index === 0 ? "text-neutral-600" : "text-neutral-400"}`}>
+                  <p
+                    className={`mt-4 text-sm leading-7 ${index === 0 ? "text-neutral-600" : "text-neutral-400"}`}
+                  >
                     {system.description}
                   </p>
                   <ul className="mt-7 space-y-3">
                     {system.items.map((item) => (
-                      <li key={item} className={`flex items-start gap-3 text-sm font-semibold ${index === 0 ? "text-neutral-700" : "text-neutral-300"}`}>
-                        <span className={`mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full ${index === 0 ? "bg-primary/10 text-primary" : "bg-primary-light/10 text-primary-light"}`}>
+                      <li
+                        key={item}
+                        className={`flex items-start gap-3 text-sm font-semibold ${index === 0 ? "text-neutral-700" : "text-neutral-300"}`}
+                      >
+                        <span
+                          className={`mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full ${index === 0 ? "bg-primary/10 text-primary" : "bg-primary-light/10 text-primary-light"}`}
+                        >
                           <Check className="h-3.5 w-3.5" />
                         </span>
                         {item}
@@ -1030,7 +1145,11 @@ export default function DHAShowcase({ data }) {
           <Reveal>
             <SectionHeading
               eyebrow="Core capabilities"
-              title={isBangla ? "দেখতে ভালো—কিন্তু মূল শক্তি workflow-এ" : "Designed well, engineered around real workflows"}
+              title={
+                isBangla
+                  ? "দেখতে ভালো—কিন্তু মূল শক্তি workflow-এ"
+                  : "Designed well, engineered around real workflows"
+              }
               description={
                 isBangla
                   ? "এই project-এর value শুধু visual design-এ নয়; content structure, access control, maintainability এবং recurring operations-এর মধ্যেও।"
@@ -1047,8 +1166,12 @@ export default function DHAShowcase({ data }) {
                 <Reveal key={item.title} delay={index * 0.04}>
                   <div className="h-full rounded-2xl border border-neutral-300 bg-neutral-50 p-6 transition hover:border-primary/35 hover:shadow-md">
                     <Icon className="h-6 w-6 text-primary" />
-                    <h3 className="mt-5 text-lg font-black text-neutral-900">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-neutral-600">{item.description}</p>
+                    <h3 className="mt-5 text-lg font-black text-neutral-900">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-neutral-600">
+                      {item.description}
+                    </p>
                   </div>
                 </Reveal>
               );
@@ -1057,7 +1180,10 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="engineering" className="institutional-engineering relative bg-neutral-900 py-20 text-neutral-50 sm:py-28">
+      <section
+        id="engineering"
+        className="institutional-engineering relative bg-neutral-900 py-20 text-neutral-50 sm:py-28"
+      >
         <div className="absolute inset-0 bg-dot-grid opacity-20" />
         <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-20">
@@ -1089,8 +1215,12 @@ export default function DHAShowcase({ data }) {
                   <Reveal key={layer.title} delay={index * 0.06}>
                     <div className="h-full bg-neutral-900 p-7 sm:p-8">
                       <Icon className="h-6 w-6 text-primary-light" />
-                      <h3 className="mt-5 text-lg font-black text-neutral-50">{layer.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-neutral-400">{layer.text}</p>
+                      <h3 className="mt-5 text-lg font-black text-neutral-50">
+                        {layer.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-neutral-400">
+                        {layer.text}
+                      </p>
                     </div>
                   </Reveal>
                 );
@@ -1106,7 +1236,11 @@ export default function DHAShowcase({ data }) {
             <Reveal>
               <SectionHeading
                 eyebrow="Project outcome"
-                title={isBangla ? "একটি live system, যা ভবিষ্যতেও expand করা যাবে" : "A live foundation built for long-term institutional growth"}
+                title={
+                  isBangla
+                    ? "একটি live system, যা ভবিষ্যতেও expand করা যাবে"
+                    : "A live foundation built for long-term institutional growth"
+                }
                 description={
                   isBangla
                     ? "Fake vanity metrics ছাড়াই project-এর বাস্তব value হলো—public communication এবং content operations এখন একটি maintainable system-এর মধ্যে রয়েছে।"
@@ -1122,7 +1256,9 @@ export default function DHAShowcase({ data }) {
                     <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-primary-lightest text-sm font-black text-primary">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <p className="pt-1 text-sm font-semibold leading-7 text-neutral-700 sm:text-base">{outcome}</p>
+                    <p className="pt-1 text-sm font-semibold leading-7 text-neutral-700 sm:text-base">
+                      {outcome}
+                    </p>
                   </div>
                 </Reveal>
               ))}
@@ -1131,13 +1267,22 @@ export default function DHAShowcase({ data }) {
         </div>
       </section>
 
-      <section id="contact" className="institutional-contact px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
+      <section
+        id="contact"
+        className="institutional-contact px-5 py-20 sm:px-8 sm:py-28 lg:px-10"
+      >
         <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-neutral-900 text-neutral-50 shadow-2xl">
           <div className="grid lg:grid-cols-[1.25fr_0.75fr]">
             <div className="p-8 sm:p-12 lg:p-14">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-primary-light">{data.cta.overline}</p>
-              <h2 className="mt-5 max-w-3xl text-3xl font-black leading-[1.08] sm:text-4xl lg:text-5xl">{data.cta.title}</h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-neutral-400 sm:text-lg">{data.cta.description}</p>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-primary-light">
+                {data.cta.overline}
+              </p>
+              <h2 className="mt-5 max-w-3xl text-3xl font-black leading-[1.08] sm:text-4xl lg:text-5xl">
+                {data.cta.title}
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-neutral-400 sm:text-lg">
+                {data.cta.description}
+              </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -1165,9 +1310,13 @@ export default function DHAShowcase({ data }) {
 
             <div className="border-t border-white/10 bg-primary-lightest p-8 text-neutral-900 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
               <Globe2 className="h-8 w-8 text-primary" />
-              <p className="mt-6 text-xs font-black uppercase tracking-[0.2em] text-primary">Live reference</p>
+              <p className="mt-6 text-xs font-black uppercase tracking-[0.2em] text-primary">
+                Live reference
+              </p>
               <h3 className="mt-3 text-2xl font-black">{data.name}</h3>
-              <p className="mt-3 text-sm leading-7 text-neutral-600">{data.client.type}</p>
+              <p className="mt-3 text-sm leading-7 text-neutral-600">
+                {data.client.type}
+              </p>
               <a
                 href={data.liveUrl}
                 target="_blank"

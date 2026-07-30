@@ -1,10 +1,12 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import effyEduManagementSystem from "@/data/effyEduManagementSystem";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/projects/EEMS";
+const canonicalUrl =
+  "https://www.effytechbd.com/projects/effy-edu-management-system";
 const liveProductionUrl = "https://www.shifatstales.com";
 const ogImageUrl = effyEduManagementSystem.ogImage.startsWith("http")
   ? effyEduManagementSystem.ogImage
@@ -119,6 +121,7 @@ export default function EffyEduManagementSystemCaseStudyPage() {
         }}
       />
       <DHAShowcase data={effyEduManagementSystem} />
+      <CaseStudyFooterNav currentSlug="EEMS" />
       <Footer />
     </>
   );

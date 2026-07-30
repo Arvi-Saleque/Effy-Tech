@@ -2,21 +2,43 @@ import siteConfig from "@/theme/siteConfig";
 
 const routes = [
   { path: "", priority: 1, changeFrequency: "weekly" },
-  { path: "/allservices", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/quickservices", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/services", priority: 0.9, changeFrequency: "monthly" },
   { path: "/projects", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/projects/IAM", priority: 0.9, changeFrequency: "weekly" },
-  { path: "/effy_edu_management_system", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/projects/EEMS", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/projects/DHA", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/projects/BUEK", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/salek", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/adnan", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/saif", priority: 0.6, changeFrequency: "monthly" },
+  {
+    path: "/projects/islamic-amal-tracker",
+    priority: 0.9,
+    changeFrequency: "weekly",
+  },
+  {
+    path: "/projects/effy-edu-management-system",
+    priority: 0.9,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/projects/darul-hikmah-academy",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/projects/bangladesh-university-of-excellence-khulna",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
+  { path: "/process", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/about", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/team", priority: 0.7, changeFrequency: "monthly" },
+  {
+    path: "/team/salek-bin-hossain",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  { path: "/team/abdullah-al-saif", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/team/adnan-bin-wahid", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/contact", priority: 0.8, changeFrequency: "monthly" },
 ];
 
 export default function sitemap() {
-  const lastModified = new Date("2026-07-27T00:00:00+06:00");
+  const lastModified = new Date("2026-07-29T00:00:00+06:00");
 
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${siteConfig.url}${path}`,

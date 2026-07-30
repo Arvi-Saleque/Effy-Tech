@@ -5,6 +5,7 @@ import {
 } from "@/lib/leadershipRoute";
 import "@/styles/spatial-components.css";
 import "@/styles/team-profile-spatial.css";
+import "@/styles/team-leadership-step5.css";
 
 const memberSlug = "adnan";
 

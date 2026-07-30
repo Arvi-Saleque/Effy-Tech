@@ -271,10 +271,10 @@ export default function ResultsSection({ studentItems = [], headerData }: { stud
   useEffect(() => {
     if (isHovered || studentResults.length <= 1) return;
     const interval = setInterval(() => {
-      handleNext();
+      setActiveIndex((previous) => (previous + 1) % studentResults.length);
     }, 4200);
     return () => clearInterval(interval);
-  }, [activeIndex, isHovered]);
+  }, [activeIndex, isHovered, studentResults.length]);
 
   const handleNext = () => {
     setActiveIndex((prev) => (studentResults.length === 0 ? 0 : (prev + 1) % studentResults.length));

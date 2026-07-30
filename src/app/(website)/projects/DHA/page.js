@@ -1,10 +1,11 @@
 import DHAShowcase from "@/components/showcase/DHAShowcase";
+import CaseStudyFooterNav from "@/components/showcase/CaseStudyFooterNav";
 import Footer from "@/components/layout/Footer";
 import dha from "@/data/dha";
 import "@/styles/spatial-components.css";
 import "@/styles/institutional-spatial-case-study.css";
 
-const canonicalUrl = "https://www.effytechbd.com/projects/DHA";
+const canonicalUrl = "https://www.effytechbd.com/projects/darul-hikmah-academy";
 
 export const metadata = {
   title: "Darul Hikmah Academy Website & Academic Platform | Effy Tech",
@@ -64,6 +65,7 @@ export default function DHAPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <DHAShowcase data={dha} />
+      <CaseStudyFooterNav currentSlug="DHA" />
       <Footer />
     </>
   );

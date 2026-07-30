@@ -25,8 +25,14 @@ export default function ComingSoon() {
   return (
     <>
       <main className="coming-soon-page">
-        <div className="coming-soon-ambient coming-soon-ambient-one" aria-hidden="true" />
-        <div className="coming-soon-ambient coming-soon-ambient-two" aria-hidden="true" />
+        <div
+          className="coming-soon-ambient coming-soon-ambient-one"
+          aria-hidden="true"
+        />
+        <div
+          className="coming-soon-ambient coming-soon-ambient-two"
+          aria-hidden="true"
+        />
 
         <section className="coming-soon-shell">
           <div className="coming-soon-copy">
@@ -51,15 +57,15 @@ export default function ComingSoon() {
                 <ArrowLeft aria-hidden="true" />
                 Back to Home
               </Link>
-              <Link href="/#contact" className="coming-soon-secondary">
+              <Link href="/contact" className="coming-soon-secondary">
                 Get Notified
                 <Bell aria-hidden="true" />
               </Link>
             </div>
 
             <p className="coming-soon-note">
-              <Clock3 aria-hidden="true" />
-              A focused experience is currently in production.
+              <Clock3 aria-hidden="true" />A focused experience is currently in
+              production.
             </p>
           </div>
 
@@ -75,8 +81,14 @@ export default function ComingSoon() {
               >
                 <div className="coming-soon-stage-grid" aria-hidden="true" />
                 <div className="coming-soon-stage-halo" aria-hidden="true" />
-                <div className="coming-soon-orbit coming-soon-orbit-one" aria-hidden="true" />
-                <div className="coming-soon-orbit coming-soon-orbit-two" aria-hidden="true" />
+                <div
+                  className="coming-soon-orbit coming-soon-orbit-one"
+                  aria-hidden="true"
+                />
+                <div
+                  className="coming-soon-orbit coming-soon-orbit-two"
+                  aria-hidden="true"
+                />
 
                 <div className="coming-soon-asset-frame">
                   <FloatingAsset
