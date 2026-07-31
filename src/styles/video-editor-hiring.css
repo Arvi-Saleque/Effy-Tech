@@ -551,7 +551,7 @@
 .hire-intro-grid article > div {
   margin-top: 10px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
 }
 
@@ -680,7 +680,7 @@
 .hire-project-copy > div {
   margin-top: 12px;
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -758,7 +758,7 @@
 .hire-responsibility-grid p {
   margin-top: 8px;
   color: var(--color-text-secondary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.72;
 }
 
@@ -786,7 +786,7 @@
 
 .hire-boundary-note p {
   color: var(--color-text-secondary);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.72;
 }
 
@@ -869,7 +869,7 @@
   padding: 13px 0;
   border-top: 1px solid rgb(255 255 255 / 9%);
   color: var(--color-neutral-300);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
   grid-template-columns: 18px 1fr;
 }
@@ -886,7 +886,7 @@
   border-radius: 8px;
   color: var(--color-primary-light);
   background: rgb(210 189 134 / 6%);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -922,7 +922,7 @@
 .hire-values-grid p {
   margin-top: 9px;
   color: var(--color-neutral-400);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.68;
 }
 
@@ -977,7 +977,7 @@
 .hire-process-list p {
   margin-top: 8px;
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -1037,7 +1037,7 @@
 
 .hire-commission-note p {
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -1101,7 +1101,7 @@
   display: block;
   padding: 16px 22px 20px;
   color: var(--color-text-tertiary);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -1145,7 +1145,7 @@
 
 .hire-selection-list p {
   color: var(--color-text-primary);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 750;
   line-height: 1.55;
 }
@@ -1180,7 +1180,7 @@
   padding: 11px 0;
   border-top: 1px solid var(--color-border-light);
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   grid-template-columns: 18px 1fr;
 }
@@ -1193,7 +1193,7 @@
 .hire-application-pack > p:last-child {
   margin-top: 14px;
   color: var(--color-text-tertiary);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -1272,7 +1272,7 @@
   padding-top: 16px;
   border-top: 1px solid var(--color-border-light);
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.72;
 }
 
@@ -1308,7 +1308,7 @@
   max-width: 650px;
   margin-top: 20px;
   color: var(--color-neutral-400);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.75;
 }
 
@@ -1368,7 +1368,7 @@
 .hire-direct-contact > p {
   margin-top: 17px;
   color: var(--color-neutral-400);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -1401,7 +1401,7 @@
   max-width: 680px;
   margin-top: 14px;
   color: var(--color-neutral-400);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.7;
 }
 
