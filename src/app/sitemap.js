@@ -34,11 +34,16 @@ const routes = [
   },
   { path: "/team/abdullah-al-saif", priority: 0.6, changeFrequency: "monthly" },
   { path: "/team/adnan-bin-wahid", priority: 0.6, changeFrequency: "monthly" },
+  {
+    path: "/hire/project-based-video-editor",
+    priority: 0.7,
+    changeFrequency: "weekly",
+  },
   { path: "/contact", priority: 0.8, changeFrequency: "monthly" },
 ];
 
 export default function sitemap() {
-  const lastModified = new Date("2026-07-29T00:00:00+06:00");
+  const lastModified = new Date("2026-07-31T00:00:00+06:00");
 
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${siteConfig.url}${path}`,

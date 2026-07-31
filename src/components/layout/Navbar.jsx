@@ -84,6 +84,21 @@ const searchPages = [
     description: "Start a project or send Effy Tech a project brief",
     keywords: ["contact", "email", "phone", "whatsapp", "start project"],
   },
+  {
+    label: "Project-Based Product Video Editor",
+    href: "/hire/project-based-video-editor",
+    type: "page",
+    description:
+      "Remote, paid, project-based product video editing opportunity at Effy Tech",
+    keywords: [
+      "hiring",
+      "video editor",
+      "capcut",
+      "remote job",
+      "career",
+      "apply",
+    ],
+  },
 ];
 
 function isPathActive(pathname, item) {

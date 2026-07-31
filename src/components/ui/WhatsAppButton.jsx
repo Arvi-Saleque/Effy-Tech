@@ -1,22 +1,34 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { applicationLinks } from "@/data/videoEditorHiring";
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
   if (pathname?.startsWith("/admin")) return null;
 
+  const isHiringPage = pathname?.startsWith(
+    "/hire/project-based-video-editor",
+  );
   const phone = "8801511190270";
   const message = "Hello! I'd like to know more about your services.";
-  const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  const href = isHiringPage
+    ? applicationLinks.whatsapp
+    : `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  const label = isHiringPage
+    ? "Apply for the video editor role on WhatsApp"
+    : "Chat with us on WhatsApp";
+  const tooltip = isHiringPage ? "Apply on WhatsApp" : "Chat on WhatsApp";
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat with us on WhatsApp"
+      aria-label={label}
       className="whatsapp-fab group"
+      data-application-channel={isHiringPage ? "whatsapp" : undefined}
+      data-application-location={isHiringPage ? "floating-button" : undefined}
     >
       {/* Ping ring */}
       <span className="whatsapp-ping" aria-hidden="true" />
@@ -34,7 +46,7 @@ export default function WhatsAppButton() {
 
       {/* Tooltip */}
       <span className="whatsapp-tooltip">
-        Chat on WhatsApp
+        {tooltip}
       </span>
     </a>
   );
