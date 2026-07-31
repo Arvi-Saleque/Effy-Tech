@@ -16,9 +16,9 @@ const amalTracker = {
   playStoreUrl: "https://play.google.com/store/apps/details?id=com.amaltracker.app",
   privacyPolicyUrl: "https://amaltrack2026.firebaseapp.com/privacy-policy.html",
   supportUrl:
-    "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20need%20support%20for%20Islamic%20Amal%20Tracker.",
+    "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20need%20support%20for%20Islamic%20Amal%20Tracker.",
   projectInquiryUrl:
-    "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20saw%20Islamic%20Amal%20Tracker%20and%20want%20to%20discuss%20building%20an%20app.",
+    "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20saw%20Islamic%20Amal%20Tracker%20and%20want%20to%20discuss%20building%20an%20app.",
 
   category: "Android",
   techStack: ["Flutter", "Dart", "Drift", "Supabase", "Native Android"],

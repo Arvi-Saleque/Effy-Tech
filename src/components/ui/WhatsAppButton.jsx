@@ -10,7 +10,7 @@ export default function WhatsAppButton() {
   const isHiringPage = pathname?.startsWith(
     "/hire/project-based-video-editor",
   );
-  const phone = "8801511190270";
+  const phone = "8801730814853";
   const message = "Hello! I'd like to know more about your services.";
   const href = isHiringPage
     ? applicationLinks.whatsapp

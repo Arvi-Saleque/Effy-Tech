@@ -16,7 +16,7 @@ import styles from "./confirmed.module.css";
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.amaltracker.app";
 const SUPPORT_URL =
-  "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20need%20help%20with%20Islamic%20Amal%20Tracker%20email%20verification.";
+  "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20need%20help%20with%20Islamic%20Amal%20Tracker%20email%20verification.";
 
 function getParam(searchParams, key) {
   const value = searchParams?.[key];

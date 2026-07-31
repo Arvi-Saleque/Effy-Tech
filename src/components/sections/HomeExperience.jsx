@@ -1370,11 +1370,11 @@ export default function HomeExperience() {
                   <strong>effytechbd@gmail.com</strong>
                 </div>
               </a>
-              <a href="tel:+8801511190270">
+              <a href="tel:+8801730814853">
                 <Smartphone size={19} />
                 <div>
                   <small>PHONE / WHATSAPP</small>
-                  <strong>+880 1511-190270</strong>
+                  <strong>+880 1730-814853</strong>
                 </div>
               </a>
               <div>

@@ -149,7 +149,7 @@ export const profileData: ProfileInfo = {
   organization: "EDUPILOT COACHING ACADEMY",
   summary: "I help students turn difficult Physics and Higher Mathematics concepts into clear, repeatable problem-solving methods through structured classes, assessments, and individual feedback.",
   email: "teacher@demo.edu",
-  phone: "+880 1700-000001",
+  phone: "+880 1730-814853",
   location: "Dhaka, Bangladesh",
   imageUrl: "/effy_edu_management_system/images/demo-instructor.png",
   greeting: "Hello, I'm",

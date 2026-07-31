@@ -71,7 +71,7 @@ export default function LocationSection({ infoData }: { infoData?: any }) {
                 <span>Get Direction</span>
               </a>
               <a
-                href="tel:+8801700000001"
+                href="tel:+8801730814853"
                 className="secondary-btn w-full flex items-center justify-center text-center font-bold"
               >
                 <span>Call Now</span>
