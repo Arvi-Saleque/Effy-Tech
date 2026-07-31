@@ -19,6 +19,7 @@ const canonicalRoutes = [
   "src/app/(website)/team/salek-bin-hossain/page.js",
   "src/app/(website)/team/abdullah-al-saif/page.js",
   "src/app/(website)/team/adnan-bin-wahid/page.js",
+  "src/app/(website)/hire/project-based-video-editor/page.js",
 ];
 
 test("all approved canonical public routes have page modules", () => {
