@@ -20,7 +20,7 @@ export const faqs: FAQItem[] = [
   {
     id: "faq-2",
     question: "How can I join the coaching?",
-    answer: "We do not offer online admission. To enroll, please contact Lead Instructor directly on WhatsApp or over the phone at +880 1700-000001, or visit our Dhaka office during office hours (Daily 4:00 PM - 9:00 PM)."
+    answer: "We do not offer online admission. To enroll, please contact Lead Instructor directly on WhatsApp or over the phone at +880 1730-814853, or visit our Dhaka office during office hours (Daily 4:00 PM - 9:00 PM)."
   },
   {
     id: "faq-3",

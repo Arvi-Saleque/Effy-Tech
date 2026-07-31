@@ -27,7 +27,7 @@ test("visible contact channels come from the central site configuration", () => 
   assert.match(data, /siteConfig\.contact\.phone/);
   assert.match(data, /siteConfig\.contact\.address/);
   assert.match(data, /siteConfig\.socials/);
-  assert.doesNotMatch(page, /8801511190270|effytechbd@gmail\.com/);
+  assert.doesNotMatch(page, /8801730814853|effytechbd@gmail\.com/);
 });
 
 test("the project brief explains the information clients should provide", () => {

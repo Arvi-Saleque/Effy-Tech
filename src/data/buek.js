@@ -235,7 +235,7 @@ const buek = {
       "Effy Tech builds custom public websites and admin systems for universities, schools, organizations and service businesses—from planning and design to deployment and long-term growth.",
     primaryLabel: "Discuss Your Website",
     whatsappUrl:
-      "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20BUEK%20project%20and%20want%20to%20discuss%20a%20website%20for%20my%20institution.",
+      "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20BUEK%20project%20and%20want%20to%20discuss%20a%20website%20for%20my%20institution.",
     secondaryLabel: "Visit BUEK Live",
   },
 };

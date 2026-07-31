@@ -13,7 +13,7 @@ export interface SiteInfo {
   shortDescription: string;
   logoUrl?: string;
   phone: string;
-  whatsapp: string; // WhatsApp API phone number prefix (no plus or spaces, e.g. "8801700000001")
+  whatsapp: string; // WhatsApp API phone number prefix (no plus or spaces, e.g. "8801730814853")
   email: string;
   address: string;
   nearbyLandmark: string;
@@ -39,8 +39,8 @@ export const siteInfo: SiteInfo = {
   coachingCenterName: "EduPilot Coaching Academy — Academic & Admission Care",
   tagline: "Admissions Open for SSC & HSC Batches",
   shortDescription: "A premium personal coaching ecosystem specialized in Physics and Higher Mathematics. Founded and mentored by Dr. Arif Rahman (Lead Instructor). Empowering SSC and HSC science students to build core concepts and score top ranks in university admission tests.",
-  phone: "+880 1700-000001",
-  whatsapp: "8801700000001",
+  phone: "+880 1730-814853",
+  whatsapp: "8801730814853",
   email: "hello@edupilot.demo",
   address: "Education Avenue, Dhaka, Bangladesh",
   nearbyLandmark: "beside the central academic district",

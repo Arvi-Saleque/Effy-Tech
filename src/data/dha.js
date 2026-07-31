@@ -261,7 +261,7 @@ const dha = {
       "Effy Tech school, academy, madrasa, college এবং training institution-এর জন্য custom website ও management system তৈরি করে—planning, design, development এবং deploymentসহ।",
     primaryLabel: "আপনার Project নিয়ে কথা বলুন",
     whatsappUrl:
-      "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20Darul%20Hikmah%20Academy%20project%20and%20want%20to%20discuss%20a%20website%20or%20management%20system%20for%20my%20institution.",
+      "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20Darul%20Hikmah%20Academy%20project%20and%20want%20to%20discuss%20a%20website%20or%20management%20system%20for%20my%20institution.",
     secondaryLabel: "DHA Live দেখুন",
   },
 };

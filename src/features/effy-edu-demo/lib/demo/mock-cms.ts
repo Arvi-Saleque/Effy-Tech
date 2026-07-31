@@ -47,7 +47,7 @@ const siteSections: Record<string, DemoSection> = {
     tagline:"Admissions open for academic and admission programs",
     shortDescription:"A complete coaching ecosystem for concept-first learning, regular assessment, transparent progress tracking and measurable student outcomes.",
     logoUrl:"/effy_edu_management_system/images/edupilot-logo.svg",
-    phone:"+880 1700-000001", whatsapp:"8801700000001", email:"hello@edupilot.demo",
+    phone:"+880 1730-814853", whatsapp:"8801730814853", email:"hello@edupilot.demo",
     address:"Education Avenue, Dhaka, Bangladesh", nearbyLandmark:"beside the central academic district", officeHours:"Daily 3:00 PM – 9:00 PM",
     facebookUrl:"https://facebook.com", youtubeUrl:"https://youtube.com",
     googleMapEmbedUrl:"https://maps.google.com/maps?q=Dhaka%20Bangladesh&t=&z=13&ie=UTF8&iwloc=&output=embed",

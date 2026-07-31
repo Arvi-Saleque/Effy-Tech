@@ -16,7 +16,7 @@ export const DEMO_TEACHER_PROFILE = {
   role: "TEACHER",
   full_name: "Dr. Arif Rahman",
   email: "teacher@demo.edu",
-  phone: "+880 1700-000001",
+  phone: "+880 1730-814853",
   avatar_url: "/effy_edu_management_system/images/demo-instructor.png",
   avatar_cloudinary_public_id: null,
   account_status: "ACTIVE",
@@ -468,8 +468,8 @@ const studentPerformance = examResults.map((r:any)=>({student_id:r.student_id,ba
 const seededDemoTables: Record<string, DemoRow[]> = {
   profiles,
   student_profiles: studentProfiles,
-  teacher_profiles:[{id:"teacher-1",profile_id:"profile-teacher",designation:"Lead Instructor & Academic Director",coaching_center_name:"EduPilot Coaching Academy",public_contact_info:"teacher@demo.edu | +880 1700-000001",created_at:iso(-600),updated_at:iso(-1)}],
-  app_settings:[{id:true,coaching_center_name:"EduPilot Coaching Academy",short_name:"EduPilot",student_id_prefix:"EDU",public_phone:"+880 1700-000001",public_email:"hello@edupilot.demo",address:"Education Avenue, Dhaka, Bangladesh",default_currency:"BDT",default_timezone:"Asia/Dhaka",academic_session:"2026–2027",default_grading_scale:"STANDARD",pending_approval_contact_text:"Your registration is under review. Contact the academy for assistance.",disabled_account_contact_text:"Please contact the academy administrator.",student_rank_visible:true,completed_batches_visible:true,grades_displayed:true,updated_at:iso(-1)}],
+  teacher_profiles:[{id:"teacher-1",profile_id:"profile-teacher",designation:"Lead Instructor & Academic Director",coaching_center_name:"EduPilot Coaching Academy",public_contact_info:"teacher@demo.edu | +880 1730-814853",created_at:iso(-600),updated_at:iso(-1)}],
+  app_settings:[{id:true,coaching_center_name:"EduPilot Coaching Academy",short_name:"EduPilot",student_id_prefix:"EDU",public_phone:"+880 1730-814853",public_email:"hello@edupilot.demo",address:"Education Avenue, Dhaka, Bangladesh",default_currency:"BDT",default_timezone:"Asia/Dhaka",academic_session:"2026–2027",default_grading_scale:"STANDARD",pending_approval_contact_text:"Your registration is under review. Contact the academy for assistance.",disabled_account_contact_text:"Please contact the academy administrator.",student_rank_visible:true,completed_batches_visible:true,grades_displayed:true,updated_at:iso(-1)}],
   batches,
   batch_subjects:batchSubjects,
   subject_units:subjectUnits,
@@ -491,7 +491,7 @@ const seededDemoTables: Record<string, DemoRow[]> = {
   subject_progress_summary:subjectProgress,
   student_subject_performance:studentPerformance,
   rate_limits:[],
-  site_settings:[{id:1,site_name:"EduPilot Coaching Academy",site_short_name:"EduPilot",tagline:"Concept-first learning. Measurable progress.",site_description:"A complete academic and admission coaching ecosystem.",primary_phone:"+880 1700-000001",secondary_phone:"+880 1700-000002",whatsapp_number:"8801700000001",email:"hello@edupilot.demo",address_line:"Education Avenue",city:"Dhaka",country:"Bangladesh"}],
+  site_settings:[{id:1,site_name:"EduPilot Coaching Academy",site_short_name:"EduPilot",tagline:"Concept-first learning. Measurable progress.",site_description:"A complete academic and admission coaching ecosystem.",primary_phone:"+880 1730-814853",secondary_phone:"+880 1700-000002",whatsapp_number:"8801730814853",email:"hello@edupilot.demo",address_line:"Education Avenue",city:"Dhaka",country:"Bangladesh"}],
 };
 
 type DemoTableGlobal = typeof globalThis & {

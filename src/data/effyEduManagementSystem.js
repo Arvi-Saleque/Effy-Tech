@@ -264,7 +264,7 @@ const effyEduManagementSystem = {
       "Effy Tech builds custom education platforms around the institution's actual workflow—from discovery and interface design to role-based software, deployment, and long-term support.",
     primaryLabel: "Discuss an Education Platform",
     whatsappUrl:
-      "https://wa.me/8801511190270?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20Effy%20Edu%20Management%20System%20case%20study%20and%20want%20to%20discuss%20an%20education%20or%20coaching%20platform.",
+      "https://wa.me/8801730814853?text=Hello%20Effy%20Tech%2C%20I%20saw%20the%20Effy%20Edu%20Management%20System%20case%20study%20and%20want%20to%20discuss%20an%20education%20or%20coaching%20platform.",
     secondaryLabel: "Visit Live Client Site",
   },
 };

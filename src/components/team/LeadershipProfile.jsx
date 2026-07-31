@@ -35,7 +35,7 @@ const socialIcons = {
 };
 
 const whatsappUrl =
-  "https://wa.me/8801511190270?text=" +
+  "https://wa.me/8801730814853?text=" +
   encodeURIComponent(
     "Hello Effy Tech, I visited a leadership profile and would like to discuss a software project.",
   );

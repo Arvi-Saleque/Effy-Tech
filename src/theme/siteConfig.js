@@ -41,7 +41,7 @@ const siteConfig = {
   /* ── Contact Info ────────────────────────────────────────── */
   contact: {
     email: "effytechbd@gmail.com",
-    phone: "+8801511190270",
+    phone: "+8801730814853",
     address: "9/7, Garden Street, Shyamoli, Dhaka-1207.",
   },
 

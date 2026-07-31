@@ -43,6 +43,22 @@ test("carousel supports mouse drag and mobile swipe through pointer events", () 
   assert.match(carouselStyles, /touch-action:\s*pan-y/);
 });
 
+test("profile links bypass drag pointer capture and remain navigable", () => {
+  assert.match(
+    carouselSource,
+    /event\.target\.closest\?\.\("a, button, input, select, textarea"\)/,
+  );
+  assert.match(carouselSource, /<Link href=\{founder\.href\}/);
+  assert.match(carouselSource, /setPointerCapture/);
+
+  const interactiveGuardIndex = carouselSource.indexOf(
+    'event.target.closest?.("a, button, input, select, textarea")',
+  );
+  const pointerCaptureIndex = carouselSource.indexOf("setPointerCapture");
+  assert.ok(interactiveGuardIndex >= 0);
+  assert.ok(interactiveGuardIndex < pointerCaptureIndex);
+});
+
 test("carousel supports keyboard navigation", () => {
   for (const key of ["ArrowLeft", "ArrowRight", "Home", "End"]) {
     assert.ok(carouselSource.includes(`event.key === "${key}"`));

@@ -41,6 +41,10 @@ export default function HomeTeamCarousel({ founders }) {
   const handlePointerDown = (event) => {
     if (event.button !== 0) return;
 
+    if (event.target.closest?.("a, button, input, select, textarea")) {
+      return;
+    }
+
     pointerStart.current = {
       id: event.pointerId,
       x: event.clientX,
