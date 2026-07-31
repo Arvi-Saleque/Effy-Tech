@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import Footer from "@/components/layout/Footer";
+import TypingHeroTitle from "@/components/hiring/TypingHeroTitle";
 import projects from "@/data/projects";
 import {
   applicationLinks,
@@ -168,10 +169,7 @@ export default function ProjectBasedVideoEditorPage() {
                 </div>
 
                 <p className="hire-eyebrow">WE’RE HIRING</p>
-                <h1>
-                  Digital product-এর story{" "}
-                  <span>video-তে translate করতে পারো?</span>
-                </h1>
+                <TypingHeroTitle />
                 <p className="hire-hero-lede">
                   Effy Tech is looking for a{" "}
                   <strong>Project-Based Product Video Editor</strong>—যিনি

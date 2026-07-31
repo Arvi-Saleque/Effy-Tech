@@ -32,7 +32,7 @@
 .hire-eyebrow {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -130,7 +130,7 @@
 .hire-status-line span,
 .hire-status-line small {
   font-family: var(--font-mono), monospace !important;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 850;
   letter-spacing: 0.15em;
 }
@@ -164,8 +164,46 @@
   letter-spacing: -0.064em;
 }
 
-.hire-hero h1 span {
+.hire-typing-title {
+  position: relative;
+}
+
+.hire-typing-measure {
+  display: block;
+  visibility: hidden;
+}
+
+.hire-typing-visual {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.hire-typing-accent {
   color: var(--color-primary);
+}
+
+.hire-typing-cursor {
+  display: inline-block;
+  width: max(3px, 0.055em);
+  height: 0.82em;
+  margin-left: 0.08em;
+  border-radius: 999px;
+  background: var(--color-primary);
+  vertical-align: -0.04em;
+  animation: hire-cursor-blink 780ms steps(1, end) infinite;
+}
+
+@keyframes hire-cursor-blink {
+  0%,
+  52% {
+    opacity: 1;
+  }
+
+  53%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .hire-hero-lede {
@@ -193,7 +231,7 @@
   align-items: center;
   gap: 7px;
   color: var(--color-text-secondary);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -282,7 +320,7 @@
   max-width: 690px;
   margin-top: 18px;
   color: var(--color-text-tertiary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -341,7 +379,7 @@
 .hire-commission-head p {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.15em;
 }
@@ -387,7 +425,7 @@
   margin-left: auto;
   color: #9ca493;
   font-family: var(--font-mono), monospace !important;
-  font-size: 7px;
+  font-size: 14px;
   font-weight: 850;
   letter-spacing: 0.13em;
 }
@@ -462,7 +500,7 @@
 .hire-role-summary dt {
   color: var(--color-text-tertiary);
   font-family: var(--font-mono), monospace;
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 850;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -471,7 +509,7 @@
 .hire-role-summary dd {
   margin-top: 6px;
   color: var(--color-text-primary);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -494,7 +532,7 @@
 }
 
 .hire-preference-note p {
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.62;
 }
 
@@ -536,7 +574,7 @@
   margin-top: 25px;
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.15em;
 }
@@ -577,7 +615,7 @@
   padding-bottom: 5px;
   border-bottom: 1px solid var(--color-primary);
   color: var(--color-primary-dark);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -648,7 +686,7 @@
   color: var(--color-neutral-100);
   background: rgb(23 29 23 / 77%);
   font-family: var(--font-mono), monospace !important;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 900;
   backdrop-filter: blur(10px);
 }
@@ -663,7 +701,7 @@
 .hire-project-copy > p {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -680,7 +718,7 @@
 .hire-project-copy > div {
   margin-top: 12px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
 }
 
@@ -698,7 +736,7 @@
   border-radius: 999px;
   color: var(--color-text-tertiary);
   background: rgb(244 242 232 / 68%);
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -709,7 +747,7 @@
   margin-top: auto;
   padding-top: 18px;
   color: var(--color-text-primary);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 850;
 }
 
@@ -744,7 +782,7 @@
 .hire-responsibility-grid article > span {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.12em;
 }
@@ -758,7 +796,7 @@
 .hire-responsibility-grid p {
   margin-top: 8px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.72;
 }
 
@@ -786,7 +824,7 @@
 
 .hire-boundary-note p {
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.72;
 }
 
@@ -844,7 +882,7 @@
   border-radius: 50%;
   color: var(--color-primary-light);
   font-family: var(--font-mono), monospace !important;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 900;
 }
 
@@ -869,7 +907,7 @@
   padding: 13px 0;
   border-top: 1px solid rgb(255 255 255 / 9%);
   color: var(--color-neutral-300);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   grid-template-columns: 18px 1fr;
 }
@@ -886,7 +924,7 @@
   border-radius: 8px;
   color: var(--color-primary-light);
   background: rgb(210 189 134 / 6%);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -907,7 +945,7 @@
 .hire-values-grid article > span {
   color: var(--color-primary-light);
   font-family: var(--font-mono), monospace !important;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.13em;
 }
@@ -922,7 +960,7 @@
 .hire-values-grid p {
   margin-top: 9px;
   color: var(--color-neutral-400);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.68;
 }
 
@@ -963,7 +1001,7 @@
 .hire-process-list li > span {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.12em;
 }
@@ -977,7 +1015,7 @@
 .hire-process-list p {
   margin-top: 8px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
 }
 
@@ -1037,7 +1075,7 @@
 
 .hire-commission-note p {
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
 }
 
@@ -1065,7 +1103,7 @@
 
 .hire-commission-head span {
   color: var(--color-neutral-400);
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .hire-commission-table > div {
@@ -1079,7 +1117,7 @@
 .hire-commission-table > div:first-child {
   color: var(--color-text-tertiary);
   background: var(--color-surface-alt);
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 850;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1101,7 +1139,7 @@
   display: block;
   padding: 16px 22px 20px;
   color: var(--color-text-tertiary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -1138,14 +1176,14 @@
 .hire-selection-list span {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.12em;
 }
 
 .hire-selection-list p {
   color: var(--color-text-primary);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 750;
   line-height: 1.55;
 }
@@ -1180,7 +1218,7 @@
   padding: 11px 0;
   border-top: 1px solid var(--color-border-light);
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   grid-template-columns: 18px 1fr;
 }
@@ -1193,7 +1231,7 @@
 .hire-application-pack > p:last-child {
   margin-top: 14px;
   color: var(--color-text-tertiary);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -1222,7 +1260,7 @@
   gap: 13px;
   padding: 18px;
   color: var(--color-text-primary);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 850;
   cursor: pointer;
   list-style: none;
@@ -1236,7 +1274,7 @@
 .hire-faq summary span {
   color: var(--color-primary);
   font-family: var(--font-mono), monospace !important;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 900;
 }
 
@@ -1272,7 +1310,7 @@
   padding-top: 16px;
   border-top: 1px solid var(--color-border-light);
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.72;
 }
 
@@ -1352,7 +1390,7 @@
 .hire-direct-contact small {
   color: var(--color-neutral-400);
   font-family: var(--font-mono), monospace;
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 850;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1361,14 +1399,14 @@
 .hire-direct-contact strong {
   margin-top: 5px;
   color: var(--color-neutral-100);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
 }
 
 .hire-direct-contact > p {
   margin-top: 17px;
   color: var(--color-neutral-400);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -1594,7 +1632,7 @@
   }
 
   .hire-commission-table > div:first-child {
-    font-size: 7px;
+    font-size: 14px;
   }
 
   .hire-faq details > p {
@@ -1635,5 +1673,10 @@
   .hire-project-card:hover,
   .hire-project-card:hover .hire-project-media img {
     transform: none;
+  }
+
+  .hire-typing-cursor {
+    animation: none;
+    opacity: 1;
   }
 }

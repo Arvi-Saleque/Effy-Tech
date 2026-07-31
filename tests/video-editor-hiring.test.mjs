@@ -19,6 +19,31 @@ test("the canonical video editor hiring route and scoped styles exist", () => {
   assert.match(page, /<Footer \/>/);
 });
 
+test("hero copy types in interactively and hiring text never drops below 14px", () => {
+  const page = read(pagePath);
+  const styles = read("src/styles/video-editor-hiring.css");
+  const typingTitle = read("src/components/hiring/TypingHeroTitle.jsx");
+
+  assert.match(page, /<TypingHeroTitle \/>/);
+  assert.match(
+    typingTitle,
+    /আপনি কি একটি Digital Product-কে/,
+  );
+  assert.match(
+    typingTitle,
+    /আকর্ষণীয় Story Video-তে রূপান্তর করতে পারেন\?/,
+  );
+  assert.match(typingTitle, /setVisibleLength/);
+  assert.match(typingTitle, /prefers-reduced-motion/);
+  assert.match(styles, /hire-cursor-blink/);
+
+  const pixelFontSizes = [...styles.matchAll(/font-size:\s*(\d+)px/g)].map(
+    ([, size]) => Number(size),
+  );
+  assert.ok(pixelFontSizes.length > 0);
+  assert.equal(pixelFontSizes.every((size) => size >= 14), true);
+});
+
 test("the role keeps editing and campaign responsibilities separate", () => {
   const page = read(pagePath);
   const data = read(dataPath);
@@ -69,4 +94,3 @@ test("the hiring route is discoverable through search and sitemap", () => {
   assert.match(navbar, /href: "\/hire\/project-based-video-editor"/);
   assert.match(sitemap, /path: "\/hire\/project-based-video-editor"/);
 });
-
