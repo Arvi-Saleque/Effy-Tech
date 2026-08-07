@@ -260,7 +260,7 @@ function TechnicalProjectCard({ project }) {
 function ProfileContextNav({ profile }) {
   return (
     <section className="profile-context-bar" aria-label="Profile navigation">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div className="flex flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <div>
           <p>Viewing leadership profile</p>
           <strong>
@@ -302,7 +302,7 @@ function LeadershipPeers({ currentSlug }) {
 
   return (
     <section className="profile-peer-section" aria-labelledby="peer-title">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="profile-peer-heading">
           <div>
             <p className="corporate-eyebrow">CONNECTED LEADERSHIP</p>
@@ -386,7 +386,7 @@ export default function LeadershipProfile({ profile }) {
           />
         </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+        <div className="relative grid items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div className="profile-hero-copy">
             <Breadcrumb
               dark
@@ -492,7 +492,7 @@ export default function LeadershipProfile({ profile }) {
         id="role"
         className="profile-leadership scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
       >
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div className="grid gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <SectionHeading
             eyebrow={profile.leadership.eyebrow}
             title={profile.leadership.title}
@@ -525,7 +525,7 @@ export default function LeadershipProfile({ profile }) {
         id="client-work"
         className="profile-client-work scroll-mt-24 bg-[#f0eee4] py-20 sm:py-24"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Selected client work"
             title="Contribution inside live Effy Tech products"
@@ -543,7 +543,7 @@ export default function LeadershipProfile({ profile }) {
         id="expertise"
         className="profile-expertise scroll-mt-24 bg-[#202720] py-20 text-[#fbfaf4] sm:py-24"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Core expertise"
             title="Engineering strengths brought to each project"
@@ -559,7 +559,7 @@ export default function LeadershipProfile({ profile }) {
       </section>
 
       <section className="profile-principles-services bg-[#fbfaf4] py-20 sm:py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+        <div className="grid gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <SectionHeading
               eyebrow="Working principles"
@@ -604,7 +604,7 @@ export default function LeadershipProfile({ profile }) {
         id="experience"
         className="profile-experience scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
       >
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+        <div className="grid gap-12 px-4 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <SectionHeading
               eyebrow="Experience"
@@ -662,7 +662,7 @@ export default function LeadershipProfile({ profile }) {
         id="technical-work"
         className="profile-technical-work scroll-mt-24 bg-[#efede3] py-20 sm:py-24"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Technical work"
             title="Selected engineering projects beyond client delivery"
@@ -680,7 +680,7 @@ export default function LeadershipProfile({ profile }) {
         id="education"
         className="profile-education scroll-mt-24 bg-[#fbfaf4] py-20 sm:py-24"
       >
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
+        <div className="grid gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
           <div className="profile-education-card rounded-[1.6rem] border border-[#d8d3c4] bg-[#f4f2e9] p-7 sm:p-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8f7335]">
               Education

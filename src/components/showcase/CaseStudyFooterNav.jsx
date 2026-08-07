@@ -18,7 +18,7 @@ export default function CaseStudyFooterNav({ currentSlug }) {
       className="border-t border-border bg-surface py-16 text-text-primary sm:py-20"
       aria-labelledby={`related-projects-${currentSlug}`}
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div className="px-5 sm:px-8 lg:px-10">
         <div className="flex flex-col gap-5 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary">

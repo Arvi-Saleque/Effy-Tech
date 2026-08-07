@@ -221,7 +221,7 @@ export default function ProjectPortfolioExplorer() {
   return (
     <section id="case-studies" aria-labelledby="project-explorer-heading">
       <div className="relative z-10 border-y border-border bg-surface/95 shadow-[0_10px_30px_rgba(32,38,31,0.06)] backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
@@ -296,7 +296,7 @@ export default function ProjectPortfolioExplorer() {
         id="project-filter-results"
         role="tabpanel"
         aria-labelledby={`project-filter-${activeFilter}`}
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        className="px-4 sm:px-6 lg:px-8"
       >
         {visibleProjects.map((project, index) => (
           <ProjectCaseStudy

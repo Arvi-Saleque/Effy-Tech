@@ -21,8 +21,10 @@
 }
 
 .hire-shell {
-  width: min(100% - 40px, 1240px);
+  width: 100%;
+  max-width: 1600px;
   margin-inline: auto;
+  padding-inline: 20px;
 }
 
 .hire-section {
@@ -1529,7 +1531,7 @@
 
 @media (max-width: 620px) {
   .hire-shell {
-    width: min(100% - 28px, 1240px);
+    padding-inline: 14px;
   }
 
   .hire-section {

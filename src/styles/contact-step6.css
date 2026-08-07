@@ -6,8 +6,10 @@
 }
 
 .contact6-shell {
-  width: min(100% - 48px, 1240px);
+  width: 100%;
+  max-width: 1600px;
   margin-inline: auto;
+  padding-inline: 24px;
 }
 
 .contact6-hero {
@@ -655,7 +657,7 @@ a.contact6-channel:hover {
 
 @media (max-width: 720px) {
   .contact6-shell {
-    width: min(100% - 32px, 1240px);
+    padding-inline: 16px;
   }
 
   .contact6-hero {
@@ -709,7 +711,7 @@ a.contact6-channel:hover {
 
 @media (max-width: 390px) {
   .contact6-shell {
-    width: min(100% - 24px, 1240px);
+    padding-inline: 12px;
   }
 
   .contact6-hero-copy h1 {
