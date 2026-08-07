@@ -158,7 +158,7 @@ export default function ProjectsPage() {
               }}
             />
           </div>
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative px-4 sm:px-6 lg:px-8">
             <Breadcrumb current="Projects" />
             <div className="mt-11 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
               <div>
@@ -212,7 +212,7 @@ export default function ProjectsPage() {
         </section>
         <ProjectPortfolioExplorer />
         <section className="bg-surface-alt py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 border-y border-border py-8 sm:grid-cols-3">
               {[
                 {
@@ -241,7 +241,7 @@ export default function ProjectsPage() {
           </div>
         </section>
         <section className="bg-surface-dark py-16 text-text-inverse sm:py-20">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+          <div className="grid gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary-light">
                 Your system can be next

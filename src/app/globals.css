@@ -591,8 +591,8 @@ h4 {
 }
 
 .home-shell {
-  width: min(1180px, calc(100% - 40px));
-  margin-inline: auto;
+  width: 100%;
+  padding-inline: 20px;
 }
 .effy-home {
   background: var(--effy-paper);
@@ -1841,7 +1841,7 @@ h4 {
 
 @media (max-width: 768px) {
   .home-shell {
-    width: min(100% - 28px, 1180px);
+    padding-inline: 14px;
   }
   .effy-navbar {
     background: rgba(251, 250, 244, 0.92);
@@ -5007,7 +5007,8 @@ h4 {
 }
 
 .effy-home .home-shell {
-  width: min(1320px, calc(100% - 64px));
+  width: 100%;
+  padding-inline: 32px;
 }
 
 .effy-home .section-intro,
@@ -5356,7 +5357,7 @@ h4 {
 
 @media (max-width: 1240px) {
   .effy-home .home-shell {
-    width: min(1180px, calc(100% - 48px));
+    padding-inline: 24px;
   }
   .effy-home .hero-grid {
     grid-template-columns: minmax(0, 1fr) minmax(480px, 0.92fr);
@@ -5427,7 +5428,7 @@ h4 {
     --phase21-body: 1rem;
   }
   .effy-home .home-shell {
-    width: min(100% - 28px, 680px);
+    padding-inline: 14px;
   }
   .effy-home .system-hero {
     min-height: auto;
@@ -5487,7 +5488,7 @@ h4 {
 
 @media (max-width: 480px) {
   .effy-home .home-shell {
-    width: min(100% - 22px, 440px);
+    padding-inline: 11px;
   }
   .effy-home .hero-copy h1 {
     font-size: clamp(2.7rem, 13vw, 3.8rem);
@@ -5835,7 +5836,7 @@ h4 {
 /* Standard laptops and 1366px desktops: prevent any cross-column collision. */
 @media (min-width: 1181px) and (max-width: 1500px) {
   .effy-home .home-shell {
-    width: min(1320px, calc(100% - 72px));
+    padding-inline: 36px;
   }
   .effy-home .hero-grid {
     grid-template-columns: minmax(0, 1.18fr) minmax(450px, 0.82fr);
