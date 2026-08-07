@@ -5379,7 +5379,7 @@ h4 {
 
 @media (max-width: 980px) {
   .effy-home .home-shell {
-    width: min(100% - 36px, 920px);
+    padding-inline: 18px;
   }
   .effy-home .hero-grid {
     grid-template-columns: 1fr;
