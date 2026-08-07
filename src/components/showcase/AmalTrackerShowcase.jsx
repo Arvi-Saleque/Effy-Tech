@@ -114,7 +114,7 @@ function FeatureDeepDive({ categories }) {
       id="product"
       className="iam-deep-dive relative overflow-hidden py-20 sm:py-28"
     >
-      <div className="mx-auto max-w-7xl px-6 sm:px-10">
+      <div className="px-6 sm:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -417,14 +417,14 @@ export default function AmalTrackerShowcase({ data }) {
           <span className="iam-hero-shape iam-hero-shape--three" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="relative z-10 px-5 sm:px-8 lg:px-10">
           <Breadcrumb
             items={[{ label: "Projects", href: "/projects" }]}
             current={name}
           />
         </div>
 
-        <div className="relative z-10 mx-auto mt-10 grid max-w-7xl gap-14 px-5 sm:px-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-16 lg:px-10">
+        <div className="relative z-10 mt-10 grid gap-14 px-5 sm:px-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-16 lg:px-10">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -578,7 +578,7 @@ export default function AmalTrackerShowcase({ data }) {
           </motion.div>
         </div>
 
-        <div className="relative z-10 mx-auto mt-16 max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="relative z-10 mt-16 px-5 sm:px-8 lg:px-10">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -605,7 +605,7 @@ export default function AmalTrackerShowcase({ data }) {
         </div>
       </section>
 
-      <Section className="iam-highlights relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20">
+      <Section className="iam-highlights relative px-6 py-16 sm:px-10 sm:py-20">
         <div className="grid gap-4 md:grid-cols-3">
           {[
             {
@@ -651,7 +651,7 @@ export default function AmalTrackerShowcase({ data }) {
         id="features"
         className="iam-features relative overflow-hidden py-20 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="px-6 sm:px-10">
           <div className="mb-12 grid gap-5 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-16">
             <div>
               <motion.p
@@ -718,7 +718,7 @@ export default function AmalTrackerShowcase({ data }) {
         id="how-it-works"
         className="iam-how-it-works relative overflow-hidden py-20 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="px-6 sm:px-10">
           <div className="mb-12 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
             <div>
               <motion.p
@@ -780,7 +780,7 @@ export default function AmalTrackerShowcase({ data }) {
         id="engineering"
         className="iam-engineering relative overflow-hidden py-20 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="px-6 sm:px-10">
           <motion.div
             variants={fadeUp}
             className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-[var(--iam-ink)] text-[#fbf8ef] shadow-[0_24px_68px_rgba(34,39,31,0.16)]"
@@ -878,7 +878,7 @@ export default function AmalTrackerShowcase({ data }) {
       </Section>
 
       <Section className="iam-trust relative overflow-hidden py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="px-6 sm:px-10">
           <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
             <motion.div
               variants={fadeUp}
@@ -997,7 +997,7 @@ export default function AmalTrackerShowcase({ data }) {
         id="download"
         className="iam-download relative overflow-hidden py-20 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+        <div className="px-6 sm:px-10">
           <motion.div
             variants={fadeUp}
             className="grid overflow-hidden rounded-[1.8rem] border border-black/[0.08] bg-white/65 shadow-[0_18px_46px_rgba(34,39,31,0.1)] lg:grid-cols-[1.2fr_0.8fr]"

@@ -597,7 +597,7 @@ function FullPageGallery({ longScreenshots, projectKey, isBangla }) {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative mx-auto max-w-7xl px-6 sm:px-10"
+          className="relative px-6 sm:px-10"
         >
           <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:gap-5">
             {longScreenshots.map((screenshot) => (
@@ -803,7 +803,7 @@ export default function DHAShowcase({ data }) {
         <div className="absolute -left-28 top-24 h-72 w-72 rounded-full bg-primary/20 blur-[110px]" />
         <div className="absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-primary-light/10 blur-[120px]" />
 
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="relative px-5 sm:px-8 lg:px-10">
           <div className="mb-9 flex flex-wrap items-center justify-between gap-4">
             <Breadcrumb
               dark
@@ -904,7 +904,7 @@ export default function DHAShowcase({ data }) {
       </section>
 
       <section className="institutional-proof relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
-        <div className="institutional-proof-grid mx-auto grid max-w-7xl gap-px overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
+        <div className="institutional-proof-grid grid gap-px overflow-hidden rounded-2xl border border-neutral-300 bg-neutral-300 shadow-xl sm:grid-cols-2 lg:grid-cols-4">
           {data.highlights.map((item) => (
             <div key={item.label} className="bg-neutral-50 px-5 py-6 sm:px-6">
               <p className="text-base font-black text-neutral-900">
@@ -921,7 +921,7 @@ export default function DHAShowcase({ data }) {
           className="px-5 pt-12 sm:px-8 sm:pt-16 lg:px-10"
           aria-labelledby="static-demo-heading"
         >
-          <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-emerald-300/80 bg-emerald-50 shadow-[0_22px_60px_-38px_rgba(5,150,105,0.5)]">
+          <Reveal className="overflow-hidden rounded-3xl border border-emerald-300/80 bg-emerald-50 shadow-[0_22px_60px_-38px_rgba(5,150,105,0.5)]">
             <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
               <div className="border-b border-emerald-200 p-7 sm:p-9 lg:border-r lg:border-b-0 lg:p-10">
                 <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white/80 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
@@ -975,7 +975,7 @@ export default function DHAShowcase({ data }) {
       ) : null}
 
       <section id="overview" className="institutional-overview py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="px-5 sm:px-8 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
             <Reveal>
               <SectionHeading
@@ -1017,7 +1017,7 @@ export default function DHAShowcase({ data }) {
       </section>
 
       <section className="institutional-deliverables border-y border-neutral-300 bg-neutral-100 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
               eyebrow="Scope delivered"
@@ -1059,7 +1059,7 @@ export default function DHAShowcase({ data }) {
       </section>
 
       <section id="solution" className="institutional-systems py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
               eyebrow="Connected system"
@@ -1141,7 +1141,7 @@ export default function DHAShowcase({ data }) {
       ) : null}
 
       <section className="institutional-capabilities py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
               eyebrow="Core capabilities"
@@ -1185,7 +1185,7 @@ export default function DHAShowcase({ data }) {
         className="institutional-engineering relative bg-neutral-900 py-20 text-neutral-50 sm:py-28"
       >
         <div className="absolute inset-0 bg-dot-grid opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="relative px-5 sm:px-8 lg:px-10">
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-20">
             <Reveal>
               <SectionHeading
@@ -1231,7 +1231,7 @@ export default function DHAShowcase({ data }) {
       </section>
 
       <section className="institutional-outcomes bg-neutral-100 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="px-5 sm:px-8 lg:px-10">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <Reveal>
               <SectionHeading
@@ -1271,7 +1271,7 @@ export default function DHAShowcase({ data }) {
         id="contact"
         className="institutional-contact px-5 py-20 sm:px-8 sm:py-28 lg:px-10"
       >
-        <Reveal className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-neutral-900 text-neutral-50 shadow-2xl">
+        <Reveal className="overflow-hidden rounded-[2rem] bg-neutral-900 text-neutral-50 shadow-2xl">
           <div className="grid lg:grid-cols-[1.25fr_0.75fr]">
             <div className="p-8 sm:p-12 lg:p-14">
               <p className="text-xs font-black uppercase tracking-[0.24em] text-primary-light">
