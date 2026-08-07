@@ -220,7 +220,7 @@ function GroupSection({ group }) {
       aria-labelledby={`${group.id}-title`}
       className={`service-group-section service-group-${group.id} scroll-mt-24 py-16 sm:py-20 lg:py-24 ${dark ? "bg-surface-dark text-text-inverse" : "bg-surface text-text-primary"}`}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-9 grid gap-7 lg:grid-cols-[0.75fr_1.25fr] lg:items-end lg:gap-16">
           <div>
             <p
@@ -310,7 +310,7 @@ export default function AllServicesPage() {
               }}
             />
           </div>
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative px-4 sm:px-6 lg:px-8">
             <Breadcrumb current="Services" />
             <div className="mt-11 grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-16">
               <div>
@@ -356,7 +356,7 @@ export default function AllServicesPage() {
           <GroupSection key={group.id} group={group} />
         ))}
         <section className="services-principles-section bg-surface-alt py-16 sm:py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
               <div>
                 <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary">
@@ -393,7 +393,7 @@ export default function AllServicesPage() {
           </div>
         </section>
         <section className="services-final-cta bg-surface-dark py-16 text-text-inverse sm:py-20">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+          <div className="grid gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary-light">
                 Combine what your system needs

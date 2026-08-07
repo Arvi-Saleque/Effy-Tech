@@ -46,7 +46,7 @@ export default function TeamPage() {
       <main className="effy-public-page corporate-page bg-surface text-text-primary">
         <section className="corporate-hero">
           <div className="corporate-grid" aria-hidden="true" />
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative px-4 sm:px-6 lg:px-8">
             <Breadcrumb
               items={[{ label: "Company", href: "/about" }]}
               current="Team"
@@ -76,7 +76,7 @@ export default function TeamPage() {
           aria-labelledby="leadership-title"
           className="corporate-section team-leadership-section"
         >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="corporate-section-heading corporate-heading-row">
               <div>
                 <p className="corporate-eyebrow">WHO OWNS WHAT</p>
@@ -94,7 +94,7 @@ export default function TeamPage() {
         </section>
 
         <section className="team-accountability-section">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="team-accountability-heading">
               <div>
                 <p className="corporate-eyebrow">HOW THE TEAM OPERATES</p>
@@ -125,7 +125,7 @@ export default function TeamPage() {
         </section>
 
         <section className="corporate-cta">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+          <div className="grid gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
             <div>
               <p className="corporate-eyebrow">WORK WITH EFFY TECH</p>
               <h2>Bring us the workflow, problem, or product idea.</h2>

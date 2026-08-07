@@ -278,7 +278,7 @@ export default function QuickServicesPage() {
             <div className="absolute -left-24 top-14 h-80 w-80 rounded-full border border-primary-light/25" />
             <div className="absolute -left-10 top-28 h-80 w-80 rounded-full border border-neutral-300/70" />
           </div>
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative px-4 sm:px-6 lg:px-8">
             <Link
               href="/services"
               className="inline-flex items-center gap-2 text-sm font-semibold text-text-secondary transition-colors hover:text-primary"
@@ -306,7 +306,7 @@ export default function QuickServicesPage() {
         </section>
 
         <section className="quickservices-solutions bg-surface-alt py-16 sm:py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {solutions.map((solution) => (
                 <SolutionCard key={solution.number} solution={solution} />
@@ -316,7 +316,7 @@ export default function QuickServicesPage() {
         </section>
 
         <section className="quickservices-process bg-surface py-16 sm:py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
               <div>
                 <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary">
@@ -362,7 +362,7 @@ export default function QuickServicesPage() {
         </section>
 
         <section className="quickservices-final-cta bg-surface-dark py-16 text-text-inverse sm:py-20">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+          <div className="grid gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary-light">
                 Still not sure?
