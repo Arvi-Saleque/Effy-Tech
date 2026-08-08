@@ -139,5 +139,37 @@ const projects = [
     featured: true,
     order: 3,
   },
+  {
+    id: "15",
+    title: "Dhaka Heights Properties Limited",
+    shortTitle: "Dhaka Heights",
+    slug: "DHP",
+    eyebrow: "Real Estate Developer Website & CMS",
+    status: "Live Client Project",
+    portfolioCategory: "operations-platform",
+    description:
+      "A luxury real estate developer's public website and protected operations platform, connecting a filterable property catalog, sister-concern subsidiary pages, buyer/landowner lead capture, and staff-managed content across the group.",
+    problem:
+      "A growing group of subsidiary companies and a live pipeline of ongoing, completed, and upcoming developments needed one credible public presence and a reliable way to capture and route buyer and landowner leads.",
+    solution:
+      "A premium public website backed by a custom CMS for the property catalog, sister-concern profiles, media, and homepage content, with dedicated buyer and landowner enquiry workflows feeding a structured admin inbox.",
+    outcome:
+      "Dhaka Heights received one live platform for brand presence, property discovery, and lead generation, with an admin system its team uses to publish new developments and manage enquiries without developer involvement.",
+    category: "Real Estate Platform",
+    audience: "Property buyers, landowners, and internal sales team",
+    tags: ["Next.js", "Supabase", "Cloudinary", "Custom CMS"],
+    deliverables: [
+      "Public corporate website and property catalog",
+      "Buyer and landowner lead capture workflows",
+      "Custom CMS for properties, concerns, and media",
+    ],
+    thumbnail: "/images/dhaka-heights/case-study/og-1200x630.jpg",
+    caseStudyUrl: "/projects/dhaka-heights",
+    liveUrl: "https://dhakaheights.com",
+    liveLabel: "Visit Live Site",
+    clientName: "Dhaka Heights Properties Limited",
+    featured: true,
+    order: 4,
+  },
 ];
 export default projects;

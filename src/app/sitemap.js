@@ -24,6 +24,11 @@ const routes = [
     priority: 0.8,
     changeFrequency: "monthly",
   },
+  {
+    path: "/projects/dhaka-heights",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
   { path: "/process", priority: 0.8, changeFrequency: "monthly" },
   { path: "/about", priority: 0.8, changeFrequency: "monthly" },
   { path: "/team", priority: 0.7, changeFrequency: "monthly" },
